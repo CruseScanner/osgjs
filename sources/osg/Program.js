@@ -22,7 +22,6 @@ var glSync = function(gl) {
 var sp = new ShaderProcessor();
 var errorCallback;
 
-var uniformRegexp = /uniform\s+\w+\s+(\w+)((\s)?\[(.*?)\])?/g;
 var attributesRegexp = /(in|attribute)\s+\w+\s+(\w+)\s*;/g;
 
 var getAttributeList = function(shaderText) {
@@ -34,16 +33,6 @@ var getAttributeList = function(shaderText) {
     }
 
     return attributeMap;
-};
-
-var getUniformList = function(shaderText) {
-    var uniformMap = {};
-    var r;
-    while ((r = uniformRegexp.exec(shaderText)) !== null) {
-        var uniform = r[1];
-        uniformMap[uniform] = true;
-    }
-    return uniformMap;
 };
 
 /**
@@ -324,7 +313,7 @@ utils.createPrototypeStateAttribute(
                 var vertexText = this._vertex.getText();
 
                 this._attributeMap = getAttributeList(vertexText);
-                this._uniformMap = getUniformList(fragmentText + '\n' + vertexText);
+                
                 // compile both vertex even if the first one fail (error reporting)
                 this._glShaderCompile(gl, this._vertex);
                 this._glShaderCompile(gl, this._fragment);
@@ -452,8 +441,26 @@ utils.createPrototypeStateAttribute(
                     // Pink must die.
                     this._activateFailSafe(gl);
                 } else {
+                    // Get locations of active uniforms from program
+                    this._uniformMap = { };
+                    var activeUniformCount = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
+                    for (var i = 0; i < activeUniformCount; i++) {
+                        var info = gl.getActiveUniform(this._program, i);
+                        var name = info.name;
+                        // Is it an array? Then we need to spell out all entries...
+                        if (info.size > 1) {
+                            // Remove [0] suffix
+                            name = name.substr(0, name.length - 3);
+                        }
+                        for (var j = 0; j < info.size; j++) {
+                            var suffix = (info.size > 1) ? '[' + j + ']' : '';
+                            var fullName = name + suffix;
+                            this._uniformMap[fullName] = true;
+                            this._uniformsCache[fullName] = gl.getUniformLocation(this._program, fullName);
+                        }                       
+                    }
+                   
                     this.cacheAttributeList(gl, window.Object.keys(this._attributeMap));
-                    this.cacheUniformList(gl, window.Object.keys(this._uniformMap));
                 }
                 this._bindProgramToSpector();
                 return this._compileClean;
@@ -494,19 +501,6 @@ utils.createPrototypeStateAttribute(
                     return;
                 }
                 this._asyncCompilation = 1;
-            },
-
-            cacheUniformList: function(gl, uniformList) {
-                var map = this._uniformsCache;
-                for (var i = 0, l = uniformList.length; i < l; i++) {
-                    var uniform = uniformList[i];
-                    var location = gl.getUniformLocation(this._program, uniform);
-                    if (location !== undefined && location !== null) {
-                        if (map[uniform] === undefined) {
-                            map[uniform] = location;
-                        }
-                    }
-                }
             },
 
             cacheAttributeList: function(gl, attributeList) {
