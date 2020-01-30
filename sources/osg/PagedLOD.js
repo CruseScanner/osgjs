@@ -18,6 +18,7 @@ var PagedLOD = function() {
     this._frameNumberOfLastTraversal = 0;
     this._databasePath = '';
     this._numChildrenThatCannotBeExpired = 0;
+    this._cameraForLODSelection = 0;
 };
 
 /**
@@ -112,6 +113,14 @@ utils.createPrototypeNode(
         getDatabaseRequest: function(childNo) {
             return this._perRangeDataList[childNo].dbrequest;
         },
+        
+        setCameraForLODSelection: function(camera) {
+            this._cameraForLODSelection = camera;
+        },
+        getCameraForLODSelection: function() {
+            return this._cameraForLODSelection;
+        },
+
         removeExpiredChildren: function(expiryTime, expiryFrame, removedChildren) {
             if (this.children.length <= this._numChildrenThatCannotBeExpired) return;
             var i = this.children.length - 1;
@@ -161,7 +170,19 @@ utils.createPrototypeNode(
 
                         // Calculate distance from viewpoint
                         var matrix = visitor.getCurrentModelViewMatrix();
+                        
+                        if(this._cameraForLODSelection && visitor.getCurrentCamera()){
+                            var cameraModelView = this._cameraForLODSelection.getViewMatrix();  
+                            
+                            var tmp = mat4.create(); 
+                            mat4.mul(tmp, cameraModelView, visitor.getCurrentModelMatrix());
+                            matrix = tmp;                            
+                        }
+                        
                         mat4.invert(viewModel, matrix);
+
+
+
                         if (this._rangeMode === Lod.DISTANCE_FROM_EYE_POINT) {
                             vec3.transformMat4(eye, zeroVector, viewModel);
                             var d = vec3.distance(this.getBound().center(), eye);
@@ -169,19 +190,29 @@ utils.createPrototypeNode(
                         } else {
                             // Calculate pixels on screen
                             var projmatrix = visitor.getCurrentProjectionMatrix();
+                            var lodScale = visitor.getLODScale();
+                            var viewPort = visitor.getViewport();
+
+                            if(this._cameraForLODSelection && visitor.getCurrentCamera()){
+                                projmatrix = this._cameraForLODSelection.getProjectionMatrix();
+                                lodScale = this._cameraForLODSelection.getLODScale();
+                                viewPort = this._cameraForLODSelection.getViewport();
+                            }
+
                             // focal lenght is the value stored in projmatrix[0]
                             requiredRange = this.projectBoundingSphere(
                                 this.getBound(),
                                 matrix,
                                 projmatrix[0]
-                            );
+                            );                            
+
                             // Get the real area value and apply LODScale
                             requiredRange =
                                 requiredRange *
-                                visitor.getViewport().width() *
-                                visitor.getViewport().width() *
+                                viewPort.width() *
+                                viewPort.width() *
                                 0.25 /
-                                visitor.getLODScale();
+                                lodScale;
                             if (requiredRange < 0)
                                 requiredRange = this._range[this._range.length - 1][0];
                         }
