@@ -7,7 +7,7 @@ import utils from 'osg/utils';
 import PooledArray from 'osg/PooledArray';
 import PooledResource from 'osg/PooledResource';
 
-var ComputeBoundsVisitor = function (traversalMode) {
+var ComputeBoundsVisitor = function(traversalMode) {
     NodeVisitor.call(this, traversalMode);
 
     // keep a matrix in memory to avoid to create matrix
@@ -23,14 +23,14 @@ var ComputeBoundsVisitor = function (traversalMode) {
 utils.createPrototypeObject(
     ComputeBoundsVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        reset: function () {
+        reset: function() {
             this._pooledMatrix.reset();
             this._matrixStack.reset();
             this._matrixStack.push(mat4.IDENTITY);
             this._bb.init();
         },
 
-        getBoundingBox: function () {
+        getBoundingBox: function() {
             return this._bb;
         },
 
@@ -40,7 +40,7 @@ utils.createPrototypeObject(
 
         //applyDrawable: function ( drawable ) {},
 
-        applyTransform: function (transform) {
+        applyTransform: function(transform) {
             var matrix = this._pooledMatrix.getOrCreateObject();
             mat4.copy(matrix, this._matrixStack.back());
             transform.computeLocalToWorldMatrix(matrix, this);
@@ -49,7 +49,7 @@ utils.createPrototypeObject(
             this.popMatrix();
         },
 
-        apply: function (node) {
+        apply: function(node) {
             if (node instanceof Transform) {
                 this.applyTransform(node);
                 return;
@@ -61,18 +61,18 @@ utils.createPrototypeObject(
             this.traverse(node);
         },
 
-        pushMatrix: function (matrix) {
+        pushMatrix: function(matrix) {
             this._matrixStack.push(matrix);
         },
 
-        popMatrix: function () {
+        popMatrix: function() {
             this._matrixStack.pop();
         },
 
-        applyBoundingBox: (function () {
+        applyBoundingBox: (function() {
             var bbOut = new BoundingBox();
 
-            return function (bbox) {
+            return function(bbox) {
                 if (bbox.valid()) {
                     bbox.transformMat4(bbOut, this._matrixStack.back());
                     this._bb.expandByBoundingBox(bbOut);
@@ -80,7 +80,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        getMatrixStack: function () {
+        getMatrixStack: function() {
             return this._matrixStack;
         }
     }),

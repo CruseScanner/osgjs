@@ -8,7 +8,7 @@ import InputGroups from 'osgViewer/input/InputConstants';
 var tempQuat = quat.create();
 var tempPos = vec3.create();
 
-var OrbitManipulatorWebVRController = function (manipulator) {
+var OrbitManipulatorWebVRController = function(manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
@@ -16,7 +16,7 @@ var OrbitManipulatorWebVRController = function (manipulator) {
 utils.createPrototypeObject(
     OrbitManipulatorWebVRController,
     utils.objectInherit(Controller.prototype, {
-        init: function () {
+        init: function() {
             this._pos = vec3.create();
             this._quat = quat.create();
 
@@ -30,7 +30,7 @@ utils.createPrototypeObject(
             // default to disabled
             manager.setEnable(InputGroups.ORBIT_MANIPULATOR_WEBVR, false);
         },
-        update: function (ev) {
+        update: function(ev) {
             var q = ev.pose.orientation;
             if (q) {
                 if (ev.sitToStandMatrix) {

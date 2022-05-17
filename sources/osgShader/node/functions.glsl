@@ -65,7 +65,7 @@ vec3 decodeRGBM(const in vec4 color, const in float range) {
 #pragma DECLARE_FUNCTION NODE_NAME:FrontNormal
 #define _frontNormal(normal) gl_FrontFacing ? normal : -normal
 
-#pragma DECLARE_FUNCTION NODE_NAME:NormalizeNd
+#pragma DECLARE_FUNCTION NODE_NAME:Normalize
 #define _normalize(vec) normalize(vec)
 
 #pragma DECLARE_FUNCTION

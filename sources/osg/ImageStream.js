@@ -2,7 +2,7 @@ import P from 'bluebird';
 import utils from 'osg/utils';
 import Image from 'osg/Image';
 
-var ImageStream = function (video) {
+var ImageStream = function(video) {
     Image.call(this, video);
     this._canPlayDefered = undefined;
 };
@@ -13,11 +13,11 @@ ImageStream.PLAYING = 1;
 utils.createPrototypeObject(
     ImageStream,
     utils.objectInherit(Image.prototype, {
-        isDirty: function () {
+        isDirty: function() {
             return this._status === ImageStream.PLAYING; // video is dirty if playing
         },
 
-        setImage: function (video) {
+        setImage: function(video) {
             Image.prototype.setImage.call(this, video);
 
             this._status = ImageStream.STOP;
@@ -25,7 +25,7 @@ utils.createPrototypeObject(
             // event at the end of the stream
             video.addEventListener(
                 'ended',
-                function () {
+                function() {
                     if (!this._imageObject.loop) this.stop();
                 }.bind(this),
                 true
@@ -34,26 +34,26 @@ utils.createPrototypeObject(
             this.dirty();
         },
 
-        setLooping: function (bool) {
+        setLooping: function(bool) {
             this._imageObject.loop = bool;
         },
 
-        play: function () {
+        play: function() {
             this._imageObject.play();
             this._status = ImageStream.PLAYING;
         },
 
-        stop: function () {
+        stop: function() {
             this._imageObject.pause();
             this._status = ImageStream.PAUSE;
         },
 
-        whenReady: function () {
+        whenReady: function() {
             if (!this._imageObject) {
                 return P.reject();
             }
             var that = this;
-            return new P(function (resolve) {
+            return new P(function(resolve) {
                 if (!that._canPlayDefered) {
                     that._canPlayDefered = resolve;
                     // resolve directly if the event is already fired

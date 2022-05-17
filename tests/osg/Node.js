@@ -3,8 +3,8 @@ import Node from 'osg/Node';
 import PooledResource from 'osg/PooledResource';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
-    test('Node', function () {
+export default function() {
+    test('Node', function() {
         var n = new Node();
         assert.isOk(n.children.length === 0, 'number of children must be 0');
         assert.isOk(n.getParents().length === 0, 'number of parents must be 0');
@@ -67,10 +67,10 @@ export default function () {
         );
     });
 
-    test('Node.getNumChildrenRequiringUpdateTraversal', function () {
-        var DummyUpdateCallback = function () {};
+    test('Node.getNumChildrenRequiringUpdateTraversal', function() {
+        var DummyUpdateCallback = function() {};
         DummyUpdateCallback.prototype = {
-            update: function () {
+            update: function() {
                 return true;
             }
         };

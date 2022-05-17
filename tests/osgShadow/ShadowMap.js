@@ -9,8 +9,8 @@ import { vec3 } from 'osg/glMatrix';
 import { vec4 } from 'osg/glMatrix';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
-    var matrixCompare = function (matrix1, matrix2) {
+export default function() {
+    var matrixCompare = function(matrix1, matrix2) {
         for (var i = 0; i < 16; i++) {
             if (Math.abs(matrix1[i] - matrix2[i]) > 1e-5) {
                 return false;
@@ -19,7 +19,7 @@ export default function () {
         return true;
     };
 
-    test('ShadowedMap', function () {
+    test('ShadowedMap', function() {
         var shadowSettings = new ShadowSettings();
         shadowSettings.light = new Light();
 

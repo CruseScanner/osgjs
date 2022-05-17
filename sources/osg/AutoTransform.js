@@ -13,7 +13,7 @@ import Node from 'osg/Node';
  * @class AutoTransform
  */
 
-var AutoTransform = function () {
+var AutoTransform = function() {
     Transform.call(this);
     this._matrix = mat4.create();
     this._position = vec3.create();
@@ -40,96 +40,96 @@ var AutoTransform = function () {
 utils.createPrototypeNode(
     AutoTransform,
     utils.objectInherit(Transform.prototype, {
-        getMatrix: function () {
+        getMatrix: function() {
             return this._matrix;
         },
 
-        setMatrix: function (m) {
+        setMatrix: function(m) {
             this._matrix = m;
             this.dirtyBound();
         },
 
-        setPosition: function (pos) {
+        setPosition: function(pos) {
             this._position = pos;
             this._matrixDirty = true;
             this.dirtyBound();
         },
-        getPosition: function () {
+        getPosition: function() {
             return this._position;
         },
 
-        setRotation: function (q) {
+        setRotation: function(q) {
             this._rotation = q;
             this._matrixDirty = true;
             this.dirtyBound();
         },
 
-        getRotation: function () {
+        getRotation: function() {
             return this._rotation;
         },
 
-        setScale: function (scale) {
+        setScale: function(scale) {
             this.setScaleFromVec3(vec3.fromValues(scale, scale, scale));
         },
 
-        setScaleFromvec3: function (scaleVec) {
+        setScaleFromvec3: function(scaleVec) {
             notify.warn('deprecated, use setScaleFromVec3');
             this.setScaleFromVec3(scaleVec);
         },
 
-        setScaleFromVec3: function (scaleVec) {
+        setScaleFromVec3: function(scaleVec) {
             this._scale = scaleVec;
             this._matrixDirty = true;
             this.dirtyBound();
         },
 
-        getScale: function () {
+        getScale: function() {
             return this._scale;
         },
 
-        setMinimumScale: function (minimumScale) {
+        setMinimumScale: function(minimumScale) {
             this._minimumScale = minimumScale;
         },
 
-        getMinimumScale: function () {
+        getMinimumScale: function() {
             return this._minimumScale;
         },
 
-        setMaximumScale: function (maximumScale) {
+        setMaximumScale: function(maximumScale) {
             this._maximumScale = maximumScale;
         },
 
-        getMaximumScale: function () {
+        getMaximumScale: function() {
             return this._maximumScale;
         },
 
-        setAutoScaleToScreen: function (autoScaleToScreen) {
+        setAutoScaleToScreen: function(autoScaleToScreen) {
             this._autoScaleToScreen = autoScaleToScreen;
             this._matrixDirty = true;
         },
 
-        getAutoScaleToScreen: function () {
+        getAutoScaleToScreen: function() {
             return this._autoScaleToScreen;
         },
 
-        setAutoRotateToScreen: function (value) {
+        setAutoRotateToScreen: function(value) {
             this._autoRotateToScreen = value;
         },
 
-        getAutoRotateToScreen: function () {
+        getAutoRotateToScreen: function() {
             return this._autoRotateToScreen;
         },
 
-        setAutoScaleTransitionWidthRatio: function (autoScaleTransitionWidthRatio) {
+        setAutoScaleTransitionWidthRatio: function(autoScaleTransitionWidthRatio) {
             this._autoScaleTransitionWidthRatio = autoScaleTransitionWidthRatio;
         },
 
-        getAutoScaleTransitionWidthRatio: function () {
+        getAutoScaleTransitionWidthRatio: function() {
             return this._autoScaleTransitionWidthRatio;
         },
 
         // local to "local world" (not Global World)
-        computeLocalToWorldMatrix: function (matrix /*, nodeVisitor */) {
+        computeLocalToWorldMatrix: function(matrix /*, nodeVisitor */) {
             if (this._matrixDirty) this.computeMatrix();
             if (this.referenceFrame === TransformEnums.RELATIVE_RF) {
                 mat4.mul(matrix, matrix, this._matrix);
@@ -138,10 +138,10 @@ utils.createPrototypeNode(
             }
         },
 
-        computeMatrix: (function () {
+        computeMatrix: (function() {
             var neg = vec3.create();
             var tmpMat = mat4.create();
-            return function () {
+            return function() {
                 if (!this._matrixDirty) return;
                 mat4.fromQuat(this._matrix, this._rotation);
 
@@ -153,13 +153,13 @@ utils.createPrototypeNode(
             };
         })(),
 
-        computeWorldToLocalMatrix: (function () {
+        computeWorldToLocalMatrix: (function() {
             var neg = vec3.create();
             var rotInverse = quat.create();
             var scaleInverse = vec3.create();
             var tmpMat = mat4.create();
 
-            return function (matrix /*, nodeVisitor */) {
+            return function(matrix /*, nodeVisitor */) {
                 if (this.scale[0] === 0.0 && this.scale[1] === 0.0 && this.scale[2] === 0.0) {
                     return false;
                 }
@@ -194,9 +194,9 @@ utils.createPrototypeNode(
             };
         })(),
 
-        computeBound: (function () {
+        computeBound: (function() {
             var matrix = mat4.create();
-            return function (bSphere) {
+            return function(bSphere) {
                 if (this._autoScaleToScreen && this._firstTimeToInitEyePoint) return bSphere;
                 Node.prototype.computeBound.call(this, bSphere);
                 if (!bSphere.valid()) {
@@ -211,8 +211,8 @@ utils.createPrototypeNode(
             };
         })(),
 
-        accept: (function () {
-            return function (visitor) {
+        accept: (function() {
+            return function(visitor) {
                 if (visitor.getVisitorType() === NodeVisitor.CULL_VISITOR) {
                     var width = visitor.getViewport().width();
                     var height = visitor.getViewport().height();
@@ -262,7 +262,7 @@ utils.createPrototypeNode(
                                               (1.0 + this._autoScaleTransitionWidthRatio);
                                     c = 1.0 / (4.0 * (i - j));
                                     b = 1.0 - 2.0 * c * i;
-                                    a = j + (b * b) / (4.0 * c);
+                                    a = j + b * b / (4.0 * c);
                                     var k = -b / (2.0 * c);
                                     if (size < k) size = this._minimumScale;
                                     else if (size < i) size = a + b * size + c * (size * size);
@@ -278,7 +278,7 @@ utils.createPrototypeNode(
                                               (1.0 - this._autoScaleTransitionWidthRatio);
                                     c = 1.0 / (4.0 * (m - n));
                                     b = 1.0 - 2.0 * c * m;
-                                    a = n + (b * b) / (4.0 * c);
+                                    a = n + b * b / (4.0 * c);
                                     var p = -b / (2.0 * c);
 
                                     if (size > p) size = this._maximumScale;
@@ -304,10 +304,10 @@ utils.createPrototypeNode(
             };
         })(),
 
-        computePixelSizeVector: (function () {
+        computePixelSizeVector: (function() {
             var scale00 = vec3.create();
             var scale10 = vec3.create();
-            return function (W, P, M) {
+            return function(W, P, M) {
                 // Where W = viewport, P = ProjectionMatrix, M = ModelViewMatrix
                 // Comment from OSG:
                 // pre adjust P00,P20,P23,P33 by multiplying them by the viewport window matrix.

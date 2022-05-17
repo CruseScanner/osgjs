@@ -3,8 +3,8 @@ import mockup from 'tests/mockup/mockup';
 import Interpolator from 'osgAnimation/interpolator';
 import Channel from 'osgAnimation/channel';
 
-export default function () {
-    test('Vec3LerpInterpolator', function () {
+export default function() {
+    test('Vec3LerpInterpolator', function() {
         var keys = mockup.createVec3Keyframes();
         var timeArray = [-1, 3, 0.5, 1.5, 5.0];
 
@@ -57,7 +57,7 @@ export default function () {
         assert.isOk(result.key === 0, 'Check key when time == 1.0 with 1 keyframes');
     });
 
-    test('FloatLerpInterpolator', function () {
+    test('FloatLerpInterpolator', function() {
         var keys = mockup.createFloatKeyframes();
 
         var timeArray = [-1, 3, 0.5, 1.5, 5];
@@ -96,7 +96,7 @@ export default function () {
         assert.isOk(result.key === 0, 'Check key when time == 5.0');
     });
 
-    test('FloatCubicBezierChannel', function () {
+    test('FloatCubicBezierChannel', function() {
         var keys = mockup.createFloatCubicBezierKeyframes();
 
         var timeArray = [-1, 3, 0.5, 1.5, 5];
@@ -135,7 +135,7 @@ export default function () {
         assert.isOk(result.key === 0, 'Check key when time == 5.0');
     });
 
-    test('Vec3CubicBezierChannel', function () {
+    test('Vec3CubicBezierChannel', function() {
         var keys = mockup.createVec3CubicBezierKeyframes();
 
         var timeArray = [-1, 3, 0.5, 1.5, 5];
@@ -174,7 +174,7 @@ export default function () {
         assert.isOk(result.key === 0, 'Check key when time == 5.0');
     });
 
-    test('QuatLerpChannel', function () {
+    test('QuatLerpChannel', function() {
         var keys = mockup.createQuatLerpKeyFrames();
 
         var timeArray = [-1, 3, 0.5, 1.5, 5];
@@ -233,7 +233,7 @@ export default function () {
         assert.isOk(result.key === 0, 'Check key when time == 5.0');
     });
 
-    test('KeysFinding', function () {
+    test('KeysFinding', function() {
         var keys = [1, 0, 3];
         var times = [0, 2.06, 2.5];
         var chan = Channel.createFloatChannel(keys, times);

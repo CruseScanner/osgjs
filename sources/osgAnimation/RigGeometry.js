@@ -22,7 +22,7 @@ import ComputeMatrixFromNodePath from 'osg/computeMatrixFromNodePath';
 //            }
 // }
 
-var RigGeometry = function () {
+var RigGeometry = function() {
     Geometry.call(this);
 
     this._shape = null; // by default no kdtree/shape for rig
@@ -53,32 +53,32 @@ var RigGeometry = function () {
 utils.createPrototypeNode(
     RigGeometry,
     utils.objectInherit(Geometry.prototype, {
-        getStateSetAnimation: function () {
+        getStateSetAnimation: function() {
             return this._stateSetAnimation;
         },
 
-        getSkeleton: function () {
+        getSkeleton: function() {
             return this._root;
         },
 
-        setSkeleton: function (root) {
+        setSkeleton: function(root) {
             this._root = root;
         },
 
-        setPathToSkeleton: function (path) {
+        setPathToSkeleton: function(path) {
             this._pathToRoot = path;
             this._isAnimatedPath = AnimationUpdateCallback.checkPathIsAnimated(path);
         },
 
-        setNeedToComputeMatrix: function (needToComputeMatrix) {
+        setNeedToComputeMatrix: function(needToComputeMatrix) {
             this._needToComputeMatrix = needToComputeMatrix;
         },
 
-        getNeedToComputeMatrix: function () {
+        getNeedToComputeMatrix: function() {
             return this._needToComputeMatrix;
         },
 
-        computeBoundingBox: function (boundingBox) {
+        computeBoundingBox: function(boundingBox) {
             boundingBox.init();
 
             var vertexArray = this.getVertexAttributeList().Vertex;
@@ -146,7 +146,7 @@ utils.createPrototypeNode(
             return boundingBox;
         },
 
-        computeMatrixFromRootSkeleton: function () {
+        computeMatrixFromRootSkeleton: function() {
             if (!this._root) {
                 notify.warn(
                     'Warning ' +
@@ -169,31 +169,31 @@ utils.createPrototypeNode(
             if (!this._isAnimatedPath) this._needToComputeMatrix = false;
         },
 
-        getMatrixFromSkeletonToGeometry: function () {
+        getMatrixFromSkeletonToGeometry: function() {
             return this._matrixFromSkeletonToGeometry;
         },
 
-        getInvMatrixFromSkeletonToGeometry: function () {
+        getInvMatrixFromSkeletonToGeometry: function() {
             return this._invMatrixFromSkeletonToGeometry;
         },
 
-        getSourceGeometry: function () {
+        getSourceGeometry: function() {
             return this._geometry;
         },
 
-        setSourceGeometry: function (geometry) {
+        setSourceGeometry: function(geometry) {
             this._geometry = geometry;
         },
 
-        getBoneNameID: function () {
+        getBoneNameID: function() {
             return this._boneNameID;
         },
 
-        setBoneNameID: function (boneMap) {
+        setBoneNameID: function(boneMap) {
             this._boneNameID = boneMap;
         },
 
-        mergeChildrenVertexAttributeList: function () {
+        mergeChildrenVertexAttributeList: function() {
             if (this._geometry instanceof MorphGeometry)
                 this._geometry.mergeChildrenVertexAttributeList();
 
@@ -205,7 +205,7 @@ utils.createPrototypeNode(
             );
         },
 
-        mergeChildrenData: function () {
+        mergeChildrenData: function() {
             // move to the rig the vertex attributes, the primitives and the stateset
 
             this.mergeChildrenVertexAttributeList();
@@ -220,11 +220,11 @@ utils.createPrototypeNode(
             this.setStateSet(this._geometry.getStateSet());
         },
 
-        update: function () {
+        update: function() {
             this._rigTransformImplementation.update(this);
         },
 
-        computeTransformedVertex: function (id, out) {
+        computeTransformedVertex: function(id, out) {
             out = out || vec3.create();
 
             var vList = this.getVertexAttributeList();
@@ -303,7 +303,7 @@ utils.createPrototypeNode(
             return out;
         },
 
-        computeTransformedVertices: function () {
+        computeTransformedVertices: function() {
             // obviously slow as it can't rely on kdTree AND we transform everything cpu side
 
             var vList = this.getVertexAttributeList();

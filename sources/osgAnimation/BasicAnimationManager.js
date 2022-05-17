@@ -14,16 +14,16 @@ import UpdateBone from 'osgAnimation/UpdateBone';
 import UpdateMatrixTransform from 'osgAnimation/UpdateMatrixTransform';
 
 var Float = {
-    lerp: function (a, b, t) {
+    lerp: function(a, b, t) {
         return a + (b - a) * t;
     },
-    init: function () {
+    init: function() {
         return 0.0;
     },
-    copy: function (out, src) {
+    copy: function(out, src) {
         return src;
     },
-    create: function () {
+    create: function() {
         return 0.0;
     }
 };
@@ -51,7 +51,7 @@ ResultType[Channel.ChannelType.Matrix] = mat4;
  *  BasicAnimationManager
  *  @class BasicAnimationManager
  */
-var BasicAnimationManager = function () {
+var BasicAnimationManager = function() {
     BaseObject.call(this);
 
     this._simulationTime = 0.0;
@@ -126,7 +126,7 @@ var BasicAnimationManager = function () {
 utils.createPrototypeObject(
     BasicAnimationManager,
     utils.objectInherit(BaseObject.prototype, {
-        init: function (animations) {
+        init: function(animations) {
             // reset all
             this._simulationTime = 0.0;
             this._pauseTime = 0.0;
@@ -158,7 +158,7 @@ utils.createPrototypeObject(
         },
 
         // push all animations into the queue
-        addAnimations: function (animations) {
+        addAnimations: function(animations) {
             var instanceAnimationList = this._addAnimation(animations);
 
             // qeue them to assign target
@@ -167,7 +167,7 @@ utils.createPrototypeObject(
             this._registerAnimations();
         },
 
-        update: function (node, nv) {
+        update: function(node, nv) {
             if (this._dirty) {
                 this._findAnimationUpdateCallback(node);
                 this._registerTargetFoundInAnimationCallback();
@@ -190,7 +190,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        updateManager: function (t) {
+        updateManager: function(t) {
             // adds active animations / channels requested
             //
             this._processStartAnimation(t);
@@ -221,27 +221,27 @@ utils.createPrototypeObject(
             this._removeFinishedAnimation(t);
         },
 
-        togglePause: function () {
+        togglePause: function() {
             //Pause the manager's time
             this._pause = !this._pause;
             // if we resume an animation we don't want to move forward the animation
             if (!this._pause) this._seekTime = this._simulationTime;
         },
 
-        getSimulationTime: function () {
+        getSimulationTime: function() {
             return this._simulationTime;
         },
 
-        setSimulationTime: function (t) {
+        setSimulationTime: function(t) {
             this._simulationTime = t;
         },
 
-        setSeekTime: function (t) {
+        setSeekTime: function(t) {
             this._simulationTime = t;
             this._seekTime = t;
         },
 
-        stopAnimation: function (name) {
+        stopAnimation: function(name) {
             var activeAnimationList = this._activeAnimationList;
             for (var i = 0, nbAnim = activeAnimationList.length; i < nbAnim; ++i) {
                 if (activeAnimationList[i].name === name) {
@@ -253,7 +253,7 @@ utils.createPrototypeObject(
             }
         },
 
-        stopAllAnimation: function () {
+        stopAllAnimation: function() {
             var activeAnimationList = this._activeAnimationList;
             for (var i = 0, nbAnim = activeAnimationList.length; i < nbAnim; ++i) {
                 var name = activeAnimationList[i].name;
@@ -263,7 +263,7 @@ utils.createPrototypeObject(
             activeAnimationList.length = 0;
         },
 
-        setTimeFactor: function (timeFactor) {
+        setTimeFactor: function(timeFactor) {
             var tf = timeFactor / this._timeFactor;
             this._startTime += (this._simulationTime - this._simulationTime * tf) / tf;
 
@@ -273,11 +273,11 @@ utils.createPrototypeObject(
                 this._simulationTime += (this._simulationTime - this._simulationTime * tf) / tf;
         },
 
-        getTimeFactor: function () {
+        getTimeFactor: function() {
             return this._timeFactor;
         },
 
-        isPlaying: function (name) {
+        isPlaying: function(name) {
             if (this._activeAnimations[name]) return true;
             return false;
         },
@@ -289,7 +289,7 @@ utils.createPrototypeObject(
         //     weight: 1.0,
         //     loop: true / false
         // }
-        playAnimationObject: function (obj) {
+        playAnimationObject: function(obj) {
             var anim = this._instanceAnimations[obj.name];
             if (!anim) {
                 notify.info('no animation ' + obj.name + ' found');
@@ -307,7 +307,7 @@ utils.createPrototypeObject(
 
         // if first argument is an object
         // playAnimationObject is called instead
-        playAnimation: function (name, loop, priority, weight) {
+        playAnimation: function(name, loop, priority, weight) {
             var animationObject;
             if (typeof name === 'object') animationObject = name;
             else {
@@ -322,11 +322,11 @@ utils.createPrototypeObject(
             return this.playAnimationObject(animationObject);
         },
 
-        getAnimations: function () {
+        getAnimations: function() {
             return this._instanceAnimations;
         },
 
-        _registerAnimations: function () {
+        _registerAnimations: function() {
             if (!this._targets.length) return;
 
             for (var i = 0, ni = this._animationsToRegister.length; i < ni; i++) {
@@ -344,7 +344,7 @@ utils.createPrototypeObject(
         // target found in the scenegraph. If no target are registered animation cant be
         // registered. In this case animation will be pending and resolved after a visitor
         // extract target.
-        _registerInstanceAnimation: function (instanceAnimation) {
+        _registerInstanceAnimation: function(instanceAnimation) {
             var instanceChannels = instanceAnimation.channels;
             for (var i = 0, ni = instanceChannels.length; i < ni; i++) {
                 var instanceChannel = instanceChannels[i];
@@ -370,7 +370,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        _findAnimationUpdateCallback: function (node) {
+        _findAnimationUpdateCallback: function(node) {
             var collector = new CollectAnimationUpdateCallbackVisitor();
             node.accept(collector);
             this._animationsUpdateCallback = collector.getAnimationUpdateCallbackMap();
@@ -384,14 +384,14 @@ utils.createPrototypeObject(
         // manager we skip it.  It means that it should be called
         // after the animations has been registered into the animation
         // manager
-        _registerTargetFoundInAnimationCallback: function () {
+        _registerTargetFoundInAnimationCallback: function() {
             this._resetTargets();
 
             var targetID = 0;
             var targetMap = this._targetMap;
             var targets = this._targets;
 
-            var registerTarget = function (uniqueTargetName, target) {
+            var registerTarget = function(uniqueTargetName, target) {
                 if (!targetMap[uniqueTargetName]) {
                     targetMap[uniqueTargetName] = target;
                     // assign an id that will be an index into a array
@@ -451,7 +451,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _addAnimation: function (animations) {
+        _addAnimation: function(animations) {
             var instanceAnimationList = [];
             for (var i = 0, ni = animations.length; i < ni; i++) {
                 var animation = animations[i];
@@ -468,7 +468,7 @@ utils.createPrototypeObject(
         },
 
         // add channels from instance animation to the active channels list
-        _addActiveChannels: function (t, instanceAnimation) {
+        _addActiveChannels: function(t, instanceAnimation) {
             var instanceChannels = instanceAnimation.channels;
             for (var i = 0, ni = instanceChannels.length; i < ni; i++) {
                 var instanceChannel = instanceChannels[i];
@@ -484,7 +484,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _removeActiveChannels: function (instanceAnimation) {
+        _removeActiveChannels: function(instanceAnimation) {
             var instanceChannels = instanceAnimation.channels;
             for (var i = 0, ni = instanceChannels.length; i < ni; i++) {
                 var instanceChannel = instanceChannels[i];
@@ -507,7 +507,7 @@ utils.createPrototypeObject(
 
         // blend value from each channels for each target
         // or copy default value if not updated by an active animation
-        _updateTargetType: function (targetList, operatorType) {
+        _updateTargetType: function(targetList, operatorType) {
             for (var i = 0, ni = targetList.length; i < ni; i++) {
                 var target = targetList[i];
                 var affectedChannels = target.channels;
@@ -546,7 +546,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _updateChannelsType: function (t, channels, interpolator) {
+        _updateChannelsType: function(t, channels, interpolator) {
             for (var i = 0, ni = channels.length; i < ni; i++) {
                 var channel = channels[i];
                 var instanceAnimation = channel.instanceAnimation;
@@ -563,7 +563,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _removeFinishedAnimation: function (t) {
+        _removeFinishedAnimation: function(t) {
             var activeAnimationList = this._activeAnimationList;
 
             var i = 0;
@@ -581,7 +581,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _addActiveAnimation: function (t, cmd) {
+        _addActiveAnimation: function(t, cmd) {
             this._activeAnimations[cmd.name] = cmd; // set animation in the list of active one
 
             var instanceAnimation = this._instanceAnimations[cmd.name];
@@ -595,7 +595,7 @@ utils.createPrototypeObject(
 
         // execute start animations events
         // during the updateManager
-        _processStartAnimation: function (t) {
+        _processStartAnimation: function(t) {
             // dont really start animation if we dont have yet targets
             if (!this._targets.length) return;
 
@@ -612,7 +612,7 @@ utils.createPrototypeObject(
             if (keyAnimation !== undefined) this._startAnimations = {};
         },
 
-        _resetTargets: function () {
+        _resetTargets: function() {
             this._targetMap = {};
             this._targets.length = 0;
 
@@ -621,20 +621,20 @@ utils.createPrototypeObject(
             }
         },
 
-        resetUpdateCallbacks: function () {
+        resetUpdateCallbacks: function() {
             var anims = this._animationsUpdateCallbackArray;
             for (var i = 0, nbAnims = anims.length; i < nbAnims; i++) {
                 anims[i].reset();
             }
         },
 
-        resetAllStackedTransforms: function () {
+        resetAllStackedTransforms: function() {
             // resetAllStackedTransforms used to reset stacked only (not morph target)
             notify.warn('Uses resetUpdateCallback instead');
             this.resetUpdateCallbacks();
         },
 
-        setAnimationLerpEndStart: function (anim, lerpDuration) {
+        setAnimationLerpEndStart: function(anim, lerpDuration) {
             var channels = anim.channels;
             if (anim.originalDuration === undefined) anim.originalDuration = anim.duration;
 

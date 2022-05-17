@@ -14,7 +14,7 @@ import ShadowCasterVisitor from 'osgShadow/ShadowCasterVisitor';
  *  @{@link [http://trac.openscenegraph.org/projects/osg//wiki/Support/ProgrammingGuide/osgShadow]}
  *  @{@link [http://developer.download.nvidia.com/presentations/2008/GDC/GDC08_SoftShadowMapping.pdf]};
  */
-var ShadowedScene = function (settings) {
+var ShadowedScene = function(settings) {
     Node.call(this);
 
     // TODO: all  techniques (stencil/projTex/map/vol)
@@ -46,15 +46,15 @@ var ShadowedScene = function (settings) {
 utils.createPrototypeNode(
     ShadowedScene,
     utils.objectInherit(Node.prototype, {
-        getReceivingStateSet: function () {
+        getReceivingStateSet: function() {
             return this._receivingStateset;
         },
 
-        getShadowTechniques: function () {
+        getShadowTechniques: function() {
             return this._shadowTechniques;
         },
 
-        addShadowTechnique: function (technique) {
+        addShadowTechnique: function(technique) {
             if (this._shadowTechniques.length > 0) {
                 if (this._shadowTechniques.indexOf(technique) !== -1) return;
             }
@@ -66,7 +66,7 @@ utils.createPrototypeNode(
                 technique.dirty();
             }
         },
-        removeShadowTechnique: function (technique) {
+        removeShadowTechnique: function(technique) {
             if (this._shadowTechniques.length > 0) {
                 var idx = this._shadowTechniques.indexOf(technique);
                 if (idx !== -1) {
@@ -78,7 +78,7 @@ utils.createPrototypeNode(
             }
         },
         /** Clean scene graph from any shadow technique specific nodes, state and drawables.*/
-        cleanSceneGraph: function () {
+        cleanSceneGraph: function() {
             for (var i = 0, lt = this._shadowTechniques.length; i < lt; i++) {
                 if (this._shadowTechniques[i] && this._shadowTechniques[i].valid()) {
                     this._shadowTechniques[i].cleanSceneGraph();
@@ -87,16 +87,16 @@ utils.createPrototypeNode(
         },
 
         /** Dirty any cache data structures held in the attached ShadowTechnique.*/
-        dirty: function () {
+        dirty: function() {
             for (var i = 0; i < this._shadowTechniques.length; i++)
                 this._shadowTechniques[i].dirty();
         },
 
-        nodeTraverse: function (nv) {
+        nodeTraverse: function(nv) {
             Node.prototype.traverse.call(this, nv);
         },
 
-        setShadowSettings: function (shadowSettings) {
+        setShadowSettings: function(shadowSettings) {
             this._settings = shadowSettings;
 
             this.setCastsShadowDrawTraversalMask(shadowSettings.castsShadowDrawTraversalMask);
@@ -115,23 +115,23 @@ utils.createPrototypeNode(
             }
         },
 
-        setCastsShadowDrawTraversalMask: function (mask) {
+        setCastsShadowDrawTraversalMask: function(mask) {
             this._castsShadowDrawTraversalMask = mask;
         },
 
-        getCastsShadowDrawTraversalMask: function () {
+        getCastsShadowDrawTraversalMask: function() {
             return this._castsDrawShadowTraversalMask;
         },
 
-        setCastsShadowBoundsTraversalMask: function (mask) {
+        setCastsShadowBoundsTraversalMask: function(mask) {
             this._castsShadowBoundsTraversalMask = mask;
         },
 
-        getCastsShadowBoundsTraversalMask: function () {
+        getCastsShadowBoundsTraversalMask: function() {
             return this._castsShadowBoundsTraversalMask;
         },
 
-        computeShadowedSceneBounds: function () {
+        computeShadowedSceneBounds: function() {
             if (this._removeNodesNeverCastingVisitor) {
                 this._removeNodesNeverCastingVisitor.setNoCastMask(
                     ~(this._castsShadowBoundsTraversalMask | this._castsShadowDrawTraversalMask)
@@ -159,7 +159,7 @@ utils.createPrototypeNode(
             return true;
         },
 
-        traverse: function (nv) {
+        traverse: function(nv) {
             // update the scene
             if (nv.getVisitorType() === NodeVisitor.CULL_VISITOR) {
                 var i,

@@ -6,9 +6,9 @@ import nodeFactory from 'osgShader/nodeFactory';
 import ShadowReceiveAttribute from 'osgShadow/ShadowReceiveAttribute';
 import ShadowTexture from 'osgShadow/ShadowTexture';
 
-export default function () {
-    test('Compiler', function () {
-        (function () {
+export default function() {
+    test('Compiler', function() {
+        (function() {
             var light = new Light(1);
             var shadowReceiveAttribute = new ShadowReceiveAttribute(light.getLightNumber());
             var shadowTexture = new ShadowTexture();
@@ -39,7 +39,7 @@ export default function () {
 
             globalDecl = globalDecl.split('\n');
             var hasDuplicates = false;
-            globalDecl.sort().filter(function (item, pos) {
+            globalDecl.sort().filter(function(item, pos) {
                 if (!hasDuplicates && item === globalDecl[pos - 1]) hasDuplicates = true;
                 return !pos || item !== globalDecl[pos - 1];
             });
@@ -58,7 +58,7 @@ export default function () {
             var abstractNodeList = [];
             var variableNodeList = [];
             var realNodeList = [];
-            nodes.forEach(function (value /*, key, map*/) {
+            nodes.forEach(function(value /*, key, map*/) {
                 var instance = Object.create(value.prototype);
                 value.apply(instance);
                 var t = instance.getType();
@@ -81,7 +81,7 @@ export default function () {
             );
 
             //
-            var realNodeListUniq = realNodeList.sort().filter(function (item, pos) {
+            var realNodeListUniq = realNodeList.sort().filter(function(item, pos) {
                 return !pos || item !== realNodeList[pos - 1];
             });
             assert.isOk(

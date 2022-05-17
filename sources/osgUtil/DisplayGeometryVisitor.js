@@ -16,7 +16,7 @@ import Depth from 'osg/Depth';
 ////////////////////////
 // COMPILER DEBUG GEOMETRY
 ////////////////////////
-var CompilerColorGeometry = function () {
+var CompilerColorGeometry = function() {
     Compiler.apply(this, arguments);
 };
 
@@ -29,11 +29,11 @@ Compiler.setStateAttributeConfig(CompilerColorGeometry, configColor);
 utils.createPrototypeObject(
     CompilerColorGeometry,
     utils.objectInherit(Compiler.prototype, {
-        getCompilerName: function () {
+        getCompilerName: function() {
             return 'CompilerDebugGeometry';
         },
-        initTextureAttributes: function () {},
-        createFragmentShaderGraph: function () {
+        initTextureAttributes: function() {},
+        createFragmentShaderGraph: function() {
             var frag = this.getNode('glFragColor');
 
             this.getNode('SetAlpha')
@@ -52,7 +52,7 @@ utils.createPrototypeObject(
     'CompilerColorGeometry'
 );
 
-var ShaderGeneratorCompilerColorGeometry = function () {
+var ShaderGeneratorCompilerColorGeometry = function() {
     ShaderGenerator.apply(this, arguments);
     this.setShaderCompiler(CompilerColorGeometry);
 };
@@ -67,7 +67,7 @@ utils.createPrototypeObject(
 ////////////////////////
 // COMPILER SKINNING DEBUG
 ////////////////////////
-var CompilerColorSkinning = function () {
+var CompilerColorSkinning = function() {
     Compiler.apply(this, arguments);
 };
 
@@ -79,11 +79,11 @@ Compiler.setStateAttributeConfig(CompilerColorSkinning, configSkinning);
 utils.createPrototypeObject(
     CompilerColorSkinning,
     utils.objectInherit(Compiler.prototype, {
-        getCompilerName: function () {
+        getCompilerName: function() {
             return 'CompilerDebugSkinning';
         },
-        initTextureAttributes: function () {},
-        createFragmentShaderGraph: function () {
+        initTextureAttributes: function() {},
+        createFragmentShaderGraph: function() {
             var frag = this.getNode('glFragColor');
 
             this.getNode('SetAlpha')
@@ -97,7 +97,7 @@ utils.createPrototypeObject(
 
             return [frag];
         },
-        declareVertexVaryings: function (roots) {
+        declareVertexVaryings: function(roots) {
             var color = this.getOrCreateVarying('vec3', 'vBonesColor');
             this.getNode('SetFromNode')
                 .inputs(this.getOrCreateAttribute('vec3', 'BonesColor'))
@@ -109,7 +109,7 @@ utils.createPrototypeObject(
     'CompilerColorSkinning'
 );
 
-var ShaderGeneratorCompilerColorSkinning = function () {
+var ShaderGeneratorCompilerColorSkinning = function() {
     ShaderGenerator.apply(this, arguments);
     this.setShaderCompiler(CompilerColorSkinning);
 };
@@ -125,7 +125,7 @@ utils.createPrototypeObject(
 // DISPLAY GEOMETRY VISITOR
 ///////////////////////////
 
-var GeometryColorDebugVisitor = function () {
+var GeometryColorDebugVisitor = function() {
     NodeVisitor.call(this);
     this._debugColor = true;
     this._debugSkinning = false;
@@ -135,38 +135,36 @@ var GeometryColorDebugVisitor = function () {
 };
 
 GeometryColorDebugVisitor.CompilerColorGeometry = CompilerColorGeometry;
-GeometryColorDebugVisitor.ShaderGeneratorCompilerColorGeometry =
-    ShaderGeneratorCompilerColorGeometry;
+GeometryColorDebugVisitor.ShaderGeneratorCompilerColorGeometry = ShaderGeneratorCompilerColorGeometry;
 
 GeometryColorDebugVisitor.CompilerSkinningGeometry = CompilerColorSkinning;
-GeometryColorDebugVisitor.ShaderGeneratorCompilerColorSkinning =
-    ShaderGeneratorCompilerColorSkinning;
+GeometryColorDebugVisitor.ShaderGeneratorCompilerColorSkinning = ShaderGeneratorCompilerColorSkinning;
 
 utils.createPrototypeObject(
     GeometryColorDebugVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        setGeometryDebug: function (node) {
+        setGeometryDebug: function(node) {
             this._stCenter.setAttributeAndModes(new Depth(Depth.ALWAYS));
             this._debugColor = true;
             this._debugSkinning = false;
             this.apply(node);
         },
 
-        setSkinningDebug: function (node) {
+        setSkinningDebug: function(node) {
             this._stCenter.setAttributeAndModes(new Depth(Depth.NEVER));
             this._debugColor = false;
             this._debugSkinning = true;
             this.apply(node);
         },
 
-        disableDebug: function (node) {
+        disableDebug: function(node) {
             this._stCenter.setAttributeAndModes(new Depth(Depth.NEVER));
             this._debugColor = false;
             this._debugSkinning = false;
             this.apply(node);
         },
 
-        _debugCenterGeometry: function (node, color) {
+        _debugCenterGeometry: function(node, color) {
             // draw cross with slightly different color than the geometry
             var bb = node.getBound();
 
@@ -201,7 +199,7 @@ utils.createPrototypeObject(
             mt._isCenterDebug = true;
         },
 
-        _debugRigGeometry: function (node) {
+        _debugRigGeometry: function(node) {
             // a bone can be shared between several rigs so we use the instanceID to get unique color
             var vList = node.getVertexAttributeList();
             if (vList.BonesColor) return;
@@ -235,7 +233,7 @@ utils.createPrototypeObject(
             vList.BonesColor = new BufferArray(BufferArray.ARRAY_BUFFER, bonesColor, 3);
         },
 
-        _debugGeometry: function (node) {
+        _debugGeometry: function(node) {
             var debugColor = this._debugColor;
             var debugSkinning = this._debugSkinning && node instanceof RigGeometry;
 
@@ -267,7 +265,7 @@ utils.createPrototypeObject(
             this._debugCenterGeometry(node, color);
         },
 
-        apply: function (node) {
+        apply: function(node) {
             if (node._isNormalDebug || node._isCenterDebug) return;
 
             if (node instanceof Geometry) {

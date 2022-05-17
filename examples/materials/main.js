@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var P = window.P;
@@ -10,12 +10,12 @@
 
     // we use this visitor to copy TexCoord0 to TexCoord1
     // for multi texture purpose
-    var VisitorCopyTexCoord = function () {
+    var VisitorCopyTexCoord = function() {
         osg.NodeVisitor.call(this);
     };
 
     VisitorCopyTexCoord.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.getTypeID() === osg.Geometry.getTypeID()) {
                 // copy tex coord 0 to 1 for multi texture
                 node.getAttributes()['TexCoord1'] = node.getAttributes()['TexCoord0'];
@@ -24,7 +24,7 @@
         }
     });
 
-    var Example = function () {
+    var Example = function() {
         this._textureNames = [
             'seamless/fabric1.jpg',
             'seamless/fabric2.jpg',
@@ -94,16 +94,16 @@
     };
 
     Example.prototype = {
-        initDatGUI: function () {
+        initDatGUI: function() {
             var path = '../media/textures/';
 
             // generate array of paths
-            var paths = this._textureNames.map(function (name) {
+            var paths = this._textureNames.map(function(name) {
                 return path + name;
             });
 
             // generate array of promise
-            var images = paths.map(function (pathname) {
+            var images = paths.map(function(pathname) {
                 return osgDB.readImageURL(pathname);
             });
 
@@ -204,8 +204,8 @@
 
             // wait for all images
             P.all(images).then(
-                function (args) {
-                    this._textures = args.map(function (image) {
+                function(args) {
+                    this._textures = args.map(function(image) {
                         var texture = new osg.Texture();
                         texture.setImage(image);
                         texture.setWrapT('REPEAT');
@@ -263,7 +263,7 @@
         },
 
         // init a model
-        createModelInstance: function () {
+        createModelInstance: function() {
             if (!this._model) {
                 this._model = new osg.MatrixTransform();
                 osg.mat4.fromRotation(this._model.getMatrix(), -Math.PI, [0, 0, 1]);
@@ -271,7 +271,7 @@
 
                 // copy tex coord 0 to tex coord1 for multi texture
                 request.then(
-                    function (model) {
+                    function(model) {
                         var copyTexCoord = new VisitorCopyTexCoord();
                         model.accept(copyTexCoord);
                         this._model.addChild(model);
@@ -286,7 +286,7 @@
         },
 
         // init a sphere model
-        createSphereInstance: function () {
+        createSphereInstance: function() {
             if (!this._sphere) {
                 this._sphere = new osg.MatrixTransform();
                 osg.mat4.fromTranslation(this._sphere.getMatrix(), [0, 0, 15]);
@@ -305,7 +305,7 @@
             return node;
         },
 
-        convertColor: function (color) {
+        convertColor: function(color) {
             var r, g, b;
 
             if (color.length === 3) {
@@ -329,12 +329,12 @@
             return result;
         },
 
-        setStateSetTransparent: function (ss) {
+        setStateSetTransparent: function(ss) {
             ss.setRenderingHint('TRANSPARENT_BIN');
             ss.setAttributeAndModes(new osg.BlendFunc('ONE', 'ONE_MINUS_SRC_ALPHA'));
         },
 
-        updateMaterial1: function () {
+        updateMaterial1: function() {
             if (!this._stateSet1) return;
             var material = this._stateSet1.getAttribute('Material');
             if (!material) material = new osg.Material();
@@ -347,7 +347,7 @@
             material.setShininess(Math.exp(this._config.materialShininess1 * 13.0 - 4.0));
         },
 
-        updateMaterial2: function () {
+        updateMaterial2: function() {
             if (!this._stateSet2) return;
             var material = this._stateSet2.getAttribute('Material');
             if (!material) material = new osg.Material();
@@ -367,7 +367,7 @@
             this._stateSet2.setTextureAttributeAndModes(0, texture);
         },
 
-        updateMaterial3: function () {
+        updateMaterial3: function() {
             if (!this._stateSet3) return;
             var material = this._stateSet3.getAttribute('Material');
             if (!material) material = new osg.Material();
@@ -403,7 +403,7 @@
             this._stateSet3.setTextureAttributeAndModes(1, texture);
         },
 
-        updateMaterial4: function () {
+        updateMaterial4: function() {
             if (!this._stateSet4) return;
             var material = this._stateSet4.getAttribute('Material');
             if (!material) material = new osg.Material();
@@ -429,7 +429,7 @@
             this._stateSet4.setTextureAttributeAndModes(0, texture);
         },
 
-        updateMaterial5: function () {
+        updateMaterial5: function() {
             if (!this._stateSet5) return;
             var material = this._stateSet5.getAttribute('Material');
             if (!material) material = new osg.Material();
@@ -459,7 +459,7 @@
             this._stateSet5.setTextureAttributeAndModes(1, texture);
         },
 
-        createScene: function () {
+        createScene: function() {
             var group = new osg.Node();
 
             var model1 = this.createModelInstance();
@@ -495,7 +495,7 @@
             return group;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, this._osgOptions);
             this._viewer = viewer;
@@ -515,7 +515,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

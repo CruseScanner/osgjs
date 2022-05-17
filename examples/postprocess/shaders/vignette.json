@@ -1,10 +1,10 @@
 {
-    "passes": [
-        {
-            "func": "vignette",
-            "textures": "%last",
-            "out": { "name": "%next" },
-            "collapsible": true
-        }
-    ]
+	"passes": [
+		{
+			"func": "vignette",
+			"textures": "%last",
+			"out": { "name": "%next" },
+			"collapsible": true
+		}
+	]
 }

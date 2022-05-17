@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import NodeVisitor from 'osg/NodeVisitor';
 
-var UpdateVisitor = function () {
+var UpdateVisitor = function() {
     NodeVisitor.call(this);
     this.visitorType = NodeVisitor.UPDATE_VISITOR;
     this._numUpdateCallback = 0;
@@ -10,11 +10,11 @@ var UpdateVisitor = function () {
 utils.createPrototypeObject(
     UpdateVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        resetStats: function () {
+        resetStats: function() {
             this._numUpdateCallback = 0;
         },
 
-        apply: function (node) {
+        apply: function(node) {
             // a way to avoid extra call is to implement getNumChildrenRequiringUpdateTraversal
             // and stateset.requiresUpdateTraversal()
 

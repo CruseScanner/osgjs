@@ -2,7 +2,7 @@ import utils from 'osg/utils';
 import Node from 'osg/Node';
 import { mat4 } from 'osg/glMatrix';
 
-var Projection = function () {
+var Projection = function() {
     Node.call(this);
     this.projection = mat4.create();
 };
@@ -10,10 +10,10 @@ var Projection = function () {
 utils.createPrototypeNode(
     Projection,
     utils.objectInherit(Node.prototype, {
-        getProjectionMatrix: function () {
+        getProjectionMatrix: function() {
             return this.projection;
         },
-        setProjectionMatrix: function (m) {
+        setProjectionMatrix: function(m) {
             this.projection = m;
         }
     }),

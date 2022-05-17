@@ -1,4 +1,4 @@
-var StackObjectPairPool = function () {
+var StackObjectPairPool = function() {
     this._globalDefault = undefined;
     this._lastApplied = undefined;
     this._changed = false;
@@ -9,10 +9,10 @@ var StackObjectPairPool = function () {
 };
 
 StackObjectPairPool.prototype = {
-    getLength: function () {
+    getLength: function() {
         return this._length;
     },
-    push: function (object, value) {
+    push: function(object, value) {
         var objectPair;
         if (this._length === this._values.length) {
             objectPair = { object: object, value: value };
@@ -25,7 +25,7 @@ StackObjectPairPool.prototype = {
         this._back = objectPair;
         this._length++;
     },
-    pop: function () {
+    pop: function() {
         if (!this._length) return undefined;
         var values = this._values;
         this._length--;

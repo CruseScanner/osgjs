@@ -11,8 +11,8 @@ import Viewport from 'osg/Viewport';
 import View from 'osgViewer/View';
 import ReaderParser from 'osgDB/readerParser';
 
-export default function () {
-    test('NodeVisitor Heavy Static Scene', function () {
+export default function() {
+    test('NodeVisitor Heavy Static Scene', function() {
         var root = new Node();
         mockupBench.addScene(root, 25, false, false);
 
@@ -36,22 +36,26 @@ export default function () {
         reportStats(timed, 'Visitor Visiting');
     });
 
-    test('IntersectVisitor Heavy Static Scene', function () {
+    test('IntersectVisitor Heavy Static Scene', function() {
         this.timeout(20000);
 
         var view = new View();
         view.getCamera().setViewport(new Viewport());
-        view.getCamera().setViewMatrix(
-            mat4.lookAt(
-                mat4.create(),
-                vec3.fromValues(0, 0, -10),
-                vec3.fromValues(0, 0, 0),
-                vec3.fromValues(0, 1, 0)
-            )
-        );
-        view.getCamera().setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
-        );
+        view
+            .getCamera()
+            .setViewMatrix(
+                mat4.lookAt(
+                    mat4.create(),
+                    vec3.fromValues(0, 0, -10),
+                    vec3.fromValues(0, 0, 0),
+                    vec3.fromValues(0, 1, 0)
+                )
+            );
+        view
+            .getCamera()
+            .setProjectionMatrix(
+                mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            );
 
         // TODO it uses the old sync parseSceneGraphDeprecated
         var root = ReaderParser.parseSceneGraph(mockup.getScene());
@@ -77,7 +81,7 @@ export default function () {
             )
         );
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var result;

@@ -7,8 +7,8 @@ import StackedRotateAxis from 'osgAnimation/StackedRotateAxis';
 import StackedMatrix from 'osgAnimation/StackedMatrix';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
-    test('BasicAnimationManager', function () {
+export default function() {
+    test('BasicAnimationManager', function() {
         var animation = mockup.createAnimation('AnimationTest');
         var cbMap = mockup.createAnimationUpdateCallback([animation]);
 
@@ -30,9 +30,9 @@ export default function () {
         //
         var time = 0.0;
         var nv = {
-            getFrameStamp: function () {
+            getFrameStamp: function() {
                 return {
-                    getSimulationTime: function () {
+                    getSimulationTime: function() {
                         return time;
                     }
                 };
@@ -81,7 +81,7 @@ export default function () {
         );
     });
 
-    test('BasicAnimationManager Linking', function () {
+    test('BasicAnimationManager Linking', function() {
         var animation = mockup.createAnimation('AnimationTest', 'testUpdateMatrixTransform');
         var basicAnimationManager = new BasicAnimationManager();
         basicAnimationManager.init([animation]);
@@ -120,9 +120,9 @@ export default function () {
         //
         var time = 0.0;
         var nv = {
-            getFrameStamp: function () {
+            getFrameStamp: function() {
                 return {
-                    getSimulationTime: function () {
+                    getSimulationTime: function() {
                         return time;
                     }
                 };
@@ -168,7 +168,7 @@ export default function () {
         );
     });
 
-    test('BasicAnimationManager Controls', function () {
+    test('BasicAnimationManager Controls', function() {
         var animation = mockup.createAnimation();
         var duration = 4;
 
@@ -183,13 +183,13 @@ export default function () {
         var managerTime = 0.0;
         var pauseTime;
 
-        basicAnimationManager.updateManager = function (t) {
+        basicAnimationManager.updateManager = function(t) {
             managerTime = t;
         };
 
         var time = 0.0;
         var pause = false;
-        var togglePause = function () {
+        var togglePause = function() {
             pause = !pause;
             basicAnimationManager.togglePause();
             if (pause) pauseTime = time;
@@ -197,9 +197,9 @@ export default function () {
 
         //mockup a node visitor
         var nv = {
-            getFrameStamp: function () {
+            getFrameStamp: function() {
                 return {
-                    getSimulationTime: function () {
+                    getSimulationTime: function() {
                         return time;
                     }
                 };
@@ -418,7 +418,7 @@ export default function () {
         );
     });
 
-    test('BasicAnimationManager Negative time in animation key', function () {
+    test('BasicAnimationManager Negative time in animation key', function() {
         var animation = mockup.createAnimationWithNegativeKey('NegativeKeys');
 
         var cbMap = mockup.createAnimationUpdateCallback([animation]);
@@ -432,9 +432,9 @@ export default function () {
         //mockup a node visitor
         var time = 0.0;
         var nv = {
-            getFrameStamp: function () {
+            getFrameStamp: function() {
                 return {
-                    getSimulationTime: function () {
+                    getSimulationTime: function() {
                         return time;
                     }
                 };

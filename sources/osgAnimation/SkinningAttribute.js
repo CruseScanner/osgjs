@@ -7,7 +7,7 @@ import Uniform from 'osg/Uniform';
  * @class SkinningAttribute
  * @inherits StateAttribute
  */
-var SkinningAttribute = function (disable, boneUniformSize) {
+var SkinningAttribute = function(disable, boneUniformSize) {
     StateAttribute.call(this);
     this._enable = !disable;
     // optional, if it's not provided, it will fall back to the maximum bone uniform size
@@ -27,17 +27,17 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Skinning',
 
-        cloneType: function () {
+        cloneType: function() {
             return new SkinningAttribute(true);
         },
 
-        getBoneUniformSize: function () {
+        getBoneUniformSize: function() {
             return this._boneUniformSize !== undefined
                 ? this._boneUniformSize
                 : SkinningAttribute.maxBoneUniformSize;
         },
 
-        getOrCreateUniforms: function () {
+        getOrCreateUniforms: function() {
             var obj = SkinningAttribute;
             var boneSize = this.getBoneUniformSize();
 
@@ -50,7 +50,7 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms[boneSize];
         },
 
-        setMatrixPalette: function (matrixPalette) {
+        setMatrixPalette: function(matrixPalette) {
             this._matrixPalette = matrixPalette;
             // update max bone size
             if (this._boneUniformSize === undefined) {
@@ -65,17 +65,17 @@ utils.createPrototypeStateAttribute(
             }
         },
 
-        getMatrixPalette: function () {
+        getMatrixPalette: function() {
             return this._matrixPalette;
         },
 
         // need a isEnabled to let the ShaderGenerator to filter
         // StateAttribute from the shader compilation
-        isEnabled: function () {
+        isEnabled: function() {
             return this._enable;
         },
 
-        getHash: function () {
+        getHash: function() {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -83,15 +83,17 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function () {
+        _computeInternalHash: function() {
             // bone uniform size is hashed because the size of uniform is statically declared in the shader
             return this.getTypeMember() + this.getBoneUniformSize() + this.isEnabled();
         },
 
-        apply: function () {
+        apply: function() {
             if (!this._enable) return;
 
-            this.getOrCreateUniforms().uBones.getInternalArray().set(this._matrixPalette);
+            this.getOrCreateUniforms()
+                .uBones.getInternalArray()
+                .set(this._matrixPalette);
         }
     }),
     'osgAnimation',

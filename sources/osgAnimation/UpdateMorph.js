@@ -5,7 +5,7 @@ import AnimationUpdateCallback from 'osgAnimation/AnimationUpdateCallback';
 import Target from 'osgAnimation/target';
 import MorphGeometry from 'osgAnimation/MorphGeometry';
 
-var UpdateMorph = function () {
+var UpdateMorph = function() {
     AnimationUpdateCallback.call(this);
 
     this._targets = []; // float target
@@ -21,14 +21,14 @@ var UpdateMorph = function () {
 };
 
 // for sorting
-var funcWeights = function (a, b) {
+var funcWeights = function(a, b) {
     return Math.abs(b.value) - Math.abs(a.value);
 };
 
 utils.createPrototypeObject(
     UpdateMorph,
     utils.objectInherit(AnimationUpdateCallback.prototype, {
-        _initNode: function (geom) {
+        _initNode: function(geom) {
             var morph;
             if (geom instanceof MorphGeometry) {
                 morph = geom;
@@ -49,7 +49,7 @@ utils.createPrototypeObject(
             }
         },
 
-        init: function (node) {
+        init: function(node) {
             this._maxMorphGPU = MorphGeometry.MAX_MORPH_GPU;
             this._morphs.length = 0;
 
@@ -65,7 +65,7 @@ utils.createPrototypeObject(
             }
         },
 
-        isInitialized: function () {
+        isInitialized: function() {
             var morphs = this._morphs;
             var nbMorphs = morphs.length;
             if (!nbMorphs) return false;
@@ -77,24 +77,24 @@ utils.createPrototypeObject(
             return true;
         },
 
-        getNumTarget: function () {
+        getNumTarget: function() {
             return this._targets.length;
         },
 
-        getTarget: function (index) {
+        getTarget: function(index) {
             return this._targets[index];
         },
 
-        getTargetName: function (index) {
+        getTargetName: function(index) {
             return this._targetNames[index];
         },
 
-        addTarget: function (name, index) {
+        addTarget: function(name, index) {
             this._targets[index] = Target.createFloatTarget(0);
             this._targetNames[index] = name;
         },
 
-        _remapBufferArrays: function () {
+        _remapBufferArrays: function() {
             // basically, this function remaps all the active morphed VA to the 4th first morphTargets VA
             var indexMap = this._indexMap;
             var morphs = this._morphs;
@@ -117,7 +117,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _mergeExtraMorphTarget: function (attrs, attName, extraWeightSum) {
+        _mergeExtraMorphTarget: function(attrs, attName, extraWeightSum) {
             var i = 0;
             // ignore the gpu morphed
             var gpuMorphed = this._gpuMorphed;
@@ -159,7 +159,7 @@ utils.createPrototypeObject(
             vAttr._cpuMorph.dirty();
         },
 
-        _computeExtraWeightsSum: function () {
+        _computeExtraWeightsSum: function() {
             var gpuMorphed = this._gpuMorphed;
             var sum = 0.0;
             var targets = this._targets;
@@ -178,7 +178,7 @@ utils.createPrototypeObject(
             return sum < 0.0 ? -eps : eps;
         },
 
-        _morphBufferArrayCPU: function () {
+        _morphBufferArrayCPU: function() {
             // the idea is... we have :
             // v' = v * (1-w1-w2-w3) + t1*w1 + t2*w2 + t3*w3
             // we want
@@ -189,8 +189,9 @@ utils.createPrototypeObject(
             // (w4 is extraWeightSum and t4 will be computed in _mergeExtraMorphTarget)
 
             // compute new weights for the 4th target (all the extra target will be merged inside this one)
-            var extraWeightSum = (this._weights[this._maxMorphGPU - 1] =
-                this._computeExtraWeightsSum());
+            var extraWeightSum = (this._weights[
+                this._maxMorphGPU - 1
+            ] = this._computeExtraWeightsSum());
 
             var processed = {}; // handles referenced buffer array (avoid useless double morph computation the same buffer)
             var morphs = this._morphs;
@@ -211,7 +212,7 @@ utils.createPrototypeObject(
             }
         },
 
-        updateWeights: function () {
+        updateWeights: function() {
             if (this._maxMorphGPU === 0) return;
 
             var i = 0;
@@ -258,14 +259,14 @@ utils.createPrototypeObject(
             }
         },
 
-        reset: function () {
+        reset: function() {
             var targets = this._targets;
             for (var i = 0, nbTarget = targets.length; i < nbTarget; ++i) {
                 targets[i].value = targets[i].defaultValue;
             }
         },
 
-        update: function (node /*, nv*/) {
+        update: function(node /*, nv*/) {
             if (!this.isInitialized()) this.init(node);
 
             this.updateWeights();

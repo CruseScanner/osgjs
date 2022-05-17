@@ -4,13 +4,13 @@ var OSG = window.OSG;
 var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
-var SimpleUpdateCallback = function () {};
+var SimpleUpdateCallback = function() {};
 
 SimpleUpdateCallback.prototype = {
     // rotation angle
     angle: 0,
 
-    update: function (node, nv) {
+    update: function(node, nv) {
         var t = nv.getFrameStamp().getSimulationTime();
         var dt = t - node._lastUpdate;
         if (dt < 0) {
@@ -56,7 +56,7 @@ function createScene() {
     return root;
 }
 
-var main = function () {
+var main = function() {
     // from require to global var
     // The 3D canvas.
     var canvas = document.getElementById('View');

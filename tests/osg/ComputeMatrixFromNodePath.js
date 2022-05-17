@@ -9,16 +9,16 @@ import Camera from 'osg/Camera';
 import { vec3 } from 'osg/glMatrix';
 import TransformEnums from 'osg/transformEnums';
 
-export default function () {
-    test('ComputeMatrixFromNodePath', function () {
-        (function () {
+export default function() {
+    test('ComputeMatrixFromNodePath', function() {
+        (function() {
             // test visit parents
-            var GetRootItem = function () {
+            var GetRootItem = function() {
                 NodeVisitor.call(this, NodeVisitor.TRAVERSE_PARENTS);
                 this.node = undefined;
             };
             GetRootItem.prototype = utils.objectInherit(NodeVisitor.prototype, {
-                apply: function (node) {
+                apply: function(node) {
                     this.node = node;
                     this.traverse(node);
                 }
@@ -48,7 +48,7 @@ export default function () {
             assert.equalVector(trans, [0, -10, 10], 'Check translation of matrix');
         })();
 
-        (function () {
+        (function() {
             var root = new Camera();
             root.setName('root');
             root.setViewMatrix(mat4.fromTranslation(mat4.create(), [0, 0, 1000]));

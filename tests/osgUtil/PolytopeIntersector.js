@@ -14,8 +14,8 @@ import primitiveSet from 'osg/primitiveSet';
 import KdTreeBuilder from 'osg/KdTreeBuilder';
 import intersectionEnums from 'osgUtil/intersectionEnums';
 
-export default function () {
-    var createLines = function (lineType) {
+export default function() {
+    var createLines = function(lineType) {
         var g = new Geometry();
         var vertexes = new utils.Float32Array(12);
         vertexes[0] = -2.0;
@@ -59,7 +59,7 @@ export default function () {
         return g;
     };
 
-    var createTriangle = function () {
+    var createTriangle = function() {
         var g = new Geometry();
         var vertexes = new utils.Float32Array(9);
         vertexes[0] = -2.0;
@@ -95,7 +95,7 @@ export default function () {
         return g;
     };
 
-    var createBigTriangle = function () {
+    var createBigTriangle = function() {
         var g = new Geometry();
         var vertexes = new utils.Float32Array(9);
         vertexes[0] = -400.0;
@@ -131,7 +131,7 @@ export default function () {
         return g;
     };
 
-    var createPoints = function () {
+    var createPoints = function() {
         var g = new Geometry();
 
         var vertexes = new utils.Float32Array(9);
@@ -176,12 +176,12 @@ export default function () {
         return g;
     };
 
-    test('PolytopeIntersector intersectPoints', function () {
+    test('PolytopeIntersector intersectPoints', function() {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createPoints();
@@ -263,12 +263,12 @@ export default function () {
         );
     });
 
-    test('PolytopeIntersector intersectLines', function () {
+    test('PolytopeIntersector intersectLines', function() {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createLines(primitiveSet.LINES);
@@ -312,12 +312,12 @@ export default function () {
         );
     });
 
-    test('PolytopeIntersector intersectLineStrip', function () {
+    test('PolytopeIntersector intersectLineStrip', function() {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createLines(primitiveSet.LINE_STRIP);
@@ -339,12 +339,12 @@ export default function () {
         assert.equalVector(pi._intersections[0]._localIntersectionPoint, [-0.06415, 0.06415, 0]);
     });
 
-    test('PolytopeIntersector intersectTriangle', function () {
+    test('PolytopeIntersector intersectTriangle', function() {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createTriangle();
@@ -406,12 +406,12 @@ export default function () {
         );
     });
 
-    test('PolytopeIntersector polytope inside Triangle ', function () {
+    test('PolytopeIntersector polytope inside Triangle ', function() {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createBigTriangle();
@@ -473,7 +473,7 @@ export default function () {
         );
     });
 
-    test('PolytopeIntersector with kdtree and camera', function () {
+    test('PolytopeIntersector with kdtree and camera', function() {
         // This test will never work with kdtree
         var camera = new Camera();
         camera.setViewport(new Viewport());
@@ -486,7 +486,7 @@ export default function () {
             )
         );
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
         );
 
         var scene = createTriangle();

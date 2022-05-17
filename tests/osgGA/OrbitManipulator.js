@@ -2,26 +2,26 @@ import { assert } from 'chai';
 import OrbitManipulator from 'osgGA/OrbitManipulator';
 import mockup from 'tests/mockup/mockup';
 
-export default function () {
+export default function() {
     var viewer;
     var canvas;
-    before(function () {
+    before(function() {
         canvas = mockup.createCanvas();
         viewer = new mockup.Viewer(canvas);
     });
 
-    after(function () {
+    after(function() {
         mockup.removeCanvas(canvas);
         viewer.getInputManager().cleanup();
     });
 
-    test('OrbitManipulator', function () {
+    test('OrbitManipulator', function() {
         var manipulator = new OrbitManipulator({ inputManager: viewer.getInputManager() });
         var matrix = manipulator.getInverseMatrix();
         assert.isOk(matrix !== undefined, 'check getInverseMatrix method');
     });
 
-    test('OrbitManipulator check controllers', function () {
+    test('OrbitManipulator check controllers', function() {
         var manipulator = new OrbitManipulator({ inputManager: viewer.getInputManager() });
         var list = manipulator.getControllerList();
         assert.isOk(list.StandardMouseKeyboard !== undefined, 'check mouse support');
@@ -29,7 +29,7 @@ export default function () {
         assert.isOk(list.GamePad !== undefined, 'check game pad support');
     });
 
-    test('OrbitManipulator test limits yaw', function () {
+    test('OrbitManipulator test limits yaw', function() {
         var orbit = new OrbitManipulator({ inputManager: viewer.getInputManager() });
         var yaw;
 

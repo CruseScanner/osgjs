@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import StateAttribute from 'osg/StateAttribute';
 
-var LineWidth = function (lineWidth) {
+var LineWidth = function(lineWidth) {
     StateAttribute.call(this);
     this.lineWidth = 1.0;
     if (lineWidth !== undefined) {
@@ -12,10 +12,10 @@ utils.createPrototypeStateAttribute(
     LineWidth,
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'LineWidth',
-        cloneType: function () {
+        cloneType: function() {
             return new LineWidth();
         },
-        apply: function (state) {
+        apply: function(state) {
             state.getGraphicContext().lineWidth(this.lineWidth);
         }
     }),

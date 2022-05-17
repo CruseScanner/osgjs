@@ -12,7 +12,7 @@ import utils from 'osg/utils';
  * as this minimizes expensive state changes in the graphics pipeline.
  */
 
-var StateSet = function () {
+var StateSet = function() {
     Object.call(this);
 
     this._parents = [];
@@ -40,22 +40,22 @@ var StateSet = function () {
     this._drawID = -1; // used by the RenderLeaf to decide if it should apply the stateSet
 };
 
-StateSet.AttributePair = function (attr, value) {
+StateSet.AttributePair = function(attr, value) {
     this._object = attr;
     this._value = value;
 };
 
 StateSet.AttributePair.prototype = {
-    getShaderGeneratorName: function () {
+    getShaderGeneratorName: function() {
         return this._object;
     },
-    getAttribute: function () {
+    getAttribute: function() {
         return this._object;
     },
-    getUniform: function () {
+    getUniform: function() {
         return this._object;
     },
-    getValue: function () {
+    getValue: function() {
         return this._value;
     }
 };
@@ -63,70 +63,70 @@ StateSet.AttributePair.prototype = {
 utils.createPrototypeObject(
     StateSet,
     utils.objectInherit(Object.prototype, {
-        setDrawID: function (id) {
+        setDrawID: function(id) {
             this._drawID = id;
         },
 
-        getDrawID: function () {
+        getDrawID: function() {
             return this._drawID;
         },
 
-        getAttributePair: function (attribute, value) {
+        getAttributePair: function(attribute, value) {
             return new StateSet.AttributePair(attribute, value);
         },
 
-        addUniform: function (uniform, originalMode) {
+        addUniform: function(uniform, originalMode) {
             var mode = originalMode !== undefined ? originalMode : StateAttribute.ON;
             var name = uniform.getName();
             this.uniforms[name] = this.getAttributePair(uniform, mode);
             this._hasUniform = true;
         },
 
-        addParent: function (node) {
+        addParent: function(node) {
             this._parents.push(node);
         },
 
-        removeParent: function (node) {
+        removeParent: function(node) {
             var idx = this._parents.indexOf(node);
             if (idx === -1) return;
             this._parents.splice(idx, 1);
         },
 
-        removeUniform: function (uniform) {
+        removeUniform: function(uniform) {
             this.removeUniformByName(uniform.getName());
         },
 
-        removeUniformByName: function (uniformName) {
+        removeUniformByName: function(uniformName) {
             delete this.uniforms[uniformName];
             this._hasUniform = window.Object.keys(this.uniforms).length ? true : false;
         },
 
-        hasUniform: function () {
+        hasUniform: function() {
             return this._hasUniform;
         },
 
-        getUniform: function (uniform) {
+        getUniform: function(uniform) {
             var uniformMap = this.uniforms;
             if (uniformMap[uniform]) return uniformMap[uniform].getAttribute();
             return undefined;
         },
 
-        getUniformList: function () {
+        getUniformList: function() {
             return this.uniforms;
         },
 
-        setTextureAttributeAndModes: function (unit, attribute, mode) {
+        setTextureAttributeAndModes: function(unit, attribute, mode) {
             this._setTextureAttribute(
                 unit,
                 this.getAttributePair(attribute, mode !== undefined ? mode : StateAttribute.ON)
             );
         },
 
-        getNumTextureAttributeLists: function () {
+        getNumTextureAttributeLists: function() {
             return this._textureAttributeArrayList.length;
         },
 
-        getTextureAttribute: function (unit, typeMember) {
+        getTextureAttribute: function(unit, typeMember) {
             var index = utils.getTextureIdFromTypeMember(typeMember);
             if (index === undefined || !this._hasTextureAttribute(unit, index)) return undefined;
 
@@ -135,7 +135,7 @@ utils.createPrototypeObject(
             return undefined;
         },
 
-        removeTextureAttribute: function (unit, typeMember) {
+        removeTextureAttribute: function(unit, typeMember) {
             var index = utils.getTextureIdFromTypeMember(typeMember);
             if (index === undefined || !this._hasTextureAttribute(unit, index)) return;
 
@@ -145,25 +145,25 @@ utils.createPrototypeObject(
             this._computeValidTextureUnit();
         },
 
-        getAttribute: function (typeMember) {
+        getAttribute: function(typeMember) {
             var index = utils.getIdFromTypeMember(typeMember);
             if (index === undefined || !this._hasAttribute(index)) return undefined;
 
             return this._attributeArray[index].getAttribute();
         },
 
-        setAttributeAndModes: function (attribute, mode) {
+        setAttributeAndModes: function(attribute, mode) {
             this._setAttribute(
                 this.getAttributePair(attribute, mode !== undefined ? mode : StateAttribute.ON)
             );
         },
 
-        setAttribute: function (attribute, mode) {
+        setAttribute: function(attribute, mode) {
             this.setAttributeAndModes(attribute, mode);
         },
 
         // TODO: check if it's an attribute type or a attribute to remove it
-        removeAttribute: function (typeMember) {
+        removeAttribute: function(typeMember) {
             var index = utils.getIdFromTypeMember(typeMember);
             if (!this._hasAttribute(index)) return;
 
@@ -171,7 +171,7 @@ utils.createPrototypeObject(
             this._computeValidAttribute();
         },
 
-        setRenderingHint: function (hint) {
+        setRenderingHint: function(hint) {
             if (hint === 'OPAQUE_BIN') {
                 this.setRenderBinDetails(0, 'RenderBin');
             } else if (hint === 'TRANSPARENT_BIN') {
@@ -181,11 +181,11 @@ utils.createPrototypeObject(
             }
         },
 
-        getUpdateCallbackList: function () {
+        getUpdateCallbackList: function() {
             return this._updateCallbackList;
         },
 
-        removeUpdateCallback: function (cb) {
+        removeUpdateCallback: function(cb) {
             var idx = this._updateCallbackList.indexOf(cb);
             if (idx === -1) return;
             this._updateCallbackList.splice(idx, 1);
@@ -201,11 +201,11 @@ utils.createPrototypeObject(
             }
         },
 
-        requiresUpdateTraversal: function () {
+        requiresUpdateTraversal: function() {
             return !!this._updateCallbackList.length;
         },
 
-        addUpdateCallback: function (cb) {
+        addUpdateCallback: function(cb) {
             var dontNoticeParents = Boolean(this._updateCallbackList.length);
             this._updateCallbackList.push(cb);
 
@@ -221,15 +221,15 @@ utils.createPrototypeObject(
             }
         },
 
-        hasUpdateCallback: function (cb) {
+        hasUpdateCallback: function(cb) {
             return this._updateCallbackList.indexOf(cb) !== -1;
         },
 
-        setRenderBinDetails: function (num, binName) {
+        setRenderBinDetails: function(num, binName) {
             this._binNumber = num;
             this._binName = binName;
         },
-        getAttributeMap: function () {
+        getAttributeMap: function() {
             // not efficieant at all but not really critique
             var obj = {};
             for (var i = 0, l = this._attributeArray.length; i < l; i++) {
@@ -240,19 +240,19 @@ utils.createPrototypeObject(
             }
             return obj;
         },
-        getBinNumber: function () {
+        getBinNumber: function() {
             return this._binNumber;
         },
-        getBinName: function () {
+        getBinName: function() {
             return this._binName;
         },
-        setBinNumber: function (binNum) {
+        setBinNumber: function(binNum) {
             this._binNumber = binNum;
         },
-        setBinName: function (binName) {
+        setBinName: function(binName) {
             this._binName = binName;
         },
-        getAttributeList: function () {
+        getAttributeList: function() {
             var attributeArray = this._attributeArray;
             var list = [];
             for (var i = 0, l = attributeArray.length; i < l; i++) {
@@ -260,21 +260,21 @@ utils.createPrototypeObject(
             }
             return list;
         },
-        setShaderGeneratorName: function (generatorName, mode) {
+        setShaderGeneratorName: function(generatorName, mode) {
             this._shaderGeneratorPair = this.getAttributePair(
                 generatorName,
                 mode !== undefined ? mode : StateAttribute.ON
             );
         },
-        getShaderGeneratorPair: function () {
+        getShaderGeneratorPair: function() {
             return this._shaderGeneratorPair;
         },
-        getShaderGeneratorName: function () {
+        getShaderGeneratorName: function() {
             return this._shaderGeneratorPair
                 ? this._shaderGeneratorPair.getShaderGeneratorName()
                 : undefined;
         },
-        releaseGLObjects: function () {
+        releaseGLObjects: function() {
             for (var i = 0, j = this._textureAttributeArrayList.length; i < j; i++) {
                 var attribute = this.getTextureAttribute(i, 'Texture');
                 if (attribute) attribute.releaseGLObjects();
@@ -289,7 +289,7 @@ utils.createPrototypeObject(
         },
 
         // for internal use, you should not call it directly
-        _setTextureAttribute: function (unit, attributePair) {
+        _setTextureAttribute: function(unit, attributePair) {
             utils.arrayDense(unit, this._textureAttributeArrayList);
             if (!this._textureAttributeArrayList[unit]) this._textureAttributeArrayList[unit] = [];
 
@@ -302,7 +302,7 @@ utils.createPrototypeObject(
             this._computeValidTextureUnit();
         },
 
-        _computeValidTextureUnit: function () {
+        _computeValidTextureUnit: function() {
             this._activeTextureAttributeUnit.length = 0;
             this._activeTextureAttribute.length = 0;
             var textureAttributeArrayList = this._textureAttributeArrayList;
@@ -323,7 +323,7 @@ utils.createPrototypeObject(
                 if (hasValidAttribute) this._activeTextureAttributeUnit.push(i);
             }
         },
-        _computeValidAttribute: function () {
+        _computeValidAttribute: function() {
             this._activeAttribute.length = 0;
             var attributeArray = this._attributeArray;
             for (var i = 0, l = attributeArray.length; i < l; i++) {
@@ -331,7 +331,7 @@ utils.createPrototypeObject(
             }
         },
         // for internal use, you should not call it directly
-        _setAttribute: function (attributePair) {
+        _setAttribute: function(attributePair) {
             var index = utils.getOrCreateStateAttributeTypeMemberIndex(
                 attributePair.getAttribute()
             );
@@ -339,11 +339,11 @@ utils.createPrototypeObject(
             this._attributeArray[index] = attributePair;
             this._computeValidAttribute();
         },
-        _hasAttribute: function (typeIndex) {
+        _hasAttribute: function(typeIndex) {
             if (typeIndex >= this._attributeArray.length) return false;
             return !!this._attributeArray[typeIndex];
         },
-        _hasTextureAttribute: function (unit, typeIndex) {
+        _hasTextureAttribute: function(unit, typeIndex) {
             if (
                 unit >= this._textureAttributeArrayList.length ||
                 !this._textureAttributeArrayList[unit]

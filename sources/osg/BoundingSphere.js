@@ -3,7 +3,7 @@ import utils from 'osg/utils';
 import BoundingBox from 'osg/BoundingBox';
 import { vec3, mat4 } from 'osg/glMatrix';
 
-var BoundingSphere = function () {
+var BoundingSphere = function() {
     this._center = vec3.create();
     this._radius = -1.0;
 };
@@ -11,52 +11,52 @@ var BoundingSphere = function () {
 utils.createPrototypeObject(
     BoundingSphere,
     {
-        init: function () {
+        init: function() {
             vec3.init(this._center);
             this._radius = -1.0;
         },
 
-        valid: function () {
+        valid: function() {
             return this._radius >= 0.0;
         },
 
-        set: function (center, radius) {
+        set: function(center, radius) {
             this._center = center;
             this._radius = radius;
         },
 
-        center: function () {
+        center: function() {
             return this._center;
         },
 
-        radius: function () {
+        radius: function() {
             return this._radius;
         },
 
-        radius2: function () {
+        radius2: function() {
             return this._radius * this._radius;
         },
 
-        volume: function () {
+        volume: function() {
             var r = this._radius;
-            return (r * r * r * Math.PI * 4) / 3;
+            return r * r * r * Math.PI * 4 / 3;
         },
 
-        copy: function (other) {
+        copy: function(other) {
             this._radius = other._radius;
             vec3.copy(this._center, other._center);
         },
 
-        copyBoundingBox: function (box) {
+        copyBoundingBox: function(box) {
             box.center(this._center);
             this._radius = box.radius();
         },
 
-        expandByBoundingBox: (function () {
+        expandByBoundingBox: (function() {
             var v = vec3.create();
             var newbb = new BoundingBox();
 
-            return function (bb) {
+            return function(bb) {
                 if (!bb.valid()) return;
 
                 if (!this.valid()) {
@@ -79,14 +79,14 @@ utils.createPrototypeObject(
             };
         })(),
 
-        expandByvec3: function (v) {
+        expandByvec3: function(v) {
             notify.warn('deprecated, use expandByVec3');
             this.expandByVec3(v);
         },
 
-        expandByVec3: (function () {
+        expandByVec3: (function() {
             var dv = vec3.create();
-            return function (v) {
+            return function(v) {
                 if (this.valid()) {
                     vec3.sub(dv, v, this.center(dv));
                     var r = vec3.length(dv);
@@ -106,7 +106,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        expandRadiusBySphere: function (sh) {
+        expandRadiusBySphere: function(sh) {
             if (sh.valid()) {
                 if (this.valid()) {
                     var r = vec3.distance(this._center, sh._center) + sh._radius;
@@ -121,7 +121,7 @@ utils.createPrototypeObject(
             }
         },
 
-        expandByBoundingSphere: function (sh) {
+        expandByBoundingSphere: function(sh) {
             // ignore operation if incomming BoundingSphere is invalid.
             if (!sh.valid()) {
                 return;
@@ -169,19 +169,19 @@ utils.createPrototypeObject(
 
             this._radius = newRadius;
         },
-        contains: function (v) {
+        contains: function(v) {
             if (!this.valid()) return false;
             return vec3.sqrDist(this.center(), v) <= this.radius2();
         },
-        intersects: function (bs) {
+        intersects: function(bs) {
             if (!this.valid() || !bs.valid()) return false;
             var r = this.radius() + bs.radius();
             return vec3.sqrDist(bs.center(), this.center()) <= r * r;
         },
 
-        transformMat4: (function () {
+        transformMat4: (function() {
             var scaleVec = vec3.create();
-            return function (out, matrix) {
+            return function(out, matrix) {
                 if (!this.valid()) return out;
 
                 if (out._center !== this._center) {

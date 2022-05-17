@@ -9,7 +9,7 @@ import WebglCaps from 'osg/WebGLCaps';
  * FrameBufferObject manage fbo / rtt
  * @class FrameBufferObject
  */
-var FrameBufferObject = function () {
+var FrameBufferObject = function() {
     GLObject.call(this);
     StateAttribute.call(this);
 
@@ -30,7 +30,7 @@ FrameBufferObject.DEPTH_COMPONENT16 = 0x81a5;
 FrameBufferObject._sDeletedGLFrameBufferCache = new window.Map();
 
 // static method to delete FrameBuffers
-FrameBufferObject.deleteGLFrameBuffer = function (gl, fb) {
+FrameBufferObject.deleteGLFrameBuffer = function(gl, fb) {
     if (!FrameBufferObject._sDeletedGLFrameBufferCache.has(gl))
         FrameBufferObject._sDeletedGLFrameBufferCache.set(gl, []);
 
@@ -38,7 +38,7 @@ FrameBufferObject.deleteGLFrameBuffer = function (gl, fb) {
 };
 
 // static method to flush all the cached glFrameBuffers which need to be deleted in the GL context specified
-FrameBufferObject.flushDeletedGLFrameBuffers = function (gl, availableTime) {
+FrameBufferObject.flushDeletedGLFrameBuffers = function(gl, availableTime) {
     // if no time available don't try to flush objects.
     if (availableTime <= 0.0) return availableTime;
 
@@ -58,7 +58,7 @@ FrameBufferObject.flushDeletedGLFrameBuffers = function (gl, availableTime) {
     return availableTime - elapsedTime;
 };
 
-FrameBufferObject.flushAllDeletedGLFrameBuffers = function (gl) {
+FrameBufferObject.flushAllDeletedGLFrameBuffers = function(gl) {
     if (!FrameBufferObject._sDeletedGLFrameBufferCache.has(gl)) return;
     var deleteList = FrameBufferObject._sDeletedGLFrameBufferCache.get(gl);
     if (deleteList.length === 0) return;
@@ -74,7 +74,7 @@ FrameBufferObject.flushAllDeletedGLFrameBuffers = function (gl) {
 FrameBufferObject._sDeletedGLRenderBufferCache = new window.Map();
 
 // static method to delete RenderBuffers
-FrameBufferObject.deleteGLRenderBuffer = function (gl, fb) {
+FrameBufferObject.deleteGLRenderBuffer = function(gl, fb) {
     if (!FrameBufferObject._sDeletedGLRenderBufferCache.has(gl))
         FrameBufferObject._sDeletedGLRenderBufferCache.set(gl, []);
 
@@ -82,7 +82,7 @@ FrameBufferObject.deleteGLRenderBuffer = function (gl, fb) {
 };
 
 // static method to flush all the cached glRenderBuffers which need to be deleted in the GL context specified
-FrameBufferObject.flushDeletedGLRenderBuffers = function (gl, availableTime) {
+FrameBufferObject.flushDeletedGLRenderBuffers = function(gl, availableTime) {
     // if no time available don't try to flush objects.
     if (availableTime <= 0.0) return availableTime;
 
@@ -101,7 +101,7 @@ FrameBufferObject.flushDeletedGLRenderBuffers = function (gl, availableTime) {
     return availableTime - elapsedTime;
 };
 
-FrameBufferObject.flushAllDeletedGLRenderBuffers = function (gl) {
+FrameBufferObject.flushAllDeletedGLRenderBuffers = function(gl) {
     if (!FrameBufferObject._sDeletedGLRenderBufferCache.has(gl)) return;
 
     var deleteList = FrameBufferObject._sDeletedGLRenderBufferCache.get(gl);
@@ -113,7 +113,7 @@ FrameBufferObject.flushAllDeletedGLRenderBuffers = function (gl) {
     }
 };
 
-FrameBufferObject.onLostContext = function (gl) {
+FrameBufferObject.onLostContext = function(gl) {
     if (!FrameBufferObject._sDeletedGLFrameBufferCache.has(gl)) return;
 
     var deleteList = FrameBufferObject._sDeletedGLFrameBufferCache.get(gl);
@@ -133,11 +133,11 @@ utils.createPrototypeStateAttribute(
         utils.objectInherit(StateAttribute.prototype, {
             attributeType: 'FrameBufferObject',
 
-            cloneType: function () {
+            cloneType: function() {
                 return new FrameBufferObject();
             },
 
-            invalidate: function () {
+            invalidate: function() {
                 if (this._rbo && this._attachments) {
                     for (var i = 0, l = this._attachments.length; i < l; ++i) {
                         var attachment = this._attachments[i];
@@ -155,20 +155,20 @@ utils.createPrototypeStateAttribute(
                 this._dirty = true;
             },
 
-            dirty: function () {
+            dirty: function() {
                 this._buffers.length = 0;
                 this._dirty = true;
             },
 
-            isDirty: function () {
+            isDirty: function() {
                 return this._dirty;
             },
 
-            setAttachment: function (attachment) {
+            setAttachment: function(attachment) {
                 this._attachments.push(attachment);
             },
 
-            getAttachment: function (attachmentType) {
+            getAttachment: function(attachmentType) {
                 if (!this._attachments) return;
                 for (var i = 0, l = this._attachments.length; i < l; ++i) {
                     var attachment = this._attachments[i];
@@ -181,7 +181,7 @@ utils.createPrototypeStateAttribute(
                 }
                 return;
             },
-            releaseGLObjects: function () {
+            releaseGLObjects: function() {
                 if (this._fbo !== undefined && this._gl !== undefined) {
                     FrameBufferObject.deleteGLFrameBuffer(this._gl, this._fbo);
                 }
@@ -193,7 +193,7 @@ utils.createPrototypeStateAttribute(
                 this.invalidate();
             },
 
-            _reportFrameBufferError: function (code) {
+            _reportFrameBufferError: function(code) {
                 switch (code) {
                     case 0x8cd6:
                         notify.debug('FRAMEBUFFER_INCOMPLETE_ATTACHMENT');
@@ -212,25 +212,25 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            reset: function () {
+            reset: function() {
                 this.releaseGLObjects();
                 this._attachments = [];
             },
 
-            getFrameBufferObject: function () {
+            getFrameBufferObject: function() {
                 return this._fbo;
             },
 
-            getRenderBufferObject: function () {
+            getRenderBufferObject: function() {
                 return this._rbo;
             },
 
-            createFrameBufferObject: function (state) {
+            createFrameBufferObject: function(state) {
                 this.setGraphicContext(state.getGraphicContext());
                 this._fbo = this._gl.createFramebuffer();
             },
 
-            createRenderBuffer: function (format, width, height) {
+            createRenderBuffer: function(format, width, height) {
                 var gl = this._gl;
                 var renderBuffer = gl.createRenderbuffer();
                 gl.bindRenderbuffer(gl.RENDERBUFFER, renderBuffer);
@@ -239,7 +239,7 @@ utils.createPrototypeStateAttribute(
                 return renderBuffer;
             },
 
-            framebufferRenderBuffer: function (attachment, renderBuffer) {
+            framebufferRenderBuffer: function(attachment, renderBuffer) {
                 var gl = this._gl;
                 gl.bindRenderbuffer(gl.RENDERBUFFER, renderBuffer);
                 gl.framebufferRenderbuffer(
@@ -257,7 +257,7 @@ utils.createPrototypeStateAttribute(
                 /* develblock:end */
             },
 
-            framebufferTexture2D: function (state, attachment, textureTarget, texture) {
+            framebufferTexture2D: function(state, attachment, textureTarget, texture) {
                 var gl = this._gl;
 
                 // apply on unit 1 to init it
@@ -298,12 +298,12 @@ utils.createPrototypeStateAttribute(
                 return true;
             },
 
-            bindFrameBufferObject: function () {
+            bindFrameBufferObject: function() {
                 var gl = this._gl;
                 gl.bindFramebuffer(gl.FRAMEBUFFER, this._fbo);
             },
 
-            checkStatus: function () {
+            checkStatus: function() {
                 var gl = this._gl;
                 var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
                 if (status !== gl.FRAMEBUFFER_COMPLETE) {
@@ -311,7 +311,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            _checkAllowedSize: function (w, h) {
+            _checkAllowedSize: function(w, h) {
                 var maxSize = WebglCaps.instance().getWebGLParameter('MAX_RENDERBUFFER_SIZE');
 
                 if (w === 0 || h === 0 || h > maxSize || w > maxSize) {
@@ -330,7 +330,7 @@ utils.createPrototypeStateAttribute(
                 return true;
             },
 
-            apply: function (state) {
+            apply: function(state) {
                 if (!this._gl) this.setGraphicContext(state.getGraphicContext());
                 var gl = this._gl;
 

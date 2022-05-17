@@ -3,7 +3,7 @@ import NodeVisitor from 'osg/NodeVisitor';
 import notify from 'osg/notify';
 import Bone from 'osgAnimation/Bone';
 
-var CollectBoneVisitor = function () {
+var CollectBoneVisitor = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
     this._boneMap = {};
 };
@@ -11,7 +11,7 @@ var CollectBoneVisitor = function () {
 utils.createPrototypeObject(
     CollectBoneVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.typeID === Bone.typeID) {
                 var name = node.getName();
 
@@ -25,7 +25,7 @@ utils.createPrototypeObject(
             this.traverse(node);
         },
 
-        getBoneMap: function () {
+        getBoneMap: function() {
             return this._boneMap;
         }
     }),

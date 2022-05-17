@@ -9,7 +9,7 @@ import { vec4 } from 'osg/glMatrix';
 import osgShader from 'osgShader/osgShader';
 import DisplayGraph from 'osgUtil/DisplayGraph';
 
-var Renderer = function (camera) {
+var Renderer = function(camera) {
     Object.call(this);
 
     this._state = undefined;
@@ -29,7 +29,7 @@ Renderer.debugGraph = false;
 utils.createPrototypeObject(
     Renderer,
     utils.objectInherit(Object.prototype, {
-        setDefaults: function () {
+        setDefaults: function() {
             this._state = new State(new osgShader.ShaderGeneratorProxy());
 
             this._cullVisitor = new CullVisitor();
@@ -47,53 +47,53 @@ utils.createPrototypeObject(
             stateSet.setAttributeAndModes(new osg.CullFace());
         },
 
-        getCullVisitor: function () {
+        getCullVisitor: function() {
             return this._cullVisitor;
         },
 
-        setCullVisitor: function (cv) {
+        setCullVisitor: function(cv) {
             if (cv && !cv.getRenderer()) cv.setRenderer(this);
             this._cullVisitor = cv;
         },
 
-        setRenderStage: function (rs) {
+        setRenderStage: function(rs) {
             this._renderStage = rs;
         },
 
-        getCamera: function () {
+        getCamera: function() {
             return this._camera;
         },
 
-        setFrameStamp: function (fs) {
+        setFrameStamp: function(fs) {
             this._frameStamp = fs;
         },
 
-        getFrameStamp: function () {
+        getFrameStamp: function() {
             return this._frameStamp;
         },
 
-        getState: function () {
+        getState: function() {
             return this._state;
         },
 
-        setState: function (state) {
+        setState: function(state) {
             this._state = state;
         },
 
-        setGraphicContext: function (gc) {
+        setGraphicContext: function(gc) {
             this._state.setGraphicContext(gc);
         },
 
-        getGraphicContext: function () {
+        getGraphicContext: function() {
             return this._state.getGraphicContext();
         },
 
-        cullAndDraw: function () {
+        cullAndDraw: function() {
             this.cull();
             this.draw();
         },
 
-        cull: function () {
+        cull: function() {
             var camera = this.getCamera();
             var view = camera.getView();
 
@@ -191,7 +191,7 @@ utils.createPrototypeObject(
             this._renderStage.sort();
         },
 
-        draw: function () {
+        draw: function() {
             var state = this.getState();
 
             // important because cache are used in cullvisitor

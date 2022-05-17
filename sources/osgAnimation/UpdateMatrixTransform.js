@@ -5,7 +5,7 @@ import AnimationUpdateCallback from 'osgAnimation/AnimationUpdateCallback';
 /**
  *  UpdateMatrixTransform
  */
-var UpdateMatrixTransform = function () {
+var UpdateMatrixTransform = function() {
     AnimationUpdateCallback.call(this);
 
     // maybe could have a more generic name and used by all AnimationUpdateCallback
@@ -19,20 +19,20 @@ var UpdateMatrixTransform = function () {
 utils.createPrototypeObject(
     UpdateMatrixTransform,
     utils.objectInherit(AnimationUpdateCallback.prototype, {
-        getStackedTransforms: function () {
+        getStackedTransforms: function() {
             return this._stackedTransforms;
         },
 
-        setMatrix: function (matrix) {
+        setMatrix: function(matrix) {
             mat4.copy(this._matrix, matrix);
             this._dirty = true;
         },
 
-        getMatrix: function () {
+        getMatrix: function() {
             return this._matrix;
         },
 
-        computeChannels: function () {
+        computeChannels: function() {
             this._dirty = true;
             var matrix = this._matrix;
             mat4.identity(matrix);
@@ -44,7 +44,7 @@ utils.createPrototypeObject(
             }
         },
 
-        reset: function () {
+        reset: function() {
             var stacked = this._stackedTransforms;
             for (var i = 0, nbStacked = stacked.length; i < nbStacked; i++) {
                 stacked[i].resetToDefaultValue();
@@ -55,7 +55,7 @@ utils.createPrototypeObject(
             this.computeChannels();
         },
 
-        update: function (node /*, nv */) {
+        update: function(node /*, nv */) {
             mat4.copy(node.getMatrix(), this._matrix);
             if (this._dirty) {
                 node.dirtyBound();

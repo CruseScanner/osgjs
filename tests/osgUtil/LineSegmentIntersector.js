@@ -17,8 +17,8 @@ import Shape from 'osg/shape';
 import View from 'osgViewer/View';
 import ReaderParser from 'osgDB/readerParser';
 
-export default function () {
-    test('LineSegmentIntersector simple test', function () {
+export default function() {
+    test('LineSegmentIntersector simple test', function() {
         var lsi = new LineSegmentIntersector();
         var bs = new BoundingSphere();
         bs.set(vec3.fromValues(4.0, 2.0, 0.0), 2.0);
@@ -64,7 +64,7 @@ export default function () {
     // points are : one in (0, 0, 0) and the other on picking path
     // picking is (0.1, 0.3, -0.5/+0.5) with threshold 0.15
 
-    var createSceneGeometry = function () {
+    var createSceneGeometry = function() {
         var scene = new Node();
         var cx, cy, cz, wx, wy, wz, hx, hy, hz;
         cx = cy = -0.5;
@@ -85,7 +85,7 @@ export default function () {
         return scene;
     };
 
-    test('LineSegmentIntersector with 2 branches', function () {
+    test('LineSegmentIntersector with 2 branches', function() {
         // right branch should be picked
         // left branch shouldn't be picked
         //
@@ -116,7 +116,7 @@ export default function () {
         var iv = new IntersectionVisitor();
         iv.setIntersector(lsi);
 
-        var testPick = function () {
+        var testPick = function() {
             lsi.reset();
             iv.reset();
             rootScene.accept(iv);
@@ -154,7 +154,7 @@ export default function () {
         testPick();
     });
 
-    test('LineSegmentIntersector with mockup scene and computeIntersections', function () {
+    test('LineSegmentIntersector with mockup scene and computeIntersections', function() {
         var view = new View();
         var camera = view.getCamera();
         camera.setViewport(new Viewport());
@@ -167,7 +167,7 @@ export default function () {
             )
         );
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 1000.0)
+            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 1000.0)
         );
 
         // TODO it uses the old sync parseSceneGraphDeprecated

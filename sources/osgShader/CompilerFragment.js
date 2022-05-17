@@ -2,7 +2,7 @@ import Light from 'osg/Light';
 import notify from 'osg/notify';
 
 var CompilerFragment = {
-    _createFragmentShader: function () {
+    _createFragmentShader: function() {
         // Call to specialised inhenrited shader Compiler
         var roots = this.createFragmentShaderGraph();
         var fname = this.getFragmentShaderName();
@@ -18,7 +18,7 @@ var CompilerFragment = {
         return shader;
     },
 
-    applyPointSizeCircle: function (color) {
+    applyPointSizeCircle: function(color) {
         if (
             !this._pointSizeAttribute ||
             !this._pointSizeAttribute.isEnabled() ||
@@ -39,7 +39,7 @@ var CompilerFragment = {
         return color;
     },
 
-    cleanAfterFragment: function () {
+    cleanAfterFragment: function() {
         // reset for next
         this._variables = {};
         this._activeNodeMap = {};
@@ -57,14 +57,16 @@ var CompilerFragment = {
         }
     },
 
-    createDefaultFragmentShaderGraph: function () {
+    createDefaultFragmentShaderGraph: function() {
         var fofd = this.getOrCreateConstant('vec4', 'fofd').setValue('vec4(1.0, 0.0, 1.0, 0.7)');
         var fragCol = this.getNode('glFragColor');
-        this.getNode('SetFromNode').inputs(fofd).outputs(fragCol);
+        this.getNode('SetFromNode')
+            .inputs(fofd)
+            .outputs(fragCol);
         return fragCol;
     },
 
-    createFragmentShaderGraph: function () {
+    createFragmentShaderGraph: function() {
         // shader graph can have multiple output (glPointsize, varyings)
         // here named roots all outputs must be pushed inside
         var roots = [];
@@ -81,14 +83,18 @@ var CompilerFragment = {
         var emission = this.getOrCreateMaterialEmission();
         if (emission) {
             var emit = this.createVariable('vec3');
-            this.getNode('Add').inputs(finalColor, emission).outputs(emit);
+            this.getNode('Add')
+                .inputs(finalColor, emission)
+                .outputs(emit);
             finalColor = emit;
         }
 
         var textureColor = this.getDiffuseColorFromTextures();
         if (textureColor) {
             var texColor = this.createVariable('vec3');
-            this.getNode('Mult').inputs(finalColor, textureColor).outputs(texColor);
+            this.getNode('Mult')
+                .inputs(finalColor, textureColor)
+                .outputs(texColor);
             finalColor = texColor;
         }
 
@@ -117,7 +123,7 @@ var CompilerFragment = {
         return roots;
     },
 
-    getAlpha: function () {
+    getAlpha: function() {
         // compute alpha
         var alpha = this.createVariable('float');
         var textureTexel = this.getFirstValidTexture();
@@ -134,14 +140,17 @@ var CompilerFragment = {
             str += 'if ( %alpha == 0.0) discard;';
         }
 
-        this.getNode('InlineCode').code(str).inputs(inputs).outputs({
-            alpha: alpha
-        });
+        this.getNode('InlineCode')
+            .code(str)
+            .inputs(inputs)
+            .outputs({
+                alpha: alpha
+            });
 
         return alpha;
     },
 
-    getOrCreateFrontViewTangent: function () {
+    getOrCreateFrontViewTangent: function() {
         var out = this._variables.frontViewTangent;
         if (out) return out;
         out = this.createVariable('vec4', 'frontViewTangent');
@@ -153,7 +162,7 @@ var CompilerFragment = {
         return out;
     },
 
-    getOrCreateFrontViewNormal: function () {
+    getOrCreateFrontViewNormal: function() {
         var out = this._variables.frontViewNormal;
         if (out) return out;
         out = this.createVariable('vec3', 'frontViewNormal');
@@ -165,14 +174,18 @@ var CompilerFragment = {
         return out;
     },
 
-    getOrCreateNormalizedViewEyeDirection: function () {
+    getOrCreateNormalizedViewEyeDirection: function() {
         var out = this._variables.eyeVector;
         if (out) return out;
         out = this.createVariable('vec3', 'eyeVector');
 
-        this.getNode('SetFromNode').inputs(this.getOrCreateViewVertex()).outputs(out);
+        this.getNode('SetFromNode')
+            .inputs(this.getOrCreateViewVertex())
+            .outputs(out);
 
-        this.getNode('NormalizeNd').inputs({ vec: out }).outputs({ result: out });
+        this.getNode('Normalize')
+            .inputs({ vec: out })
+            .outputs({ result: out });
 
         this.getNode('Mult')
             .inputs(out, this.createVariable('float').setValue('-1.0'))
@@ -181,19 +194,19 @@ var CompilerFragment = {
         return out;
     },
 
-    getOrCreateNormalizedFrontViewNormal: function () {
+    getOrCreateNormalizedFrontViewNormal: function() {
         var out = this._variables.nFrontViewNormal;
         if (out) return out;
         out = this.createVariable('vec3', 'nFrontViewNormal');
 
-        this.getNode('NormalizeNd')
+        this.getNode('Normalize')
             .inputs({ vec: this.getOrCreateFrontViewNormal() })
             .outputs({ result: out });
 
         return out;
     },
 
-    getOrCreateFrontModelNormal: function () {
+    getOrCreateFrontModelNormal: function() {
         var out = this._variables.frontModelNormal;
         if (out) return out;
         out = this.createVariable('vec3', 'frontModelNormal');
@@ -205,19 +218,19 @@ var CompilerFragment = {
         return out;
     },
 
-    getOrCreateNormalizedFrontModelNormal: function () {
+    getOrCreateNormalizedFrontModelNormal: function() {
         var out = this._variables.nFrontModelNormal;
         if (out) return out;
         out = this.createVariable('vec3', 'nFrontModelNormal');
 
-        this.getNode('NormalizeNd')
+        this.getNode('Normalize')
             .inputs({ vec: this.getOrCreateFrontModelNormal() })
             .outputs({ result: out });
 
         return out;
     },
 
-    getPremultAlpha: function (finalColor, alpha) {
+    getPremultAlpha: function(finalColor, alpha) {
         if (alpha === undefined) return finalColor;
 
         var premultAlpha = this.createVariable('vec4');
@@ -229,7 +242,7 @@ var CompilerFragment = {
         return premultAlpha;
     },
 
-    getColorsRGB: function (finalColor) {
+    getColorsRGB: function(finalColor) {
         var finalSrgbColor = this.createVariable('vec3');
         this.getNode('LinearTosRGB')
             .inputs({ color: finalColor })
@@ -238,7 +251,7 @@ var CompilerFragment = {
         return finalSrgbColor;
     },
 
-    multiplyDiffuseWithVertexColor: function (diffuseColor) {
+    multiplyDiffuseWithVertexColor: function(diffuseColor) {
         var vertexColor = this.getOrCreateVarying('vec4', 'vVertexColor');
         var vertexColorUniform = this.getOrCreateUniform('float', 'uArrayColorEnabled');
         var tmp = this.createVariable('vec4');
@@ -263,7 +276,7 @@ var CompilerFragment = {
         return tmp;
     },
 
-    getDiffuseColorFromTextures: function () {
+    getDiffuseColorFromTextures: function() {
         var texturesInput = [];
         var textures = this._texturesByName;
 
@@ -280,7 +293,9 @@ var CompilerFragment = {
         if (texturesInput.length > 1) {
             var texAccum = this.createVariable('vec3', 'texDiffuseAccum');
 
-            this.getNode('Mult').inputs(texturesInput).outputs(texAccum);
+            this.getNode('Mult')
+                .inputs(texturesInput)
+                .outputs(texAccum);
             return texAccum;
         } else if (texturesInput.length === 1) {
             return texturesInput[0];
@@ -289,7 +304,7 @@ var CompilerFragment = {
         return undefined;
     },
 
-    getFirstValidTexture: function () {
+    getFirstValidTexture: function() {
         var textures = this._textures;
         for (var i = 0, nb = textures.length; i < nb; ++i) {
             var tex = textures[i];
@@ -298,7 +313,7 @@ var CompilerFragment = {
         return undefined;
     },
 
-    _getShadowReceiveAttributeFromLightNum: function (array, lightNum) {
+    _getShadowReceiveAttributeFromLightNum: function(array, lightNum) {
         // array is shadow textures or shadow receive attributes
         for (var i = 0; i < array.length; i++) {
             var shadow = array[i];
@@ -308,7 +323,7 @@ var CompilerFragment = {
         }
     },
 
-    _getShadowTextureFromLightNum: function (array, lightNum) {
+    _getShadowTextureFromLightNum: function(array, lightNum) {
         // array is shadow textures or shadow receive attributes
         for (var i = 0; i < array.length; i++) {
             var shadow = array[i];
@@ -318,7 +333,7 @@ var CompilerFragment = {
         }
     },
 
-    getInputsFromShadow: function (shadowReceive, shadowTexture, lighted, lightNum) {
+    getInputsFromShadow: function(shadowReceive, shadowTexture, lighted, lightNum) {
         var shadowUniforms = shadowReceive.getOrCreateUniforms();
         var tUnit = this._shadowsTextures.indexOf(shadowTexture);
         var textureUniforms = shadowTexture.getOrCreateUniforms(tUnit);
@@ -348,7 +363,7 @@ var CompilerFragment = {
         return inputs;
     },
 
-    getOrCreateDistanceShadow: function (num) {
+    getOrCreateDistanceShadow: function(num) {
         if (!this._computeShadowOutDistance) return undefined;
 
         var varName = 'shadowDistance' + num;
@@ -357,17 +372,17 @@ var CompilerFragment = {
         return distance;
     },
 
-    getOrCreateJitterShadow: function () {
+    getOrCreateJitterShadow: function() {
         return false;
     },
 
-    hasLightShadow: function (lightNum) {
+    hasLightShadow: function(lightNum) {
         var shadowTexture = this._getShadowTextureFromLightNum(this._shadowsTextures, lightNum);
         var shadowReceive = this._getShadowReceiveAttributeFromLightNum(this._shadows, lightNum);
         return !!shadowTexture && !!shadowReceive;
     },
 
-    createShadowingLight: function (light, lighted) {
+    createShadowingLight: function(light, lighted) {
         var lightNum = light.getLightNumber();
         var shadowTexture = this._getShadowTextureFromLightNum(this._shadowsTextures, lightNum);
         var shadowReceive = this._getShadowReceiveAttributeFromLightNum(this._shadows, lightNum);
@@ -393,16 +408,19 @@ var CompilerFragment = {
             inputs.jitter = doJitter;
         }
 
-        this.getNode('ShadowReceive').inputs(inputs).outputs(outputs).addDefines(defines);
+        this.getNode('ShadowReceive')
+            .inputs(inputs)
+            .outputs(outputs)
+            .addDefines(defines);
 
         return shadowedOutput;
     },
 
-    getOrCreateMaterialNormal: function () {
+    getOrCreateMaterialNormal: function() {
         return this.getOrCreateNormalizedFrontViewNormal();
     },
 
-    getOrCreateMaterialDiffuseColor: function () {
+    getOrCreateMaterialDiffuseColor: function() {
         var matDiffuse = this.getVariable('materialDiffuseColor');
         if (matDiffuse) return matDiffuse;
         matDiffuse = this.createVariable('vec4', 'materialDiffuseColor');
@@ -415,33 +433,35 @@ var CompilerFragment = {
         return matDiffuse;
     },
 
-    getOrCreateMaterialEmission: function () {
+    getOrCreateMaterialEmission: function() {
         return this.getOrCreateUniform(this._material.getOrCreateUniforms().emission);
     },
 
-    getOrCreateMaterialSpecularColor: function () {
+    getOrCreateMaterialSpecularColor: function() {
         return this.getOrCreateUniform(this._material.getOrCreateUniforms().specular);
     },
 
-    getOrCreateMaterialSpecularHardness: function () {
+    getOrCreateMaterialSpecularHardness: function() {
         return this.getOrCreateUniform(this._material.getOrCreateUniforms().shininess);
     },
 
-    getOrCreateMaterialAmbient: function () {
+    getOrCreateMaterialAmbient: function() {
         return this.getOrCreateUniform(this._material.getOrCreateUniforms().ambient);
     },
 
-    getLighting: function () {
+    getLighting: function() {
         if (this._lights.length === 0) return undefined;
 
         var res = this.getLightingSeparate();
         var output = this.createVariable('vec3');
-        this.getNode('Add').inputs(res.diffuse, res.specular).outputs(output);
+        this.getNode('Add')
+            .inputs(res.diffuse, res.specular)
+            .outputs(output);
 
         return output;
     },
 
-    getLightingSeparate: function () {
+    getLightingSeparate: function() {
         if (this._lights.length === 0) return undefined;
 
         // return contribution of diffuse and specular lights
@@ -462,10 +482,14 @@ var CompilerFragment = {
             finalSpecular = specularSum[0];
         } else {
             finalDiffuse = this.createVariable('vec3');
-            this.getNode('Add').inputs(diffuseSum).outputs(finalDiffuse);
+            this.getNode('Add')
+                .inputs(diffuseSum)
+                .outputs(finalDiffuse);
 
             finalSpecular = this.createVariable('vec3');
-            this.getNode('Add').inputs(specularSum).outputs(finalSpecular);
+            this.getNode('Add')
+                .inputs(specularSum)
+                .outputs(finalSpecular);
         }
 
         return {
@@ -474,7 +498,7 @@ var CompilerFragment = {
         };
     },
 
-    getLightSeparate: function (light) {
+    getLightSeparate: function(light) {
         var precompute = this.getPrecomputeLight(light);
         var outputs = this.getLightWithPrecompute(light, precompute);
 
@@ -490,7 +514,9 @@ var CompilerFragment = {
 
         var ambient = this.getAmbientLight(light);
         if (ambient)
-            this.getNode('Add').inputs(outputs.diffuseOut, ambient).outputs(outputs.diffuseOut);
+            this.getNode('Add')
+                .inputs(outputs.diffuseOut, ambient)
+                .outputs(outputs.diffuseOut);
 
         return {
             diffuseOut: outputs.diffuseOut,
@@ -503,7 +529,7 @@ var CompilerFragment = {
         };
     },
 
-    getPrecomputeLight: function (light) {
+    getPrecomputeLight: function(light) {
         var lightUniforms = light.getOrCreateUniforms();
 
         var outputs = {
@@ -539,11 +565,13 @@ var CompilerFragment = {
             inputs.lightViewDirection = this.getOrCreateUniform(lightUniforms.viewDirection);
         }
 
-        this.getNode(nodeName).inputs(inputs).outputs(outputs);
+        this.getNode(nodeName)
+            .inputs(inputs)
+            .outputs(outputs);
         return outputs;
     },
 
-    getLightWithPrecompute: function (light, precompute) {
+    getLightWithPrecompute: function(light, precompute) {
         var lightUniforms = light.getOrCreateUniforms();
 
         var inputs = {
@@ -568,20 +596,24 @@ var CompilerFragment = {
         }
 
         var outputs = this.getOutputsFromLight();
-        this.getNode(nodeName).inputs(inputs).outputs(outputs);
+        this.getNode(nodeName)
+            .inputs(inputs)
+            .outputs(outputs);
 
         return outputs;
     },
 
-    getAmbientLight: function (light) {
+    getAmbientLight: function(light) {
         var ambient = this.createVariable('vec3');
         var lightAmbient = this.getOrCreateUniform(light.getOrCreateUniforms().ambient);
         var materialAmbient = this.getOrCreateMaterialAmbient();
-        this.getNode('Mult').inputs(materialAmbient, lightAmbient).outputs(ambient);
+        this.getNode('Mult')
+            .inputs(materialAmbient, lightAmbient)
+            .outputs(ambient);
         return ambient;
     },
 
-    getOutputsFromLight: function () {
+    getOutputsFromLight: function() {
         var outputs = {
             diffuseOut: this.createVariable('vec3'),
             specularOut: this.createVariable('vec3'),
@@ -595,7 +627,7 @@ var CompilerFragment = {
         return outputs;
     },
 
-    createTextureRGBA: function (texture, textureSampler, texCoord) {
+    createTextureRGBA: function(texture, textureSampler, texCoord) {
         // but we could later implement srgb inside and read differents flag
         // as read only in the texture
 
@@ -608,8 +640,8 @@ var CompilerFragment = {
     }
 };
 
-var wrapperFragmentOnly = function (fn, name) {
-    return function () {
+var wrapperFragmentOnly = function(fn, name) {
+    return function() {
         if (!this._fragmentShaderMode) {
             this.logError('This function should not be called from vertex shader : ' + name);
         }

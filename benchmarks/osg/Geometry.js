@@ -2,8 +2,8 @@ import Shape from 'osg/shape';
 import Timer from 'osg/Timer';
 import reportStats from 'benchmarks/reportStats';
 
-export default function () {
-    test('ComputeBound', function () {
+export default function() {
+    test('ComputeBound', function() {
         // 250 * 250 * 6 = 375k vertices (draw arrays...)
         var geom = Shape.createTexturedSphere(1.0, 250, 250);
         var timed = Timer.instance().tick();

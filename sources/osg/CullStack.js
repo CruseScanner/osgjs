@@ -13,11 +13,11 @@ import PooledArray from 'osg/PooledArray';
 import PooledResource from 'osg/PooledResource';
 import PooledMap from 'osg/PooledMap';
 
-var createCullingSet = function () {
+var createCullingSet = function() {
     return new CullingSet();
 };
 
-var CullStack = function () {
+var CullStack = function() {
     this._modelViewMatrixStack = new PooledArray();
     this._projectionMatrixStack = new PooledArray();
     this._viewportStack = new PooledArray();
@@ -46,7 +46,7 @@ var CullStack = function () {
 utils.createPrototypeObject(
     CullStack,
     utils.objectInherit(CullSettings.prototype, {
-        reset: function () {
+        reset: function() {
             this._modelViewMatrixStack.reset();
             this._projectionMatrixStack.reset();
             this._cullingSetStack.reset();
@@ -62,18 +62,18 @@ utils.createPrototypeObject(
             this._cameraMatrixInverseRoot = undefined;
         },
 
-        getProjectionMatrixStack: function () {
+        getProjectionMatrixStack: function() {
             return this._projectionMatrixStack;
         },
-        getCurrentProjectionMatrix: function () {
+        getCurrentProjectionMatrix: function() {
             return this._projectionMatrixStack.back();
         },
 
-        getCurrentModelViewMatrix: function () {
+        getCurrentModelViewMatrix: function() {
             return this._modelViewMatrixStack.back();
         },
 
-        getCameraInverseMatrix: function () {
+        getCameraInverseMatrix: function() {
             // Return or compute and cache the MatrixInverse of the last
             // active camera in absolute reference
 
@@ -99,7 +99,7 @@ utils.createPrototypeObject(
             return cameraInverse;
         },
 
-        getCurrentModelMatrix: function () {
+        getCurrentModelMatrix: function() {
             // Improvment could be to cache more things
             // and / or use this method only if the shader use it
             var invMatrix = this.getCameraInverseMatrix();
@@ -108,7 +108,7 @@ utils.createPrototypeObject(
             return world;
         },
 
-        getCurrentViewMatrix: function () {
+        getCurrentViewMatrix: function() {
             // Improvment could be to cache more things
             // and / or use this method only if the shader use it
             var modelViewMatrixStackArray = this._modelViewMatrixStack.getArray();
@@ -120,13 +120,13 @@ utils.createPrototypeObject(
             return modelViewMatrixStackArray[this._cameraModelViewIndexStack.back()];
         },
 
-        getViewport: function () {
+        getViewport: function() {
             if (this._viewportStack.getLength() === 0) {
                 return undefined;
             }
             return this._viewportStack.back();
         },
-        getLookVectorLocal: function (outLookVector) {
+        getLookVectorLocal: function(outLookVector) {
             var lookVectorLocal = this.getCurrentModelViewMatrix();
             return vec3.set(
                 outLookVector,
@@ -135,17 +135,17 @@ utils.createPrototypeObject(
                 -lookVectorLocal[10]
             );
         },
-        pushViewport: function (vp) {
+        pushViewport: function(vp) {
             this._viewportStack.push(vp);
         },
-        popViewport: function () {
+        popViewport: function() {
             this._viewportStack.pop();
         },
 
-        getFrustumPlanes: (function () {
+        getFrustumPlanes: (function() {
             var mvp = mat4.create();
 
-            return function (out, projection, view, withNearFar) {
+            return function(out, projection, view, withNearFar) {
                 mat4.mul(mvp, projection, view);
 
                 var computeNearFar = !!withNearFar;
@@ -202,7 +202,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        pushCullingSet: function () {
+        pushCullingSet: function() {
             var cs = this._pooledCullingSet.getOrCreateObject();
             if (this._enableFrustumCulling) {
                 mat4.getFrustumPlanes(
@@ -219,40 +219,40 @@ utils.createPrototypeObject(
 
             this._cullingSetStack.push(cs);
         },
-        popCullingSet: function () {
+        popCullingSet: function() {
             return this._cullingSetStack.pop();
         },
-        getCurrentCullingSet: function () {
+        getCurrentCullingSet: function() {
             return this._cullingSetStack.back();
         },
 
-        pushCurrentMask: function () {
+        pushCurrentMask: function() {
             var cs = this.getCurrentCullingSet();
             if (cs) cs.pushCurrentMask();
         },
-        popCurrentMask: function () {
+        popCurrentMask: function() {
             var cs = this.getCurrentCullingSet();
             if (cs) cs.popCurrentMask();
         },
 
-        isVerticesCulled: function (vertices) {
+        isVerticesCulled: function(vertices) {
             if (!this._enableFrustumCulling) return false;
             return this.getCurrentCullingSet().isVerticesCulled(vertices);
         },
 
-        isBoundingBoxCulled: function (bb) {
+        isBoundingBoxCulled: function(bb) {
             if (!this._enableFrustumCulling) return false;
             return bb.valid() && this.getCurrentCullingSet().isBoundingBoxCulled(bb);
         },
 
-        isBoundingSphereCulled: function (bs) {
+        isBoundingSphereCulled: function(bs) {
             if (!this._enableFrustumCulling) return false;
             return bs.valid() && this.getCurrentCullingSet().isBoundingSphereCulled(bs);
         },
 
-        isCulled: (function () {
+        isCulled: (function() {
             var bsWorld = new BoundingSphere();
-            return function (node, nodePath) {
+            return function(node, nodePath) {
                 if (!this._enableFrustumCulling) return false;
                 if (node.isCullingActive()) {
                     if (this.getCurrentCullingSet().getCurrentResultMask() === 0) return false; // father bounding sphere totally inside
@@ -285,9 +285,9 @@ utils.createPrototypeObject(
             };
         })(),
 
-        pushModelViewMatrix: (function () {
+        pushModelViewMatrix: (function() {
             var lookVector = vec3.create();
-            return function (matrix) {
+            return function(matrix) {
                 // When pushing a matrix, it can be a transform or camera. To compute
                 // differents matrix type in shader ( ViewMatrix/ModelMatrix/ModelViewMatrix )
                 // we track camera node when using pushModelViewMatrix
@@ -332,10 +332,10 @@ utils.createPrototypeObject(
                 /*jshint bitwise: true */
             };
         })(),
-        popModelViewMatrix: (function () {
+        popModelViewMatrix: (function() {
             var lookVector = vec3.create();
 
-            return function () {
+            return function() {
                 // if same index it's a camera and we have to pop it
                 var np = this.getNodePath();
                 var index = np.length - 1;
@@ -362,7 +362,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        pushProjectionMatrix: function (matrix) {
+        pushProjectionMatrix: function(matrix) {
             this._projectionMatrixStack.push(matrix);
 
             // need to recompute frustum volume.
@@ -370,7 +370,7 @@ utils.createPrototypeObject(
 
             this.pushCullingSet();
         },
-        popProjectionMatrix: function () {
+        popProjectionMatrix: function() {
             this._projectionMatrixStack.pop();
 
             // need to recompute frustum volume.

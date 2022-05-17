@@ -7,7 +7,7 @@ import Uniform from 'osg/Uniform';
  * @class ShadowReceiveAttribute
  * @inherits StateAttribute
  */
-var ShadowReceiveAttribute = function (lightNum, disable) {
+var ShadowReceiveAttribute = function(lightNum, disable) {
     StateAttribute.call(this);
 
     this._lightNumber = lightNum;
@@ -43,78 +43,78 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'ShadowReceive',
 
-        cloneType: function () {
+        cloneType: function() {
             return new ShadowReceiveAttribute(this._lightNumber, true);
         },
 
-        getTypeMember: function () {
+        getTypeMember: function() {
             return this.attributeType + this.getLightNumber();
         },
 
-        getLightNumber: function () {
+        getLightNumber: function() {
             return this._lightNumber;
         },
 
-        getUniformName: function (name) {
+        getUniformName: function(name) {
             var prefix = this.getType() + this.getLightNumber().toString();
             return 'u' + prefix + '_' + name;
         },
 
-        getAtlas: function () {
+        getAtlas: function() {
             return this._isAtlasTexture;
         },
-        setAtlas: function (v) {
+        setAtlas: function(v) {
             this._isAtlasTexture = v;
         },
 
-        setBias: function (bias) {
+        setBias: function(bias) {
             this._bias = bias;
         },
 
-        getBias: function () {
+        getBias: function() {
             return this._bias;
         },
 
-        setNormalBias: function (bias) {
+        setNormalBias: function(bias) {
             this._normalBias = bias;
         },
 
-        getNormalBias: function () {
+        getNormalBias: function() {
             return this._normalBias;
         },
 
-        setJitterOffset: function (jitter) {
+        setJitterOffset: function(jitter) {
             this._jitterOffset = jitter;
         },
 
-        getJitterOffset: function () {
+        getJitterOffset: function() {
             return this._jitterOffset;
         },
 
-        getKernelSizePCF: function () {
+        getKernelSizePCF: function() {
             return this._kernelSizePCF;
         },
 
-        setKernelSizePCF: function (v) {
+        setKernelSizePCF: function(v) {
             this._kernelSizePCF = v;
             this._dirtyHash = true;
         },
 
-        setPrecision: function (precision) {
+        setPrecision: function(precision) {
             this._precision = precision;
             this._dirtyHash = true;
         },
 
-        getPrecision: function () {
+        getPrecision: function() {
             return this._precision;
         },
 
-        setLightNumber: function (lightNum) {
+        setLightNumber: function(lightNum) {
             this._lightNumber = lightNum;
             this._dirtyHash = true;
         },
 
-        getOrCreateUniforms: function () {
+        getOrCreateUniforms: function() {
             // uniform are once per CLASS attribute, not per instance
             var obj = ShadowReceiveAttribute;
 
@@ -132,7 +132,7 @@ utils.createPrototypeStateAttribute(
 
         // Here to be common between  caster and receiver
         // (used by shadowMap and shadow node shader)
-        getDefines: function () {
+        getDefines: function() {
             var defines = [];
 
             var pcf = this.getKernelSizePCF();
@@ -160,7 +160,7 @@ utils.createPrototypeStateAttribute(
             return defines;
         },
 
-        apply: function () {
+        apply: function() {
             if (!this._enable) return;
 
             var uniformMap = this.getOrCreateUniforms();
@@ -171,11 +171,11 @@ utils.createPrototypeStateAttribute(
 
         // need a isEnabled to let the ShaderGenerator to filter
         // StateAttribute from the shader compilation
-        isEnabled: function () {
+        isEnabled: function() {
             return this._enable;
         },
 
-        getHash: function () {
+        getHash: function() {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -183,7 +183,7 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function () {
+        _computeInternalHash: function() {
             return this.getTypeMember() + '_' + this.getKernelSizePCF();
         }
     }),

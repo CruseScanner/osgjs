@@ -1,4 +1,4 @@
-(function () {
+(function() {
     /**
      * @author Jordi Torres
      */
@@ -11,7 +11,7 @@
     var minExtent = [-1000000.0, -1000000.0];
     var maxExtent = [1000000.0, 1000000.0];
 
-    var Example = function () {
+    var Example = function() {
         this.maxx = undefined;
         this.minx = undefined;
         this.miny = undefined;
@@ -25,16 +25,16 @@
     };
 
     Example.prototype = {
-        createTileForGeometry: function (i, x, y, width, height) {
+        createTileForGeometry: function(i, x, y, width, height) {
             var node = osg.createTexturedQuadGeometry(x, y, 0, width, 0, 0, 0, height, 0);
             var materialGround = new osg.Material();
-            materialGround.setAmbient([(1 * i) / 8, (1 * i) / 2, (1 * i) / 2, 1]);
+            materialGround.setAmbient([1 * i / 8, 1 * i / 2, 1 * i / 2, 1]);
             materialGround.setDiffuse([0, 0, 0, 1]);
             node.getOrCreateStateSet().setAttributeAndModes(materialGround);
             return node;
         },
 
-        subTileLevelRowCol: function (subTileId, level, row, col) {
+        subTileLevelRowCol: function(subTileId, level, row, col) {
             var x = 0;
             var y = 0; // subtileID = 0 is 0,0
             if (subTileId === 1) {
@@ -56,7 +56,7 @@
             };
         },
 
-        levelRowColToXYWidthHeight: function (rootLevel, level, row, col) {
+        levelRowColToXYWidthHeight: function(rootLevel, level, row, col) {
             var leveldiff = level - rootLevel;
             var tileExtent = this.computeExtent(leveldiff, row, col);
             var width = this.maxx - this.minx;
@@ -69,7 +69,7 @@
             };
         },
 
-        computeExtent: function (level, x, y) {
+        computeExtent: function(level, x, y) {
             var numTiles = 1 << level;
             var width = (maxExtent[0] - minExtent[0]) / numTiles;
             var height = (maxExtent[1] - minExtent[1]) / numTiles;
@@ -85,19 +85,23 @@
             };
         },
 
-        initGui: function () {
+        initGui: function() {
             this.gui = new window.dat.GUI();
             var self = this;
             // config to let dat.gui change the scale
             var lodScaleController = this.gui.add(this._config, 'lodScale', 0.01, 3.0);
-            lodScaleController.onChange(function (value) {
-                self.viewer.getCamera().getRenderer().getCullVisitor().setLODScale(value);
+            lodScaleController.onChange(function(value) {
+                self.viewer
+                    .getCamera()
+                    .getRenderer()
+                    .getCullVisitor()
+                    .setLODScale(value);
             });
             var acceptRequestscontroller = this.gui.add(this._config, 'acceptNewRequests');
-            acceptRequestscontroller.onChange(function (value) {
+            acceptRequestscontroller.onChange(function(value) {
                 self.viewer.getDatabasePager().setAcceptNewDatabaseRequests(value);
             });
-            this._config['lostContext'] = function () {
+            this._config['lostContext'] = function() {
                 var gl = this.viewer.getGraphicContext();
                 var ext = gl.getExtension('WEBGL_lose_context');
                 if (!ext) {
@@ -105,13 +109,13 @@
                     return;
                 }
                 ext.loseContext();
-                window.setTimeout(function () {
+                window.setTimeout(function() {
                     ext.restoreContext(gl);
                 }, 0);
             }.bind(this);
             this.gui.add(this._config, 'lostContext');
         },
-        run: function () {
+        run: function() {
             // The 3D canvas.
             var canvas = document.getElementById('View');
 
@@ -177,7 +181,7 @@
                 enableFrustumCulling: true
             });
             this.viewer.init();
-            this.viewer.getDatabasePager().setProgressCallback(function (a, b) {
+            this.viewer.getDatabasePager().setProgressCallback(function(a, b) {
                 window.progress(a + b);
             });
             this.viewer.setSceneData(plod);
@@ -194,7 +198,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             example.run();
         },

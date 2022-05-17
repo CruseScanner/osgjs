@@ -4,7 +4,7 @@ import { vec4 } from 'osg/glMatrix';
 import Uniform from 'osg/Uniform';
 
 // Define a material attribute
-var Material = function () {
+var Material = function() {
     StateAttribute.call(this);
     this._ambient = vec4.fromValues(0.2, 0.2, 0.2, 1.0);
     this._diffuse = vec4.fromValues(0.8, 0.8, 0.8, 1.0);
@@ -18,15 +18,15 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Material',
 
-        cloneType: function () {
+        cloneType: function() {
             return new Material();
         },
 
-        getParameterName: function (name) {
+        getParameterName: function(name) {
             return 'u' + this.getType() + '_' + name;
         },
 
-        getOrCreateUniforms: function () {
+        getOrCreateUniforms: function() {
             var obj = Material;
             if (obj.uniforms) return obj.uniforms;
 
@@ -41,55 +41,55 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms;
         },
 
-        setEmission: function (a) {
+        setEmission: function(a) {
             vec4.copy(this._emission, a);
         },
 
-        getEmission: function () {
+        getEmission: function() {
             return this._emission;
         },
 
-        setAmbient: function (a) {
+        setAmbient: function(a) {
             vec4.copy(this._ambient, a);
         },
 
-        getAmbient: function () {
+        getAmbient: function() {
             return this._ambient;
         },
 
-        setSpecular: function (a) {
+        setSpecular: function(a) {
             vec4.copy(this._specular, a);
         },
 
-        getSpecular: function () {
+        getSpecular: function() {
             return this._specular;
         },
 
-        setDiffuse: function (a) {
+        setDiffuse: function(a) {
             vec4.copy(this._diffuse, a);
         },
 
-        getDiffuse: function () {
+        getDiffuse: function() {
             return this._diffuse;
         },
 
-        setShininess: function (a) {
+        setShininess: function(a) {
             this._shininess = a;
         },
 
-        getShininess: function () {
+        getShininess: function() {
             return this._shininess;
         },
 
-        setTransparency: function (a) {
+        setTransparency: function(a) {
             this._diffuse[3] = 1.0 - a;
         },
 
-        getTransparency: function () {
+        getTransparency: function() {
             return this._diffuse[3];
         },
 
-        apply: function () {
+        apply: function() {
             var uniforms = this.getOrCreateUniforms();
 
             uniforms.ambient.setFloat4(this._ambient);

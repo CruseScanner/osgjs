@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -7,7 +7,7 @@
     var osgViewer = OSG.osgViewer;
     var $ = window.$;
 
-    var Example = function () {
+    var Example = function() {
         this._config = {
             spotAmbient: '#000000',
             spotDiffuse: '#d0cde8',
@@ -35,7 +35,7 @@
     };
 
     Example.prototype = {
-        initDatGUI: function () {
+        initDatGUI: function() {
             var gui = new window.dat.GUI();
 
             var controller;
@@ -94,7 +94,7 @@
             controller.onChange(this.updateMaterial.bind(this));
         },
 
-        convertColor: function (color) {
+        convertColor: function(color) {
             var r, g, b;
 
             if (color.length === 3) {
@@ -118,7 +118,7 @@
             return result;
         },
 
-        updateSpot: function () {
+        updateSpot: function() {
             this._spotLight.setDiffuse(this.convertColor(this._config.spotDiffuse));
             this._spotLight.setSpecular(this.convertColor(this._config.spotSpecular));
             this._spotLight.setAmbient(this.convertColor(this._config.spotAmbient));
@@ -130,18 +130,18 @@
             this._spotLight.setQuadraticAttenuation(att * att);
         },
 
-        updateDirectional: function () {
+        updateDirectional: function() {
             this._directionalLight.setDiffuse(this.convertColor(this._config.directionalDiffuse));
             this._directionalLight.setSpecular(this.convertColor(this._config.directionalSpecular));
             this._directionalLight.setAmbient(this.convertColor(this._config.directionalAmbient));
         },
 
-        updateHemi: function () {
+        updateHemi: function() {
             this._hemiLight.setDiffuse(this.convertColor(this._config.hemiDiffuse));
             this._hemiLight.setGround(this.convertColor(this._config.hemiGround));
         },
 
-        updatePoint: function () {
+        updatePoint: function() {
             this._pointLight.setDiffuse(this.convertColor(this._config.pointDiffuse));
             this._pointLight.setSpecular(this.convertColor(this._config.pointSpecular));
             this._pointLight.setAmbient(this.convertColor(this._config.pointAmbient));
@@ -152,13 +152,13 @@
             this._pointLight.setQuadraticAttenuation(att * att);
         },
 
-        updateMaterial: function () {
+        updateMaterial: function() {
             this._material.setDiffuse(this.convertColor(this._config.materialDiffuse));
             this._material.setSpecular(this.convertColor(this._config.materialSpecular));
             this._material.setAmbient(this.convertColor(this._config.materialAmbient));
         },
 
-        createDirectionalLight: function (x, y, z) {
+        createDirectionalLight: function(x, y, z) {
             var root = new osg.MatrixTransform();
             osg.mat4.fromTranslation(root.getMatrix(), [x, y, z]);
 
@@ -193,7 +193,7 @@
             return root;
         },
 
-        createHemiLight: function (x, y, z) {
+        createHemiLight: function(x, y, z) {
             var root = new osg.MatrixTransform();
             osg.mat4.fromTranslation(root.getMatrix(), [x, y, z]);
 
@@ -228,7 +228,7 @@
             return root;
         },
 
-        createSpotLight: function (x, y, z) {
+        createSpotLight: function(x, y, z) {
             var root = new osg.MatrixTransform();
             osg.mat4.fromTranslation(root.getMatrix(), [x, y, z]);
 
@@ -263,7 +263,7 @@
             return root;
         },
 
-        createPointLight: function (x, y, z) {
+        createPointLight: function(x, y, z) {
             var root = new osg.MatrixTransform();
             osg.mat4.fromTranslation(root.getMatrix(), [x, y, z]);
 
@@ -292,7 +292,7 @@
             return root;
         },
 
-        createModelInstance: function () {
+        createModelInstance: function() {
             if (!this._model) {
                 this._model = new osg.MatrixTransform();
                 osg.mat4.fromRotation(this._model.getMatrix(), -Math.PI, [0, 0, 1]);
@@ -300,7 +300,7 @@
 
                 // copy tex coord 0 to tex coord1 for multi texture
                 request.then(
-                    function (model) {
+                    function(model) {
                         this._model.addChild(model);
                     }.bind(this)
                 );
@@ -314,7 +314,7 @@
             return node;
         },
 
-        setDisableLights: function (stateSet, except) {
+        setDisableLights: function(stateSet, except) {
             for (var i = 0; i < 4; i++) {
                 if (i === except) continue;
                 var light = new osg.Light(i, true);
@@ -322,7 +322,7 @@
             }
         },
 
-        createPlane: function () {
+        createPlane: function() {
             // create plane
             var grp = new osg.Node();
             var planeSize = 20;
@@ -345,7 +345,7 @@
             return grp;
         },
 
-        createScene: function () {
+        createScene: function() {
             var group = new osg.Node();
 
             // add a light directionnal
@@ -375,7 +375,7 @@
             return group;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, this._osgOptions);
             this._viewer = viewer;
@@ -395,7 +395,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

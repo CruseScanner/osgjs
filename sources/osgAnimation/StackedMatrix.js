@@ -3,7 +3,7 @@ import Object from 'osg/Object';
 import { mat4 } from 'osg/glMatrix';
 import Target from 'osgAnimation/target';
 
-var StackedMatrix = function (name, matrix) {
+var StackedMatrix = function(name, matrix) {
     Object.call(this);
     this._target = Target.createMatrixTarget(matrix || mat4.IDENTITY);
     if (name) this.setName(name);
@@ -12,28 +12,28 @@ var StackedMatrix = function (name, matrix) {
 utils.createPrototypeObject(
     StackedMatrix,
     utils.objectInherit(Object.prototype, {
-        init: function (matrix) {
+        init: function(matrix) {
             this.setMatrix(matrix);
             mat4.copy(this._target.defaultValue, matrix);
         },
 
-        getTarget: function () {
+        getTarget: function() {
             return this._target;
         },
 
-        getMatrix: function () {
+        getMatrix: function() {
             return this._target.value;
         },
 
-        setMatrix: function (m) {
+        setMatrix: function(m) {
             mat4.copy(this._target.value, m);
         },
 
-        resetToDefaultValue: function () {
+        resetToDefaultValue: function() {
             this.setMatrix(this._target.defaultValue);
         },
 
-        applyToMatrix: function (m) {
+        applyToMatrix: function(m) {
             mat4.mul(m, m, this._target.value);
         }
     }),

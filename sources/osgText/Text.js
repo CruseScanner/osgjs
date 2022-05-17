@@ -24,7 +24,7 @@ import Node from 'osg/Node';
  *  - Texts are generated as a canvas 2D texture sticked in a quad. The size of the texture is the next power of two of the current size of the
  *    text so the bigger is your characterSize, the more memory it will consume.
  */
-var Text = function (text) {
+var Text = function(text) {
     AutoTransform.call(this);
     // create a canvas element
     this._canvas = document.createElement('canvas');
@@ -91,7 +91,7 @@ Text.RIGHT_BOTTOM = 8;
 utils.createPrototypeNode(
     Text,
     utils.objectInherit(AutoTransform.prototype, {
-        drawText: function () {
+        drawText: function() {
             if (this._geometry !== undefined) {
                 this._matrixTransform.removeChild(this._geometry);
                 // The text could be dynamic, so we need to remove GL objects
@@ -141,22 +141,22 @@ utils.createPrototypeNode(
             this.dirtyBound();
         },
 
-        setText: function (text) {
+        setText: function(text) {
             this._text = text;
             // Canvas size could change so we need to make it dirty.
             this._dirty = true;
         },
 
-        getText: function () {
+        getText: function() {
             return this._text;
         },
 
-        setFont: function (font) {
+        setFont: function(font) {
             this._font = font;
             this._dirty = true;
         },
 
-        setColor: function (color) {
+        setColor: function(color) {
             this._color = color;
             // Convert color to html range
             this._fillStyle =
@@ -174,11 +174,11 @@ utils.createPrototypeNode(
             this._context.fillText(this._text, this._textX, this._textY);
         },
 
-        getColor: function () {
+        getColor: function() {
             return this._color;
         },
 
-        setCharacterSize: function (size) {
+        setCharacterSize: function(size) {
             this._characterSize = size;
             if (this._characterSizeMode !== Text.OBJECT_COORDS) {
                 mat4.fromScaling(this._matrixTransform.getMatrix(), [
@@ -195,11 +195,11 @@ utils.createPrototypeNode(
             this._dirty = true;
         },
 
-        getCharacterSize: function () {
+        getCharacterSize: function() {
             return this._characterSize;
         },
 
-        setCharacterSizeMode: function (mode) {
+        setCharacterSizeMode: function(mode) {
             this._characterSizeMode = mode;
             if (this._characterSizeMode !== Text.OBJECT_COORDS) {
                 mat4.fromScaling(this._matrixTransform.getMatrix(), [
@@ -221,45 +221,45 @@ utils.createPrototypeNode(
             this._dirty = true;
         },
 
-        getCharacterSizeMode: function () {
+        getCharacterSizeMode: function() {
             return this._characterSizeMode;
         },
 
-        setFontResolution: function (resolution) {
+        setFontResolution: function(resolution) {
             this._fontSize = resolution;
             this._dirty = true;
         },
 
-        getFontResolution: function () {
+        getFontResolution: function() {
             return this._fontSize;
         },
 
-        setPosition: function (position) {
+        setPosition: function(position) {
             this._position = position;
             mat4.fromTranslation(this.getMatrix(), position);
         },
 
-        getPosition: function () {
+        getPosition: function() {
             return this._position;
         },
 
-        setTextProperties: function () {
+        setTextProperties: function() {
             this._context.fillStyle = this._fillStyle;
             this._setAlignmentValues(this._alignment);
             this._context.font = this._fontSize + 'px ' + this._font;
             this._context.direction = this._layout;
         },
 
-        setAutoRotateToScreen: function (value) {
+        setAutoRotateToScreen: function(value) {
             AutoTransform.prototype.setAutoRotateToScreen.call(this, value);
             this._dirty = true;
         },
 
-        getAutoRotateToScreen: function () {
+        getAutoRotateToScreen: function() {
             return this._autoRotateToScreen;
         },
 
-        setLayout: function (layout) {
+        setLayout: function(layout) {
             if (typeof layout === 'string') {
                 this._layout = Text[layout];
             } else {
@@ -267,10 +267,10 @@ utils.createPrototypeNode(
             }
             this._dirty = true;
         },
-        getLayout: function () {
+        getLayout: function() {
             return this._layout;
         },
-        setAlignment: function (alignment) {
+        setAlignment: function(alignment) {
             if (typeof alignment === 'string') {
                 this._alignment = Text[alignment];
             } else {
@@ -278,12 +278,12 @@ utils.createPrototypeNode(
             }
             this._dirty = true;
         },
-        getAlignment: function () {
+        getAlignment: function() {
             return this._alignment;
         },
 
-        accept: (function () {
-            return function (visitor) {
+        accept: (function() {
+            return function(visitor) {
                 if (this._dirty) {
                     this.drawText();
                     this._dirty = false;
@@ -341,7 +341,7 @@ utils.createPrototypeNode(
                                               (1.0 + this._autoScaleTransitionWidthRatio);
                                     c = 1.0 / (4.0 * (i - j));
                                     b = 1.0 - 2.0 * c * i;
-                                    a = j + (b * b) / (4.0 * c);
+                                    a = j + b * b / (4.0 * c);
                                     var k = -b / (2.0 * c);
                                     if (size < k) size = this._minimumScale;
                                     else if (size < i) size = a + b * size + c * (size * size);
@@ -357,7 +357,7 @@ utils.createPrototypeNode(
                                               (1.0 - this._autoScaleTransitionWidthRatio);
                                     c = 1.0 / (4.0 * (m - n));
                                     b = 1.0 - 2.0 * c * m;
-                                    a = n + (b * b) / (4.0 * c);
+                                    a = n + b * b / (4.0 * c);
                                     var p = -b / (2.0 * c);
 
                                     if (size > p) size = this._maximumScale;
@@ -383,7 +383,7 @@ utils.createPrototypeNode(
                 Node.prototype.accept.call(this, visitor);
             };
         })(),
-        _setAlignmentValues: function (alignment) {
+        _setAlignmentValues: function(alignment) {
             // Convert the OSG Api to js API
             switch (alignment) {
                 case Text.LEFT_TOP:
@@ -442,13 +442,13 @@ utils.createPrototypeNode(
                     break;
             }
         },
-        setForcePowerOfTwo: function (value) {
+        setForcePowerOfTwo: function(value) {
             this._forcePowerOfTwo = value;
         },
-        getForcePowerOfTwo: function () {
+        getForcePowerOfTwo: function() {
             return this._forcePowerOfTwo;
         },
-        _nextPowerOfTwo: function (value) {
+        _nextPowerOfTwo: function(value) {
             var v = value;
             v--;
             v |= v >> 1;

@@ -13,7 +13,7 @@ import { vec2 } from 'osg/glMatrix';
  * @class ShadowTexture
  * @inherits StateAttribute
  */
-var ShadowTexture = function () {
+var ShadowTexture = function() {
     Texture.call(this);
 
     this._uniforms = {};
@@ -29,37 +29,37 @@ ShadowTexture.uniforms = {};
 utils.createPrototypeStateAttribute(
     ShadowTexture,
     utils.objectInherit(Texture.prototype, {
-        cloneType: function () {
+        cloneType: function() {
             return new ShadowTexture();
         },
-        invalidate: function () {
+        invalidate: function() {
             Texture.prototype.invalidate.call(this);
             this.dirty();
         },
-        hasLightNumber: function (lightNum) {
+        hasLightNumber: function(lightNum) {
             return this._lightNumber === lightNum;
         },
 
-        setLightNumber: function (lun) {
+        setLightNumber: function(lun) {
             this._lightNumber = lun;
             this._dirtyHash = true;
         },
 
-        getLightNumber: function () {
+        getLightNumber: function() {
             return this._lightNumber;
         },
 
-        getUniformName: function (name) {
+        getUniformName: function(name) {
             var prefix = 'Shadow_' + this.getType() + this._lightNumber.toString();
             return 'u' + prefix + '_' + name;
         },
 
-        setInternalFormatType: function (value) {
+        setInternalFormatType: function(value) {
             Texture.prototype.setInternalFormatType.call(this, value);
             this._dirtyHash = true;
         },
 
-        getOrCreateUniforms: function (unit) {
+        getOrCreateUniforms: function(unit) {
             // uniform are once per CLASS attribute, not per instance
             var obj = ShadowTexture;
 
@@ -89,19 +89,19 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms[unit];
         },
 
-        setViewMatrix: function (viewMatrix) {
+        setViewMatrix: function(viewMatrix) {
             this._viewMatrix = viewMatrix;
         },
 
-        setProjection: function (projection) {
+        setProjection: function(projection) {
             this._projection = projection;
         },
 
-        setDepthRange: function (depthRange) {
+        setDepthRange: function(depthRange) {
             this._depthRange = depthRange;
         },
 
-        setTextureSize: function (w, h) {
+        setTextureSize: function(w, h) {
             Texture.prototype.setTextureSize.call(this, w, h);
             this.dirty();
             this._mapSize[0] = w;
@@ -114,7 +114,7 @@ utils.createPrototypeStateAttribute(
         },
 
         // optimize a mat4 into 3 vec4 unforms
-        _updateViewMatrixUniforms: function (viewMatrix, viewRight, viewUp, viewLook) {
+        _updateViewMatrixUniforms: function(viewMatrix, viewRight, viewUp, viewLook) {
             var v;
             var m = viewMatrix;
             v = viewRight.getInternalArray();
@@ -136,7 +136,7 @@ utils.createPrototypeStateAttribute(
             v[3] = m[14];
         },
 
-        apply: function (state, texNumber) {
+        apply: function(state, texNumber) {
             // Texture stuff: call parent class method
             Texture.prototype.apply.call(this, state, texNumber);
 
@@ -157,7 +157,7 @@ utils.createPrototypeStateAttribute(
             uniformMap.RenderSize.setFloat2(this._renderSize);
         },
 
-        getHash: function () {
+        getHash: function() {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -165,7 +165,7 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function () {
+        _computeInternalHash: function() {
             return this.getTypeMember() + '_' + this._lightNumber + '_' + this._type;
         }
     }),

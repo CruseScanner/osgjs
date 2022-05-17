@@ -10,7 +10,7 @@ import VertexArrayObject from 'osg/VertexArrayObject';
  * @class Geometry
  */
 
-var Geometry = function () {
+var Geometry = function() {
     Node.call(this);
 
     this._attributes = {};
@@ -38,7 +38,7 @@ Geometry.enableVAO = true;
 utils.createPrototypeNode(
     Geometry,
     utils.objectInherit(Node.prototype, {
-        releaseGLObjects: function () {
+        releaseGLObjects: function() {
             if (this.stateset !== undefined) this.stateset.releaseGLObjects();
 
             for (var keyAttribute in this._attributes) {
@@ -58,7 +58,7 @@ utils.createPrototypeNode(
             this.releaseVAO();
         },
 
-        releaseVAO: function () {
+        releaseVAO: function() {
             if (!this._useVAO || !this._glContext) return;
 
             for (var prgID in this._vao) {
@@ -69,30 +69,30 @@ utils.createPrototypeNode(
             }
         },
 
-        dirty: function () {
+        dirty: function() {
             this._cacheDrawCall = {};
             this.releaseVAO();
         },
 
-        getPrimitives: function () {
+        getPrimitives: function() {
             // Notify.warn( 'deprecated use instead getPrimitiveSetList' );
             return this.getPrimitiveSetList();
         },
 
-        getAttributes: function () {
+        getAttributes: function() {
             // Notify.warn( 'deprecated use instead getVertexAttributeList' );
             return this.getVertexAttributeList();
         },
 
-        getShape: function () {
+        getShape: function() {
             return this._shape;
         },
 
-        setShape: function (shape) {
+        setShape: function(shape) {
             this._shape = shape;
         },
 
-        getVertexAttributeList: function () {
+        getVertexAttributeList: function() {
             return this._attributes;
         },
 
@@ -101,7 +101,7 @@ utils.createPrototypeNode(
          * If you modify something inside this array
          * you must call dirty() on the Geometry
          */
-        getPrimitiveSetList: function () {
+        getPrimitiveSetList: function() {
             return this._primitives;
         },
 
@@ -113,14 +113,14 @@ utils.createPrototypeNode(
          * if you change a buffer a dirty will be automatically
          * called to rebuild the VAO if needed.
          */
-        setVertexAttribArray: function (key, array) {
+        setVertexAttribArray: function(key, array) {
             if (this._attributes[key] !== array) {
                 this._attributes[key] = array;
                 this.dirty();
             }
         },
 
-        _generateVertexSetup: function (
+        _generateVertexSetup: function(
             validAttributeKeyList,
             validAttributeIndexList,
             includeFirstIndexBuffer
@@ -158,7 +158,7 @@ utils.createPrototypeNode(
             return vertexAttributeSetup;
         },
 
-        _generatePrimitives: function (validPrimitives, hasVertexColor, optimizeVAO) {
+        _generatePrimitives: function(validPrimitives, hasVertexColor, optimizeVAO) {
             var primitiveSetup = [
                 hasVertexColor ? 'state.enableVertexColor();' : 'state.disableVertexColor();'
             ];
@@ -186,11 +186,11 @@ utils.createPrototypeNode(
          *  Generate a function specific to the Geometry/Program
          *  two version one using VAO and a regular one
          */
-        generateDrawCommand: (function () {
+        generateDrawCommand: (function() {
             var validAttributeList = [];
             var validAttributeKeyList = [];
 
-            return function (state, program, prgID, validPrimitives) {
+            return function(state, program, prgID, validPrimitives) {
                 var attributesCacheMap = program._attributesCache;
                 var geometryVertexAttributes = this.getVertexAttributeList();
 
@@ -318,7 +318,7 @@ utils.createPrototypeNode(
             };
         })(),
 
-        _getValidPrimitives: function () {
+        _getValidPrimitives: function() {
             var validPrimitives = [];
 
             for (var i = 0; i < this._primitives.length; i++) {
@@ -340,7 +340,7 @@ utils.createPrototypeNode(
             return validPrimitives;
         },
 
-        drawImplementation: function (state) {
+        drawImplementation: function(state) {
             var program = state.getLastProgramApplied();
             var prgID = program.getInstanceID();
 
@@ -387,12 +387,12 @@ utils.createPrototypeNode(
             state.setVertexArrayObject(null);
         },
 
-        setBound: function (bb) {
+        setBound: function(bb) {
             this._boundingBox = bb;
             this._boundingBoxComputed = true;
         },
 
-        computeBoundingBox: function (boundingBox) {
+        computeBoundingBox: function(boundingBox) {
             boundingBox.init();
 
             var vertexArray = this.getVertexAttributeList().Vertex;
@@ -437,7 +437,7 @@ utils.createPrototypeNode(
             return boundingBox;
         },
 
-        computeBoundingSphere: function (boundingSphere) {
+        computeBoundingSphere: function(boundingSphere) {
             boundingSphere.init();
             var bb = this.getBoundingBox();
             boundingSphere.expandByBoundingBox(bb);
@@ -448,7 +448,7 @@ utils.createPrototypeNode(
     'Geometry'
 );
 
-Geometry.appendVertexAttributeToList = function (from, to, postfix) {
+Geometry.appendVertexAttributeToList = function(from, to, postfix) {
     for (var key in from) {
         var keyPostFix = key;
         if (postfix !== undefined) keyPostFix += '_' + postfix;

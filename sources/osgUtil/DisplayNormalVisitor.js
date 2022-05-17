@@ -17,7 +17,7 @@ import UpdateMorph from 'osgAnimation/UpdateMorph';
 ////////////////////////
 // COMPILER OFFSET NORMAL
 ////////////////////////
-var CompilerOffsetNormal = function () {
+var CompilerOffsetNormal = function() {
     Compiler.apply(this, arguments);
 };
 
@@ -29,11 +29,11 @@ Compiler.setStateAttributeConfig(CompilerOffsetNormal, configNormal);
 utils.createPrototypeObject(
     CompilerOffsetNormal,
     utils.objectInherit(Compiler.prototype, {
-        getCompilerName: function () {
+        getCompilerName: function() {
             return 'CompilerOffsetNormal';
         },
-        initTextureAttributes: function () {},
-        createFragmentShaderGraph: function () {
+        initTextureAttributes: function() {},
+        createFragmentShaderGraph: function() {
             var frag = this.getNode('glFragColor');
 
             this.getNode('SetAlpha')
@@ -47,10 +47,10 @@ utils.createPrototypeObject(
 
             return [frag];
         },
-        getOffsetDirection: function () {
+        getOffsetDirection: function() {
             return this.getOrCreateModelNormal();
         },
-        getOrCreateModelVertex: function () {
+        getOrCreateModelVertex: function() {
             var vertexOffset = this.getVariable('vertexOffset');
             if (vertexOffset) return vertexOffset;
 
@@ -72,7 +72,7 @@ utils.createPrototypeObject(
 
             return vertexOffset;
         },
-        getOrCreateViewVertex: function () {
+        getOrCreateViewVertex: function() {
             var out = this._variables.FragEyeVector;
             if (out && !out.isEmpty()) return out;
             out = this._varyings.FragEyeVector || this.createVariable('vec4', 'FragEyeVector');
@@ -93,7 +93,7 @@ utils.createPrototypeObject(
     'CompilerOffsetNormal'
 );
 
-var ShaderGeneratorCompilerOffsetNormal = function () {
+var ShaderGeneratorCompilerOffsetNormal = function() {
     ShaderGenerator.apply(this, arguments);
     this.setShaderCompiler(CompilerOffsetNormal);
 };
@@ -107,7 +107,7 @@ utils.createPrototypeObject(
 ////////////////////////
 // COMPILER OFFSET TANGENT
 ////////////////////////
-var CompilerOffsetTangent = function () {
+var CompilerOffsetTangent = function() {
     CompilerOffsetNormal.apply(this, arguments);
 };
 
@@ -117,10 +117,10 @@ Compiler.setStateAttributeConfig(CompilerOffsetTangent, configTangent);
 utils.createPrototypeObject(
     CompilerOffsetTangent,
     utils.objectInherit(CompilerOffsetNormal.prototype, {
-        getCompilerName: function () {
+        getCompilerName: function() {
             return 'CompilerOffsetTangent';
         },
-        getOffsetDirection: function () {
+        getOffsetDirection: function() {
             return this.getOrCreateModelTangent();
         }
     }),
@@ -128,7 +128,7 @@ utils.createPrototypeObject(
     'CompilerOffsetTangent'
 );
 
-var ShaderGeneratorCompilerOffsetTangent = function () {
+var ShaderGeneratorCompilerOffsetTangent = function() {
     ShaderGenerator.apply(this, arguments);
     this.setShaderCompiler(CompilerOffsetTangent);
 };
@@ -144,7 +144,7 @@ utils.createPrototypeObject(
 // DISPLAY NORMAL VISITOR
 ////////////////////////
 
-var DisplayNormalVisitor = function () {
+var DisplayNormalVisitor = function() {
     NodeVisitor.call(this);
 
     this._unifScale = Uniform.createFloat(1.0, 'uScale');
@@ -170,16 +170,16 @@ DisplayNormalVisitor.ShaderGeneratorCompilerOffsetTangent = ShaderGeneratorCompi
 utils.createPrototypeObject(
     DisplayNormalVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        setScale: function (scale) {
+        setScale: function(scale) {
             this._unifScale.setFloat(scale);
         },
-        setTangentVisibility: function (bool) {
+        setTangentVisibility: function(bool) {
             this._tangentStateSet.setAttributeAndModes(new Depth(bool ? Depth.LESS : Depth.NEVER));
         },
-        setNormalVisibility: function (bool) {
+        setNormalVisibility: function(bool) {
             this._normalStateSet.setAttributeAndModes(new Depth(bool ? Depth.LESS : Depth.NEVER));
         },
-        apply: function (node) {
+        apply: function(node) {
             if (node._isVisitedNormalDebug) return;
             node._isVisitedNormalDebug = true;
 
@@ -199,7 +199,7 @@ utils.createPrototypeObject(
                 }
             }
         },
-        _createDoubleOffsetArray: function (nbVertices) {
+        _createDoubleOffsetArray: function(nbVertices) {
             // 0 means original vertex pos
             // 1 means offseted vertex
             var elts = new Float32Array(nbVertices * 2);
@@ -208,7 +208,7 @@ utils.createPrototypeObject(
             }
             return new BufferArray(BufferArray.ARRAY_BUFFER, elts, 1);
         },
-        _createDoubledBufferArray: function (bufferArray) {
+        _createDoubledBufferArray: function(bufferArray) {
             // in case of morphs
             if (bufferArray.getInitialBufferArray)
                 bufferArray = bufferArray.getInitialBufferArray();
@@ -231,7 +231,7 @@ utils.createPrototypeObject(
 
             return new BufferArray(BufferArray.ARRAY_BUFFER, elementsDouble, itemSize);
         },
-        _addMorphTargets: function (originMorph, morph, vecName) {
+        _addMorphTargets: function(originMorph, morph, vecName) {
             var targets = morph.getMorphTargets();
             morph.setName(originMorph.getName()); // for the UpdateMorph
 
@@ -254,7 +254,7 @@ utils.createPrototypeObject(
             morph.mergeChildrenVertexAttributeList();
             return morph;
         },
-        _createDebugGeom: function (node, vecName, stateSet) {
+        _createDebugGeom: function(node, vecName, stateSet) {
             var attrs = node.getAttributes();
             var dispVec = attrs[vecName];
             if (!dispVec) return;

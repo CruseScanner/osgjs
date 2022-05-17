@@ -3,7 +3,7 @@ import utils from 'osg/utils';
 import osgMath from 'osg/math';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var OrbitManipulatorHammerController = function (manipulator) {
+var OrbitManipulatorHammerController = function(manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
@@ -11,7 +11,7 @@ var OrbitManipulatorHammerController = function (manipulator) {
 utils.createPrototypeObject(
     OrbitManipulatorHammerController,
     utils.objectInherit(Controller.prototype, {
-        init: function () {
+        init: function() {
             this._panFactor = [];
             this._panFactor[0] = 1.0;
             this._panFactor[1] = -this._panFactor[0];
@@ -29,7 +29,7 @@ utils.createPrototypeObject(
             this._initInputs(InputGroups.ORBIT_MANIPULATOR_TOUCH);
         },
 
-        _initInputs: function (group) {
+        _initInputs: function(group) {
             var manager = this._manipulator.getInputManager();
 
             manager.group(group).addMappings(
@@ -47,17 +47,17 @@ utils.createPrototypeObject(
             );
         },
 
-        startPan: function (event) {
+        startPan: function(event) {
             this._panning = true;
             this.startMotion(this._manipulator.getPanInterpolator(), this._panFactor, event);
         },
 
-        startRotate: function (event) {
+        startRotate: function(event) {
             this._rotating = true;
             this.startMotion(this._manipulator.getRotateInterpolator(), this._rotateFactor, event);
         },
 
-        pan: function (event) {
+        pan: function(event) {
             if (!this._panning) {
                 this.endMotion();
                 this.startPan(event);
@@ -65,7 +65,7 @@ utils.createPrototypeObject(
             this.move(this._manipulator.getPanInterpolator(), this._panFactor, event);
         },
 
-        rotate: function (event) {
+        rotate: function(event) {
             if (!this._rotating) {
                 this.endMotion();
                 this.startPan(event);
@@ -73,7 +73,7 @@ utils.createPrototypeObject(
             this.move(this._manipulator.getRotateInterpolator(), this._rotateFactor, event);
         },
 
-        startMotion: function (interpolator, factor, event) {
+        startMotion: function(interpolator, factor, event) {
             if (this._zooming) {
                 return;
             }
@@ -83,19 +83,19 @@ utils.createPrototypeObject(
             interpolator.set(x, y);
         },
 
-        move: function (interpolator, factor, event) {
+        move: function(interpolator, factor, event) {
             var x = event.canvasX * factor[0];
             var y = event.canvasY * factor[1];
             interpolator.setTarget(x, y);
         },
 
-        endMotion: function () {
+        endMotion: function() {
             if (!this._panning && !this._rotating) return;
             this._panning = false;
             this._rotating = false;
         },
 
-        pinchStart: function (event) {
+        pinchStart: function(event) {
             this._zooming = true;
             this._lastScale = event.scale;
             var zoomInterpolator = this._manipulator.getZoomInterpolator();
@@ -103,11 +103,11 @@ utils.createPrototypeObject(
             zoomInterpolator.set(this._lastScale);
         },
 
-        pinchEnd: function () {
+        pinchEnd: function() {
             this._zooming = false;
         },
 
-        pinchInOut: function (event) {
+        pinchInOut: function(event) {
             if (!this._zooming) return;
 
             // make the dezoom faster (because the manipulator dezoom/dezoom distance speed is adaptive)
@@ -126,7 +126,7 @@ utils.createPrototypeObject(
             zoomInterpolator.setTarget(zoomInterpolator.getTarget()[0] - scale);
         },
 
-        setManipulator: function (manipulator) {
+        setManipulator: function(manipulator) {
             this._manipulator = manipulator;
         }
     })

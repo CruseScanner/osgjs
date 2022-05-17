@@ -10,7 +10,7 @@ import WebglCaps from 'osg/WebGLCaps';
 //     - Handle (recursive) include, avoiding code repeat and help code factorization
 //     - Handle per shader and global define/precision
 
-var ShaderProcessor = function (createInstance) {
+var ShaderProcessor = function(createInstance) {
     if (!createInstance) {
         if (ShaderProcessor.instance) {
             return ShaderProcessor.instance;
@@ -39,14 +39,14 @@ ShaderProcessor.prototype = {
     //     'lights.glsl': textShaderFunctions,
     //     'textures.glsl': textShaderFunctions
     // };
-    addShaders: function (shaders) {
+    addShaders: function(shaders) {
         for (var key in shaders) {
             this._shadersList[key] = key;
             this._shadersText[key] = shaders[key];
         }
     },
 
-    instrumentShaderlines: function (content, sourceID) {
+    instrumentShaderlines: function(content, sourceID) {
         // TODO instrumentShaderlines
         // http://immersedcode.org/2012/1/12/random-notes-on-webgl/
         // one ID per "file"
@@ -69,12 +69,12 @@ ShaderProcessor.prototype = {
         return '\n#line ' + 0 + ' ' + sourceID + '\n' + content;
     },
 
-    hasShader: function (shaderName) {
+    hasShader: function(shaderName) {
         // unlike getShaderTextPure, doesn't log an erreur if the shader doesn't exist
         return this._shadersText[shaderName] !== undefined;
     },
 
-    getShaderTextPure: function (shaderName) {
+    getShaderTextPure: function(shaderName) {
         var preShader = this._shadersText[shaderName];
 
         if (!preShader) {
@@ -85,18 +85,18 @@ ShaderProcessor.prototype = {
         return preShader;
     },
 
-    getShader: function (shaderName, defines, extensions, type) {
+    getShader: function(shaderName, defines, extensions, type) {
         var shader = this.getShaderTextPure(shaderName);
         return this.processShader(shader, defines, extensions, type);
     },
 
     // recursively  handle #include external glsl
     // files (for now in the same folder.)
-    preprocess: function (content, sourceID, includeList, inputsDefines /*, type */) {
+    preprocess: function(content, sourceID, includeList, inputsDefines /*, type */) {
         var self = this;
         return content.replace(
             this._includeCondR,
-            function (_, strMatch) {
+            function(_, strMatch) {
                 var includeOpt = strMatch.split(' ');
                 var includeName = includeOpt[0].replace(/"/g, '');
 
@@ -109,7 +109,7 @@ ShaderProcessor.prototype = {
                     // some conditions here.
                     // if not defined we do not include
                     var found = false;
-                    var defines = inputsDefines.map(function (defineString) {
+                    var defines = inputsDefines.map(function(defineString) {
                         // find '#define', remove duplicate whitespace, split on space and return the define Text
                         return (
                             self._defineR.test(defineString) &&
@@ -146,22 +146,22 @@ ShaderProcessor.prototype = {
         );
     },
 
-    _getSortedUnique: (function () {
-        var filterDuplicate = function (item, pos, self) {
+    _getSortedUnique: (function() {
+        var filterDuplicate = function(item, pos, self) {
             return !pos || item !== self[pos - 1];
         };
 
-        return function (array) {
+        return function(array) {
             return array && array.sort().filter(filterDuplicate);
         };
     })(),
 
-    _convertExtensionsToWebGL2: (function () {
-        var cbRenamer = function (match, extension) {
+    _convertExtensionsToWebGL2: (function() {
+        var cbRenamer = function(match, extension) {
             return 'core_' + extension;
         };
 
-        var cbDefiner = function (match, extension) {
+        var cbDefiner = function(match, extension) {
             return '#define ' + extension;
         };
 
@@ -170,22 +170,22 @@ ShaderProcessor.prototype = {
         var definer = new RegExp('#\\s*extension\\s+' + extensions + '.*', 'g');
         var renamer = new RegExp(extensions, 'g');
 
-        return function (strShader) {
+        return function(strShader) {
             strShader = strShader.replace(definer, cbDefiner); // replace #extension by #define
             strShader = strShader.replace(renamer, cbRenamer); // rename extension
             return strShader;
         };
     })(),
 
-    _convertToWebGL2: (function () {
+    _convertToWebGL2: (function() {
         var frags = [];
-        var replaceMRT = function (match, number) {
+        var replaceMRT = function(match, number) {
             var varName = 'glFragData_' + number;
             frags[number] = 'layout(location = ' + number + ') out vec4 ' + varName + ';';
             return varName;
         };
 
-        return function (strShader, isFragment) {
+        return function(strShader, isFragment) {
             if (!strShader) return strShader;
 
             strShader = strShader.replace(/attribute\s+/g, 'in ');
@@ -211,7 +211,7 @@ ShaderProcessor.prototype = {
         };
     })(),
 
-    _hasVersion: function (shader) {
+    _hasVersion: function(shader) {
         // match first line starting with #
         var version = shader.match(/^#(.*)$/m);
         return version && version[0].indexOf('version') !== -1;
@@ -221,7 +221,7 @@ ShaderProcessor.prototype = {
     // - declare version, extensions, precision and defines
     // - resolve pragma include
     // - Convert webgl1 to webgl2 (glsl 100 to glsl 330 es)
-    processShader: function (shader, defines, extensions, type) {
+    processShader: function(shader, defines, extensions, type) {
         // if the shader has #version statement we skip the shader processing
         if (this._hasVersion(shader)) {
             return shader;

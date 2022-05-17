@@ -6,8 +6,8 @@ import MatrixTransform from 'osg/MatrixTransform';
 import Shape from 'osg/shape';
 import { vec3 } from 'osg/glMatrix';
 
-export default function () {
-    test('ComputeBoundsVisitor translate', function () {
+export default function() {
+    test('ComputeBoundsVisitor translate', function() {
         var root = new MatrixTransform();
 
         var child1 = new MatrixTransform();
@@ -59,7 +59,7 @@ export default function () {
         );
     });
 
-    test('ComputeBoundsVisitor translate and rotate', function () {
+    test('ComputeBoundsVisitor translate and rotate', function() {
         var root = new MatrixTransform();
         var tra = mat4.create();
 

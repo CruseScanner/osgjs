@@ -7,7 +7,7 @@ import { vec3 } from 'osg/glMatrix';
  *  LightSource is a positioned node to use with StateAttribute Light
  *  @class LightSource
  */
-var LightSource = function () {
+var LightSource = function() {
     Node.call(this);
     this.setCullingActive(false);
     this._light = undefined;
@@ -18,22 +18,22 @@ var LightSource = function () {
 utils.createPrototypeNode(
     LightSource,
     utils.objectInherit(Node.prototype, {
-        getLight: function () {
+        getLight: function() {
             return this._light;
         },
-        setLight: function (light) {
+        setLight: function(light) {
             this._light = light;
         },
-        setReferenceFrame: function (value) {
+        setReferenceFrame: function(value) {
             this._referenceFrame = value;
         },
-        getReferenceFrame: function () {
+        getReferenceFrame: function() {
             return this._referenceFrame;
         },
-        computeBoundingSphere: (function () {
+        computeBoundingSphere: (function() {
             var tmp = vec3.create();
 
-            return function (bsphere) {
+            return function(bsphere) {
                 Node.prototype.computeBoundingSphere.call(this, bsphere);
 
                 if (

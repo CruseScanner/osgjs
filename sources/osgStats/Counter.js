@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 var performance = window.performance;
 
-var Counter = function (config) {
+var Counter = function(config) {
     this._caption = config.caption;
     this._accumValue = 0;
     this._accumSamples = 0;
@@ -20,31 +20,31 @@ var Counter = function (config) {
 };
 
 utils.createPrototypeObject(Counter, {
-    isDisplayable: function () {
+    isDisplayable: function() {
         return this._display;
     },
-    setDisplayable: function (boolean) {
+    setDisplayable: function(boolean) {
         this._display = boolean;
     },
-    getOver: function () {
+    getOver: function() {
         return this._over;
     },
-    getBelow: function () {
+    getBelow: function() {
         return this._below;
     },
-    getGraph: function () {
+    getGraph: function() {
         return this._graph;
     },
-    getAverageMs: function () {
+    getAverageMs: function() {
         return this._avgMs;
     },
-    getAverageValue: function () {
+    getAverageValue: function() {
         return this._averageValue;
     },
-    getValue: function () {
+    getValue: function() {
         return this._value;
     },
-    average: function (value) {
+    average: function(value) {
         if (!this._avgMs) return;
 
         this._accumValue += value;
@@ -57,24 +57,24 @@ utils.createPrototypeObject(Counter, {
             this._accumSamples = 0;
         }
     },
-    start: function () {
+    start: function() {
         this._display = true;
         this._time = performance.now();
     },
-    end: function () {
+    end: function() {
         this._value = performance.now() - this._time;
         this.average(this._value);
     },
-    set: function (value) {
+    set: function(value) {
         this._display = true;
         this._value = value;
         this.average(value);
     },
-    tick: function () {
+    tick: function() {
         this.end();
         this.start();
     },
-    frame: function () {
+    frame: function() {
         var delta = performance.now() - this._time;
         this.set(1000.0 / delta);
         this.start();

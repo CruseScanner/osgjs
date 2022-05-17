@@ -12,16 +12,16 @@ if (mockup.isNodeContext()) {
     Input = require('osgDB/Input').default;
 }
 
-export default function () {
-    var FindAnimationManagerVisitor = function () {
+export default function() {
+    var FindAnimationManagerVisitor = function() {
         NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
         this._cb = undefined;
     };
     FindAnimationManagerVisitor.prototype = utils.objectInherit(NodeVisitor.prototype, {
-        getAnimationManager: function () {
+        getAnimationManager: function() {
             return this._cb;
         },
-        apply: function (node) {
+        apply: function(node) {
             var cbs = node.getUpdateCallbackList();
             for (var i = 0, l = cbs.length; i < l; i++) {
                 if (cbs[0] instanceof BasicAnimationManager) {
@@ -33,7 +33,7 @@ export default function () {
         }
     });
 
-    var getChannelsInfo = function (animation) {
+    var getChannelsInfo = function(animation) {
         var nbChannelSyncEnd = 0;
         var nbTimesEmptySlot = 0;
         var nbKeysEmptySlot = 0;
@@ -58,11 +58,11 @@ export default function () {
         };
     };
 
-    test('osgAnimation character', function (done) {
+    test('osgAnimation character', function(done) {
         var input = new Input();
         input
             .readNodeURL('../examples/media/models/animation/character.osgjs')
-            .then(function (scene) {
+            .then(function(scene) {
                 var findAnimationManager = new FindAnimationManagerVisitor();
                 scene.accept(findAnimationManager);
                 var manager = findAnimationManager.getAnimationManager();

@@ -5,7 +5,7 @@ import StateAttribute from 'osg/StateAttribute';
  *  Manage Blending mode
  *  @class BlendFunc
  */
-var BlendFunc = function (sourceRGB, destinationRGB, sourceAlpha, destinationAlpha) {
+var BlendFunc = function(sourceRGB, destinationRGB, sourceAlpha, destinationAlpha) {
     StateAttribute.call(this);
     this._sourceFactor = BlendFunc.DISABLE;
     this._destinationFactor = BlendFunc.DISABLE;
@@ -63,33 +63,33 @@ utils.createPrototypeStateAttribute(
         /**
          * Create an instance of this StateAttribute
          */
-        cloneType: function () /**BlendFunc*/ {
+        cloneType: function() /**BlendFunc*/ {
             return new BlendFunc();
         },
-        setSource: function (f) {
+        setSource: function(f) {
             this.setSourceRGB(f);
             this.setSourceAlpha(f);
         },
-        getSource: function () {
+        getSource: function() {
             return this._sourceFactor;
         },
-        setDestination: function (f) {
+        setDestination: function(f) {
             this.setDestinationRGB(f);
             this.setDestinationAlpha(f);
         },
-        getDestination: function () {
+        getDestination: function() {
             return this._destinationFactor;
         },
-        getSeparate: function () {
+        getSeparate: function() {
             return this._separate;
         },
-        checkSeparate: function () {
+        checkSeparate: function() {
             return (
                 this._sourceFactor !== this._sourceFactorAlpha ||
                 this._destinationFactor !== this._destinationFactorAlpha
             );
         },
-        setSourceRGB: function (f) {
+        setSourceRGB: function(f) {
             if (typeof f === 'string') {
                 this._sourceFactor = BlendFunc[f];
             } else {
@@ -97,10 +97,10 @@ utils.createPrototypeStateAttribute(
             }
             this._separate = this.checkSeparate();
         },
-        getSourceRGB: function () {
+        getSourceRGB: function() {
             return this._sourceFactor;
         },
-        setSourceAlpha: function (f) {
+        setSourceAlpha: function(f) {
             if (typeof f === 'string') {
                 this._sourceFactorAlpha = BlendFunc[f];
             } else {
@@ -108,10 +108,10 @@ utils.createPrototypeStateAttribute(
             }
             this._separate = this.checkSeparate();
         },
-        getSourceAlpha: function () {
+        getSourceAlpha: function() {
             return this._sourceFactorAlpha;
         },
-        setDestinationRGB: function (f) {
+        setDestinationRGB: function(f) {
             if (typeof f === 'string') {
                 this._destinationFactor = BlendFunc[f];
             } else {
@@ -119,10 +119,10 @@ utils.createPrototypeStateAttribute(
             }
             this._separate = this.checkSeparate();
         },
-        getDestinationRGB: function () {
+        getDestinationRGB: function() {
             return this._destinationFactor;
         },
-        setDestinationAlpha: function (f) {
+        setDestinationAlpha: function(f) {
             if (typeof f === 'string') {
                 this._destinationFactorAlpha = BlendFunc[f];
             } else {
@@ -130,7 +130,7 @@ utils.createPrototypeStateAttribute(
             }
             this._separate = this.checkSeparate();
         },
-        getDestinationAlpha: function () {
+        getDestinationAlpha: function() {
             return this._destinationFactorAlpha;
         },
 
@@ -138,7 +138,7 @@ utils.createPrototypeStateAttribute(
          * Apply the mode, must be called in the draw traversal
          * @param state
          */
-        apply: function (state) {
+        apply: function(state) {
             state.applyBlendFunc(this);
         }
     }),

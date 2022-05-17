@@ -4,7 +4,7 @@ import notify from 'osg/notify';
 
 var DefaultFont = 'Courier New';
 
-var determineFontHeight = function (fontStyle) {
+var determineFontHeight = function(fontStyle) {
     var body = document.getElementsByTagName('body')[0];
     var dummy = document.createElement('div');
     var dummyText = document.createTextNode('M');
@@ -16,16 +16,16 @@ var determineFontHeight = function (fontStyle) {
     return result;
 };
 
-var loadFont = function (fontFamily) {
-    return new P(function (resolve, reject) {
+var loadFont = function(fontFamily) {
+    return new P(function(resolve, reject) {
         window.WebFontConfig = {
             google: {
                 families: [fontFamily + ':200']
             },
-            active: function () {
+            active: function() {
                 resolve(fontFamily);
             },
-            inactive: function (error) {
+            inactive: function(error) {
                 reject('loadFont error:' + error);
             }
         };
@@ -33,14 +33,14 @@ var loadFont = function (fontFamily) {
             s = document.scripts[0];
         wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
         wf.async = true;
-        wf.onerror = function () {
+        wf.onerror = function() {
             reject();
         };
         s.parentNode.insertBefore(wf, s);
     });
 };
 
-var TextGenerator = function () {
+var TextGenerator = function() {
     this._canvas = undefined;
     this._characterHeight = 0;
     this._characterWidth = 0;
@@ -54,23 +54,23 @@ var TextGenerator = function () {
 };
 
 utils.createPrototypeObject(TextGenerator, {
-    setFontSize: function (size) {
+    setFontSize: function(size) {
         this._fontSize = size;
     },
-    getCharacterWidth: function () {
+    getCharacterWidth: function() {
         return this._characterWidth;
     },
-    getCharacterHeight: function () {
+    getCharacterHeight: function() {
         return this._characterHeight;
     },
-    getCanvas: function () {
+    getCanvas: function() {
         return this._promise;
     },
-    getCharacterUV: function (characterCode) {
+    getCharacterUV: function(characterCode) {
         var index = characterCode - this._characterFirstCode;
         return index * this._characterSizeUV;
     },
-    _fillCanvas: function (fontFamily, fontSize) {
+    _fillCanvas: function(fontFamily, fontSize) {
         // get font height
         var size = fontSize + 'px';
         var style = 'font-family: ' + fontFamily + '; font-size: ' + size + ';';
@@ -114,15 +114,15 @@ utils.createPrototypeObject(TextGenerator, {
         }
         return canvas;
     },
-    _createCanvas: function () {
+    _createCanvas: function() {
         this._promise = loadFont(this._fontFamily)
             .then(
-                function (fontFamily) {
+                function(fontFamily) {
                     return this._fillCanvas(fontFamily, this._fontSize);
                 }.bind(this)
             )
             .catch(
-                function () {
+                function() {
                     return this._fillCanvas(DefaultFont, this._fontSize);
                 }.bind(this)
             );

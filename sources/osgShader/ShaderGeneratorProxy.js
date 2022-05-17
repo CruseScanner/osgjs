@@ -4,7 +4,7 @@ import ShadowCastShaderGenerator from 'osgShadow/ShadowCastShaderGenerator';
 import DisplayNormalVisitor from 'osgUtil/DisplayNormalVisitor';
 import DisplayGeometryVisitor from 'osgUtil/DisplayGeometryVisitor';
 
-var ShaderGeneratorProxy = function () {
+var ShaderGeneratorProxy = function() {
     // object of shader generators
     this._generators = {};
     this.addShaderGenerator('default', new ShaderGenerator());
@@ -30,7 +30,7 @@ var ShaderGeneratorProxy = function () {
 };
 
 ShaderGeneratorProxy.prototype = {
-    getShaderGenerator: function (name) {
+    getShaderGenerator: function(name) {
         if (!name) return this._generators.default;
 
         var shaderGenerator = this._generators[name];
@@ -44,7 +44,7 @@ ShaderGeneratorProxy.prototype = {
     },
 
     // user-space facility to provide its own
-    addShaderGenerator: function (name, sg) {
+    addShaderGenerator: function(name, sg) {
         this._generators[name] = sg;
     }
 };

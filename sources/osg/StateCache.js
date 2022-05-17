@@ -20,7 +20,7 @@ import CullFace from 'osg/CullFace';
 //     - state, that contains the last state appied to webgl, it's used to compare if a
 //              change happend from the incoming attribute
 
-var createStateBlendFunc = function () {
+var createStateBlendFunc = function() {
     return {
         buffer: {
             separate: false,
@@ -42,7 +42,7 @@ var createStateBlendFunc = function () {
     };
 };
 
-var createStateDepth = function () {
+var createStateDepth = function() {
     return {
         buffer: {
             func: Depth.LESS,
@@ -60,7 +60,7 @@ var createStateDepth = function () {
     };
 };
 
-var createStateCullFace = function () {
+var createStateCullFace = function() {
     return {
         buffer: {
             enable: false,
@@ -74,7 +74,7 @@ var createStateCullFace = function () {
     };
 };
 
-var createStateScissor = function () {
+var createStateScissor = function() {
     return {
         buffer: {
             enable: false,
@@ -94,7 +94,7 @@ var createStateScissor = function () {
     };
 };
 
-var createStateColorMask = function () {
+var createStateColorMask = function() {
     return {
         buffer: {
             red: true,
@@ -112,7 +112,7 @@ var createStateColorMask = function () {
     };
 };
 
-var createStateViewport = function () {
+var createStateViewport = function() {
     return {
         buffer: {
             x: 0,
@@ -130,7 +130,7 @@ var createStateViewport = function () {
     };
 };
 
-var createStateDepthMask = function () {
+var createStateDepthMask = function() {
     return {
         state: { value: true },
         buffer: { value: undefined },
@@ -138,7 +138,7 @@ var createStateDepthMask = function () {
     };
 };
 
-var createStateClearDepth = function () {
+var createStateClearDepth = function() {
     return {
         buffer: { value: 1.0 },
         state: { value: undefined },
@@ -146,7 +146,7 @@ var createStateClearDepth = function () {
     };
 };
 
-var createStateClearColor = function () {
+var createStateClearColor = function() {
     return {
         buffer: {
             red: 0.0,
@@ -164,7 +164,7 @@ var createStateClearColor = function () {
     };
 };
 
-var StateCache = function () {
+var StateCache = function() {
     this._stateClearColor = createStateClearColor();
     this._stateClearDepth = createStateClearDepth();
     this._stateDepthMask = createStateDepthMask();
@@ -177,7 +177,7 @@ var StateCache = function () {
 };
 
 StateCache.prototype = {
-    clearColor: function (array) {
+    clearColor: function(array) {
         var data = this._stateClearColor;
         var buffer = data.buffer;
         var state = data.state;
@@ -198,7 +198,7 @@ StateCache.prototype = {
         }
     },
 
-    applyClearColor: function (gl) {
+    applyClearColor: function(gl) {
         var data = this._stateClearColor;
         var state = data.state;
         var buffer = data.buffer;
@@ -210,7 +210,7 @@ StateCache.prototype = {
         gl.clearColor(state.red, state.green, state.blue, state.alpha);
     },
 
-    clearDepth: function (value) {
+    clearDepth: function(value) {
         var data = this._stateClearDepth;
         var buffer = data.buffer;
         var state = data.state;
@@ -223,7 +223,7 @@ StateCache.prototype = {
         }
     },
 
-    applyClearDepth: function (gl) {
+    applyClearDepth: function(gl) {
         var data = this._stateClearDepth;
         var buffer = data.buffer;
         var state = data.state;
@@ -232,7 +232,7 @@ StateCache.prototype = {
         gl.clearDepth(state.value);
     },
 
-    depthMask: function (value) {
+    depthMask: function(value) {
         var data = this._stateDepthMask;
         var buffer = data.buffer;
         var state = data.state;
@@ -245,7 +245,7 @@ StateCache.prototype = {
         }
     },
 
-    applyDepthMask: function (gl) {
+    applyDepthMask: function(gl) {
         var data = this._stateDepthMask;
         var buffer = data.buffer;
         var state = data.state;
@@ -254,11 +254,11 @@ StateCache.prototype = {
         gl.depthMask(state.value);
     },
 
-    applyViewportAttribute: function (attribute) {
+    applyViewportAttribute: function(attribute) {
         this.viewport(attribute._x, attribute._y, attribute._width, attribute._height);
     },
 
-    viewport: function (x, y, width, height) {
+    viewport: function(x, y, width, height) {
         var data = this._stateViewport;
         var buffer = data.buffer;
         var state = data.state;
@@ -274,7 +274,7 @@ StateCache.prototype = {
         }
     },
 
-    applyViewport: function (gl) {
+    applyViewport: function(gl) {
         var data = this._stateViewport;
         var buffer = data.buffer;
         var state = data.state;
@@ -286,7 +286,7 @@ StateCache.prototype = {
         gl.viewport(state.x, state.y, state.width, state.height);
     },
 
-    applyColorMaskAttribute: function (attribute) {
+    applyColorMaskAttribute: function(attribute) {
         var data = this._stateColorMask;
         var buffer = data.buffer;
         var state = data.state;
@@ -307,7 +307,7 @@ StateCache.prototype = {
         }
     },
 
-    applyColorMask: function (gl) {
+    applyColorMask: function(gl) {
         var data = this._stateColorMask;
         var buffer = data.buffer;
         var state = data.state;
@@ -319,7 +319,7 @@ StateCache.prototype = {
         gl.colorMask(state.red, state.green, state.blue, state.alpha);
     },
 
-    applyScissorAttribute: function (attribute) {
+    applyScissorAttribute: function(attribute) {
         var enable = attribute._x !== -1;
         var data = this._stateScissor;
         var buffer = data.buffer;
@@ -343,7 +343,7 @@ StateCache.prototype = {
         }
     },
 
-    applyScissor: function (gl) {
+    applyScissor: function(gl) {
         var data = this._stateScissor;
         var buffer = data.buffer;
         var state = data.state;
@@ -374,7 +374,7 @@ StateCache.prototype = {
         }
     },
 
-    applyCullFaceAttribute: function (attribute) {
+    applyCullFaceAttribute: function(attribute) {
         var data = this._stateCullFace;
         var buffer = data.buffer;
         var state = data.state;
@@ -389,7 +389,7 @@ StateCache.prototype = {
         }
     },
 
-    applyCullFace: function (gl) {
+    applyCullFace: function(gl) {
         var data = this._stateCullFace;
         var buffer = data.buffer;
         var state = data.state;
@@ -412,7 +412,7 @@ StateCache.prototype = {
         }
     },
 
-    applyDepthAttribute: function (attribute) {
+    applyDepthAttribute: function(attribute) {
         var enable = attribute._func !== Depth.DISABLE;
         var data = this._stateDepth;
         var buffer = data.buffer;
@@ -436,7 +436,7 @@ StateCache.prototype = {
         this.depthMask(attribute._writeMask);
     },
 
-    applyDepth: function (gl) {
+    applyDepth: function(gl) {
         var data = this._stateDepth;
         var buffer = data.buffer;
         var state = data.state;
@@ -465,7 +465,7 @@ StateCache.prototype = {
         }
     },
 
-    applyBlendFuncAttribute: function (attribute) {
+    applyBlendFuncAttribute: function(attribute) {
         var data = this._stateBlendFunc;
         var buffer = data.buffer;
         var state = data.state;
@@ -492,7 +492,7 @@ StateCache.prototype = {
         }
     },
 
-    applyBlendFunc: function (gl) {
+    applyBlendFunc: function(gl) {
         var data = this._stateBlendFunc;
         var buffer = data.buffer;
         var state = data.state;
@@ -538,7 +538,7 @@ StateCache.prototype = {
         }
     },
 
-    applyClearStates: function (gl) {
+    applyClearStates: function(gl) {
         if (this._stateDepthMask.changed) {
             this.applyDepthMask(gl);
         }
@@ -556,7 +556,7 @@ StateCache.prototype = {
         }
     },
 
-    applyDrawStates: function (gl) {
+    applyDrawStates: function(gl) {
         if (this._stateViewport.changed) {
             this.applyViewport(gl);
         }
@@ -580,12 +580,12 @@ StateCache.prototype = {
         }
     },
 
-    clear: function (gl, mask) {
+    clear: function(gl, mask) {
         this.applyClearStates(gl);
         gl.clear(mask);
     },
 
-    drawGeometry: function (gl) {
+    drawGeometry: function(gl) {
         this.applyDrawStates(gl);
     }
 };

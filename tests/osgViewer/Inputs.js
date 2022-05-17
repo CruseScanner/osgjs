@@ -3,10 +3,10 @@ import InputManager from 'osgViewer/input/InputManager';
 import InputSourceMouse from 'osgViewer/input/source/InputSourceMouse';
 import InputSourceKeyboard from 'osgViewer/input/source/InputSourceKeyboard';
 
-export default function () {
-    test('Inputs', function () {
+export default function() {
+    test('Inputs', function() {
         // Event parsing
-        (function () {
+        (function() {
             var inputManager = new InputManager();
             var keyboard = new InputSourceKeyboard();
             var mouse = new InputSourceMouse();
@@ -60,7 +60,7 @@ export default function () {
                 ctrlKey: true,
                 metaKey: false,
                 altKey: false,
-                preventDefault: function () {}
+                preventDefault: function() {}
             };
             assert(keyboard.isEventRegistered(event, parsedEvent), 'Event should match');
 
@@ -74,7 +74,7 @@ export default function () {
                 ctrlKey: true,
                 metaKey: false,
                 altKey: false,
-                preventDefault: function () {}
+                preventDefault: function() {}
             };
             assert(mouse.isEventRegistered(event, parsedEvent), 'Event should match');
         })();

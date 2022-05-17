@@ -7,7 +7,7 @@ import TransformEnums from 'osg/transformEnums';
  *  MatrixTransform is a Transform Node that can be customized with user matrix
  *  @class MatrixTransform
  */
-var MatrixTransform = function () {
+var MatrixTransform = function() {
     Transform.call(this);
     this.matrix = mat4.create();
 };
@@ -16,17 +16,17 @@ var MatrixTransform = function () {
 utils.createPrototypeNode(
     MatrixTransform,
     utils.objectInherit(Transform.prototype, {
-        getMatrix: function () {
+        getMatrix: function() {
             return this.matrix;
         },
 
-        setMatrix: function (m) {
+        setMatrix: function(m) {
             this.matrix = m;
             this.dirtyBound();
         },
 
         // local to "local world" (not Global World)
-        computeLocalToWorldMatrix: function (matrix /*, nodeVisitor */) {
+        computeLocalToWorldMatrix: function(matrix /*, nodeVisitor */) {
             if (this.referenceFrame === TransformEnums.RELATIVE_RF) {
                 mat4.mul(matrix, matrix, this.matrix);
             } else {
@@ -35,9 +35,9 @@ utils.createPrototypeNode(
             return true;
         },
 
-        computeWorldToLocalMatrix: (function () {
+        computeWorldToLocalMatrix: (function() {
             var minverse = mat4.create();
-            return function (matrix /*, nodeVisitor */) {
+            return function(matrix /*, nodeVisitor */) {
                 mat4.invert(minverse, this.matrix);
                 if (this.referenceFrame === TransformEnums.RELATIVE_RF) {
                     mat4.mul(matrix, minverse, matrix);

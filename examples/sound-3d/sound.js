@@ -1,5 +1,5 @@
 var osg = window.OSG.osg;
-var Sound = function (domElement, url, panner) {
+var Sound = function(domElement, url, panner) {
     this._player = domElement;
     this._mediaElement = undefined;
     this._panner = panner;
@@ -7,19 +7,19 @@ var Sound = function (domElement, url, panner) {
 };
 
 Sound.prototype = {
-    play: function () {
+    play: function() {
         if (this._player) this._player.play();
     },
 
-    pause: function () {
+    pause: function() {
         if (this._player) this._player.pause();
     },
 
-    update: (function () {
+    update: (function() {
         var matrixWorldSpace = osg.mat4.create();
         var position = osg.vec3.create();
 
-        return function (node, nv) {
+        return function(node, nv) {
             if (!this._panner) return true;
 
             osg.computeLocalToWorld(nv.nodePath, true, osg.mat4.identity(matrixWorldSpace));
@@ -32,13 +32,13 @@ Sound.prototype = {
     })()
 };
 
-var SoundManager = function () {
+var SoundManager = function() {
     var AudioConstructor = window.AudioContext || window.webkitAudioContext;
     this._context = new AudioConstructor();
 };
 
 SoundManager.prototype = {
-    create3DSound: function (player, url) {
+    create3DSound: function(player, url) {
         var panner = this._context.createPanner();
 
         panner.panningModel = 'HRTF';
@@ -69,13 +69,13 @@ SoundManager.prototype = {
         return sound;
     },
 
-    createAmbientSound: function (player, url) {
+    createAmbientSound: function(player, url) {
         var sound = new Sound(player, url);
         sound._mediaElement = this._context.createMediaElementSource(player);
         return sound;
     },
 
-    releaseSound: function (sound) {
+    releaseSound: function(sound) {
         if (!sound) return;
 
         sound.pause();
@@ -85,12 +85,12 @@ SoundManager.prototype = {
         sound._mediaElement = undefined;
     },
 
-    update: (function () {
+    update: (function() {
         var eye = osg.vec3.create();
         var center = osg.vec3.create();
         var up = osg.vec3.create();
 
-        return function () {
+        return function() {
             var camera = this._camera;
 
             if (camera) {

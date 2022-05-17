@@ -1,7 +1,7 @@
 import { mat4 } from 'osg/glMatrix';
 import { vec3 } from 'osg/glMatrix';
 
-var EllipsoidModel = function () {
+var EllipsoidModel = function() {
     this._radiusEquator = EllipsoidModel.WGS_84_RADIUS_EQUATOR;
     this._radiusPolar = EllipsoidModel.WGS_84_RADIUS_POLAR;
     this.computeCoefficients();
@@ -11,21 +11,21 @@ EllipsoidModel.WGS_84_RADIUS_EQUATOR = 6378137.0;
 EllipsoidModel.WGS_84_RADIUS_POLAR = 6356752.3142;
 
 EllipsoidModel.prototype = {
-    setRadiusEquator: function (radius) {
+    setRadiusEquator: function(radius) {
         this._radiusEquator = radius;
         this.computeCoefficients();
     },
-    getRadiusEquator: function () {
+    getRadiusEquator: function() {
         return this._radiusEquator;
     },
-    setRadiusPolar: function (radius) {
+    setRadiusPolar: function(radius) {
         this._radiusPolar = radius;
         this.computeCoefficients();
     },
-    getRadiusPolar: function () {
+    getRadiusPolar: function() {
         return this._radiusPolar;
     },
-    convertLatLongHeightToXYZ: function (latitude, longitude, height, result) {
+    convertLatLongHeightToXYZ: function(latitude, longitude, height, result) {
         var sinLatitude = Math.sin(latitude);
         var cosLatitude = Math.cos(latitude);
         var N =
@@ -39,7 +39,7 @@ EllipsoidModel.prototype = {
         result[2] = Z;
         return result;
     },
-    convertXYZToLatLongHeight: function (X, Y, Z, result) {
+    convertXYZToLatLongHeight: function(X, Y, Z, result) {
         // http://www.colorado.edu/geography/gcraft/notes/datum/gif/xyzllh.gif
         var p = Math.sqrt(X * X + Y * Y);
         var theta = Math.atan2(Z * this._radiusEquator, p * this._radiusPolar);
@@ -74,7 +74,7 @@ EllipsoidModel.prototype = {
         result[2] = height;
         return result;
     },
-    computeLocalUpVector: function (X, Y, Z) {
+    computeLocalUpVector: function(X, Y, Z) {
         // Note latitude is angle between normal to ellipsoid surface and XY-plane
         var latitude, longitude;
         var coord = this.convertXYZToLatLongHeight(X, Y, Z, vec3.create());
@@ -88,34 +88,34 @@ EllipsoidModel.prototype = {
             Math.sin(latitude)
         ];
     },
-    isWGS84: function () {
+    isWGS84: function() {
         return (
             this._radiusEquator === EllipsoidModel.WGS_84_RADIUS_EQUATOR &&
             this._radiusPolar === EllipsoidModel.WGS_84_RADIUS_POLAR
         );
     },
 
-    computeCoefficients: function () {
+    computeCoefficients: function() {
         var flattening = (this._radiusEquator - this._radiusPolar) / this._radiusEquator;
         this._eccentricitySquared = 2.0 * flattening - flattening * flattening;
     },
-    computeLocalToWorldTransformFromLatLongHeight: function (latitude, longitude, height, result) {
+    computeLocalToWorldTransformFromLatLongHeight: function(latitude, longitude, height, result) {
         var pos = this.convertLatLongHeightToXYZ(latitude, longitude, height, result);
         mat4.fromTranslation(result, pos);
         this.computeCoordinateFrame(latitude, longitude, result);
         return result;
     },
-    computeLocalToWorldTransformFromXYZ: function (X, Y, Z) {
+    computeLocalToWorldTransformFromXYZ: function(X, Y, Z) {
         var lla = this.convertXYZToLatLongHeight(X, Y, Z, vec3.create());
         var m = mat4.fromTranslation(mat4.create(), vec3.fromValues(X, Y, Z));
         this.computeCoordinateFrame(lla[0], lla[1], m);
         return m;
     },
-    computeCoordinateFrame: (function () {
+    computeCoordinateFrame: (function() {
         var up = vec3.create();
         var east = vec3.create();
         var north = vec3.create();
-        return function (latitude, longitude, localToWorld) {
+        return function(latitude, longitude, localToWorld) {
             // Compute up vector
             up[0] = Math.cos(longitude) * Math.cos(latitude);
             up[1] = Math.sin(longitude) * Math.cos(latitude);

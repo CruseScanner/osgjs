@@ -4,7 +4,7 @@ var OSG = window.OSG;
 var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
-var SimpleUpdateCallback = function (material) {
+var SimpleUpdateCallback = function(material) {
     this.material = material;
 };
 
@@ -12,7 +12,7 @@ SimpleUpdateCallback.prototype = {
     // rotation angle
     alpha: 0,
 
-    update: function (node, nv) {
+    update: function(node, nv) {
         var t = nv.getFrameStamp().getSimulationTime();
         var dt = t - node._lastUpdate;
         if (dt < 0) {
@@ -43,9 +43,9 @@ function createScene() {
     cube.addChild(cubeModel);
 
     cube.getOrCreateStateSet().setRenderingHint('TRANSPARENT_BIN');
-    cube.getOrCreateStateSet().setAttributeAndModes(
-        new osg.BlendFunc('SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA')
-    );
+    cube
+        .getOrCreateStateSet()
+        .setAttributeAndModes(new osg.BlendFunc('SRC_ALPHA', 'ONE_MINUS_SRC_ALPHA'));
     cube.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace('DISABLE'));
 
     // add a stateSet of texture to cube
@@ -66,7 +66,7 @@ function createScene() {
     return root;
 }
 
-var main = function () {
+var main = function() {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     var viewer;

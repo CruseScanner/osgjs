@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -7,11 +7,11 @@
     var osgUtil = OSG.osgUtil;
     var $ = window.$;
 
-    var Example = function () {};
+    var Example = function() {};
 
     Example.prototype = {
         // This function will create a basic scene with some cubes
-        createScene: function () {
+        createScene: function() {
             var root = new osg.Node();
 
             var group1 = new osg.MatrixTransform();
@@ -66,7 +66,7 @@
             return root;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, {
                 antialias: true,
@@ -94,7 +94,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

@@ -3,7 +3,7 @@ import StateAttribute from 'osg/StateAttribute';
 import { mat4 } from 'osg/glMatrix';
 import { vec3 } from 'osg/glMatrix';
 
-var Viewport = function (x, y, w, h) {
+var Viewport = function(x, y, w, h) {
     StateAttribute.call(this);
 
     this._x = x !== undefined ? x : 0;
@@ -17,39 +17,39 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Viewport',
 
-        cloneType: function () {
+        cloneType: function() {
             return new Viewport();
         },
 
-        setViewport: function (x, y, width, height) {
+        setViewport: function(x, y, width, height) {
             this._x = x;
             this._y = y;
             this._width = width;
             this._height = height;
         },
 
-        x: function () {
+        x: function() {
             return this._x;
         },
 
-        y: function () {
+        y: function() {
             return this._y;
         },
 
-        width: function () {
+        width: function() {
             return this._width;
         },
 
-        height: function () {
+        height: function() {
             return this._height;
         },
 
-        computeWindowMatrix: (function () {
+        computeWindowMatrix: (function() {
             var translate = mat4.create();
             var scale = mat4.create();
             var tmpVec = vec3.create();
 
-            return function (destination) {
+            return function(destination) {
                 // res = Matrix offset * Matrix scale * Matrix translate
                 mat4.fromTranslation(translate, vec3.ONE);
                 mat4.fromScaling(scale, [0.5 * this._width, 0.5 * this._height, 0.5]);
@@ -62,7 +62,7 @@ utils.createPrototypeStateAttribute(
             };
         })(),
 
-        apply: function (state) {
+        apply: function(state) {
             state.applyViewport(this);
         }
     }),

@@ -2,25 +2,25 @@ import { assert } from 'chai';
 import Shader from 'osg/Shader';
 import notify from 'osg/notify';
 
-export default function () {
-    test('Shader', function () {
+export default function() {
+    test('Shader', function() {
         // catch logs
         var results = '';
         var resultsWarn = '';
         var resultsError = '';
         var myConsole = {
-            warn: function (txt) {
+            warn: function(txt) {
                 results += txt + '\n';
                 resultsWarn += txt + '\n';
             },
-            error: function (txt) {
+            error: function(txt) {
                 results += txt + '\n';
                 resultsError += txt + '\n';
             },
-            log: function (txt) {
+            log: function(txt) {
                 results += txt + '\n';
             },
-            info: function (txt) {
+            info: function(txt) {
                 results += txt + '\n';
             }
         };

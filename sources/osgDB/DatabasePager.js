@@ -4,7 +4,7 @@ import NodeVisitor from 'osg/NodeVisitor';
 import PagedLOD from 'osg/PagedLOD';
 import Timer from 'osg/Timer';
 
-var FindPagedLODsVisitor = function () {
+var FindPagedLODsVisitor = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
     this._activePagedLODList = undefined;
     this._frameNumber = 0;
@@ -13,14 +13,14 @@ var FindPagedLODsVisitor = function () {
 utils.createPrototypeObject(
     FindPagedLODsVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.getTypeID() === PagedLOD.getTypeID()) {
                 node.setFrameNumberOfLastTraversal(this._frameNumber);
                 this._activePagedLODList.add(node);
             }
             this.traverse(node);
         },
-        set: function (pagedLODList, frameNumber) {
+        set: function(pagedLODList, frameNumber) {
             this._activePagedLODList = pagedLODList;
             this._frameNumber = frameNumber;
         }
@@ -29,14 +29,14 @@ utils.createPrototypeObject(
     'FindPagedLODsVisitor'
 );
 
-var ReleaseVisitor = function () {
+var ReleaseVisitor = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
 };
 
 utils.createPrototypeObject(
     ReleaseVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             // mark GLResources in nodes to be released
             node.releaseGLObjects();
             this.traverse(node);
@@ -46,7 +46,7 @@ utils.createPrototypeObject(
     'ReleaseVisitor'
 );
 
-var ExpiredPagedLODVisitor = function () {
+var ExpiredPagedLODVisitor = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
     this._childrenList = [];
 };
@@ -54,7 +54,7 @@ var ExpiredPagedLODVisitor = function () {
 utils.createPrototypeObject(
     ExpiredPagedLODVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.getTypeID() === PagedLOD.getTypeID()) {
                 this._childrenList.push(node);
                 this._markRequestsExpired(node);
@@ -62,7 +62,7 @@ utils.createPrototypeObject(
             this.traverse(node);
         },
 
-        removeExpiredChildrenAndFindPagedLODs: function (
+        removeExpiredChildrenAndFindPagedLODs: function(
             plod,
             expiryTime,
             expiryFrame,
@@ -78,7 +78,7 @@ utils.createPrototypeObject(
             return sizeBefore !== removedChildren.length;
         },
 
-        _markRequestsExpired: function (plod) {
+        _markRequestsExpired: function(plod) {
             var numRanges = plod._perRangeDataList.length;
             var request;
             for (var i = 0; i < numRanges; i++) {
@@ -89,7 +89,7 @@ utils.createPrototypeObject(
                 }
             }
         },
-        reset: function () {
+        reset: function() {
             this._childrenList.length = 0;
         }
     }),
@@ -98,10 +98,10 @@ utils.createPrototypeObject(
 );
 
 // Helper functions to avoid undesired memory allocation
-var sortByTimeStamp = function (r1, r2) {
+var sortByTimeStamp = function(r1, r2) {
     return r2._timeStamp - r1._timeStamp;
 };
-var sortByPriority = function (r1, r2) {
+var sortByPriority = function(r1, r2) {
     // Ask for newer requests first.
     var value = r1._timeStamp - r2._timeStamp;
     // Ask for the greater priority if the timestamp is the same.
@@ -116,7 +116,7 @@ var sortByPriority = function (r1, r2) {
  * and synchronizing of loaded models with the main scene graph.
  *  @class DatabasePager
  */
-var DatabasePager = function () {
+var DatabasePager = function() {
     this._pendingRequests = [];
     this._pendingNodes = [];
     this._loading = false;
@@ -140,7 +140,7 @@ var DatabasePager = function () {
     this._availableTime = 0;
 };
 
-var DatabaseRequest = function () {
+var DatabaseRequest = function() {
     this._loadedModel = undefined;
     this._group = undefined;
     this._url = undefined;
@@ -153,21 +153,21 @@ var DatabaseRequest = function () {
 utils.createPrototypeObject(
     DatabasePager,
     {
-        setTargetMaximumNumberOfPageLOD: function (target) {
+        setTargetMaximumNumberOfPageLOD: function(target) {
             this._targetMaximumNumberOfPagedLOD = target;
         },
 
-        getTargetMaximumNumberOfPageLOD: function () {
+        getTargetMaximumNumberOfPageLOD: function() {
             return this._targetMaximumNumberOfPagedLOD;
         },
 
-        setAcceptNewDatabaseRequests: function (acceptNewRequests) {
+        setAcceptNewDatabaseRequests: function(acceptNewRequests) {
             this._acceptNewRequests = acceptNewRequests;
         },
-        getAcceptNewDatabaseRequests: function () {
+        getAcceptNewDatabaseRequests: function() {
             return this._acceptNewRequests;
         },
-        reset: function () {
+        reset: function() {
             this._pendingRequests = [];
             this._pendingNodes = [];
             this._loading = false;
@@ -180,7 +180,7 @@ utils.createPrototypeObject(
             this._targetMaximumNumberOfPagedLOD = 75;
         },
 
-        updateSceneGraph: function (frameStamp) {
+        updateSceneGraph: function(frameStamp) {
             // Progress callback
             if (this._progressCallback !== undefined) {
                 // Maybe we should encapsulate this in a promise.
@@ -200,7 +200,7 @@ utils.createPrototypeObject(
             this.addLoadedDataToSceneGraph(frameStamp, 0.005);
         },
 
-        executeProgressCallback: function () {
+        executeProgressCallback: function() {
             if (this._pendingRequests.length > 0 || this._pendingNodes.length > 0) {
                 this._progressCallback(
                     this._pendingRequests.length + this._downloadingRequestsNumber,
@@ -218,23 +218,23 @@ utils.createPrototypeObject(
             }
         },
 
-        setMaxRequestsPerFrame: function (numRequests) {
+        setMaxRequestsPerFrame: function(numRequests) {
             this._maxRequestsPerFrame = numRequests;
         },
 
-        getMaxRequestsPerFrame: function () {
+        getMaxRequestsPerFrame: function() {
             return this._maxRequestsPerFrame;
         },
 
-        getRequestListSize: function () {
+        getRequestListSize: function() {
             return this._pendingRequests.length + this._downloadingRequestsNumber;
         },
 
-        setProgressCallback: function (cb) {
+        setProgressCallback: function(cb) {
             this._progressCallback = cb;
         },
 
-        addLoadedDataToSceneGraph: function (frameStamp, availableTime) {
+        addLoadedDataToSceneGraph: function(frameStamp, availableTime) {
             if (!this._pendingNodes.length || availableTime <= 0.0) return 0.0;
 
             // Prune the list of database requests.
@@ -273,17 +273,17 @@ utils.createPrototypeObject(
             return availableTime;
         },
 
-        isLoading: function () {
+        isLoading: function() {
             return this._loading;
         },
 
-        registerPagedLODs: function (subgraph, frameNumber) {
+        registerPagedLODs: function(subgraph, frameNumber) {
             if (!subgraph) return;
             this._findPagedLODsVisitor.set(this._activePagedLODList, frameNumber);
             subgraph.accept(this._findPagedLODsVisitor);
         },
 
-        requestNodeFile: function (func, url, node, timestamp, priority) {
+        requestNodeFile: function(func, url, node, timestamp, priority) {
             // Check if we are currently accepting requests.
             if (!this._acceptNewRequests) return undefined;
             // We don't need to determine if the dbrequest is in the queue
@@ -298,7 +298,7 @@ utils.createPrototypeObject(
             return dbrequest;
         },
 
-        takeRequests: function () {
+        takeRequests: function() {
             if (this._pendingRequests.length) {
                 var numRequests = Math.min(this._maxRequestsPerFrame, this._pendingRequests.length);
                 this._pendingRequests.sort(sortByPriority);
@@ -309,7 +309,7 @@ utils.createPrototypeObject(
             }
         },
 
-        processRequest: function (dbrequest) {
+        processRequest: function(dbrequest) {
             this._loading = true;
             var that = this;
             // Check if the request is valid;
@@ -322,7 +322,7 @@ utils.createPrototypeObject(
 
             // Load from function
             if (dbrequest._function !== undefined) {
-                this.loadNodeFromFunction(dbrequest._function, dbrequest._group).then(function (
+                this.loadNodeFromFunction(dbrequest._function, dbrequest._group).then(function(
                     child
                 ) {
                     that._downloadingRequestsNumber--;
@@ -332,7 +332,7 @@ utils.createPrototypeObject(
                 });
             } else if (dbrequest._url !== '') {
                 // Load from URL
-                this.loadNodeFromURL(dbrequest._url).then(function (child) {
+                this.loadNodeFromURL(dbrequest._url).then(function(child) {
                     that._downloadingRequestsNumber--;
                     dbrequest._loadedModel = child;
                     that._pendingNodes.push(dbrequest);
@@ -341,7 +341,7 @@ utils.createPrototypeObject(
             }
         },
 
-        loadNodeFromFunction: function (func, plod) {
+        loadNodeFromFunction: function(func, plod) {
             // Need to call with pagedLOD as parent, to be able to have multiresolution structures.
             var promise = func(plod);
             // should func always return a promise ?
@@ -350,7 +350,7 @@ utils.createPrototypeObject(
             return P.resolve(promise);
         },
 
-        loadNodeFromURL: function (url) {
+        loadNodeFromURL: function(url) {
             var ReaderParser = require('osgDB/readerParser').default;
             // Call to ReaderParser just in case there is a custom readNodeURL Callback
             // See osgDB/options.js and/or osgDB/Input.js
@@ -361,7 +361,7 @@ utils.createPrototypeObject(
             return ReaderParser.readNodeURL(url);
         },
 
-        releaseGLExpiredSubgraphs: function (availableTime) {
+        releaseGLExpiredSubgraphs: function(availableTime) {
             this._availableTime = availableTime;
             if (!this._childrenToRemoveList.size || availableTime <= 0.0) return 0.0;
             // We need to test if we have time to flush
@@ -373,7 +373,7 @@ utils.createPrototypeObject(
         },
 
         // function to avoid memory allocation in forEach
-        _releaseExpiredSubgraphs: function (node) {
+        _releaseExpiredSubgraphs: function(node) {
             // If we don't have more time, break the loop.
             if (this._elapsedTime > this._availableTime) return;
             this._childrenToRemoveList.delete(node);
@@ -383,7 +383,7 @@ utils.createPrototypeObject(
             this._elapsedTime = Timer.instance().deltaS(this._beginTime, Timer.instance().tick());
         },
 
-        removeExpiredSubgraphs: function (frameStamp, availableTime) {
+        removeExpiredSubgraphs: function(frameStamp, availableTime) {
             if (frameStamp.getFrameNumber() === 0) return 0.0;
             var numToPrune = this._activePagedLODList.size - this._targetMaximumNumberOfPagedLOD;
             var expiryTime = frameStamp.getSimulationTime() - 0.1;
@@ -402,7 +402,7 @@ utils.createPrototypeObject(
             return availableTime;
         },
 
-        removeExpiredChildren: function (numToPrune, expiryTime, expiryFrame, availableTime) {
+        removeExpiredChildren: function(numToPrune, expiryTime, expiryFrame, availableTime) {
             // Iterate over the activePagedLODList to remove expired children
             // We need to control the time spent in remove childs.
             var elapsedTime = 0.0;
@@ -412,7 +412,7 @@ utils.createPrototypeObject(
             var expiredPagedLODVisitor = this._expiredPagedLODVisitor;
             expiredPagedLODVisitor.reset();
 
-            this._activePagedLODList.forEach(function (plod) {
+            this._activePagedLODList.forEach(function(plod) {
                 // Check if we have time, else return 0
                 if (elapsedTime > availableTime) return 0.0;
                 if (numToPrune < 0) return availableTime;

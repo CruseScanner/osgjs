@@ -1,4 +1,4 @@
-var getBoxScene = function () {
+var getBoxScene = function() {
     return {
         children: [
             {

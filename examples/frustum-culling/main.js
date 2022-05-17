@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -11,12 +11,12 @@
     var culled = 0;
 
     // Callback getting the Total, only on model root node for main render
-    var CountCallback = function (options, config) {
+    var CountCallback = function(options, config) {
         this._options = options;
         this._config = config;
     };
     CountCallback.prototype = {
-        update: function (/*node, nv*/) {
+        update: function(/*node, nv*/) {
             // update
             this._config.culled = culled + '';
             culled = 0;
@@ -24,7 +24,7 @@
         }
     };
 
-    var CustomCullVisitor = function (config) {
+    var CustomCullVisitor = function(config) {
         osg.CullVisitor.call(this);
         this._config = config;
     };
@@ -33,7 +33,7 @@
 
     CustomCullVisitor.prototype = osg.objectInherit(osg.CullVisitor.prototype, {
         // this one
-        popCameraModelViewProjectionMatrix: function (camera) {
+        popCameraModelViewProjectionMatrix: function(camera) {
             this._mainCamera = camera === this._config['camera'];
 
             this.popModelViewMatrix();
@@ -60,13 +60,13 @@
     // some refs:
     // https://fgiesen.wordpress.com/2010/10/20/some-more-frustum-culling-notes/
     // http://iquilezles.org/www/articles/frustumcorrect/frustumcorrect.htm
-    var Example = function () {
+    var Example = function() {
         this._config = {
-            nearFar: function () {
+            nearFar: function() {
                 viewer.getCamera().setComputeNearFar(!viewer.getCamera().getComputeNearFar());
                 console.log('autoNearFar: ' + viewer.getCamera().getComputeNearFar());
             },
-            frustumculling: function () {
+            frustumculling: function() {
                 viewer
                     .getCamera()
                     .setEnableFrustumCulling(!viewer.getCamera().getEnableFrustumCulling());
@@ -83,7 +83,7 @@
         window.location.search
             .substr(1)
             .split('&')
-            .forEach(function (item) {
+            .forEach(function(item) {
                 queryDict[item.split('=')[0]] = item.split('=')[1];
             });
         if (queryDict['debug']) {
@@ -104,15 +104,15 @@
     // debug sphere and the topview render
     // from counts/coloring
     // as the scene in rendered for the two camera (main and topview)
-    var FrustumCullingDebugCallback = function (options) {
+    var FrustumCullingDebugCallback = function(options) {
         this._options = options;
     };
     FrustumCullingDebugCallback.prototype = {
-        update: function (node, nv) {
+        update: function(node, nv) {
             // update
             var topView = false;
             var debugSphere = false;
-            nv.getNodePath().forEach(function (a) {
+            nv.getNodePath().forEach(function(a) {
                 if (
                     a.getName() === 'TopView' ||
                     (a.getParents()[0] && a.getParents()[0].getName() === 'TopView')
@@ -139,11 +139,11 @@
             return true;
         },
 
-        cull: function (node, nv) {
+        cull: function(node, nv) {
             // cull
             var topView = false;
             var debugSphere = false;
-            nv.getNodePath().forEach(function (a) {
+            nv.getNodePath().forEach(function(a) {
                 if (
                     a.getName() === 'TopView' ||
                     (a.getParents()[0] && a.getParents()[0].getName() === 'TopView')
@@ -172,7 +172,7 @@
     };
 
     Example.prototype = {
-        initDatGUI: function () {
+        initDatGUI: function() {
             var gui = new window.dat.GUI();
             // ui
             gui.add(this._config, 'nearFar');
@@ -184,7 +184,7 @@
         },
 
         // helper for transaprency
-        setMaterialAndAlpha: function (n, alpha) {
+        setMaterialAndAlpha: function(n, alpha) {
             var ss = n.getOrCreateStateSet();
 
             ss.setRenderingHint('TRANSPARENT_BIN');
@@ -195,7 +195,7 @@
             ss.setAttributeAndModes(material);
         },
         // init a model
-        createModelInstance: function () {
+        createModelInstance: function() {
             if (!this._model) {
                 // for now a once and for all
                 var debugSphere = false;
@@ -231,7 +231,7 @@
                 ground.setCullingActive(true);
 
                 var groundTex = new osg.Texture();
-                osgDB.readImageURL('../media/textures/seamless/bricks1.jpg').then(function (image) {
+                osgDB.readImageURL('../media/textures/seamless/bricks1.jpg').then(function(image) {
                     groundTex.setImage(image);
                 });
 
@@ -289,11 +289,13 @@
 
                             this.setMaterialAndAlpha(bs, 0.5);
 
-                            bs.getOrCreateStateSet().setTextureAttributeAndModes(
-                                0,
-                                emptyTex,
-                                osg.StateAttribute.OFF | osg.StateAttribute.PROTECTED
-                            );
+                            bs
+                                .getOrCreateStateSet()
+                                .setTextureAttributeAndModes(
+                                    0,
+                                    emptyTex,
+                                    osg.StateAttribute.OFF | osg.StateAttribute.PROTECTED
+                                );
                             /*
 bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.StateAttribute.OFF | osg.StateAttribute.OVERRIDE );
 */
@@ -326,13 +328,15 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
                     bs.setCullingActive(false);
                     this.setMaterialAndAlpha(bs, 0.5);
 
-                    bs.getOrCreateStateSet().setTextureAttributeAndModes(
-                        0,
-                        new osg.Texture(),
-                        osg.StateAttribute.ON |
-                            osg.StateAttribute.PROTECTED |
-                            osg.StateAttribute.OVERRIDE
-                    );
+                    bs
+                        .getOrCreateStateSet()
+                        .setTextureAttributeAndModes(
+                            0,
+                            new osg.Texture(),
+                            osg.StateAttribute.ON |
+                                osg.StateAttribute.PROTECTED |
+                                osg.StateAttribute.OVERRIDE
+                        );
 
                     callbackUpdateCull = new FrustumCullingDebugCallback();
                     bs.addUpdateCallback(callbackUpdateCull);
@@ -355,7 +359,7 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
             }
         },
 
-        addTopView: function () {
+        addTopView: function() {
             // create a camera that will render to texture
             var rttSize = [512, 512];
             var rttCamera = new osg.Camera();
@@ -366,13 +370,40 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
             rttCamera.setViewport(new osg.Viewport(0, 0, rttSize[0], rttSize[1]));
 
             rttCamera.setProjectionMatrix([
-                1.4034433605922465, 0, 0, 0, 0, 1.920982126971166, 0, 0, 0, 0, -1.002002002002002,
-                -1, 0, 0, -2.002002002002002, 0
+                1.4034433605922465,
+                0,
+                0,
+                0,
+                0,
+                1.920982126971166,
+                0,
+                0,
+                0,
+                0,
+                -1.002002002002002,
+                -1,
+                0,
+                0,
+                -2.002002002002002,
+                0
             ]);
             rttCamera.setViewMatrix([
-                1, -4.4404402314756446e-13, 1.459502124082795e-13, 0, 4.674147612079625e-13,
-                0.9500000000000002, -0.3122498999199198, 0, -0, 0.31224989991991986, 0.95, 0,
-                62.50000000002921, 60.936249499571865, -94.31513162847247, 1
+                1,
+                -4.4404402314756446e-13,
+                1.459502124082795e-13,
+                0,
+                4.674147612079625e-13,
+                0.9500000000000002,
+                -0.3122498999199198,
+                0,
+                -0,
+                0.31224989991991986,
+                0.95,
+                0,
+                62.50000000002921,
+                60.936249499571865,
+                -94.31513162847247,
+                1
             ]);
             // we will render a textured quad on the rtt target with a fixed texture without
             // motion
@@ -394,7 +425,7 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
 
             this._topView = rttCamera;
         },
-        addFrameBufferView: function () {
+        addFrameBufferView: function() {
             this._rttdebugNode = new osg.Node();
             this._rttdebugNode._name = 'debugFBNode';
 
@@ -507,7 +538,7 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
             return this._ComposerdebugCamera;
         },
 
-        createScene: function () {
+        createScene: function() {
             var root = new osg.Node();
 
             this._rtt = [];
@@ -536,7 +567,7 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
             return root;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             viewer = new osgViewer.Viewer(canvas, {
                 enableFrustumCulling: false
             });
@@ -567,7 +598,7 @@ bs.getOrCreateStateSet().setTextureAttributeAndModes( 0, new osg.Texture(), osg.
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

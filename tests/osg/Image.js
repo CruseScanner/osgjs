@@ -2,9 +2,9 @@ import { assert } from 'chai';
 import Image from 'osg/Image';
 import mockup from 'tests/mockup/mockup';
 
-export default function () {
-    test('Image.isGreyScale grey image', function (done) {
-        var test = function (img) {
+export default function() {
+    test('Image.isGreyScale grey image', function(done) {
+        var test = function(img) {
             var n = new Image(img);
 
             assert.equal(n.isGreyscale(2), true, 'check image is grey');
@@ -12,7 +12,7 @@ export default function () {
         };
 
         var img = new window.Image();
-        img.onload = function () {
+        img.onload = function() {
             test(this);
         };
 
@@ -23,8 +23,8 @@ export default function () {
         }
     });
 
-    test('Image.isGreyScale color image', function (done) {
-        var test = function (img) {
+    test('Image.isGreyScale color image', function(done) {
+        var test = function(img) {
             var n = new Image(img);
 
             assert.equal(n.isGreyscale(2), false, 'check image is not grey');
@@ -32,7 +32,7 @@ export default function () {
         };
 
         var img = new window.Image();
-        img.onload = function () {
+        img.onload = function() {
             test(this);
         };
         img.src = 'mockup/rgba32.png';
@@ -41,11 +41,11 @@ export default function () {
         }
     });
 
-    test('Image.isReady', function () {
+    test('Image.isReady', function() {
         var fakeImage = {
             complete: true,
             naturalWidth: 1024,
-            isReady: function () {
+            isReady: function() {
                 return true;
             }
         };

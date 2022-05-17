@@ -25,12 +25,12 @@
 
 // Various functions for helping debug WebGL apps.
 
-var WebGLDebugUtils = (function () {
+var WebGLDebugUtils = (function() {
     /**
      * Wrapped logging function.
      * @param {string} msg Message to log.
      */
-    var log = function (msg) {
+    var log = function(msg) {
         if (window.console && window.console.log) {
             window.console.log(msg);
         }
@@ -40,7 +40,7 @@ var WebGLDebugUtils = (function () {
      * Wrapped error logging function.
      * @param {string} msg Message to log.
      */
-    var error = function (msg) {
+    var error = function(msg) {
         if (window.console && window.console.error) {
             window.console.error(msg);
         } else {
@@ -922,12 +922,12 @@ var WebGLDebugUtils = (function () {
 
     function makePropertyWrapper(wrapper, original, propertyName) {
         //log("wrap prop: " + propertyName);
-        wrapper.__defineGetter__(propertyName, function () {
+        wrapper.__defineGetter__(propertyName, function() {
             return original[propertyName];
         });
         // TODO(gmane): this needs to handle properties that take more than
         // one value?
-        wrapper.__defineSetter__(propertyName, function (value) {
+        wrapper.__defineSetter__(propertyName, function(value) {
             //log("set: " + propertyName);
             original[propertyName] = value;
         });
@@ -937,7 +937,7 @@ var WebGLDebugUtils = (function () {
     function makeFunctionWrapper(original, functionName) {
         //log("wrap fn: " + functionName);
         var f = original[functionName];
-        return function () {
+        return function() {
             //log("call: " + functionName);
             var result = f.apply(original, arguments);
             return result;
@@ -966,7 +966,7 @@ var WebGLDebugUtils = (function () {
         init(ctx);
         opt_onErrorFunc =
             opt_onErrorFunc ||
-            function (err, functionName, args) {
+            function(err, functionName, args) {
                 // apparently we can't do args.join(",");
                 var argStr = '';
                 var numArgs = args.length;
@@ -992,7 +992,7 @@ var WebGLDebugUtils = (function () {
 
         // Makes a function that calls a WebGL function and then calls getError.
         function makeErrorWrapper(ctx, functionName) {
-            return function () {
+            return function() {
                 if (opt_onFunc) {
                     opt_onFunc(functionName, arguments);
                 }
@@ -1015,7 +1015,7 @@ var WebGLDebugUtils = (function () {
                     wrapper[propertyName] = makeErrorWrapper(ctx, propertyName);
                 } else {
                     var wrapped = makeErrorWrapper(ctx, propertyName);
-                    wrapper[propertyName] = function () {
+                    wrapper[propertyName] = function() {
                         var result = wrapped.apply(ctx, arguments);
                         if (!result) {
                             return null;
@@ -1029,7 +1029,7 @@ var WebGLDebugUtils = (function () {
         }
 
         // Override the getError function with one that returns our saved results.
-        wrapper.getError = function () {
+        wrapper.getError = function() {
             for (var err in glErrorShadow) {
                 if (glErrorShadow.hasOwnProperty(err)) {
                     if (glErrorShadow[err]) {
@@ -1170,8 +1170,8 @@ var WebGLDebugUtils = (function () {
         // Holds booleans for each GL error so can simulate errors.
         var glErrorShadow_ = {};
 
-        canvas.getContext = (function (f) {
-            return function () {
+        canvas.getContext = (function(f) {
+            return function() {
                 var ctx = f.apply(canvas, arguments);
                 // Did we get a context and is it a WebGL context?
                 if (
@@ -1197,23 +1197,23 @@ var WebGLDebugUtils = (function () {
             if (typeof listener === 'function') {
                 return listener;
             } else {
-                return function (info) {
+                return function(info) {
                     listener.handleEvent(info);
                 };
             }
         }
 
-        var addOnContextLostListener = function (listener) {
+        var addOnContextLostListener = function(listener) {
             onLost_.push(wrapEvent(listener));
         };
 
-        var addOnContextRestoredListener = function (listener) {
+        var addOnContextRestoredListener = function(listener) {
             onRestored_.push(wrapEvent(listener));
         };
 
         function wrapAddEventListener(canvas) {
             var f = canvas.addEventListener;
-            canvas.addEventListener = function (type, listener, bubble) {
+            canvas.addEventListener = function(type, listener, bubble) {
                 switch (type) {
                     case 'webglcontextlost':
                         addOnContextLostListener(listener);
@@ -1229,7 +1229,7 @@ var WebGLDebugUtils = (function () {
 
         wrapAddEventListener(canvas);
 
-        canvas.loseContext = function () {
+        canvas.loseContext = function() {
             if (!contextLost_) {
                 contextLost_ = true;
                 numCallsToLoseContext_ = 0;
@@ -1239,14 +1239,14 @@ var WebGLDebugUtils = (function () {
                 glErrorShadow_[unwrappedContext_.CONTEXT_LOST_WEBGL] = true;
                 var event = makeWebGLContextEvent('context lost');
                 var callbacks = onLost_.slice();
-                setTimeout(function () {
+                setTimeout(function() {
                     //log("numCallbacks:" + callbacks.length);
                     for (var ii = 0; ii < callbacks.length; ++ii) {
                         //log("calling callback:" + ii);
                         callbacks[ii](event);
                     }
                     if (restoreTimeout_ >= 0) {
-                        setTimeout(function () {
+                        setTimeout(function() {
                             canvas.restoreContext();
                         }, restoreTimeout_);
                     }
@@ -1254,10 +1254,10 @@ var WebGLDebugUtils = (function () {
             }
         };
 
-        canvas.restoreContext = function () {
+        canvas.restoreContext = function() {
             if (contextLost_) {
                 if (onRestored_.length) {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         if (!canRestore_) {
                             throw 'can not restore. webglcontestlost listener did not call event.preventDefault';
                         }
@@ -1276,18 +1276,18 @@ var WebGLDebugUtils = (function () {
             }
         };
 
-        canvas.loseContextInNCalls = function (numCalls) {
+        canvas.loseContextInNCalls = function(numCalls) {
             if (contextLost_) {
                 throw 'You can not ask a lost contet to be lost';
             }
             numCallsToLoseContext_ = numCalls_ + numCalls;
         };
 
-        canvas.getNumCalls = function () {
+        canvas.getNumCalls = function() {
             return numCalls_;
         };
 
-        canvas.setRestoreTimeout = function (timeout) {
+        canvas.setRestoreTimeout = function(timeout) {
             restoreTimeout_ = timeout;
         };
 
@@ -1332,7 +1332,7 @@ var WebGLDebugUtils = (function () {
         // Makes a function that simulates WebGL when out of context.
         function makeLostContextFunctionWrapper(ctx, functionName) {
             var f = ctx[functionName];
-            return function () {
+            return function() {
                 // log("calling:" + functionName);
                 // Only call the functions if the context is not lost.
                 loseContextIfTime();
@@ -1381,7 +1381,7 @@ var WebGLDebugUtils = (function () {
         function makeWebGLContextEvent(statusMessage) {
             return {
                 statusMessage: statusMessage,
-                preventDefault: function () {
+                preventDefault: function() {
                     canRestore_ = true;
                 }
             };
@@ -1403,7 +1403,7 @@ var WebGLDebugUtils = (function () {
             }
 
             // Wrap a few functions specially.
-            wrappedContext_.getError = function () {
+            wrappedContext_.getError = function() {
                 loseContextIfTime();
                 if (!contextLost_) {
                     var err;
@@ -1439,8 +1439,8 @@ var WebGLDebugUtils = (function () {
             }
             for (var ii = 0; ii < creationFunctions.length; ++ii) {
                 var functionName = creationFunctions[ii];
-                wrappedContext_[functionName] = (function (f) {
-                    return function () {
+                wrappedContext_[functionName] = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return null;
@@ -1489,8 +1489,8 @@ var WebGLDebugUtils = (function () {
             }
             for (var ii = 0; ii < functionsThatShouldReturnNull.length; ++ii) {
                 var functionName = functionsThatShouldReturnNull[ii];
-                wrappedContext_[functionName] = (function (f) {
-                    return function () {
+                wrappedContext_[functionName] = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return null;
@@ -1520,8 +1520,8 @@ var WebGLDebugUtils = (function () {
             }
             for (var ii = 0; ii < isFunctions.length; ++ii) {
                 var functionName = isFunctions[ii];
-                wrappedContext_[functionName] = (function (f) {
-                    return function () {
+                wrappedContext_[functionName] = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return false;
@@ -1531,8 +1531,8 @@ var WebGLDebugUtils = (function () {
                 })(wrappedContext_[functionName]);
             }
 
-            wrappedContext_.checkFramebufferStatus = (function (f) {
-                return function () {
+            wrappedContext_.checkFramebufferStatus = (function(f) {
+                return function() {
                     loseContextIfTime();
                     if (contextLost_) {
                         return wrappedContext_.FRAMEBUFFER_UNSUPPORTED;
@@ -1541,8 +1541,8 @@ var WebGLDebugUtils = (function () {
                 };
             })(wrappedContext_.checkFramebufferStatus);
 
-            wrappedContext_.getAttribLocation = (function (f) {
-                return function () {
+            wrappedContext_.getAttribLocation = (function(f) {
+                return function() {
                     loseContextIfTime();
                     if (contextLost_) {
                         return -1;
@@ -1551,8 +1551,8 @@ var WebGLDebugUtils = (function () {
                 };
             })(wrappedContext_.getAttribLocation);
 
-            wrappedContext_.getVertexAttribOffset = (function (f) {
-                return function () {
+            wrappedContext_.getVertexAttribOffset = (function(f) {
+                return function() {
                     loseContextIfTime();
                     if (contextLost_) {
                         return 0;
@@ -1561,13 +1561,13 @@ var WebGLDebugUtils = (function () {
                 };
             })(wrappedContext_.getVertexAttribOffset);
 
-            wrappedContext_.isContextLost = function () {
+            wrappedContext_.isContextLost = function() {
                 return contextLost_;
             };
 
             if (isWebGL2RenderingContext) {
-                wrappedContext_.getFragDataLocation = (function (f) {
-                    return function () {
+                wrappedContext_.getFragDataLocation = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return -1;
@@ -1576,8 +1576,8 @@ var WebGLDebugUtils = (function () {
                     };
                 })(wrappedContext_.getFragDataLocation);
 
-                wrappedContext_.clientWaitSync = (function (f) {
-                    return function () {
+                wrappedContext_.clientWaitSync = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return wrappedContext_.WAIT_FAILED;
@@ -1586,8 +1586,8 @@ var WebGLDebugUtils = (function () {
                     };
                 })(wrappedContext_.clientWaitSync);
 
-                wrappedContext_.getUniformBlockIndex = (function (f) {
-                    return function () {
+                wrappedContext_.getUniformBlockIndex = (function(f) {
+                    return function() {
                         loseContextIfTime();
                         if (contextLost_) {
                             return wrappedContext_.INVALID_INDEX;

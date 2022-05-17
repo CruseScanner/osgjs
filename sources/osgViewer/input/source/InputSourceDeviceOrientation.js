@@ -5,7 +5,7 @@ import InputSource from 'osgViewer/input/source/InputSource';
  * Device Orientation input handling
  * @constructor
  */
-var InputSourceDeviceOrientation = function () {
+var InputSourceDeviceOrientation = function() {
     InputSource.call(this);
     this._target = window;
     this._callbacks = [];
@@ -17,11 +17,11 @@ var InputSourceDeviceOrientation = function () {
 utils.createPrototypeObject(
     InputSourceDeviceOrientation,
     utils.objectInherit(InputSource.prototype, {
-        getName: function () {
+        getName: function() {
             return 'DeviceOrientation';
         },
 
-        setEnable: function (name, callback, enable) {
+        setEnable: function(name, callback, enable) {
             if (name === 'orientationchange') {
                 if (enable) {
                     this._target.addEventListener(name, callback);
@@ -52,11 +52,11 @@ utils.createPrototypeObject(
             }
         },
 
-        onDeviceOrientation: function (ev) {
+        onDeviceOrientation: function(ev) {
             this.populateEvent(ev, this._event);
         },
 
-        populateEvent: function (ev, customEvent) {
+        populateEvent: function(ev, customEvent) {
             customEvent.absolute = ev.absolute;
             customEvent.alpha = ev.alpha;
             customEvent.beta = ev.beta;
@@ -65,7 +65,7 @@ utils.createPrototypeObject(
             customEvent.screenOrientation = window.orientation;
         },
 
-        isEventRegistered: function (ev) {
+        isEventRegistered: function(ev) {
             if (ev.type === 'deviceorientation') {
                 if (ev.alpha === null || ev.alpha === undefined) {
                     return false;
@@ -79,7 +79,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        poll: function () {
+        poll: function() {
             if (!this._nbCallbacks) {
                 return;
             }

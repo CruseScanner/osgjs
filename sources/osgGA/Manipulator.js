@@ -3,7 +3,7 @@ import BoundingSphere from 'osg/BoundingSphere';
 import { mat4 } from 'osg/glMatrix';
 
 // Base class for Camera / User manipulator
-var Manipulator = function (options) {
+var Manipulator = function(options) {
     if (options) {
         this._boundStrategy = options.boundStrategy;
         this.setInputManager(options.inputManager);
@@ -25,32 +25,32 @@ var Manipulator = function (options) {
 };
 
 Manipulator.prototype = {
-    setCamera: function (c) {
+    setCamera: function(c) {
         this._camera = c;
     },
-    getCamera: function () {
+    getCamera: function() {
         return this._camera;
     },
-    setNode: function (node) {
+    setNode: function(node) {
         this._node = node;
     },
-    setComputeBoundNodeMaskOverride: function (mask) {
+    setComputeBoundNodeMaskOverride: function(mask) {
         this._computeBoundNodeMaskOverride = mask;
     },
-    getComputeBoundNodeMaskOverride: function () {
+    getComputeBoundNodeMaskOverride: function() {
         return this._computeBoundNodeMaskOverride;
     },
 
-    setInputManager: function (inputManager) {
+    setInputManager: function(inputManager) {
         this._inputManager = inputManager;
     },
 
-    getInputManager: function () {
+    getInputManager: function() {
         return this._inputManager;
     },
 
     // overrideStrat should be a bounding volume calculation strategy
-    getHomeBoundingSphere: function (overrideStrat) {
+    getHomeBoundingSphere: function(overrideStrat) {
         var node = this._node;
         if (!node) return;
 
@@ -87,12 +87,12 @@ Manipulator.prototype = {
         return node.getBoundingSphere();
     },
 
-    getHomeBound: function (overrideStrat) {
+    getHomeBound: function(overrideStrat) {
         notify.warn('Please use getHomeBoundingSphere instead');
         return this.getHomeBoundingSphere(overrideStrat);
     },
 
-    getHomeDistance: function (bound) {
+    getHomeDistance: function(bound) {
         var frustum = this._frustum;
         var dist = bound.radius();
         if (this._camera && mat4.getFrustum(frustum, this._camera.getProjectionMatrix())) {
@@ -105,13 +105,13 @@ Manipulator.prototype = {
         return dist;
     },
     // eg: var currentTime = nv.getFrameStamp().getSimulationTime();
-    update: function (/*nv*/) {},
+    update: function(/*nv*/) {},
 
-    getInverseMatrix: function () {
+    getInverseMatrix: function() {
         return this._inverseMatrix;
     },
 
-    getControllerList: function () {
+    getControllerList: function() {
         return this._controllerList;
     }
 };

@@ -4,7 +4,7 @@ import notify from 'osg/notify';
 
 var $;
 
-var init$ = function () {
+var init$ = function() {
     try {
         $ = require('jquery');
     } catch (e) {
@@ -15,7 +15,7 @@ var init$ = function () {
 };
 
 // Simple tooltips implementation
-var SimpleTooltips = function (options) {
+var SimpleTooltips = function(options) {
     this.options = options;
     var css = document.createElement('style');
     css.type = 'text/css';
@@ -52,22 +52,26 @@ var SimpleTooltips = function (options) {
     }
 };
 SimpleTooltips.prototype = {
-    showTooltip: function (e) {
+    showTooltip: function(e) {
         if (!$) return;
 
         var target = e.currentTarget;
         this.el.innerHTML = target.getAttribute('title');
         this.el.style.display = 'block';
         this.el.style.left =
-            $(target).position().left + $(target).get(0).getBoundingClientRect().width + 'px';
+            $(target).position().left +
+            $(target)
+                .get(0)
+                .getBoundingClientRect().width +
+            'px';
         this.el.style.top = $(target).position().top + 'px';
     },
-    hideTooltip: function () {
+    hideTooltip: function() {
         this.el.style.display = 'none';
     }
 };
 
-var DisplayGraph = function () {
+var DisplayGraph = function() {
     init$();
     if (!$) return;
 
@@ -94,7 +98,7 @@ var DisplayGraph = function () {
         '.node {text-align: center;cursor: pointer;}.node rect {stroke: #FFF;}.edgePath path {stroke: #FFF;fill: none;}table {text-align: right;}svg {position: absolute;left: 0px;top: 0px;}.osgDebugButton {position: absolute;left: 15px;top: 15px;z-index: 5;border: 0;background: #65a9d7;background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7));background: -webkit-linear-gradient(top, #3e779d, #65a9d7);background: -moz-linear-gradient(top, #3e779d, #65a9d7);background: -ms-linear-gradient(top, #3e779d, #65a9d7);background: -o-linear-gradient(top, #3e779d, #65a9d7);padding: 5px 10px;-webkit-border-radius: 7px;-moz-border-radius: 7px;border-radius: 7px;-webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;-moz-box-shadow: rgba(0,0,0,1) 0 1px 0;box-shadow: rgba(0,0,0,1) 0 1px 0;text-shadow: rgba(0,0,0,.4) 0 1px 0;color: white;font-size: 15px;font-family: Helvetica, Arial, Sans-Serif;text-decoration: none;vertical-align: middle;}.osgDebugButton:hover {border-top-color: #28597a;background: #28597a;color: #ccc;}.osgDebugButton:active {border-top-color: #1b435e;background: #1b435e;}.osgDebugSimpleTooltip .osgDebugName {font-weight: bold;color: #60b1fc;margin: 0;}.osgDebugSimpleTooltip .osgDebugDescription {margin: 0;}';
 };
 
-DisplayGraph.instance = function () {
+DisplayGraph.instance = function() {
     if (!DisplayGraph._instance) DisplayGraph._instance = new DisplayGraph();
     return DisplayGraph._instance;
 };
@@ -102,11 +106,11 @@ DisplayGraph.instance = function () {
 DisplayGraph.prototype = {
     getColorFromClassName: DisplayGraphNode.prototype.getColorFromClassName,
 
-    setCallbackSelect: function (cb) {
+    setCallbackSelect: function(cb) {
         this._cbSelect = cb;
     },
 
-    reset: function () {
+    reset: function() {
         if (!$) return;
 
         this._selectables.clear();
@@ -115,17 +119,17 @@ DisplayGraph.prototype = {
         $('.osgDebugButton').hide();
     },
 
-    setDisplayGraphRenderer: function (bool) {
+    setDisplayGraphRenderer: function(bool) {
         this._displayRenderer = bool;
     },
 
-    createRenderGraph: function (renderStage) {
+    createRenderGraph: function(renderStage) {
         // called by renderer
         this._graphRender.createGraph(renderStage);
         this.displayGraph();
     },
 
-    createGraph: function (root) {
+    createGraph: function(root) {
         if (!$) return;
         this.reset();
 
@@ -144,7 +148,7 @@ DisplayGraph.prototype = {
     },
 
     // Create and display a dagre d3 graph
-    displayGraph: function () {
+    displayGraph: function() {
         if (!$) return;
         if (window.d3 && window.dagreD3) {
             this._createGraphApply();
@@ -155,12 +159,12 @@ DisplayGraph.prototype = {
         var dagreurl = '//cdn.jsdelivr.net/dagre-d3/0.2.9/dagre-d3.min.js';
 
         var cb = this._createGraphApply.bind(this);
-        $.getScript(d3url).done(function () {
+        $.getScript(d3url).done(function() {
             $.getScript(dagreurl).done(cb);
         });
     },
 
-    _createGraphApply: function () {
+    _createGraphApply: function() {
         var diGraph = new window.dagreD3.Digraph();
         if (this._displayNode) this._graphNode.generateNodeAndLink(diGraph);
         if (this._displayRenderer) this._graphRender.generateNodeAndLink(diGraph);
@@ -179,7 +183,7 @@ DisplayGraph.prototype = {
         // Set initial zoom to 75%
         var initialScale = 0.75;
         var oldZoom = renderer.zoom();
-        renderer.zoom(function (g, argSVG) {
+        renderer.zoom(function(g, argSVG) {
             var zoom = oldZoom(g, argSVG);
 
             zoom.scale(initialScale).event(argSVG);
@@ -187,7 +191,7 @@ DisplayGraph.prototype = {
         });
 
         // Simple function to style the tooltip for the given node.
-        var styleTooltip = function (instanceID, description) {
+        var styleTooltip = function(instanceID, description) {
             // instanceID is used by onNodeSelect to retrieve the node
             return (
                 '<p class="osgDebugName">' +
@@ -201,11 +205,11 @@ DisplayGraph.prototype = {
         var idToDom = this._idToDomElement;
         // Override drawNodes to set up the hover.
         var oldDrawNodes = renderer.drawNodes();
-        renderer.drawNodes(function (g, argSVG) {
+        renderer.drawNodes(function(g, argSVG) {
             var svgNodes = oldDrawNodes(g, argSVG);
 
             // Set the title on each of the nodes and use tipsy to display the tooltip on hover
-            svgNodes.attr('title', function (d) {
+            svgNodes.attr('title', function(d) {
                 idToDom.set(d, this);
                 return styleTooltip(d, g.node(d).description || '');
             });
@@ -225,13 +229,13 @@ DisplayGraph.prototype = {
         this.focusOnGraph();
     },
 
-    selectNode: function (node) {
+    selectNode: function(node) {
         var id = node.getInstanceID();
         var dom = this._idToDomElement.get(id);
         if (dom) $(dom).click();
     },
 
-    onNodeSelect: function (e) {
+    onNodeSelect: function(e) {
         var target = e.currentTarget;
         var identifier = $(target.getAttribute('title'))[0].innerHTML;
         var selectables = this._selectables;
@@ -257,13 +261,13 @@ DisplayGraph.prototype = {
         if (this._cbSelect) this._cbSelect(elt);
     },
 
-    focusOnScene: function () {
+    focusOnScene: function() {
         $('.osgDebugButton').text('Access to the graph');
         this._$svg.css('zIndex', '-2');
         this._focusedElement = 'scene';
     },
 
-    focusOnGraph: function () {
+    focusOnGraph: function() {
         $('.osgDebugButton').text('Access to the scene');
         this._$svg.css('zIndex', '2');
         $('.osgDebugSimpleTooltip').css('zIndex', '3');
@@ -271,13 +275,13 @@ DisplayGraph.prototype = {
     },
 
     // Apply all the style
-    injectStyleElement: function () {
+    injectStyleElement: function() {
         if (this._cssInjected) return;
         this._cssInjected = true;
 
         $('body').append('<button class="osgDebugButton">Access to the scene</button>');
         $('.osgDebugButton').click(
-            function () {
+            function() {
                 if (this._focusedElement === 'scene') this.focusOnGraph();
                 else this.focusOnScene();
             }.bind(this)

@@ -72,7 +72,7 @@ function createScene() {
         0.0,
         0.81
     );
-    densityController.onChange(function (value) {
+    densityController.onChange(function(value) {
         density.setFloat(value);
     });
 
@@ -81,7 +81,7 @@ function createScene() {
     return root;
 }
 
-var main = function () {
+var main = function() {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     var viewer;

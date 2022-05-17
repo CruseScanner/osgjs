@@ -8,7 +8,7 @@ import Texture from 'osg/Texture';
  * @class TextureCubeMap
  * @inherits Texture
  */
-var TextureCubeMap = function () {
+var TextureCubeMap = function() {
     Texture.call(this);
     this._images = {};
 
@@ -22,14 +22,14 @@ var TextureCubeMap = function () {
 utils.createPrototypeStateAttribute(
     TextureCubeMap,
     utils.objectInherit(Texture.prototype, {
-        setDefaultParameters: function () {
+        setDefaultParameters: function() {
             Texture.prototype.setDefaultParameters.call(this);
             this._textureTarget = Texture.TEXTURE_CUBE_MAP;
 
             this._flipY = false;
         },
 
-        invalidate: function () {
+        invalidate: function() {
             Texture.prototype.invalidate.call(this);
             for (
                 var i = Texture.TEXTURE_CUBE_MAP_POSITIVE_X;
@@ -44,11 +44,11 @@ utils.createPrototypeStateAttribute(
             this.dirty();
         },
 
-        cloneType: function () {
+        cloneType: function() {
             return new TextureCubeMap();
         },
 
-        setImage: function (imageFace, img, imageFormat) {
+        setImage: function(imageFace, img, imageFormat) {
             var face = imageFace;
 
             if (typeof face === 'string') face = Texture[face];
@@ -62,11 +62,11 @@ utils.createPrototypeStateAttribute(
             this.dirty();
         },
 
-        getImage: function (face) {
+        getImage: function(face) {
             return this._images[face].getImage();
         },
 
-        initCubemapContent: function (gl) {
+        initCubemapContent: function(gl) {
             var internalFormat = this._internalFormat;
 
             this.applyTexImage2D(
@@ -151,7 +151,7 @@ utils.createPrototypeStateAttribute(
         },
 
         // handle mipmap logic, if images for mipmap are provided or not
-        generateMipmap: function (gl, target) {
+        generateMipmap: function(gl, target) {
             if (!this.hasMipmapFilter()) return;
 
             // manual mipmap provided
@@ -188,7 +188,7 @@ utils.createPrototypeStateAttribute(
             this._dirtyMipmap = false;
         },
 
-        applyImageTarget: function (gl, internalFormat, target) {
+        applyImageTarget: function(gl, internalFormat, target) {
             var faceImage = this._images[target];
 
             if (!faceImage.getImage()) return 0;
@@ -234,7 +234,7 @@ utils.createPrototypeStateAttribute(
             return 1;
         },
 
-        initCubemapContentImage: function (gl) {
+        initCubemapContentImage: function(gl) {
             var internalFormat = this._internalFormat;
             var valid = 0;
             valid += this.applyImageTarget(gl, internalFormat, gl.TEXTURE_CUBE_MAP_POSITIVE_X);
@@ -251,7 +251,7 @@ utils.createPrototypeStateAttribute(
             return false;
         },
 
-        apply: function (state) {
+        apply: function(state) {
             var gl = state.getGraphicContext();
             // if need to release the texture
             if (this._dirtyTextureObject) {

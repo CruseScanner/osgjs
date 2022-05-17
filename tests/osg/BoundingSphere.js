@@ -10,8 +10,8 @@ import MatrixTransform from 'osg/MatrixTransform';
 import { vec3 } from 'osg/glMatrix';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
-    test('BoundingSphere', function () {
+export default function() {
+    test('BoundingSphere', function() {
         var simpleBoundingSphere = new BoundingSphere();
         assert.isOk(simpleBoundingSphere.valid() !== 1, 'BoundingSphere is invalid');
 
@@ -89,7 +89,7 @@ export default function () {
         );
     });
 
-    test('BoundingSphere - expand with box', function () {
+    test('BoundingSphere - expand with box', function() {
         // test expand by bounding box
         var bbox = new BoundingBox();
         vec3.set(bbox.getMin(), -2.0, -2.0, -2.0);

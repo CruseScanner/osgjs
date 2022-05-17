@@ -8,7 +8,7 @@ import ShadowedScene from 'osgShadow/ShadowedScene';
 import ShadowSettings from 'osgShadow/ShadowSettings';
 import ShadowMap from 'osgShadow/ShadowMap';
 
-var addScene = function (rootNode, count, shadows, culling) {
+var addScene = function(rootNode, count, shadows, culling) {
     var groundSubNode;
     var groundSize = 75 / count;
 

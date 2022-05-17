@@ -2,7 +2,7 @@
     "root": true,
     "plugins": ["prettier"],
     "parserOptions": {
-        "ecmaVersion": 2015,
+        "ecmaVersion": 5,
         "sourceType": "module",
         "ecmaFeatures": {
             "classes": false,
@@ -14,7 +14,7 @@
     },
     "env": {
         "browser": true,
-        "node": true,
+        "node": false,
         "es6": true,
         "mocha": true
     },

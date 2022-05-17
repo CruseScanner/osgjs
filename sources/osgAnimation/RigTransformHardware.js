@@ -7,7 +7,7 @@ import CollectBoneVisitor from 'osgAnimation/CollectBoneVisitor';
  * Hardware implementation for rigGeometry
  *
  */
-var RigTransformHardware = function () {
+var RigTransformHardware = function() {
     this._isInitialized = false;
 
     // bones are sorted to be used directly by
@@ -34,7 +34,7 @@ RigTransformHardware.prototype = {
     //    Bone4 object,
     //    Bone0 object
     // ]
-    computeBonePalette: function (boneMap, boneNameID) {
+    computeBonePalette: function(boneMap, boneNameID) {
         var bones = this._bones;
         for (var boneName in boneMap) {
             var index = boneNameID[boneName];
@@ -46,7 +46,7 @@ RigTransformHardware.prototype = {
         return bones;
     },
 
-    init: function (geom) {
+    init: function(geom) {
         // init the bones map
 
         // stop here
@@ -67,10 +67,10 @@ RigTransformHardware.prototype = {
         return true;
     },
 
-    computeMatrixPalette: (function () {
+    computeMatrixPalette: (function() {
         var mTmp = mat4.create();
 
-        return function (transformFromSkeletonToGeometry, invTransformFromSkeletonToGeometry) {
+        return function(transformFromSkeletonToGeometry, invTransformFromSkeletonToGeometry) {
             var bones = this._bones;
             var matPalette = this._skinningAttribute.getMatrixPalette();
             var uniformIndex = 0;
@@ -107,7 +107,7 @@ RigTransformHardware.prototype = {
         };
     })(),
 
-    update: function (geom) {
+    update: function(geom) {
         if (!this._isInitialized) this.init(geom);
 
         this.computeMatrixPalette(

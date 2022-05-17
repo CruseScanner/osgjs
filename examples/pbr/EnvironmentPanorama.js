@@ -1,4 +1,4 @@
-window.EnvironmentPanorama = (function () {
+window.EnvironmentPanorama = (function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -8,7 +8,7 @@ window.EnvironmentPanorama = (function () {
 
     var shaderProcessor = new osgShader.ShaderProcessor();
 
-    var PanoramaEnv = function (urlOrData, size, options) {
+    var PanoramaEnv = function(urlOrData, size, options) {
         this._options = options || {};
         this._size = size;
         if (typeof urlOrData === 'string') this._file = urlOrData;
@@ -16,11 +16,11 @@ window.EnvironmentPanorama = (function () {
     };
 
     PanoramaEnv.prototype = {
-        getFile: function () {
+        getFile: function() {
             return this._file;
         },
 
-        createShaderPanorama: function (defines) {
+        createShaderPanorama: function(defines) {
             if (this._shaderPanorama === undefined) {
                 var vertexshader = shaderProcessor.getShader('panoramaVertex.glsl');
                 var fragmentshader = shaderProcessor.getShader('panoramaFragment.glsl', defines);
@@ -36,11 +36,11 @@ window.EnvironmentPanorama = (function () {
             return this._shaderPanorama;
         },
 
-        getTexture: function () {
+        getTexture: function() {
             return this._texture;
         },
 
-        deinterleaveImage4: function (size, src, dst) {
+        deinterleaveImage4: function(size, src, dst) {
             var npixel = size * size;
             var npixel2 = 2 * npixel;
             var npixel3 = 3 * npixel;
@@ -53,7 +53,7 @@ window.EnvironmentPanorama = (function () {
             }
         },
 
-        deinterleaveImage3: function (size, src, dst) {
+        deinterleaveImage3: function(size, src, dst) {
             var npixel = size * size;
             var idx = 0;
             for (var i = 0; i < npixel; i++) {
@@ -63,8 +63,8 @@ window.EnvironmentPanorama = (function () {
             }
         },
 
-        loadPacked: function (type) {
-            var readInputArray = function (inputArray) {
+        loadPacked: function(type) {
+            var readInputArray = function(inputArray) {
                 var data = inputArray;
                 if (osgDB.isGunzipBuffer(data)) data = osgDB.gunzip(data);
 
@@ -102,7 +102,7 @@ window.EnvironmentPanorama = (function () {
             }
         },
 
-        createFloatPacked: function (image) {
+        createFloatPacked: function(image) {
             var texture = new osg.Texture();
 
             texture.setMinFilter('LINEAR');
@@ -116,7 +116,7 @@ window.EnvironmentPanorama = (function () {
             return texture;
         },
 
-        createRGBA8Packed: function (image) {
+        createRGBA8Packed: function(image) {
             var texture = new osg.Texture();
 
             texture.setMinFilter('LINEAR');
@@ -128,7 +128,7 @@ window.EnvironmentPanorama = (function () {
             this._texture = texture;
             return texture;
         },
-        createRGB: function (image) {
+        createRGB: function(image) {
             var texture = new osg.Texture();
 
             texture.setMinFilter('LINEAR');

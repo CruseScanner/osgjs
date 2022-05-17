@@ -1,7 +1,7 @@
 import notify from 'osg/notify';
 
 var CompilerVertex = {
-    _createVertexShader: function () {
+    _createVertexShader: function() {
         // Call to specialised inhenrited shader Compiler
         var roots = this.declareVertexMain();
         var vname = this.getVertexShaderName();
@@ -16,7 +16,7 @@ var CompilerVertex = {
         return shader;
     },
 
-    declareVertexMain: function () {
+    declareVertexMain: function() {
         // Because of a weird bug on iOS, glPosition should be computed in the vertex shader before some varyings
         var roots = [this.declarePointSize(), this.declareVertexPosition()];
 
@@ -25,7 +25,7 @@ var CompilerVertex = {
         return roots;
     },
 
-    declarePointSize: function () {
+    declarePointSize: function() {
         var glPointSize = this.getNode('glPointSize');
 
         if (!this._pointSizeAttribute || !this._pointSizeAttribute.isEnabled()) {
@@ -48,7 +48,7 @@ var CompilerVertex = {
         return glPointSize;
     },
 
-    declareVertexVaryings: function (roots) {
+    declareVertexVaryings: function(roots) {
         var varyings = this._varyings;
 
         if (varyings.vModelVertex) {
@@ -112,14 +112,14 @@ var CompilerVertex = {
         }
     },
 
-    declareVertexPosition: function () {
+    declareVertexPosition: function() {
         var glPosition = this.getNode('glPosition');
         if (this._isBillboard) this.declareVertexTransformBillboard(glPosition);
         else this.declareScreenVertex(glPosition);
         return glPosition;
     },
 
-    declareScreenVertex: function (glPosition) {
+    declareScreenVertex: function(glPosition) {
         this.getNode('MatrixMultPosition')
             .inputs({
                 matrix: this.getOrCreateProjectionMatrix(),
@@ -130,7 +130,7 @@ var CompilerVertex = {
             });
     },
 
-    declareVertexTransformBillboard: function (glPosition) {
+    declareVertexTransformBillboard: function(glPosition) {
         this.getNode('Billboard')
             .inputs({
                 Vertex: this.getOrCreateAttribute('vec3', 'Vertex'),
@@ -142,7 +142,7 @@ var CompilerVertex = {
             });
     },
 
-    getOrCreateBoneMatrix: function () {
+    getOrCreateBoneMatrix: function() {
         // reusable BoneMatrix between Vertex, Normal, Tangent
         // Manadatory: scale animations must be uniform scale
         var boneMatrix = this._variables.boneMatrix;
@@ -170,18 +170,18 @@ var CompilerVertex = {
         return boneMatrix;
     },
 
-    getTarget: function (inputName, i) {
+    getTarget: function(inputName, i) {
         var type = inputName.indexOf('Tangent') !== -1 ? 'vec4' : 'vec3';
         return this.getOrCreateAttribute(type, inputName + '_' + i);
     },
 
-    morphTangentApproximation: function (inputVertex, outputVertex) {
+    morphTangentApproximation: function(inputVertex, outputVertex) {
         var normalizedMorph = this.getOrCreateLocalNormal();
         // kind of tricky, here we retrieve the normalized normal after morphing
         // if there is no rigging we do not recompute it
         if (this._skinningAttribute) {
             normalizedMorph = this.createVariable('vec3');
-            this.getNode('NormalizeNd')
+            this.getNode('Normalize')
                 .inputs({
                     vec: this.getOrCreateMorphNormal()
                 })
@@ -203,7 +203,7 @@ var CompilerVertex = {
         return outputVertex;
     },
 
-    getTargetWeights: function (inputName) {
+    getTargetWeights: function(inputName) {
         var targetWeights = this.getOrCreateUniform('vec4', 'uTargetWeights');
         if (inputName.indexOf('Normal') === -1 && inputName.indexOf('Tangent') === -1) {
             return targetWeights;
@@ -228,7 +228,7 @@ var CompilerVertex = {
         return nWeights;
     },
 
-    morphTransformVec3: function (inputVertex, outputVertex) {
+    morphTransformVec3: function(inputVertex, outputVertex) {
         var inputs = {
             vertex: inputVertex,
             weights: this.getTargetWeights(inputVertex.getVariable())
@@ -239,14 +239,16 @@ var CompilerVertex = {
             inputs['target' + i] = this.getTarget(inputVertex.getVariable(), i);
         }
 
-        this.getNode('Morphing').inputs(inputs).outputs({
-            result: outputVertex
-        });
+        this.getNode('Morphing')
+            .inputs(inputs)
+            .outputs({
+                result: outputVertex
+            });
 
         return outputVertex;
     },
 
-    skinTransformVertex: function (inputVertex, outputVertex) {
+    skinTransformVertex: function(inputVertex, outputVertex) {
         this.getNode('MatrixMultPosition')
             .setInverse(true)
             .inputs({
@@ -259,7 +261,7 @@ var CompilerVertex = {
         return outputVertex;
     },
 
-    skinTransformNormal: function (inputVertex, outputVertex) {
+    skinTransformNormal: function(inputVertex, outputVertex) {
         this.getNode('MatrixMultDirection')
             .setInverse(true)
             .inputs({
@@ -272,7 +274,7 @@ var CompilerVertex = {
         return outputVertex;
     },
 
-    getOrCreateMorphVertex: function () {
+    getOrCreateMorphVertex: function() {
         var vecOut = this.getVariable('morphVertex');
         if (vecOut) return vecOut;
 
@@ -282,7 +284,7 @@ var CompilerVertex = {
         return this.morphTransformVec3(inputVertex, this.createVariable('vec3', 'morphVertex'));
     },
 
-    getOrCreateMorphNormal: function () {
+    getOrCreateMorphNormal: function() {
         var vecOut = this.getVariable('morphNormal');
         if (vecOut) return vecOut;
 
@@ -292,7 +294,7 @@ var CompilerVertex = {
         return this.morphTransformVec3(inputNormal, this.createVariable('vec3', 'morphNormal'));
     },
 
-    getOrCreateMorphTangent: function () {
+    getOrCreateMorphTangent: function() {
         var vecOut = this.getVariable('morphTangent');
         if (vecOut) return vecOut;
 
@@ -311,7 +313,7 @@ var CompilerVertex = {
         // return this.morphTangentApproximation( inputTangent, this.createVariable( 'vec3', 'morphTangent' ) );
     },
 
-    getOrCreateSkinVertex: function () {
+    getOrCreateSkinVertex: function() {
         var vecOut = this.getVariable('skinVertex');
         if (vecOut) return vecOut;
 
@@ -321,7 +323,7 @@ var CompilerVertex = {
         return this.skinTransformVertex(inputVertex, this.createVariable('vec3', 'skinVertex'));
     },
 
-    getOrCreateSkinNormal: function () {
+    getOrCreateSkinNormal: function() {
         var vecOut = this.getVariable('skinNormal');
         if (vecOut) return vecOut;
 
@@ -331,7 +333,7 @@ var CompilerVertex = {
         return this.skinTransformNormal(inputNormal, this.createVariable('vec3', 'skinNormal'));
     },
 
-    getOrCreateSkinTangent: function () {
+    getOrCreateSkinTangent: function() {
         var vecOut = this.getVariable('skinTangent');
         if (vecOut) return vecOut;
 
@@ -341,11 +343,11 @@ var CompilerVertex = {
         return this.skinTransformNormal(inputTangent, this.createVariable('vec3', 'skinTangent'));
     },
 
-    getOrCreateLocalVertex: function () {
+    getOrCreateLocalVertex: function() {
         return this.getOrCreateSkinVertex();
     },
 
-    getOrCreateLocalNormal: function () {
+    getOrCreateLocalNormal: function() {
         var vecOut = this.getVariable('localNormal');
         if (vecOut) return vecOut;
 
@@ -353,7 +355,7 @@ var CompilerVertex = {
         if (normal === this.getOrCreateAttribute('vec3', 'Normal')) return normal;
 
         vecOut = this.createVariable('vec3', 'localNormal');
-        this.getNode('NormalizeNd')
+        this.getNode('Normalize')
             .inputs({
                 vec: normal
             })
@@ -364,7 +366,7 @@ var CompilerVertex = {
         return vecOut;
     },
 
-    getOrCreateLocalTangent: function () {
+    getOrCreateLocalTangent: function() {
         var vecOut = this.getVariable('localTangent');
         if (vecOut) return vecOut;
 
@@ -379,9 +381,9 @@ var CompilerVertex = {
         );
     },
 
-    normalizeAndSetAlpha: function (tang3, tang4, vecOut) {
+    normalizeAndSetAlpha: function(tang3, tang4, vecOut) {
         var tangNormalized = this.createVariable('vec3');
-        this.getNode('NormalizeNd')
+        this.getNode('Normalize')
             .inputs({
                 vec: tang3
             })
@@ -402,8 +404,8 @@ var CompilerVertex = {
     }
 };
 
-var wrapperVertexOnly = function (fn, name) {
-    return function () {
+var wrapperVertexOnly = function(fn, name) {
+    return function() {
         if (this._fragmentShaderMode) {
             this.logError('This function should not be called from fragment shader : ' + name);
         }

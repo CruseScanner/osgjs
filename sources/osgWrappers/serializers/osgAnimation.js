@@ -14,7 +14,7 @@ var rejectObject = utils.rejectObject;
 
 var osgAnimationWrapper = {};
 
-var channelCtor = function () {};
+var channelCtor = function() {};
 
 var registry = ReaderParser.registry();
 registry.registerObject('osgAnimation.Vec3LerpChannel', channelCtor);
@@ -27,7 +27,7 @@ registry.registerObject('osgAnimation.Vec3CubicBezierChannel', channelCtor);
 registry.registerObject('osgAnimation.StackedMatrixElement', StackedMatrix);
 registry.registerObject('osgAnimation.StackedScaleElement', StackedScale);
 
-osgAnimationWrapper.Animation = function (input) {
+osgAnimationWrapper.Animation = function(input) {
     var jsonObj = input.getJSON();
     if (jsonObj.Name === undefined || !jsonObj.Channels || jsonObj.Channels.length === 0) {
         return rejectObject('Animation', jsonObj);
@@ -41,12 +41,12 @@ osgAnimationWrapper.Animation = function (input) {
         arrayChannelsPromise.push(promise);
     }
 
-    return P.all(arrayChannelsPromise).then(function (channels) {
+    return P.all(arrayChannelsPromise).then(function(channels) {
         return Animation.createAnimation(channels, jsonObj.Name);
     });
 };
 
-osgAnimationWrapper.StandardVec3Channel = function (input, channel, creator) {
+osgAnimationWrapper.StandardVec3Channel = function(input, channel, creator) {
     var jsonObj = input.getJSON();
     if (
         jsonObj.TargetName === undefined ||
@@ -64,7 +64,7 @@ osgAnimationWrapper.StandardVec3Channel = function (input, channel, creator) {
     var jsKeyY = input.setJSON(jsonObj.KeyFrames.Key[1]).readBufferArray();
     var jsKeyZ = input.setJSON(jsonObj.KeyFrames.Key[2]).readBufferArray();
 
-    return P.all([jsTime, jsKeyX, jsKeyY, jsKeyZ]).then(function (pArray) {
+    return P.all([jsTime, jsKeyX, jsKeyY, jsKeyZ]).then(function(pArray) {
         var eTime = pArray[0].getElements();
         var eKeyX = pArray[1].getElements();
         var eKeyY = pArray[2].getElements();
@@ -89,7 +89,7 @@ osgAnimationWrapper.StandardVec3Channel = function (input, channel, creator) {
     });
 };
 
-osgAnimationWrapper.StandardQuatChannel = function (input, channel, creator) {
+osgAnimationWrapper.StandardQuatChannel = function(input, channel, creator) {
     var jsonObj = input.getJSON();
     if (
         jsonObj.TargetName === undefined ||
@@ -108,7 +108,7 @@ osgAnimationWrapper.StandardQuatChannel = function (input, channel, creator) {
     var jsKeyZ = input.setJSON(jsonObj.KeyFrames.Key[2]).readBufferArray();
     var jsKeyW = input.setJSON(jsonObj.KeyFrames.Key[3]).readBufferArray();
 
-    return P.all([jsTime, jsKeyX, jsKeyY, jsKeyZ, jsKeyW]).then(function (pArray) {
+    return P.all([jsTime, jsKeyX, jsKeyY, jsKeyZ, jsKeyW]).then(function(pArray) {
         var eTime = pArray[0].getElements();
         var eKeyX = pArray[1].getElements();
         var eKeyY = pArray[2].getElements();
@@ -132,7 +132,7 @@ osgAnimationWrapper.StandardQuatChannel = function (input, channel, creator) {
     });
 };
 
-osgAnimationWrapper.StandardFloatChannel = function (input, channel, creator) {
+osgAnimationWrapper.StandardFloatChannel = function(input, channel, creator) {
     var jsonObj = input.getJSON();
     if (
         jsonObj.TargetName === undefined ||
@@ -147,7 +147,7 @@ osgAnimationWrapper.StandardFloatChannel = function (input, channel, creator) {
     var jsTime = input.setJSON(jsonObj.KeyFrames.Time).readBufferArray();
     var jsKey = input.setJSON(jsonObj.KeyFrames.Key).readBufferArray();
 
-    return P.all([jsTime, jsKey]).then(function (pArray) {
+    return P.all([jsTime, jsKey]).then(function(pArray) {
         var eTime = pArray[0].getElements();
         var eKey = pArray[1].getElements();
 
@@ -165,25 +165,25 @@ osgAnimationWrapper.StandardFloatChannel = function (input, channel, creator) {
     });
 };
 
-osgAnimationWrapper.Vec3LerpChannel = function (input, channel) {
+osgAnimationWrapper.Vec3LerpChannel = function(input, channel) {
     return osgAnimationWrapper.StandardVec3Channel(input, channel, Channel.createVec3Channel);
 };
 
-osgAnimationWrapper.QuatLerpChannel = function (input, channel) {
+osgAnimationWrapper.QuatLerpChannel = function(input, channel) {
     return osgAnimationWrapper.StandardQuatChannel(input, channel, Channel.createQuatChannel);
 };
 
-osgAnimationWrapper.QuatSlerpChannel = function (input, channel) {
+osgAnimationWrapper.QuatSlerpChannel = function(input, channel) {
     // nlerp is less expensive than slerp
     return osgAnimationWrapper.StandardQuatChannel(input, channel, Channel.createQuatChannel);
     // return osgAnimationWrapper.StandardQuatChannel( input, channel, Channel.createQuatSlerpChannel );
 };
 
-osgAnimationWrapper.FloatLerpChannel = function (input, channel) {
+osgAnimationWrapper.FloatLerpChannel = function(input, channel) {
     return osgAnimationWrapper.StandardFloatChannel(input, channel, Channel.createFloatChannel);
 };
 
-osgAnimationWrapper.FloatCubicBezierChannel = function (input, channel) {
+osgAnimationWrapper.FloatCubicBezierChannel = function(input, channel) {
     var jsonObj = input.getJSON();
 
     if (
@@ -204,7 +204,7 @@ osgAnimationWrapper.FloatCubicBezierChannel = function (input, channel) {
     for (i = 0; i < keyFrames.length; i++)
         arrayPromise.push(input.setJSON(jsonObj.KeyFrames[keyFrames[i]]).readBufferArray());
 
-    return P.all(arrayPromise).then(function (pArray) {
+    return P.all(arrayPromise).then(function(pArray) {
         var controlPointIn = pArray[0].getElements();
         var controlPointOut = pArray[1].getElements();
         var position = pArray[2].getElements();
@@ -233,7 +233,7 @@ osgAnimationWrapper.FloatCubicBezierChannel = function (input, channel) {
     });
 };
 
-osgAnimationWrapper.Vec3CubicBezierChannel = function (input, channel) {
+osgAnimationWrapper.Vec3CubicBezierChannel = function(input, channel) {
     var jsonObj = input.getJSON();
 
     if (
@@ -266,7 +266,7 @@ osgAnimationWrapper.Vec3CubicBezierChannel = function (input, channel) {
         } else arrayPromise.push(input.setJSON(jsonAttribute).readBufferArray());
     }
 
-    return P.all(arrayPromise).then(function (pArray) {
+    return P.all(arrayPromise).then(function(pArray) {
         var cpi0 = pArray[0].getElements();
         var cpi1 = pArray[1].getElements();
         var cpi2 = pArray[2].getElements();
@@ -309,7 +309,7 @@ osgAnimationWrapper.Vec3CubicBezierChannel = function (input, channel) {
     });
 };
 
-osgAnimationWrapper.BasicAnimationManager = function (input, manager) {
+osgAnimationWrapper.BasicAnimationManager = function(input, manager) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Animations) return rejectObject('BasicAnimationManager', jsonObj);
 
@@ -326,13 +326,13 @@ osgAnimationWrapper.BasicAnimationManager = function (input, manager) {
         animPromises.push(promiseAnimation);
     }
 
-    return P.all(animPromises).then(function (animations) {
+    return P.all(animPromises).then(function(animations) {
         manager.init(animations);
         return manager;
     });
 };
 
-osgAnimationWrapper.UpdateMatrixTransform = function (input, umt) {
+osgAnimationWrapper.UpdateMatrixTransform = function(input, umt) {
     var jsonObj = input.getJSON();
     //  some stackedTransform on bones has no name but the transform is usefull
     if (/*!jsonObj.Name ||*/ !jsonObj.StackedTransforms) {
@@ -354,7 +354,7 @@ osgAnimationWrapper.UpdateMatrixTransform = function (input, umt) {
 
     // when UpdateMatrixTransform is ready
     // compute the default value data
-    return P.all(promiseArray).then(function (array) {
+    return P.all(promiseArray).then(function(array) {
         var stack = umt.getStackedTransforms();
         for (i = 0, l = array.length; i < l; i++) stack.push(array[i]);
         umt.computeChannels();
@@ -362,7 +362,7 @@ osgAnimationWrapper.UpdateMatrixTransform = function (input, umt) {
     });
 };
 
-osgAnimationWrapper.StackedTranslate = function (input, st) {
+osgAnimationWrapper.StackedTranslate = function(input, st) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Name || !jsonObj.Translate) return rejectObject('StackedTranslate', jsonObj);
 
@@ -373,7 +373,7 @@ osgAnimationWrapper.StackedTranslate = function (input, st) {
     return P.resolve(st);
 };
 
-osgAnimationWrapper.StackedQuaternion = function (input, st) {
+osgAnimationWrapper.StackedQuaternion = function(input, st) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Name || !jsonObj.Quaternion) return rejectObject('StackedQuaternion', jsonObj);
 
@@ -384,7 +384,7 @@ osgAnimationWrapper.StackedQuaternion = function (input, st) {
     return P.resolve(st);
 };
 
-osgAnimationWrapper.StackedRotateAxis = function (input, st) {
+osgAnimationWrapper.StackedRotateAxis = function(input, st) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Axis || jsonObj.Angle === undefined) {
         return rejectObject('StackedRotateAxis', jsonObj);
@@ -397,7 +397,7 @@ osgAnimationWrapper.StackedRotateAxis = function (input, st) {
     return P.resolve(st);
 };
 
-osgAnimationWrapper.StackedMatrix = function (input, sme) {
+osgAnimationWrapper.StackedMatrix = function(input, sme) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Name || !jsonObj.Matrix) return rejectObject('StackedMatrix', jsonObj);
 
@@ -408,7 +408,7 @@ osgAnimationWrapper.StackedMatrix = function (input, sme) {
     return P.resolve(sme);
 };
 
-osgAnimationWrapper.StackedScale = function (input, stc) {
+osgAnimationWrapper.StackedScale = function(input, stc) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Name || !jsonObj.Scale) return rejectObject('StackedScale', jsonObj);
 
@@ -419,7 +419,7 @@ osgAnimationWrapper.StackedScale = function (input, stc) {
     return P.resolve(stc);
 };
 
-osgAnimationWrapper.Bone = function (input, bone) {
+osgAnimationWrapper.Bone = function(input, bone) {
     var jsonObj = input.getJSON();
     if (!jsonObj.InvBindMatrixInSkeletonSpace) return rejectObject('Bone', jsonObj);
 
@@ -439,14 +439,14 @@ osgAnimationWrapper.Bone = function (input, bone) {
 
 osgAnimationWrapper.UpdateBone = osgAnimationWrapper.UpdateMatrixTransform;
 
-osgAnimationWrapper.UpdateSkeleton = function (input, upSkl) {
+osgAnimationWrapper.UpdateSkeleton = function(input, upSkl) {
     osgWrapper.Object(input, upSkl);
     return P.resolve(upSkl);
 };
 
 osgAnimationWrapper.Skeleton = osgWrapper.MatrixTransform;
 
-osgAnimationWrapper.RigGeometry = function (input, rigGeom) {
+osgAnimationWrapper.RigGeometry = function(input, rigGeom) {
     var jsonObj = input.getJSON();
 
     // check boneMap
@@ -479,13 +479,13 @@ osgAnimationWrapper.RigGeometry = function (input, rigGeom) {
     // not sure if it's normal but rig geometry don't have UniqueID
     if (rigGeom._uniqueID === undefined) rigGeom._uniqueID = sourceGeometry.UniqueID;
 
-    return P.all([rigPromise, geomPromise]).then(function () {
+    return P.all([rigPromise, geomPromise]).then(function() {
         rigGeom.mergeChildrenData();
         return rigGeom;
     });
 };
 
-osgAnimationWrapper.MorphGeometry = function (input, morphGeometry) {
+osgAnimationWrapper.MorphGeometry = function(input, morphGeometry) {
     var jsonObj = input.getJSON();
 
     if (!jsonObj.MorphTargets) return rejectObject('MorphGeometry', jsonObj);
@@ -499,7 +499,7 @@ osgAnimationWrapper.MorphGeometry = function (input, morphGeometry) {
     for (var i = 0, l = morphTargets.length; i < l; i++)
         arrayPromise.push(input.setJSON(morphTargets[i]).readObject());
 
-    return P.all(arrayPromise).then(function (promiseResultArray) {
+    return P.all(arrayPromise).then(function(promiseResultArray) {
         var morphGeometryResolved = promiseResultArray[0];
 
         var targets = morphGeometryResolved.getMorphTargets();
@@ -511,7 +511,7 @@ osgAnimationWrapper.MorphGeometry = function (input, morphGeometry) {
     });
 };
 
-osgAnimationWrapper.UpdateMorph = function (input, updateMorph) {
+osgAnimationWrapper.UpdateMorph = function(input, updateMorph) {
     var jsonObj = input.getJSON();
     if (!jsonObj.TargetMap) return rejectObject('UpdateMorph', jsonObj);
 

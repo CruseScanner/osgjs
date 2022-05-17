@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     // various osg shortcuts
@@ -10,7 +10,7 @@
 
     var NUM_TEXTURES = 4;
 
-    var Example = function () {
+    var Example = function() {
         // main variables
 
         this._viewer = undefined;
@@ -26,7 +26,7 @@
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        run: function () {
+        run: function() {
             this._canvas = document.getElementById('View');
 
             this._viewer = new osgViewer.Viewer(this._canvas);
@@ -45,7 +45,7 @@
             this._viewer.run();
         },
 
-        createColorTexture: function (width, height) {
+        createColorTexture: function(width, height) {
             var texture = new osg.Texture();
             texture.setTextureSize(width, height);
             texture.setMinFilter(osg.Texture.LINEAR);
@@ -53,7 +53,7 @@
             return texture;
         },
 
-        createDephTexture: function (width, height) {
+        createDephTexture: function(width, height) {
             var depthTexture = new osg.Texture();
             depthTexture.setTextureSize(width, height);
             depthTexture.setMinFilter(osg.Texture.NEAREST);
@@ -63,7 +63,7 @@
             return depthTexture;
         },
 
-        createHUDCamera: function (width, height) {
+        createHUDCamera: function(width, height) {
             var camera = new osg.Camera();
             camera.setEnableFrustumCulling(true);
             camera.setName('finalPass');
@@ -77,7 +77,7 @@
             return camera;
         },
 
-        createPreRenderCamera: function (width, height) {
+        createPreRenderCamera: function(width, height) {
             var camera = new osg.Camera();
             camera.setEnableFrustumCulling(true);
             camera.setName('scene');
@@ -90,18 +90,18 @@
             return camera;
         },
 
-        createRTTQuad: function (width, height) {
+        createRTTQuad: function(width, height) {
             var quad = osg.createTexturedQuadGeometry(0, 0, 0, width, 0, 0, 0, height, 0);
             var stateSet = quad.getOrCreateStateSet();
             stateSet.setAttributeAndModes(this.generateFinalPassProgram());
             return quad;
         },
 
-        createRTTScene: function () {
+        createRTTScene: function() {
             var that = this;
             return osgDB
                 .readNodeURL('../media/models/material-test/file.osgjs')
-                .then(function (node) {
+                .then(function(node) {
                     var stateSet = node.getOrCreateStateSet();
                     stateSet.setAttributeAndModes(that.generateProgram());
                     that._viewer.getManipulator().setTarget(node.getBoundingSphere().center());
@@ -112,7 +112,7 @@
                 });
         },
 
-        generateProgram: function () {
+        generateProgram: function() {
             var vertexShader = [
                 '#ifdef GL_FRAGMENT_PRECISION_HIGH',
                 'precision highp float;',
@@ -151,7 +151,7 @@
             return program;
         },
 
-        generateFinalPassProgram: function () {
+        generateFinalPassProgram: function() {
             var vertexShader = [
                 '#ifdef GL_FRAGMENT_PRECISION_HIGH',
                 'precision highp float;',
@@ -195,14 +195,14 @@
             return program;
         },
 
-        createScene: function () {
+        createScene: function() {
             var mrtGroup = new osg.Node();
 
             var width = this._canvas.width;
             var height = this._canvas.height;
 
             var camera = this.createPreRenderCamera(width, height);
-            this.createRTTScene().then(function (scene) {
+            this.createRTTScene().then(function(scene) {
                 camera.addChild(scene);
             });
 
@@ -252,7 +252,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             example.run();
         },

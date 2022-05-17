@@ -13,7 +13,7 @@ import utils from 'osg/utils';
  * (otherwise it might break things)
  * visits whole underlying scene recursively
  */
-var ShadowCasterVisitor = function (mask) {
+var ShadowCasterVisitor = function(mask) {
     NodeVisitor.call(this);
     // mask setting to avoid casting shadows
     this._noCastMask = mask;
@@ -23,10 +23,10 @@ var ShadowCasterVisitor = function (mask) {
 utils.createPrototypeObject(
     ShadowCasterVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        reset: function () {
+        reset: function() {
             this._nodeList = [];
         },
-        removeNodeFromCasting: function (node) {
+        removeNodeFromCasting: function(node) {
             /*jshint bitwise: false */
 
             var nm = node.getNodeMask();
@@ -45,7 +45,7 @@ utils.createPrototypeObject(
             /*jshint bitwise: true */
         },
         // Visiting whole casting scene recursively
-        apply: function (node) {
+        apply: function(node) {
             // check that and other things ?
             // TODO: should check whole hierarchy to check for override/protected/etc
             // Depth, BlendFunc Attributes...
@@ -78,13 +78,13 @@ utils.createPrototypeObject(
             this.traverse(node);
         },
 
-        setNoCastMask: function (mask) {
+        setNoCastMask: function(mask) {
             this._noCastMask = mask;
         },
 
         // restore to any previous mask avoiding any breaks
         // in other application mask usage.
-        restore: function () {
+        restore: function() {
             for (var i = 0, l = this._nodeList.length; i < l; i++) {
                 var node = this._nodeList[i];
                 var nm = node.getNodeMask();

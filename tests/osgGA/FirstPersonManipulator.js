@@ -5,38 +5,38 @@ import Camera from 'osg/Camera';
 import { vec3 } from 'osg/glMatrix';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
+export default function() {
     var viewer;
     var canvas;
-    before(function () {
+    before(function() {
         canvas = mockup.createCanvas();
         viewer = new mockup.Viewer(canvas);
     });
 
-    after(function () {
+    after(function() {
         mockup.removeCanvas(canvas);
         viewer.getInputManager().cleanup();
     });
 
-    test('FirstPersonManipulator', function () {
+    test('FirstPersonManipulator', function() {
         var manipulator = new FirstPersonManipulator({ inputManager: viewer.getInputManager() });
         var matrix = manipulator.getInverseMatrix();
         assert.isOk(matrix !== undefined, 'check getInverseMatrix method');
     });
 
-    test('FirstPersonManipulator check controllers', function () {
+    test('FirstPersonManipulator check controllers', function() {
         var manipulator = new FirstPersonManipulator({ inputManager: viewer.getInputManager() });
         var list = manipulator.getControllerList();
         assert.isOk(list.StandardMouseKeyboard !== undefined, 'check mouse support');
     });
 
-    test('FirstPersonManipulator check computation', function () {
+    test('FirstPersonManipulator check computation', function() {
         var manipulator = new FirstPersonManipulator({ inputManager: viewer.getInputManager() });
 
         var fakeFS = {
-            getFrameStamp: function () {
+            getFrameStamp: function() {
                 return {
-                    getDeltaTime: function () {
+                    getDeltaTime: function() {
                         return 0.0;
                     }
                 };

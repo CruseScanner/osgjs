@@ -1,7 +1,7 @@
 import notify from 'osg/notify';
 import Timer from 'osg/Timer';
 
-var TextureProfile = function (target, internalFormat, width, height) {
+var TextureProfile = function(target, internalFormat, width, height) {
     this._target = target;
     this._internalFormat = internalFormat;
     this._width = width;
@@ -11,7 +11,7 @@ var TextureProfile = function (target, internalFormat, width, height) {
 };
 
 TextureProfile.prototype = {
-    match: function (textureProfile) {
+    match: function(textureProfile) {
         return (
             textureProfile._target === this._target &&
             textureProfile._internalFormat === this._internalFormat &&
@@ -19,7 +19,7 @@ TextureProfile.prototype = {
             textureProfile._height === this._height
         );
     },
-    computeSize: function () {
+    computeSize: function() {
         var Texture = require('osg/Texture').default;
 
         var numBitsPerTexel = 0;
@@ -65,62 +65,62 @@ TextureProfile.prototype = {
         this._size = size;
     },
 
-    getSize: function () {
+    getSize: function() {
         return this._size;
     }
 };
-TextureProfile.getHash = function () {
+TextureProfile.getHash = function() {
     var array = Array.prototype.slice.call(arguments);
     var hash = '';
-    array.forEach(function (element) {
+    array.forEach(function(element) {
         hash += element;
     });
     return hash;
 };
 
-var TextureObject = function (texture, id, textureSet) {
+var TextureObject = function(texture, id, textureSet) {
     this._texture = texture;
     this._id = id;
     this._textureSet = textureSet;
 };
 
 TextureObject.prototype = {
-    target: function () {
+    target: function() {
         return this._textureSet._profile._target;
     },
-    id: function () {
+    id: function() {
         return this._id;
     },
-    getTextureSet: function () {
+    getTextureSet: function() {
         return this._textureSet;
     },
-    reset: function () {
+    reset: function() {
         this._textureObject = null;
         this._texture = undefined;
     },
-    bind: function (gl) {
+    bind: function(gl) {
         gl.bindTexture(this.target(), this._id);
     }
 };
 
-var TextureObjectSet = function (profile) {
+var TextureObjectSet = function(profile) {
     this._profile = profile;
     this._usedTextureObjects = [];
     this._orphanedTextureObjects = [];
 };
 
 TextureObjectSet.prototype = {
-    getProfile: function () {
+    getProfile: function() {
         return this._profile;
     },
-    getUsedTextureObjects: function () {
+    getUsedTextureObjects: function() {
         return this._usedTextureObjects;
     },
-    getOrphanedTextureObjects: function () {
+    getOrphanedTextureObjects: function() {
         return this._orphanedTextureObjects;
     },
 
-    takeOrGenerate: function (gl, texture) {
+    takeOrGenerate: function(gl, texture) {
         var textureObject;
         if (this._orphanedTextureObjects.length > 0) {
             textureObject = this.takeFromOrphans();
@@ -137,14 +137,14 @@ TextureObjectSet.prototype = {
     },
 
     // get texture object from pool
-    takeFromOrphans: function () {
+    takeFromOrphans: function() {
         if (this._orphanedTextureObjects.length) return this._orphanedTextureObjects.pop();
 
         return undefined;
     },
 
     // release texture object
-    orphan: function (textureObject) {
+    orphan: function(textureObject) {
         var index = this._usedTextureObjects.indexOf(textureObject);
         if (index !== -1) {
             this._orphanedTextureObjects.push(this._usedTextureObjects[index]);
@@ -152,7 +152,7 @@ TextureObjectSet.prototype = {
         }
     },
 
-    flushDeletedTextureObjects: function (gl, availableTime) {
+    flushDeletedTextureObjects: function(gl, availableTime) {
         // if no time available don't try to flush objects.
         if (availableTime <= 0.0) return availableTime;
         var nbTextures = this._orphanedTextureObjects.length;
@@ -171,7 +171,7 @@ TextureObjectSet.prototype = {
         return availableTime - elapsedTime;
     },
 
-    flushAllDeletedTextureObjects: function (gl) {
+    flushAllDeletedTextureObjects: function(gl) {
         var nbTextures = this._orphanedTextureObjects.length;
         var size = this.getProfile().getSize();
         for (var i = 0, j = nbTextures; i < j; ++i) {
@@ -183,12 +183,12 @@ TextureObjectSet.prototype = {
             'TextureManager: released ' +
                 nbTextures +
                 ' with ' +
-                (nbTextures * size) / (1024 * 1024) +
+                nbTextures * size / (1024 * 1024) +
                 ' MB'
         );
     },
 
-    onLostContext: function () {
+    onLostContext: function() {
         var i, nbTextures;
 
         nbTextures = this._orphanedTextureObjects.length;
@@ -205,12 +205,12 @@ TextureObjectSet.prototype = {
     }
 };
 
-var TextureManager = function () {
+var TextureManager = function() {
     this._textureSetMap = {};
 };
 
 TextureManager.prototype = {
-    generateTextureObject: function (gl, texture, target, internalFormat, width, height) {
+    generateTextureObject: function(gl, texture, target, internalFormat, width, height) {
         var hash = TextureProfile.getHash(target, internalFormat, width, height);
 
         if (this._textureSetMap[hash] === undefined) {
@@ -224,7 +224,7 @@ TextureManager.prototype = {
         return textureObject;
     },
 
-    updateStats: function (frameNumber, stats) {
+    updateStats: function(frameNumber, stats) {
         var totalUsed = 0;
         var totalUnused = 0;
         for (var keyTexture in this._textureSetMap) {
@@ -242,7 +242,7 @@ TextureManager.prototype = {
         stats.getCounter('texturetotal').set((totalUsed + totalUnused) / MB);
     },
 
-    reportStats: function () {
+    reportStats: function() {
         var total = 0;
         for (var keyTexture in this._textureSetMap) {
             var profile = this._textureSetMap[keyTexture].getProfile();
@@ -266,19 +266,19 @@ TextureManager.prototype = {
         notify.notice(String(total) + ' MB in total');
     },
 
-    flushAllDeletedTextureObjects: function (gl) {
+    flushAllDeletedTextureObjects: function(gl) {
         for (var keyTexture in this._textureSetMap) {
             this._textureSetMap[keyTexture].flushAllDeletedTextureObjects(gl);
         }
     },
 
-    onLostContext: function (gl) {
+    onLostContext: function(gl) {
         for (var keyTexture in this._textureSetMap) {
             this._textureSetMap[keyTexture].onLostContext(gl);
         }
     },
 
-    flushDeletedTextureObjects: function (gl, availableTimeArg) {
+    flushDeletedTextureObjects: function(gl, availableTimeArg) {
         var availableTime = availableTimeArg;
         for (var keyTexture in this._textureSetMap) {
             availableTime = this._textureSetMap[keyTexture].flushDeletedTextureObjects(
@@ -290,7 +290,7 @@ TextureManager.prototype = {
         return availableTime;
     },
 
-    releaseTextureObject: function (textureObject) {
+    releaseTextureObject: function(textureObject) {
         if (textureObject) {
             var ts = textureObject.getTextureSet();
             ts.orphan(textureObject);

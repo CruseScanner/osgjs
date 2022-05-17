@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -11,7 +11,7 @@
 
     var P = window.P;
 
-    var Example = function () {
+    var Example = function() {
         this._rotateSpeed = 0.00025;
         this._showGeometry = true;
         this._showQuad = true;
@@ -38,7 +38,7 @@
     };
 
     Example.prototype = {
-        run: function () {
+        run: function() {
             this._viewer = new osgViewer.Viewer(document.getElementById('View'));
             this._viewer.init();
             this._viewer.setSceneData(this.createScene());
@@ -49,7 +49,7 @@
             this.rebuildGUI('passthrough.json');
         },
 
-        createPassthrough: function () {
+        createPassthrough: function() {
             // add passtrough effect
             var str =
                 'vec4 passthrough() { return vec4(TEXTURE_2D_TextureInput(gTexCoord).rgb, 1.0);}';
@@ -59,7 +59,7 @@
             this.addPostProcessEffect([{ name: 'passthrough.glsl' }], [str]);
         },
 
-        createScene: function () {
+        createScene: function() {
             this._scene = this.createSceneGeometryGroup();
 
             this._composer = this.createComposer();
@@ -99,7 +99,7 @@
             return this._rootNode;
         },
 
-        createRandomMatrixTransform: function () {
+        createRandomMatrixTransform: function() {
             var trans = osg.vec3.create();
             trans[0] = Math.random() - 0.5;
             trans[1] = Math.random() - 0.5;
@@ -125,7 +125,7 @@
             return mt;
         },
 
-        createRandomPrimitives: function () {
+        createRandomPrimitives: function() {
             var primitives = new osg.MatrixTransform();
 
             var i = 0;
@@ -154,7 +154,7 @@
             return primitives;
         },
 
-        createTexturedQuad: function () {
+        createTexturedQuad: function() {
             // add static quad with texture
             var quad = osg.createTexturedQuadGeometry(-0.5, 0, -0.5, 1, 0, 0, 0, 0, 1);
             var stQuad = quad.getOrCreateStateSet();
@@ -179,7 +179,7 @@
             return mtTexQuad;
         },
 
-        createSceneGeometryGroup: function () {
+        createSceneGeometryGroup: function() {
             var group = new osg.Node();
             var primitives = this.createRandomPrimitives();
             group.addChild(primitives);
@@ -193,7 +193,7 @@
 
             var self = this;
             group.addUpdateCallback({
-                update: function () {
+                update: function() {
                     var matrix = primitives.getMatrix();
                     osg.mat4.rotate(matrix, matrix, self._rotateSpeed, axis);
 
@@ -207,7 +207,7 @@
             return group;
         },
 
-        getOrCreateDepthShader: function () {
+        getOrCreateDepthShader: function() {
             if (this._depthShader) return this._depthShader;
 
             var vertexshader = [
@@ -257,9 +257,9 @@
             return this._depthShader;
         },
 
-        bindProjectionUpdateCallback: function (camera) {
+        bindProjectionUpdateCallback: function(camera) {
             var self = this;
-            camera.setClampProjectionMatrixCallback(function (m, near, far, nearFarRatio) {
+            camera.setClampProjectionMatrixCallback(function(m, near, far, nearFarRatio) {
                 this.clampProjectionMatrix(m, near, far, nearFarRatio);
 
                 osg.mat4.copy(self._viewer.getCamera().getProjectionMatrix(), m);
@@ -270,7 +270,7 @@
             });
         },
 
-        updateSsao: function (near, far) {
+        updateSsao: function(near, far) {
             if (near > far) return;
 
             var rootSt = this._rootNode.getOrCreateStateSet();
@@ -294,7 +294,7 @@
             projectionInfo[3] = (1.0 - projMat[9]) / projMat[5];
         },
 
-        _createCameraRtt: function (texture) {
+        _createCameraRtt: function(texture) {
             var camera = new osg.Camera();
 
             camera.setRenderOrder(osg.Camera.PRE_RENDER, 0);
@@ -308,7 +308,7 @@
             return camera;
         },
 
-        createCameraColor: function () {
+        createCameraColor: function() {
             var texture = this._composer.getInternalTexture('TextureColor');
             var camera = this._createCameraRtt(texture);
             camera.setName('CameraColor');
@@ -316,7 +316,7 @@
             return camera;
         },
 
-        createCameraDepth: function () {
+        createCameraDepth: function() {
             var texture = this._composer.getInternalTexture('TextureDepth');
             var camera = this._createCameraRtt(texture);
             camera.setName('CameraDepth');
@@ -328,7 +328,7 @@
             return camera;
         },
 
-        addInternalTextures: function () {
+        addInternalTextures: function() {
             this._composer.addInternalTexture({
                 name: 'TextureColor',
                 immuable: true,
@@ -347,7 +347,7 @@
             this._composer.setInputTexture('TextureColor');
         },
 
-        createComposer: function () {
+        createComposer: function() {
             var viewer = this._viewer;
             var width = viewer.getCanvasWidth();
             var height = viewer.getCanvasHeight();
@@ -360,7 +360,7 @@
             return composer;
         },
 
-        loadLutTextures: function () {
+        loadLutTextures: function() {
             var promises = [];
 
             var i;
@@ -378,14 +378,14 @@
 
             var self = this;
 
-            P.all(promises).then(function (images) {
+            P.all(promises).then(function(images) {
                 for (i = 0; i < self._lutTextureNames.length; i++) {
                     self._lutTextures[self._lutTextureNames[i]].setImage(images[i]);
                 }
             });
         },
 
-        _resetCameraAttachements: function (camera) {
+        _resetCameraAttachements: function(camera) {
             var texture = camera.getAttachments()[osg.FrameBufferObject.COLOR_ATTACHMENT0].texture;
             // reset attachment and redo them (because of render buffer)
             // camera should have a resize attachments function for helper
@@ -397,7 +397,7 @@
             );
         },
 
-        update: function () {
+        update: function() {
             var viewer = this._viewer;
             var width = viewer.getCanvasWidth();
             var height = viewer.getCanvasHeight();
@@ -414,7 +414,7 @@
             return true;
         },
 
-        rebuildComposer: function (fileName) {
+        rebuildComposer: function(fileName) {
             var composer = this._composer;
             composer.clear();
 
@@ -470,7 +470,7 @@
             }
         },
 
-        rebuildGUI: function (name) {
+        rebuildGUI: function(name) {
             if (this._gui) {
                 this._gui.destroy();
             }
@@ -487,7 +487,7 @@
             this._gui.add(this, '_showQuad').name('Show quad');
             this._gui.add(this, '_showGeometry').name('Show geometry');
 
-            cb.onFinishChange(function (value) {
+            cb.onFinishChange(function(value) {
                 self.rebuildComposer(value);
                 self.rebuildGUI(value);
             });
@@ -510,12 +510,12 @@
                 var innerCtrl = folder.add(vignette, 'innerRadius', 0, 1);
 
                 var eps = 0.01;
-                outerCtrl.onChange(function (value) {
+                outerCtrl.onChange(function(value) {
                     lensArray[0] = value;
                     if (value <= lensArray[1]) innerCtrl.setValue(value - eps);
                 });
 
-                innerCtrl.onChange(function (value) {
+                innerCtrl.onChange(function(value) {
                     lensArray[1] = value;
                     if (value >= lensArray[0]) outerCtrl.setValue(value + eps);
                 });
@@ -525,7 +525,7 @@
                 };
 
                 var lutCtrl = folder.add(colorCorrectionParams, 'current', this._lutTextureNames);
-                lutCtrl.onFinishChange(function (value) {
+                lutCtrl.onFinishChange(function(value) {
                     var passStateSet = self._composer.getStateSetPass('colorCorrection');
                     var uniform = passStateSet.getUniform('TextureLut');
                     passStateSet.setTextureAttributeAndModes(
@@ -572,7 +572,7 @@
                 folder
                     .add({ bool: only[0] ? true : false }, 'bool')
                     .name('Ssao only')
-                    .onChange(function (bool) {
+                    .onChange(function(bool) {
                         only[0] = bool ? 1 : 0;
                     });
 
@@ -580,14 +580,14 @@
                 folder
                     .add({ bool: mip[0] ? true : false }, 'bool')
                     .name('Use mipmap')
-                    .onChange(function (bool) {
+                    .onChange(function(bool) {
                         mip[0] = bool ? 1 : 0;
                     });
             }
             this._currentComposer = name;
         },
 
-        addComposerConfig: function (name, content) {
+        addComposerConfig: function(name, content) {
             this._composerConfigNames.push(name);
             this._composerConfigFiles[name] = content;
 
@@ -596,7 +596,7 @@
             this.rebuildGUI(this._currentComposer);
         },
 
-        addPostProcessEffect: function (files, fileContents) {
+        addPostProcessEffect: function(files, fileContents) {
             var shaders = {};
 
             for (var i = 0; i < fileContents.length; i++) {
@@ -613,13 +613,13 @@
             this._shaderProcessor.addShaders(shaders);
         },
 
-        dragOverEvent: function (evt) {
+        dragOverEvent: function(evt) {
             evt.stopPropagation();
             evt.preventDefault();
             evt.dataTransfer.dropEffect = 'copy';
         },
 
-        dropEvent: function (evt) {
+        dropEvent: function(evt) {
             evt.stopPropagation();
             evt.preventDefault();
 
@@ -644,14 +644,14 @@
             P.all(promises).then(this.addContent.bind(this, files));
         },
 
-        loadXHR: function (url) {
+        loadXHR: function(url) {
             var split = url.split('/');
             var shaderName = split[split.length - 1];
 
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
             xhr.responseType = 'text';
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (xhr.status !== 200 && (!xhr.response || !xhr.response.byteLength)) {
                     return;
                 }
@@ -662,7 +662,7 @@
         }
     };
 
-    var initExample = function () {
+    var initExample = function() {
         var example = new Example();
         example.run();
 

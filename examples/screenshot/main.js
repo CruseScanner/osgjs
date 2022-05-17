@@ -6,13 +6,13 @@ var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 var osgGA = OSG.osgGA;
 
-var SimpleUpdateCallback = function () {};
+var SimpleUpdateCallback = function() {};
 
 SimpleUpdateCallback.prototype = {
     // rotation angle
     angle: 0,
 
-    update: function (node, nv) {
+    update: function(node, nv) {
         var t = nv.getFrameStamp().getSimulationTime();
         var dt = t - node._lastUpdate;
 
@@ -62,7 +62,7 @@ function createScene() {
     return root;
 }
 
-var main = function () {
+var main = function() {
     // from require to global var
 
     // The 3D canvas.
@@ -108,7 +108,7 @@ var main = function () {
         var rowPixelsStart = new Uint8Array(rowSize);
         var dataToDownload;
 
-        var userEndFrame = function (state) {
+        var userEndFrame = function(state) {
             if (takeShot) {
                 var gl = state.getGraphicContext();
 
@@ -166,14 +166,14 @@ var main = function () {
 
         document.getElementById('screenshot').addEventListener(
             'click',
-            function () {
+            function() {
                 dataToDownload = c.toDataURL('image/jpeg', 1.0); //.replace( 'image/jpeg', 'image/octet-stream' );
                 window.location.href = dataToDownload;
             },
             false
         );
 
-        window.setInterval(function () {
+        window.setInterval(function() {
             takeShot = !takeShot;
         }, 1000);
 

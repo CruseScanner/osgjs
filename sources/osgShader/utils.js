@@ -80,7 +80,7 @@ this.getNode('myFuncTiti')
 
 */
 
-var sprintf = function (string, args) {
+var sprintf = function(string, args) {
     if (!string || !args) {
         return '';
     }
@@ -102,7 +102,7 @@ var sprintf = function (string, args) {
     return string;
 };
 
-var checkVariableType = function (vars, optionalPrefix) {
+var checkVariableType = function(vars, optionalPrefix) {
     var inputs = vars;
     var varsList = [];
     var prefix = optionalPrefix;
@@ -130,7 +130,7 @@ var checkVariableType = function (vars, optionalPrefix) {
     return varsList;
 };
 
-var callFunction = function (funcName, output, inputs) {
+var callFunction = function(funcName, output, inputs) {
     var osgShader = require('osgShader/osgShader').default;
 
     var debug = [];
@@ -170,7 +170,7 @@ var callFunction = function (funcName, output, inputs) {
     return callString;
 };
 
-var extractPragmaArgs = function (option) {
+var extractPragmaArgs = function(option) {
     // extract glslVar:jsVar pattern
     // res: ["DERIVATIVES:enable", "glslVarIn:jsVarIn", "glslVarOut:jsVarOut"]
     var res = option.match(/([^\s]+):([^\s]+)/g);
@@ -186,7 +186,7 @@ var extractPragmaArgs = function (option) {
     return map;
 };
 
-var extractSignature = function (option, signature) {
+var extractSignature = function(option, signature) {
     var openParen = signature.indexOf('(');
     var closeParen = signature.indexOf(')');
 
@@ -244,7 +244,10 @@ var extractSignature = function (option, signature) {
         if (!argi) continue;
 
         // cleanArg: "const in vec3 varIn"
-        var cleanArg = argi.trim().replace(/\s+/g, ' ').split('[')[0];
+        var cleanArg = argi
+            .trim()
+            .replace(/\s+/g, ' ')
+            .split('[')[0];
         var splits = cleanArg.split(/\s/);
         var nbSplits = splits.length;
 
@@ -277,8 +280,8 @@ var extractSignature = function (option, signature) {
     };
 };
 
-var createNode = function (res, fileName) {
-    var NodeCustom = function () {
+var createNode = function(res, fileName) {
+    var NodeCustom = function() {
         Node.call(this);
         this._defines = [];
         this._extensions = [];
@@ -292,32 +295,32 @@ var createNode = function (res, fileName) {
             signatures: [res.signature],
             globalDeclare: '#pragma include "' + fileName + '"',
 
-            checkInputsOutputs: function () {},
+            checkInputsOutputs: function() {},
 
-            globalFunctionDeclaration: function () {
+            globalFunctionDeclaration: function() {
                 return this.globalDeclare;
             },
 
-            addExtensions: function (exts) {
+            addExtensions: function(exts) {
                 this._extensions.push.apply(this._extensions, exts);
                 return this;
             },
 
-            getExtensions: function () {
+            getExtensions: function() {
                 this.getOrCreateSignature();
                 return this._extensions;
             },
 
-            addDefines: function (defines) {
+            addDefines: function(defines) {
                 this._defines.push.apply(this._defines, defines);
                 return this;
             },
 
-            getDefines: function () {
+            getDefines: function() {
                 return this._defines;
             },
 
-            _validateSameVariables: function (glslArray, jsObj) {
+            _validateSameVariables: function(glslArray, jsObj) {
                 var nbGlsl = glslArray.length;
                 for (var i = 0; i < nbGlsl; ++i) {
                     if (!jsObj[glslArray[i].name]) return false;
@@ -325,7 +328,7 @@ var createNode = function (res, fileName) {
                 return glslArray.length === Object.keys(jsObj).length;
             },
 
-            _validateSameType: function (glslArray, jsObj) {
+            _validateSameType: function(glslArray, jsObj) {
                 var nbGlsl = glslArray.length;
                 for (var i = 0; i < nbGlsl; ++i) {
                     var jsVar = jsObj[glslArray[i].name];
@@ -334,7 +337,7 @@ var createNode = function (res, fileName) {
                 return true;
             },
 
-            _getSignatureBestMatch: function () {
+            _getSignatureBestMatch: function() {
                 if (this.signatures.length === 1) return this.signatures[0];
 
                 var matchNames = [];
@@ -360,7 +363,7 @@ var createNode = function (res, fileName) {
                 return matchInput[0];
             },
 
-            getOrCreateSignature: function () {
+            getOrCreateSignature: function() {
                 if (!this._signature) {
                     this._signature = this._getSignatureBestMatch();
                     this.addExtensions(this._signature.extensions);
@@ -368,7 +371,7 @@ var createNode = function (res, fileName) {
                 return this._signature;
             },
 
-            _typeDownCast: function (glslArg) {
+            _typeDownCast: function(glslArg) {
                 var jsArg;
                 if (glslArg.optional) {
                     jsArg = this._inputs[glslArg.name] || this._outputs[glslArg.name];
@@ -398,7 +401,7 @@ var createNode = function (res, fileName) {
                 return jsArg;
             },
 
-            computeShader: function () {
+            computeShader: function() {
                 var signature = this.getOrCreateSignature();
 
                 var ret = signature.returnVariable && signature.returnVariable.name;
@@ -427,7 +430,7 @@ var createNode = function (res, fileName) {
 
 var shaderNodeClassGlobal = {};
 
-var extractFunctions = function (shaderLib, fileName) {
+var extractFunctions = function(shaderLib, fileName) {
     var signatures = shaderLib[fileName].split(/#pragma DECLARE_FUNCTION(.*)[\r\n|\r|\n]/);
     var nbSignatures = (signatures.length - 1) / 2;
 

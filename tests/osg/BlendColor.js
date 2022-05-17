@@ -4,8 +4,8 @@ import BlendColor from 'osg/BlendColor';
 import State from 'osg/State';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function () {
-    test('BlendColor', function () {
+export default function() {
+    test('BlendColor', function() {
         var n = new BlendColor();
         assert.isOk(
             n.getConstantColor()[0] === 1.0 &&

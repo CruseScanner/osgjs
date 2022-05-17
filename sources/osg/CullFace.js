@@ -5,7 +5,7 @@ import StateAttribute from 'osg/StateAttribute';
  *  Manage CullFace attribute
  *  @class CullFace
  */
-var CullFace = function (mode) {
+var CullFace = function(mode) {
     StateAttribute.call(this);
     this.setMode(mode !== undefined ? mode : CullFace.BACK);
 };
@@ -21,21 +21,21 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'CullFace',
 
-        cloneType: function () {
+        cloneType: function() {
             return new CullFace();
         },
 
-        setMode: function (mode) {
+        setMode: function(mode) {
             var value = mode;
             if (typeof value === 'string') value = CullFace[value];
             this._mode = value;
         },
 
-        getMode: function () {
+        getMode: function() {
             return this._mode;
         },
 
-        apply: function (state) {
+        apply: function(state) {
             state.applyCullFace(this);
         }
     }),

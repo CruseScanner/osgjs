@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var P = window.P;
@@ -8,7 +8,7 @@
     var osgViewer = OSG.osgViewer;
     var $ = window.$;
 
-    var Example = function () {
+    var Example = function() {
         this._textureNames = [
             'seamless/fabric1.jpg',
             'seamless/fabric2.jpg',
@@ -33,16 +33,16 @@
     };
 
     Example.prototype = {
-        initDatGUI: function () {
+        initDatGUI: function() {
             var path = '../media/textures/';
 
             // generate array of paths
-            var paths = this._textureNames.map(function (name) {
+            var paths = this._textureNames.map(function(name) {
                 return path + name;
             });
 
             // generate array of promise
-            var images = paths.map(function (pathname) {
+            var images = paths.map(function(pathname) {
                 return osgDB.readImageURL(pathname);
             });
 
@@ -69,8 +69,8 @@
 
             // wait for all images
             P.all(images).then(
-                function (args) {
-                    this._textures = args.map(function (image) {
+                function(args) {
+                    this._textures = args.map(function(image) {
                         var texture = new osg.Texture();
                         texture.setImage(image);
                         texture.setWrapT('REPEAT');
@@ -87,7 +87,7 @@
         },
 
         // get the model
-        getOrCreateModel: function () {
+        getOrCreateModel: function() {
             if (!this._model) {
                 var size = 10;
                 // check osg/shape.js to see arguements of createTexturedQuadGeometry
@@ -107,7 +107,7 @@
             return this._model;
         },
 
-        convertColor: function (color) {
+        convertColor: function(color) {
             var r, g, b;
 
             if (color.length === 3) {
@@ -131,7 +131,7 @@
             return result;
         },
 
-        updateMaterial1: function () {
+        updateMaterial1: function() {
             if (!this._stateSet1) return;
             var material = this._stateSet1.getAttribute('Material');
 
@@ -152,7 +152,7 @@
             this._stateSet1.setTextureAttributeAndModes(0, texture);
         },
 
-        createScene: function () {
+        createScene: function() {
             var model1 = this.getOrCreateModel();
             this._stateSet1 = model1.getOrCreateStateSet();
             this.updateMaterial1();
@@ -160,7 +160,7 @@
             return model1;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, this._osgOptions);
             this._viewer = viewer;
@@ -180,7 +180,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

@@ -6,7 +6,7 @@ import utils from 'osg/utils';
  *  ShadowTechnique provides an implementation interface of shadow techniques.
  *  @class ShadowTechnique
  */
-var ShadowTechnique = function () {
+var ShadowTechnique = function() {
     Object.call(this);
 
     this._shadowedScene = undefined;
@@ -20,50 +20,50 @@ var ShadowTechnique = function () {
 utils.createPrototypeObject(
     ShadowTechnique,
     utils.objectInherit(Object.prototype, {
-        dirty: function () {
+        dirty: function() {
             this._dirty = true;
         },
 
-        getShadowedScene: function () {
+        getShadowedScene: function() {
             return this._shadowedScene;
         },
 
-        setContinuousUpdate: function (enabled) {
+        setContinuousUpdate: function(enabled) {
             this._continuousUpdate = enabled;
         },
 
-        isContinuousUpdate: function () {
+        isContinuousUpdate: function() {
             return this._continuousUpdate;
         },
 
-        needRedraw: function () {
+        needRedraw: function() {
             return this._needRedraw;
         },
 
-        requestRedraw: function () {
+        requestRedraw: function() {
             this._needRedraw = true;
         },
 
-        setShadowedScene: function (shadowedScene) {
+        setShadowedScene: function(shadowedScene) {
             this._shadowedScene = shadowedScene;
         },
 
-        init: function () {
+        init: function() {
             // well shouldn't be called
             notify.log('No ShadowTechnique activated: normal rendering activated');
         },
 
-        valid: function () {
+        valid: function() {
             // make sure abstract class not used.
             return false;
         },
 
         // update the technic
-        updateShadowTechnique: function (/*nodeVisitor*/) {},
+        updateShadowTechnique: function(/*nodeVisitor*/) {},
 
-        cullShadowCasting: function (/*cullVisitor*/) {},
+        cullShadowCasting: function(/*cullVisitor*/) {},
 
-        cleanSceneGraph: function () {
+        cleanSceneGraph: function() {
             // well shouldn't be called
             notify.log('No ShadowTechnique activated: normal rendering activated');
         }

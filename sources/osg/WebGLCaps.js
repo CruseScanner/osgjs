@@ -3,7 +3,7 @@ import WebGLUtils from 'osgViewer/webgl-utils';
 import Options from 'osg/Options';
 var Texture;
 
-var WebGLCaps = function () {
+var WebGLCaps = function() {
     // circular deps with texture
     if (!Texture) Texture = require('osg/Texture').default;
 
@@ -38,7 +38,7 @@ var WebGLCaps = function () {
     this._gl = undefined;
 };
 
-WebGLCaps.instance = function (glParam, force) {
+WebGLCaps.instance = function(glParam, force) {
     if (!WebGLCaps._instance) {
         var oldWebGLInspector;
         var gl = glParam;
@@ -65,7 +65,7 @@ WebGLCaps.instance = function (glParam, force) {
             // in case of webgl2
             options.extendWithOptionsURL();
 
-            gl = WebGLUtils.setupWebGL(c, options, function () {});
+            gl = WebGLUtils.setupWebGL(c, options, function() {});
         }
 
         WebGLCaps._instance = new WebGLCaps();
@@ -97,11 +97,11 @@ WebGLCaps.instance = function (glParam, force) {
 };
 
 WebGLCaps.prototype = {
-    getContext: function () {
+    getContext: function() {
         return this._gl;
     },
 
-    initContextDependant: function (gl) {
+    initContextDependant: function(gl) {
         // store context in case of multiple context
         this._gl = gl;
         // We need to check if this is a webGL2 context to get the extensions work.
@@ -122,7 +122,7 @@ WebGLCaps.prototype = {
         this.hasFloatRTT(gl);
     },
 
-    init: function (gl) {
+    init: function(gl) {
         // get capabilites
         this.initWebGLParameters(gl);
 
@@ -153,19 +153,19 @@ WebGLCaps.prototype = {
             ];
 
             var ext = WebGLCaps._instance.getWebGLExtensions();
-            var dummyFunc = function () {};
+            var dummyFunc = function() {};
             for (var i = 0, l = nativeExtension.length; i < l; i++) {
                 ext[nativeExtension[i]] = dummyFunc;
             }
         }
     },
 
-    isWebGL2: function () {
+    isWebGL2: function() {
         return this._isGL2;
     },
 
     // inevitable bugs per platform (browser/OS/GPU)
-    initBugDB: function (gl) {
+    initBugDB: function(gl) {
         var p = this._webGLPlatforms;
         var ext = this._webGLParameters;
 
@@ -204,7 +204,7 @@ WebGLCaps.prototype = {
         }
     },
 
-    checkShader: function (gl, t, text) {
+    checkShader: function(gl, t, text) {
         var type = t;
         if (typeof type === 'string') type = gl[t];
         var shader = gl.createShader(type);
@@ -218,7 +218,7 @@ WebGLCaps.prototype = {
         return true;
     },
 
-    initPlatformSupport: function () {
+    initPlatformSupport: function() {
         var p = this._webGLPlatforms;
 
         p.Apple =
@@ -228,31 +228,31 @@ WebGLCaps.prototype = {
         p.Mobile = /Mobi/.test(navigator.userAgent) || /ablet/.test(navigator.userAgent);
     },
 
-    getWebGLPlatform: function (str) {
+    getWebGLPlatform: function(str) {
         return this._webGLPlatforms[str];
     },
 
-    getWebGLPlatforms: function () {
+    getWebGLPlatforms: function() {
         return this._webGLPlatforms;
     },
 
-    getWebGLParameter: function (str) {
+    getWebGLParameter: function(str) {
         return this._webGLParameters[str];
     },
 
-    getWebGLParameters: function () {
+    getWebGLParameters: function() {
         return this._webGLParameters;
     },
 
-    getShaderMaxPrecisionFloat: function () {
+    getShaderMaxPrecisionFloat: function() {
         return this._webGLParameters.MAX_SHADER_PRECISION_FLOAT;
     },
 
-    getShaderMaxPrecisionInt: function () {
+    getShaderMaxPrecisionInt: function() {
         return this._webGLParameters.MAX_SHADER_PRECISION_INT;
     },
 
-    checkSupportRTT: function (gl, typeFloat, typeTexture) {
+    checkSupportRTT: function(gl, typeFloat, typeTexture) {
         var key = typeFloat + ',' + typeTexture;
 
         if (this._isGL2) {
@@ -292,52 +292,52 @@ WebGLCaps.prototype = {
         return status;
     },
 
-    hasLinearHalfFloatRTT: function (gl) {
+    hasLinearHalfFloatRTT: function(gl) {
         return (
             this._webGLExtensions['OES_texture_half_float_linear'] &&
             this.checkSupportRTT(gl, Texture.HALF_FLOAT_OES, Texture.LINEAR)
         );
     },
 
-    hasLinearFloatRTT: function (gl) {
+    hasLinearFloatRTT: function(gl) {
         return (
             this._webGLExtensions['OES_texture_float_linear'] &&
             this.checkSupportRTT(gl, Texture.FLOAT, Texture.LINEAR)
         );
     },
 
-    hasHalfFloatRTT: function (gl) {
+    hasHalfFloatRTT: function(gl) {
         return (
             this._webGLExtensions['OES_texture_half_float'] &&
             this.checkSupportRTT(gl, Texture.HALF_FLOAT_OES, Texture.NEAREST)
         );
     },
 
-    hasFloatRTT: function (gl) {
+    hasFloatRTT: function(gl) {
         return (
             this._webGLExtensions['OES_texture_float'] &&
             this.checkSupportRTT(gl, Texture.FLOAT, Texture.NEAREST)
         );
     },
 
-    queryPrecision: function (gl, shaderType, precision) {
+    queryPrecision: function(gl, shaderType, precision) {
         var answer = gl.getShaderPrecisionFormat(shaderType, precision);
         if (!answer) return false;
         return answer.precision !== 0;
     },
 
-    hasVAO: function () {
+    hasVAO: function() {
         return !!this._webGLExtensions['OES_vertex_array_object'];
     },
 
-    getDisjointTimerQuery: function () {
+    getDisjointTimerQuery: function() {
         return (
             this._webGLExtensions['EXT_disjoint_timer_query_webgl2'] ||
             this._webGLExtensions['EXT_disjoint_timer_query']
         );
     },
 
-    initWebGLParameters: function (gl) {
+    initWebGLParameters: function(gl) {
         if (!gl) return;
         var limits = [
             'MAX_COMBINED_TEXTURE_IMAGE_UNITS',
@@ -399,7 +399,7 @@ WebGLCaps.prototype = {
         // try to compile a small shader to test the spec is respected
     },
 
-    applyExtension: function (gl, name) {
+    applyExtension: function(gl, name) {
         var ext = gl.getExtension(name);
         // Borrowed from https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html
         // make "generalized" functions and name
@@ -421,15 +421,15 @@ WebGLCaps.prototype = {
         }
     },
 
-    getWebGLExtension: function (str) {
+    getWebGLExtension: function(str) {
         return this._webGLExtensions[str];
     },
 
-    getWebGLExtensions: function () {
+    getWebGLExtensions: function() {
         return this._webGLExtensions;
     },
 
-    _checkShader: function (gl, t, text) {
+    _checkShader: function(gl, t, text) {
         var type = t;
         if (typeof type === 'string') type = gl[t];
         var shader = gl.createShader(type);
@@ -445,7 +445,7 @@ WebGLCaps.prototype = {
     // GPUs with different capabilities
     // double check if glsl compiler agree
     // with driver
-    _doubleCheckExtension: function (gl, extension) {
+    _doubleCheckExtension: function(gl, extension) {
         var shader = [
             '#version 100',
             '#extension GL_%ext% : require',
@@ -458,7 +458,7 @@ WebGLCaps.prototype = {
         return this._checkShader(gl, 'FRAGMENT_SHADER', shader.replace(/\%ext\%/g, extension));
     },
 
-    initWebGLExtensions: function (gl, filterBugs) {
+    initWebGLExtensions: function(gl, filterBugs) {
         // nodejs, phantomjs
         if (!gl) return;
 

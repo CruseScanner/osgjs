@@ -2,9 +2,9 @@ import { assert } from 'chai';
 import BufferArrayProxy from 'osg/BufferArrayProxy';
 import BufferArray from 'osg/BufferArray';
 
-export default function () {
-    test('BufferArrayProxy', function () {
-        (function () {
+export default function() {
+    test('BufferArrayProxy', function() {
+        (function() {
             var bufferArrayA = new BufferArray();
             var bufferArrayB = new BufferArray();
 

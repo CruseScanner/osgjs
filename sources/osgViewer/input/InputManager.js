@@ -7,7 +7,7 @@ var MODIFIERS = ['shift', 'alt', 'ctrl', 'meta'];
  * InputGroup
  * @constructor
  */
-var InputGroup = function (inputManager, name) {
+var InputGroup = function(inputManager, name) {
     // true when this group is enabled
     this._enabled = true;
 
@@ -53,7 +53,7 @@ InputGroup.prototype = {
      * @param mappings
      * @param listener
      */
-    addMappings: function (mappings, listener) {
+    addMappings: function(mappings, listener) {
         for (var key in mappings) {
             mappings[this._name + ':' + key] = mappings[key];
             delete mappings[key];
@@ -62,7 +62,7 @@ InputGroup.prototype = {
         this._inputManager.addMappings(mappings, listener);
     },
 
-    _collectNativeEvents: function (nativeEvent) {
+    _collectNativeEvents: function(nativeEvent) {
         if (!this._enabled || this._mask.length) {
             return;
         }
@@ -96,7 +96,7 @@ InputGroup.prototype = {
         }
     },
 
-    _addEvent: function (nativeEvent, eventName) {
+    _addEvent: function(nativeEvent, eventName) {
         // creating an event instance for each eventName / raw nativeEvent  combination.
         var fullName = this._name + ':' + eventName;
         var registerEvent = false;
@@ -140,7 +140,7 @@ InputGroup.prototype = {
         }
     },
 
-    _findEvent: function (list, name, nativeRaw) {
+    _findEvent: function(list, name, nativeRaw) {
         for (var i = 0; i < list.length; i++) {
             var evt = list[i];
             if (evt.type === name && evt._parsedEvent.raw === nativeRaw) {
@@ -150,7 +150,7 @@ InputGroup.prototype = {
         return undefined;
     },
 
-    _setEnable: function (enable) {
+    _setEnable: function(enable) {
         this._enabled = enable;
         // adding / removing native events
         for (var nativeEvent in this._mappings) {
@@ -167,7 +167,7 @@ InputGroup.prototype = {
 /**
  * InputManager
  */
-var InputManager = function () {
+var InputManager = function() {
     // Contains all created input groups
     this._groups = {};
 
@@ -206,7 +206,7 @@ InputManager.prototype = {
      * See osgViewer/input/InputSource.js
      * @param source
      */
-    registerInputSource: function (source) {
+    registerInputSource: function(source) {
         if (!source.setEnable || !source.supportsEvent || !source.getName) {
             throw 'Invalid input target ' + JSON.stringify(source);
         }
@@ -219,7 +219,7 @@ InputManager.prototype = {
      * @param name the name of the input source to find.
      * @returns the input source or undefined if it was not found.
      */
-    getInputSource: function (name) {
+    getInputSource: function(name) {
         for (var i = 0; i < this._sources.length; i++) {
             var source = this._sources[i];
             if (source.getName() === name) {
@@ -243,7 +243,7 @@ InputManager.prototype = {
      * @param mappings
      * @param listener
      */
-    addMappings: function (mappings, listener) {
+    addMappings: function(mappings, listener) {
         for (var key in mappings) {
             var nativeEvents = mappings[key];
             var groupEvent = key.split(':');
@@ -290,7 +290,7 @@ InputManager.prototype = {
      * @param name the name of the group
      * @returns the group.
      */
-    group: function (name) {
+    group: function(name) {
         return this._getOrCreateGroup(name);
     },
 
@@ -299,7 +299,7 @@ InputManager.prototype = {
      * @param groupName the group name
      * @param enable true to enable, false to disable.
      */
-    setEnable: function (groupName, enable) {
+    setEnable: function(groupName, enable) {
         var group = this._groups[groupName];
         if (group) {
             group._setEnable(enable);
@@ -352,7 +352,7 @@ InputManager.prototype = {
      * @param eventName
      * @param priority
      */
-    setPriority: function (eventName, priority) {
+    setPriority: function(eventName, priority) {
         var groupEvent = eventName.split(':');
         if (priority < 0) {
             throw 'priority must be a positive number';
@@ -392,7 +392,7 @@ InputManager.prototype = {
      * @param groupName the name of the group
      * @returns {number} the priority.
      */
-    getHigherPriority: function (groupName) {
+    getHigherPriority: function(groupName) {
         var priority = DEFAULT_PRIORITY;
         for (var key in this._groups) {
             var group = this._groups[key];
@@ -410,7 +410,7 @@ InputManager.prototype = {
      * @param name the name of the parameter
      * @returns {*} the parameter value, undefined if not found
      */
-    getParam: function (name) {
+    getParam: function(name) {
         return this._params[name];
     },
 
@@ -419,21 +419,21 @@ InputManager.prototype = {
      * @param name the name of the parameter
      * @param value the value of the parameter
      */
-    setParam: function (name, value) {
+    setParam: function(name, value) {
         this._params[name] = value;
     },
 
     /**
      * Disables all groups on the manager and clear all listeners attached to DOM elements.
      */
-    cleanup: function () {
+    cleanup: function() {
         for (var key in this._groups) {
             var group = this._groups[key];
             group._setEnable(false);
         }
     },
 
-    _parseNativeEvent: function (event) {
+    _parseNativeEvent: function(event) {
         var tokens = event.split(' ');
         var parsedEvent = {};
         parsedEvent.name = tokens[0];
@@ -474,7 +474,7 @@ InputManager.prototype = {
         return parsedEvent;
     },
 
-    _getOrCreateGroup: function (name) {
+    _getOrCreateGroup: function(name) {
         var group = this._groups[name];
         if (!group) {
             group = new InputGroup(this, name);
@@ -493,7 +493,7 @@ InputManager.prototype = {
     /**
      * Internal use only.
      */
-    update: function () {
+    update: function() {
         var i;
         //polling sources if relevant
         for (i = 0; i < this._sources.length; i++) {
@@ -520,7 +520,7 @@ InputManager.prototype = {
         }
     },
 
-    _getSource: function (triggerName) {
+    _getSource: function(triggerName) {
         for (var i = 0; i < this._sources.length; i++) {
             var source = this._sources[i];
             if (source.supportsEvent(triggerName)) {
@@ -529,7 +529,7 @@ InputManager.prototype = {
         }
     },
 
-    _dumpInputGroups: function (filter, onlyEnabled) {
+    _dumpInputGroups: function(filter, onlyEnabled) {
         if (filter === true) {
             onlyEnabled = filter;
             filter = undefined;
@@ -577,7 +577,7 @@ InputManager.prototype = {
         }
     },
 
-    _dumpEventSequence: function (filter, onlyEnabled) {
+    _dumpEventSequence: function(filter, onlyEnabled) {
         var eventList = [];
         if (filter === true) {
             onlyEnabled = filter;

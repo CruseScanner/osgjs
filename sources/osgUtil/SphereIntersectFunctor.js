@@ -2,7 +2,7 @@ import utils from 'osg/utils';
 import { vec3 } from 'osg/glMatrix';
 import IntersectFunctor from 'osgUtil/IntersectFunctor';
 
-var SphereIntersection = function () {
+var SphereIntersection = function() {
     IntersectFunctor.Intersection.call(this);
 
     this._localIntersectionNormal = vec3.clone(vec3.ONE);
@@ -18,7 +18,7 @@ var SphereIntersection = function () {
     this._r3 = 0.0;
 };
 
-var SphereIntersectFunctor = function () {
+var SphereIntersectFunctor = function() {
     IntersectFunctor.apply(this);
 
     this._center = undefined;
@@ -28,12 +28,12 @@ var SphereIntersectFunctor = function () {
 utils.createPrototypeObject(
     SphereIntersectFunctor,
     utils.objectInherit(IntersectFunctor.prototype, {
-        set: function (center, radius) {
+        set: function(center, radius) {
             this._center = center;
             this._radius = radius;
         },
 
-        enter: function (bbox) {
+        enter: function(bbox) {
             // Intersection sphere box, from graphic gems 2
             // https://github.com/erich666/GraphicsGems/blob/master/gems/BoxSphere.c
             var r2 = this._radius * this._radius;
@@ -53,7 +53,7 @@ utils.createPrototypeObject(
             return dmin <= r2;
         },
 
-        intersectPoint: function (v0, i0) {
+        intersectPoint: function(v0, i0) {
             var sqrDistance = vec3.sqrDist(v0, this._center);
             if (sqrDistance > this._radius * this._radius) return;
 
@@ -64,11 +64,11 @@ utils.createPrototypeObject(
             intersection._ratio = Math.sqrt(sqrDistance) / this._radius;
         },
 
-        intersectLine: (function () {
+        intersectLine: (function() {
             var tmp = vec3.create();
             var dir = vec3.create();
 
-            return function (v0, v1, p0, p1) {
+            return function(v0, v1, p0, p1) {
                 // https://www.geometrictools.com/GTEngine/Include/Mathematics/GteDistPointSegment.h
                 vec3.sub(tmp, this._center, v0);
                 vec3.sub(dir, v1, v0);
@@ -108,11 +108,11 @@ utils.createPrototypeObject(
         //
         // from http://www.geometrictools.com/Source/Distance3D.html#PointPlanar
         // js : https://github.com/stephomi/sculptgl/blob/master/src/math3d/Geometry.js#L89
-        intersectTriangle: (function () {
+        intersectTriangle: (function() {
             var edge1 = vec3.create();
             var edge2 = vec3.create();
             var diff = vec3.create();
-            return function (v0, v1, v2, i0, i1, i2) {
+            return function(v0, v1, v2, i0, i1, i2) {
                 if (this._limitOneIntersection && this._hit) return;
                 // sphere is a 'volume' here (so if the triangle is inside the ball it will intersects)
 

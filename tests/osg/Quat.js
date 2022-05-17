@@ -4,7 +4,7 @@ import { quat } from 'osg/glMatrix';
 import { vec3 } from 'osg/glMatrix';
 import { mat4 } from 'osg/glMatrix';
 
-export default function () {
+export default function() {
     // shared const
     var id = quat.create(); // inited with identity
     var sqrt2 = Math.sqrt(0.5);
@@ -19,13 +19,13 @@ export default function () {
     var Y45RotNeg = quat.fromValues(-0.5, 0.0, -0.5, 0.7071067811865475);
     //Quat.createAndSet(0.0, 0.38, 0.0, 0.92 );
 
-    test('Quat.init', function () {
+    test('Quat.init', function() {
         var q = quat.create();
         quat.init(q);
         assert.equalVector(q, quat.fromValues(0.0, 0.0, 0.0, 1.0));
     });
 
-    test('Quat.makeRotate', function () {
+    test('Quat.makeRotate', function() {
         var q0 = quat.setAxisAngle(quat.create(), [1.0, 0.0, 0.0], Math.PI);
         assert.equalVector(q0, quat.fromValues(1.0, 0.0, 0.0, 6.12303e-17), 1e-5);
 
@@ -36,7 +36,7 @@ export default function () {
         assert.equalVector(q2, quat.fromValues(0.0, 0.0, 0.382683, 0.92388));
     });
 
-    test('Quat.makeRotateFromTo', function () {
+    test('Quat.makeRotateFromTo', function() {
         //var q1 = quat.makeRotateFromTo( vec3.fromValues( 1.0, 0.0, 0.0 ), vec3.fromValues( 0.0, 1.0, 0.0 ), Quat.create() );
         var q1 = quat.rotationTo(
             quat.create(),
@@ -61,7 +61,7 @@ export default function () {
     //     near(result , [-10.0, 0.0, 0]);
     // });
 
-    test('Quat.multiply', function () {
+    test('Quat.multiply', function() {
         var q0 = quat.setAxisAngle(quat.create(), [1.0, 0.0, 0.0], Math.PI);
         var q1 = quat.setAxisAngle(quat.create(), [0.0, 1.0, 0.0], Math.PI / 2);
         var q2 = quat.setAxisAngle(quat.create(), [0.0, 0.0, 1.0], Math.PI / 4);
@@ -89,7 +89,7 @@ export default function () {
         );
     });
 
-    test('Quat.slerp', function () {
+    test('Quat.slerp', function() {
         var res = quat.fromValues(0.0, 0.0, 0.0, 0.0);
 
         // t = 0.5, half the angle between Y90RotNegX180Rot and ?Z90Rot?
@@ -127,7 +127,7 @@ export default function () {
         assert.equalVector(res, id, 1e-5, 'opposite sign, t:0.5');
     });
 
-    test('Quat.nlerp', function () {
+    test('Quat.nlerp', function() {
         var res = quat.fromValues(0.0, 0.0, 0.0, 0.0);
 
         // t = 0.5, half the angle between Y90RotNegX180Rot and ?Z90Rot?
@@ -165,7 +165,7 @@ export default function () {
         assert.equalVector(res, id, 1e-5, 'opposite sign, t:0.5');
     });
 
-    test('Quat.transformVec3', function () {
+    test('Quat.transformVec3', function() {
         var v = vec3.fromValues(1.0, 2.0, 3.0);
         vec3.transformQuat(v, v, quat.fromValues(0.0, 0.707107, 0.0, 0.707107));
         assert.equalVector(v, vec3.fromValues(3.0, 2.0, -1.0));

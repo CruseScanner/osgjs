@@ -1,9 +1,9 @@
 import { assert } from 'chai';
 import Uniform from 'osg/Uniform';
 
-export default function () {
-    test('Uniform', function () {
-        (function () {
+export default function() {
+    test('Uniform', function() {
+        (function() {
             var testInt = Uniform.createInt1(12, 'int_uniform');
             var testFloat = Uniform.createFloat1(6.283, 'float_uniform');
             var testVec3 = Uniform.createFloat3([3.14, 6.28, 1.44], 'vec3_uniform');

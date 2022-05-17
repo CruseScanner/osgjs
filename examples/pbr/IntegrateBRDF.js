@@ -1,18 +1,18 @@
-window.IntegrateBRDFMap = (function () {
+window.IntegrateBRDFMap = (function() {
     'use strict';
 
     var OSG = window.OSG;
     var osg = OSG.osg;
     var osgDB = OSG.osgDB;
 
-    var IntegrateBRDFMap = function (urlOrData, size) {
+    var IntegrateBRDFMap = function(urlOrData, size) {
         this._size = size;
         if (typeof urlOrData === 'string') this._file = urlOrData;
         else this._data = urlOrData;
     };
 
     IntegrateBRDFMap.prototype = {
-        createTexture: function (image) {
+        createTexture: function(image) {
             var texture = new osg.Texture();
             texture.setImage(image);
             texture.setMinFilter('NEAREST');
@@ -20,14 +20,14 @@ window.IntegrateBRDFMap = (function () {
             return texture;
         },
 
-        getTexture: function () {
+        getTexture: function() {
             return this._texture;
         },
 
-        loadPacked: function () {
+        loadPacked: function() {
             var size = this._size;
 
-            var readInputArray = function (inputArray) {
+            var readInputArray = function(inputArray) {
                 var data = inputArray;
                 if (osgDB.isGunzipBuffer(data)) data = osgDB.gunzip(data);
 

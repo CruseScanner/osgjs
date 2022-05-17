@@ -2,20 +2,20 @@ import { vec3 } from 'osg/glMatrix';
 import { quat } from 'osg/glMatrix';
 import Channel from 'osgAnimation/channel';
 
-var vec3CopyKeyFrame = function (i, keys, result) {
+var vec3CopyKeyFrame = function(i, keys, result) {
     result[0] = keys[i++];
     result[1] = keys[i++];
     result[2] = keys[i++];
 };
 
-var Vec4CopyKeyFrame = function (i, keys, result) {
+var Vec4CopyKeyFrame = function(i, keys, result) {
     result[0] = keys[i++];
     result[1] = keys[i++];
     result[2] = keys[i++];
     result[3] = keys[i++];
 };
 
-var Vec3LerpInterpolator = function (t, channelInstance) {
+var Vec3LerpInterpolator = function(t, channelInstance) {
     var channel = channelInstance.channel;
     var value = channelInstance.value;
     var keys = channel.keys;
@@ -55,11 +55,11 @@ var Vec3LerpInterpolator = function (t, channelInstance) {
     channelInstance.key = i1;
 };
 
-var QuatLerpInterpolator = (function () {
+var QuatLerpInterpolator = (function() {
     var q0 = quat.create32();
     var q1 = quat.create32();
 
-    return function (t, channelInstance) {
+    return function(t, channelInstance) {
         var channel = channelInstance.channel;
         var value = channelInstance.value;
         var keys = channel.keys;
@@ -100,11 +100,11 @@ var QuatLerpInterpolator = (function () {
     };
 })();
 
-var QuatSlerpInterpolator = (function () {
+var QuatSlerpInterpolator = (function() {
     var q0 = quat.create32();
     var q1 = quat.create32();
 
-    return function (t, channelInstance) {
+    return function(t, channelInstance) {
         var channel = channelInstance.channel;
         var value = channelInstance.value;
         var keys = channel.keys;
@@ -146,7 +146,7 @@ var QuatSlerpInterpolator = (function () {
     };
 })();
 
-var FloatLerpInterpolator = function (t, channelInstance) {
+var FloatLerpInterpolator = function(t, channelInstance) {
     var channel = channelInstance.channel;
     var value = channelInstance.value;
     var keys = channel.keys;
@@ -180,7 +180,7 @@ var FloatLerpInterpolator = function (t, channelInstance) {
     channelInstance.value = value;
 };
 
-var FloatCubicBezierInterpolator = function (t, channelInstance) {
+var FloatCubicBezierInterpolator = function(t, channelInstance) {
     var channel = channelInstance.channel;
     var value = channelInstance.value;
     var keys = channel.keys;
@@ -217,13 +217,13 @@ var FloatCubicBezierInterpolator = function (t, channelInstance) {
     channelInstance.value = value;
 };
 
-var Vec3CubicBezierInterpolator = (function () {
+var Vec3CubicBezierInterpolator = (function() {
     var v0 = vec3.create();
     var v1 = vec3.create();
     var v2 = vec3.create();
     var v3 = vec3.create();
 
-    return function (t, channelInstance) {
+    return function(t, channelInstance) {
         var channel = channelInstance.channel;
         var value = channelInstance.value;
         var keys = channel.keys;

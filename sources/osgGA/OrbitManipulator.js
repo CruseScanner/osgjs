@@ -14,7 +14,7 @@ import Groups from 'osgViewer/input/InputConstants';
  *  OrbitManipulator
  *  @class
  */
-var OrbitManipulator = function (options) {
+var OrbitManipulator = function(options) {
     Manipulator.call(this, options);
     this._homePosition = vec3.create();
     this._frustum = {};
@@ -38,7 +38,7 @@ OrbitManipulator.ControllerList = [
 ];
 
 var TWO_PI = 2 * Math.PI;
-var lowerOrEqual = function (val, limit) {
+var lowerOrEqual = function(val, limit) {
     return val < limit + 0.00001;
 };
 
@@ -49,7 +49,7 @@ var MAX_ZOOM = Infinity;
 utils.createPrototypeObject(
     OrbitManipulator,
     utils.objectInherit(Manipulator.prototype, {
-        init: function () {
+        init: function() {
             this._distance = 25.0;
             this._target = vec3.create();
             this._upz = vec3.fromValues(0.0, 0.0, 1.0);
@@ -99,7 +99,7 @@ utils.createPrototypeObject(
             // instance of controller
             var self = this;
 
-            OrbitManipulator.ControllerList.forEach(function (value) {
+            OrbitManipulator.ControllerList.forEach(function(value) {
                 if (OrbitManipulator[value] !== undefined) {
                     if (self._controllerList[value]) {
                         self._controllerList[value].init();
@@ -109,74 +109,74 @@ utils.createPrototypeObject(
                 }
             });
         },
-        setLimitPitchUp: function (up) {
+        setLimitPitchUp: function(up) {
             this._limitPitchUp = up;
         },
-        setLimitPitchDown: function (down) {
+        setLimitPitchDown: function(down) {
             this._limitPitchDown = down;
         },
-        setLimitYawLeft: function (left) {
+        setLimitYawLeft: function(left) {
             this._limitYawLeft = left;
             this._constrainYaw = true;
         },
-        setLimitYawRight: function (right) {
+        setLimitYawRight: function(right) {
             this._limitYawRight = right;
             this._constrainYaw = true;
         },
-        setLimitZoomOut: function (zoomOut) {
+        setLimitZoomOut: function(zoomOut) {
             this._limitZoomOut = zoomOut;
             this._constrainZoom = true;
         },
-        setLimitZoomIn: function (zoomIn) {
+        setLimitZoomIn: function(zoomIn) {
             this._limitZoomIn = zoomIn;
             this._constrainZoom = true;
         },
 
-        setConstrainPitch: function (limit) {
+        setConstrainPitch: function(limit) {
             this._constrainPitch = limit;
             this._previousPitch = undefined;
         },
 
-        isConstrainPitch: function () {
+        isConstrainPitch: function() {
             return this._constrainPitch;
         },
 
-        setConstrainYaw: function (constrain) {
+        setConstrainYaw: function(constrain) {
             this._constrainYaw = constrain;
             this._previousYaw = undefined;
         },
 
-        isConstrainYaw: function () {
+        isConstrainYaw: function() {
             return this._constrainYaw;
         },
 
-        setConstrainZoom: function (limit) {
+        setConstrainZoom: function(limit) {
             this._constrainZoom = limit;
         },
 
-        isConstrainZoom: function () {
+        isConstrainZoom: function() {
             return this._constrainZoom;
         },
 
-        setDelay: function (dt) {
+        setDelay: function(dt) {
             this._rotate.setDelay(dt);
             this._pan.setDelay(dt);
             this._zoom.setDelay(dt);
         },
-        reset: function () {
+        reset: function() {
             this.init();
         },
-        setTarget: function (target) {
+        setTarget: function(target) {
             vec3.copy(this._target, target);
             var eyePos = vec3.create();
             this.getEyePosition(eyePos);
             this._distance = vec3.distance(target, eyePos);
         },
-        setEyePosition: (function () {
+        setEyePosition: (function() {
             var f = vec3.create();
             var s = vec3.create();
             var u = vec3.create();
-            return function (eye) {
+            return function(eye) {
                 var result = this._rotation;
                 var center = this._target;
 
@@ -214,11 +214,11 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setEnable: function (enabled) {
+        setEnable: function(enabled) {
             this.getInputManager().setEnable(Groups.ORBIT_MANIPULATOR, enabled);
         },
 
-        computeHomePosition: function (boundStrategy) {
+        computeHomePosition: function(boundStrategy) {
             var bs = this.getHomeBoundingSphere(boundStrategy);
             if (!bs || !bs.valid()) return;
 
@@ -226,7 +226,7 @@ utils.createPrototypeObject(
             this.setTarget(bs.center());
         },
 
-        getHomePosition: function () {
+        getHomePosition: function() {
             if (this._node !== undefined) {
                 var target = this._target;
                 var distance = this.getDistance();
@@ -236,28 +236,28 @@ utils.createPrototypeObject(
             return this._homePosition;
         },
 
-        setMinSpeed: function (s) {
+        setMinSpeed: function(s) {
             this._minSpeed = s;
         },
-        getMinSpeed: function () {
+        getMinSpeed: function() {
             return this._minSpeed;
         },
 
-        setDistance: function (d) {
+        setDistance: function(d) {
             this._distance = d;
         },
-        getDistance: function () {
+        getDistance: function() {
             return this._distance;
         },
 
-        getSpeedFactor: function () {
+        getSpeedFactor: function() {
             return Math.max(this._distance, this._minSpeed);
         },
-        computePan: (function () {
+        computePan: (function() {
             var inv = mat4.create();
             var x = vec3.create();
             var y = vec3.create();
-            return function (dx, dy) {
+            return function(dx, dy) {
                 var proj = this._camera.getProjectionMatrix();
                 // modulate panning speed with verticalFov value
                 // if it's an orthographic we don't change the panning speed
@@ -285,10 +285,10 @@ utils.createPrototypeObject(
                 vec3.add(this._target, this._target, y);
             };
         })(),
-        computeRotation: (function () {
+        computeRotation: (function() {
             var rightDir = vec3.fromValues(1.0, 0.0, 0.0);
 
-            return function (dx, dy) {
+            return function(dx, dy) {
                 var prevPitch = Math.atan(-this._rotation[6] / this._rotation[5]);
                 if (isNaN(prevPitch)) {
                     prevPitch = 0.0;
@@ -303,12 +303,12 @@ utils.createPrototypeObject(
             };
         })(),
 
-        _computePitch: function (prevPitch, dy) {
+        _computePitch: function(prevPitch, dy) {
             var pitch = prevPitch + dy / 10.0;
             return Math.min(Math.max(pitch, this._limitPitchDown), this._limitPitchUp);
         },
 
-        _computeYaw: function (previousYaw, deltaYaw) {
+        _computeYaw: function(previousYaw, deltaYaw) {
             var yaw = previousYaw + deltaYaw;
             var left = this._limitYawLeft;
             var right = this._limitYawRight;
@@ -342,17 +342,17 @@ utils.createPrototypeObject(
             return yaw;
         },
 
-        computeZoom: function (dz) {
+        computeZoom: function(dz) {
             this.zoom(dz);
         },
 
-        setAutoPushTarget: function (bool) {
+        setAutoPushTarget: function(bool) {
             this._autoPushTarget = bool;
         },
 
-        zoom: (function () {
+        zoom: (function() {
             var dir = vec3.create();
-            return function (ratio) {
+            return function(ratio) {
                 var newValue = this._distance + this.getSpeedFactor() * (ratio - 1.0);
 
                 if (this._autoPushTarget && newValue < this._limitZoomIn) {
@@ -369,27 +369,27 @@ utils.createPrototypeObject(
             };
         })(),
 
-        getRotateInterpolator: function () {
+        getRotateInterpolator: function() {
             return this._rotate;
         },
-        getPanInterpolator: function () {
+        getPanInterpolator: function() {
             return this._pan;
         },
-        getZoomInterpolator: function () {
+        getZoomInterpolator: function() {
             return this._zoom;
         },
-        getTarget: function (target) {
+        getTarget: function(target) {
             return vec3.copy(target, this._target);
         },
-        getEyePosition: function (eye) {
+        getEyePosition: function(eye) {
             this.computeEyePosition(this._target, this._distance, eye);
             return eye;
         },
 
-        computeEyePosition: (function () {
+        computeEyePosition: (function() {
             var tmpDist = vec3.create();
             var tmpInverse = mat4.create();
-            return function (target, distance, eye) {
+            return function(target, distance, eye) {
                 mat4.invert(tmpInverse, this._rotation);
                 tmpDist[1] = distance;
                 vec3.transformMat4(eye, tmpDist, tmpInverse);
@@ -397,9 +397,9 @@ utils.createPrototypeObject(
             };
         })(),
 
-        update: (function () {
+        update: (function() {
             var eye = vec3.create();
-            return function (nv) {
+            return function(nv) {
                 var dt = nv.getFrameStamp().getDeltaTime();
 
                 var delta;
@@ -438,7 +438,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setPoseVR: function (q /*, pos*/) {
+        setPoseVR: function(q /*, pos*/) {
             mat4.fromQuat(this._vrMatrix, q);
             // this._vrMatrix[ 12 ] = pos[ 0 ];
             // this._vrMatrix[ 13 ] = pos[ 1 ];

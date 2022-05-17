@@ -1,4 +1,4 @@
-window.EnvironmentCubeMap = (function () {
+window.EnvironmentCubeMap = (function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -8,7 +8,7 @@ window.EnvironmentCubeMap = (function () {
 
     var shaderProcessor = new osgShader.ShaderProcessor();
 
-    var CubeMapEnv = function (urlOrData, size, options) {
+    var CubeMapEnv = function(urlOrData, size, options) {
         this._options = options || {};
         this._size = size;
         if (typeof urlOrData === 'string') this._file = urlOrData;
@@ -16,7 +16,7 @@ window.EnvironmentCubeMap = (function () {
     };
 
     CubeMapEnv.prototype = {
-        createTexture: function (image) {
+        createTexture: function(image) {
             var texture = new osg.Texture();
             texture.setImage(image);
             texture.setMinFilter(this._options.minFilter || 'NEAREST');
@@ -24,7 +24,7 @@ window.EnvironmentCubeMap = (function () {
             return texture;
         },
 
-        createTextureCubemap: function () {
+        createTextureCubemap: function() {
             var texture = new osg.TextureCubeMap();
             texture.setMinFilter(this._options.minFilter || 'NEAREST');
             texture.setMagFilter(this._options.magFilter || 'NEAREST');
@@ -35,7 +35,7 @@ window.EnvironmentCubeMap = (function () {
             return texture;
         },
 
-        createShader: function (defines) {
+        createShader: function(defines) {
             var vertexshader = shaderProcessor.getShader('cubemapVertex.glsl');
             var fragmentshader = shaderProcessor.getShader('cubemapFragment.glsl', defines);
 
@@ -47,7 +47,7 @@ window.EnvironmentCubeMap = (function () {
             return program;
         },
 
-        createFloatCubeMapDebugGeometry: function () {
+        createFloatCubeMapDebugGeometry: function() {
             var scene = new osg.Node();
 
             var size = 10;
@@ -55,15 +55,15 @@ window.EnvironmentCubeMap = (function () {
 
             geom.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace('DISABLE'));
             geom.getOrCreateStateSet().setTextureAttributeAndModes(0, this._texture);
-            geom.getOrCreateStateSet().setAttributeAndModes(
-                this.createShader(['#define FLOAT_CUBEMAP_LOD'])
-            );
+            geom
+                .getOrCreateStateSet()
+                .setAttributeAndModes(this.createShader(['#define FLOAT_CUBEMAP_LOD']));
 
             scene.addChild(geom);
             return scene;
         },
 
-        deinterleaveImage4: function (size, src, dst) {
+        deinterleaveImage4: function(size, src, dst) {
             var npixel = size * size;
             var npixel2 = 2 * size * size;
             var npixel3 = 3 * size * size;
@@ -76,7 +76,7 @@ window.EnvironmentCubeMap = (function () {
             }
         },
 
-        deinterleaveImage3: function (size, src, dst) {
+        deinterleaveImage3: function(size, src, dst) {
             var npixel = size * size;
             var idx = 0;
             for (var i = 0; i < npixel; i++) {
@@ -86,11 +86,11 @@ window.EnvironmentCubeMap = (function () {
             }
         },
 
-        loadPacked: function (type0) {
+        loadPacked: function(type0) {
             var type = type0;
             if (type === undefined) type = 'FLOAT';
 
-            var readInputArray = function (inputArray) {
+            var readInputArray = function(inputArray) {
                 var data = inputArray;
                 if (osgDB.isGunzipBuffer(data)) data = osgDB.gunzip(data);
 
@@ -148,11 +148,11 @@ window.EnvironmentCubeMap = (function () {
             }
         },
 
-        getTexture: function () {
+        getTexture: function() {
             return this._texture;
         },
 
-        createFloatPacked: function () {
+        createFloatPacked: function() {
             var texture = new osg.TextureCubeMap();
             texture.setMinFilter(this._options.minFilter || 'LINEAR_MIPMAP_LINEAR');
             texture.setMagFilter(this._options.magFilter || 'LINEAR');
@@ -167,7 +167,7 @@ window.EnvironmentCubeMap = (function () {
             return texture;
         },
 
-        createRGBA8Packed: function () {
+        createRGBA8Packed: function() {
             var texture = new osg.TextureCubeMap();
             texture.setMinFilter('LINEAR_MIPMAP_LINEAR');
             texture.setMagFilter('LINEAR');
@@ -181,7 +181,7 @@ window.EnvironmentCubeMap = (function () {
             return texture;
         },
 
-        createFloatCubeMapPackedDebugGeometry: function () {
+        createFloatCubeMapPackedDebugGeometry: function() {
             var scene = new osg.Node();
 
             var size = 10;
@@ -189,13 +189,15 @@ window.EnvironmentCubeMap = (function () {
 
             geom.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace('DISABLE'));
             geom.getOrCreateStateSet().setTextureAttributeAndModes(0, this._texture);
-            geom.getOrCreateStateSet().setAttributeAndModes(
-                this.createShader([
-                    '#define FLOAT',
-                    '#define CUBEMAP_LOD',
-                    '#define CUBEMAP_SEAMLESS'
-                ])
-            );
+            geom
+                .getOrCreateStateSet()
+                .setAttributeAndModes(
+                    this.createShader([
+                        '#define FLOAT',
+                        '#define CUBEMAP_LOD',
+                        '#define CUBEMAP_SEAMLESS'
+                    ])
+                );
 
             scene.addChild(geom);
             return scene;

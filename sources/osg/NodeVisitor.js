@@ -1,4 +1,4 @@
-var NodeVisitor = function (traversalMode) {
+var NodeVisitor = function(traversalMode) {
     /*jshint bitwise: false */
     this.traversalMask = ~0x0;
     /*jshint bitwise: true */
@@ -39,11 +39,11 @@ var traverseChildren = function traverseAllChildren(node) {
 NodeVisitor._traversalFunctions = [undefined, traverseParents, traverseChildren, traverseChildren];
 
 // =================== PushOntoNodePath functions ===============
-var pushOntoNodePathParents = function (node) {
+var pushOntoNodePathParents = function(node) {
     this.nodePath.unshift(node);
 };
 
-var pushOntoNodePathChildren = function (node) {
+var pushOntoNodePathChildren = function(node) {
     this.nodePath.push(node);
 };
 
@@ -55,11 +55,11 @@ NodeVisitor._pushOntoNodePath = [
 ];
 
 // =================== PopOntoNodePath functions ===============
-var popFromNodePathParents = function () {
+var popFromNodePathParents = function() {
     return this.nodePath.shift();
 };
 
-var popFromNodePathChildren = function () {
+var popFromNodePathChildren = function() {
     this.nodePath.pop();
 };
 
@@ -71,53 +71,53 @@ NodeVisitor._popFromNodePath = [
 ];
 
 NodeVisitor.prototype = {
-    reset: function () {
+    reset: function() {
         // to be used when you want to re-use a nv
         this.nodePath.length = 0;
     },
 
-    setFrameStamp: function (frameStamp) {
+    setFrameStamp: function(frameStamp) {
         this._frameStamp = frameStamp;
     },
 
-    getFrameStamp: function () {
+    getFrameStamp: function() {
         return this._frameStamp;
     },
 
-    setNodeMaskOverride: function (m) {
+    setNodeMaskOverride: function(m) {
         this.nodeMaskOverride = m;
     },
-    getNodeMaskOverride: function () {
+    getNodeMaskOverride: function() {
         return this.nodeMaskOverride;
     },
 
-    setTraversalMask: function (m) {
+    setTraversalMask: function(m) {
         this.traversalMask = m;
     },
-    getTraversalMask: function () {
+    getTraversalMask: function() {
         return this.traversalMask;
     },
 
-    getNodePath: function () {
+    getNodePath: function() {
         return this.nodePath;
     },
 
-    validNodeMask: function (node) {
+    validNodeMask: function(node) {
         var nm = node.getNodeMask();
         /*jshint bitwise: false */
         return (this.traversalMask & (this.nodeMaskOverride | nm)) !== 0;
         /*jshint bitwise: true */
     },
-    apply: function (node) {
+    apply: function(node) {
         this.traverse(node);
     },
-    getVisitorType: function () {
+    getVisitorType: function() {
         return this.visitorType;
     },
-    setDatabaseRequestHandler: function (dbpager) {
+    setDatabaseRequestHandler: function(dbpager) {
         this._databaseRequestHandler = dbpager;
     },
-    getDatabaseRequestHandler: function () {
+    getDatabaseRequestHandler: function() {
         return this._databaseRequestHandler;
     }
 };

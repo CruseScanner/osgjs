@@ -5,8 +5,8 @@ import Lod from 'osg/Lod';
 import PagedLOD from 'osg/PagedLOD';
 import Shape from 'osg/shape';
 
-export default function () {
-    test('PagedLOD', function () {
+export default function() {
+    test('PagedLOD', function() {
         var plod = new PagedLOD();
         assert.isOk(plod.children.length === 0, 'number of children must be 0');
         assert.isOk(plod.getParents().length === 0, 'number of parents must be 0');
@@ -17,7 +17,7 @@ export default function () {
         assert.isOk(plod._range[0][1] === 200, ' range max should be 200');
     });
 
-    test('PagedLOD.UserDefinedBound', function () {
+    test('PagedLOD.UserDefinedBound', function() {
         var plod = new PagedLOD();
         // Create a quad of 2x2 with center in 0,0,0
 

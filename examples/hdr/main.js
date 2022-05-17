@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var P = window.P;
@@ -66,7 +66,7 @@
 
     // Read a radiance .hdr file (http://radsite.lbl.gov/radiance/refer/filefmts.pdf)
     // Ported from http://www.graphics.cornell.edu/~bjw/rgbe.html
-    osg.readHDRImage = function (url, options) {
+    osg.readHDRImage = function(url, options) {
         if (options === undefined) {
             options = {};
         }
@@ -81,8 +81,8 @@
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.responseType = 'arraybuffer';
-        return new P(function (resolve) {
-            xhr.onload = function () {
+        return new P(function(resolve) {
+            xhr.onload = function() {
                 if (xhr.response) {
                     var bytes = new Uint8Array(xhr.response);
 
@@ -180,14 +180,14 @@
         });
     };
     var nbLoading = 0;
-    var removeLoading = function () {
+    var removeLoading = function() {
         nbLoading -= 1;
         if (nbLoading === 0) {
             document.getElementById('loading').style.display = 'None';
             Viewer.getManipulator().computeHomePosition();
         }
     };
-    var addLoading = function () {
+    var addLoading = function() {
         nbLoading += 1;
         document.getElementById('loading').style.display = 'Block';
     };
@@ -369,8 +369,8 @@
         var mt = new osg.MatrixTransform();
         mt.setMatrix(osg.mat4.fromRotation(osg.mat4.create(), -Math.PI / 2.0, [1, 0, 0]));
         mt.addChild(geom);
-        var CullCallback = function () {
-            this.cull = function (node, nv) {
+        var CullCallback = function() {
+            this.cull = function(node, nv) {
                 // overwrite matrix, remove translate so environment is always at camera origin
                 osg.mat4.setTranslation(nv.getCurrentModelViewMatrix(), [0, 0, 0]);
                 var m = nv.getCurrentModelViewMatrix();
@@ -388,21 +388,15 @@
 
         // the update callback get exactly the same view of the camera
         // but configure the projection matrix to always be in a short znear/zfar range to not vary depend on the scene size
-        var UpdateCallback = function () {
-            this.update = function (/*node, nv*/) {
+        var UpdateCallback = function() {
+            this.update = function(/*node, nv*/) {
                 var rootCam = Viewer.getCamera();
 
                 //rootCam.
                 var info = {};
                 osg.mat4.getPerspective(info, rootCam.getProjectionMatrix());
                 var proj = [];
-                osg.mat4.perspective(
-                    proj,
-                    (Math.PI / 180) * info.fovy,
-                    info.aspectRatio,
-                    1.0,
-                    100.0
-                );
+                osg.mat4.perspective(proj, Math.PI / 180 * info.fovy, info.aspectRatio, 1.0, 100.0);
 
                 cam.setProjectionMatrix(proj);
                 cam.setViewMatrix(rootCam.getViewMatrix());
@@ -417,11 +411,11 @@
         return geom;
     }
 
-    var getModel = function () {
+    var getModel = function() {
         var root = new osg.MatrixTransform();
         osg.mat4.fromRotation(root.getMatrix(), Math.PI, [0, 0, 1]);
         addLoading();
-        osgDB.readNodeURL('../media/models/material-test/file.osgjs').then(function (node) {
+        osgDB.readNodeURL('../media/models/material-test/file.osgjs').then(function(node) {
             root.addChild(node);
             removeLoading();
         });
@@ -467,7 +461,7 @@
         P.all([
             readImageURL('textures/' + name + '/' + urls[0]),
             readImageURL('textures/' + name + '/' + urls[1])
-        ]).then(function (images) {
+        ]).then(function(images) {
             textureHigh.setImage(images[0]);
             if (images[0].data) {
                 textureHigh.setTextureSize(images[0].width, images[0].height);
@@ -500,13 +494,13 @@
         ground.getOrCreateStateSet().addUniform(uniformGamma);
 
         // gui
-        document.getElementById('rangeExposure').onchange = function () {
+        document.getElementById('rangeExposure').onchange = function() {
             uniformCenter.setFloat(parseFloat(this.value));
         };
-        document.getElementById('rangeGamma').onchange = function () {
+        document.getElementById('rangeGamma').onchange = function() {
             uniformGamma.setFloat(parseFloat(this.value));
         };
-        document.getElementById('texture').onchange = function () {
+        document.getElementById('texture').onchange = function() {
             setEnvironment(this.value, background, ground);
         };
         setEnvironment('Alexs_Apartment', background, ground);
@@ -515,7 +509,7 @@
         return group;
     }
 
-    var main = function () {
+    var main = function() {
         //osg.ReportWebGLError = true;
 
         var canvas = document.getElementById('View');
@@ -539,7 +533,7 @@
 
             viewer.run();
 
-            var mousedown = function (ev) {
+            var mousedown = function(ev) {
                 ev.stopPropagation();
             };
             document.getElementById('explanation').addEventListener('mousedown', mousedown, false);

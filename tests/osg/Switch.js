@@ -5,8 +5,8 @@ import NodeVisitor from 'osg/NodeVisitor';
 import Switch from 'osg/Switch';
 import Utils from 'osg/utils';
 
-export default function () {
-    test('Switch', function () {
+export default function() {
+    test('Switch', function() {
         var switchNode = new Switch();
         assert.isOk(switchNode.children.length === 0, 'number of children must be 0');
         assert.isOk(switchNode.getParents().length === 0, 'number of parents must be 0');
@@ -20,12 +20,12 @@ export default function () {
         assert.isOk(switchNode._values[0] === true, 'first value should be true');
         assert.isOk(switchNode._values[1] === false, 'first value should be false');
 
-        var TestVisitor = function () {
+        var TestVisitor = function() {
             NodeVisitor.call(this, NodeVisitor.TRAVERSE_ACTIVE_CHILDREN);
         };
 
         TestVisitor.prototype = Utils.objectInherit(NodeVisitor.prototype, {
-            apply: function (node) {
+            apply: function(node) {
                 if (node.getName !== undefined) {
                     assert.isOk(
                         node.getName() !== 'disabled',

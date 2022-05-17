@@ -16,7 +16,7 @@ import Viewport from 'osg/Viewport';
 var WebVRCustom = {};
 
 // no smart resize, we just recreate everything
-var UpdateRecreateOnResize = function (viewer, rttScene, hmdConfig, root, canvas) {
+var UpdateRecreateOnResize = function(viewer, rttScene, hmdConfig, root, canvas) {
     this._viewer = viewer;
     this._rttScene = rttScene;
     this._hmdConfig = hmdConfig;
@@ -27,7 +27,7 @@ var UpdateRecreateOnResize = function (viewer, rttScene, hmdConfig, root, canvas
 };
 
 UpdateRecreateOnResize.prototype = {
-    update: function () {
+    update: function() {
         var canvas = this._canvas;
         var width = canvas.width;
         var height = canvas.height;
@@ -49,40 +49,40 @@ UpdateRecreateOnResize.prototype = {
     }
 };
 
-var UpdateOffsetCamera = function (rootView, offsetView) {
+var UpdateOffsetCamera = function(rootView, offsetView) {
     this._rootView = rootView;
     this._offsetView = offsetView;
 };
 
 UpdateOffsetCamera.prototype = {
-    update: function (node) {
+    update: function(node) {
         var nodeView = node.getViewMatrix();
         mat4.mul(nodeView, this._offsetView, this._rootView);
         return true;
     }
 };
 
-var setupWebVR = function (worldFactor, HMD, webVRUniforms, webVRMatrices) {
+var setupWebVR = function(worldFactor, HMD, webVRUniforms, webVRMatrices) {
     var aspect = HMD.hResolution / (2.0 * HMD.vResolution);
     var r =
-        -1.0 -
-        (4.0 * (HMD.hScreenSize * 0.25 - HMD.lensSeparationDistance * 0.5)) / HMD.hScreenSize;
+        -1.0 - 4.0 * (HMD.hScreenSize * 0.25 - HMD.lensSeparationDistance * 0.5) / HMD.hScreenSize;
     var distScale =
         HMD.distortionK[0] +
         HMD.distortionK[1] * Math.pow(r, 2) +
         HMD.distortionK[2] * Math.pow(r, 4) +
         HMD.distortionK[3] * Math.pow(r, 6);
     var fov =
-        (180.0 / Math.PI) *
+        180.0 /
+        Math.PI *
         2.0 *
         Math.atan2(HMD.vScreenSize * distScale, 2.0 * HMD.eyeToScreenDistance);
 
-    var proj = mat4.perspective(mat4.create(), (Math.PI / 180) * fov, aspect, 0.3, 10000.0);
+    var proj = mat4.perspective(mat4.create(), Math.PI / 180 * fov, aspect, 0.3, 10000.0);
 
     var hOffset =
-        (4.0 * (HMD.hScreenSize * 0.25 - HMD.interpupillaryDistance * 0.5)) / HMD.hScreenSize;
+        4.0 * (HMD.hScreenSize * 0.25 - HMD.interpupillaryDistance * 0.5) / HMD.hScreenSize;
     var lensShift =
-        (4.0 * (HMD.hScreenSize * 0.25 - HMD.lensSeparationDistance * 0.5)) / HMD.hScreenSize;
+        4.0 * (HMD.hScreenSize * 0.25 - HMD.lensSeparationDistance * 0.5) / HMD.hScreenSize;
 
     var leftMat = mat4.create();
     var rightMat = mat4.create();
@@ -110,10 +110,10 @@ var setupWebVR = function (worldFactor, HMD, webVRUniforms, webVRMatrices) {
     webVRUniforms.hmdWarpParam = HMD.distortionK;
     webVRUniforms.chromAbParam = HMD.chromaAbParameter;
     webVRUniforms.scaleIn = vec2.fromValues(1.0, 1.0 / aspect);
-    webVRUniforms.scale = vec2.fromValues(1.0 / distScale, (1.0 * aspect) / distScale);
+    webVRUniforms.scale = vec2.fromValues(1.0 / distScale, 1.0 * aspect / distScale);
 };
 
-var getWebVRShader = function () {
+var getWebVRShader = function() {
     var fragmentshader = [
         '',
         '#ifdef GL_ES',
@@ -171,7 +171,7 @@ var getWebVRShader = function () {
     );
 };
 
-var createTextureRtt = function (rttSize) {
+var createTextureRtt = function(rttSize) {
     var rttTexture = new Texture();
     rttTexture.setTextureSize(rttSize[0], rttSize[1]);
     rttTexture.setMinFilter('LINEAR');
@@ -179,7 +179,7 @@ var createTextureRtt = function (rttSize) {
     return rttTexture;
 };
 
-var createOrthoRtt = function (left, viewportSize, canvasSize, cardboard, texture, webVRUniforms) {
+var createOrthoRtt = function(left, viewportSize, canvasSize, cardboard, texture, webVRUniforms) {
     var orthoCamera = new Camera();
     var vw = viewportSize[0];
     var vh = viewportSize[1];
@@ -213,7 +213,7 @@ var createOrthoRtt = function (left, viewportSize, canvasSize, cardboard, textur
     return orthoCamera;
 };
 
-var createCameraRtt = function (texture, projMatrix) {
+var createCameraRtt = function(texture, projMatrix) {
     var camera = new Camera();
     camera.setName('rtt camera');
     camera.setViewport(new Viewport(0, 0, texture.getWidth(), texture.getHeight()));
@@ -229,13 +229,7 @@ var createCameraRtt = function (texture, projMatrix) {
     return camera;
 };
 
-WebVRCustom.createScene = function (
-    viewer,
-    rttScene,
-    HMDconfig,
-    rootOverride,
-    worldFactorOverride
-) {
+WebVRCustom.createScene = function(viewer, rttScene, HMDconfig, rootOverride, worldFactorOverride) {
     var HMD = WebVRCustom.getDefaultConfig(HMDconfig);
     var rttSize = vec2.fromValues(HMD.hResolution * 0.5, HMD.vResolution);
     var viewportSize = vec2.fromValues(HMD.hResolution * 0.5, HMD.vResolution);
@@ -297,7 +291,7 @@ WebVRCustom.createScene = function (
     return root;
 };
 
-WebVRCustom.getDefaultConfig = function (hmdConfig) {
+WebVRCustom.getDefaultConfig = function(hmdConfig) {
     // FOV: 103.506416
     // vScreenCenter: 0.03645
 

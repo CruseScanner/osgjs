@@ -1,7 +1,7 @@
 import Compiler from 'tests/osgShader/Compiler';
 import ShaderGenerator from 'tests/osgShader/ShaderGenerator';
 
-export default function () {
+export default function() {
     Compiler();
     ShaderGenerator();
 }

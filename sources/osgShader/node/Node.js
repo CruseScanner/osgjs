@@ -1,7 +1,7 @@
 import notify from 'osg/notify';
 
 var instance = 0;
-var Node = function () {
+var Node = function() {
     this._name = 'AbstractNode';
     this._inputs = [];
     this._outputs = null;
@@ -21,32 +21,32 @@ var Node = function () {
 };
 
 Node.prototype = {
-    getID: function () {
+    getID: function() {
         return this._id;
     },
-    getName: function () {
+    getName: function() {
         return this._name;
     },
 
-    getType: function () {
+    getType: function() {
         return this.type;
     },
 
-    toString: function () {
+    toString: function() {
         var str = 'name : ' + this._name;
         if (this.type) str += ' (' + this.type + ')';
         return str;
     },
 
-    getInputs: function () {
+    getInputs: function() {
         return this._inputs;
     },
 
-    getOutputs: function () {
+    getOutputs: function() {
         return this._outputs;
     },
 
-    checkInputsOutputs: function () {
+    checkInputsOutputs: function() {
         var i, key;
         if (this.validInputs) {
             for (i = 0; i < this.validInputs.length; i++) {
@@ -87,7 +87,7 @@ Node.prototype = {
     // inputs( [ a, b, c , d] )
     // inputs( { a: x, b: y } )
     // inputs( a, b, c, d )
-    inputs: function () {
+    inputs: function() {
         // handle inputs ( a, b, c, d)
         for (var i = 0, l = arguments.length; i < l; i++) {
             var input = arguments[i];
@@ -121,7 +121,7 @@ Node.prototype = {
     // accepts inputs like that:
     // outputs( { a: x, b: y } )
     // outputs( a )
-    outputs: function (outputs) {
+    outputs: function(outputs) {
         this._outputs = outputs;
 
         // single output
@@ -137,7 +137,7 @@ Node.prototype = {
         return this;
     },
 
-    autoLink: function (output) {
+    autoLink: function(output) {
         if (output === undefined) return this;
 
         output.inputs(this);
@@ -145,15 +145,15 @@ Node.prototype = {
         return this;
     },
 
-    computeShader: function () {
+    computeShader: function() {
         return this._text;
     },
 
-    comment: function (txt) {
+    comment: function(txt) {
         this._comment = '//' + txt;
     },
 
-    getComment: function () {
+    getComment: function() {
         return this._comment;
     }
 };

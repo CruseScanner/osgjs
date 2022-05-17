@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var OSG = window.OSG;
@@ -16,11 +16,11 @@
         '}'
     ].join('\n');
 
-    var sortBin = function (a, b) {
+    var sortBin = function(a, b) {
         return a._binNum - b._binNum;
     };
 
-    var getInsertPosition = function (state, previous) {
+    var getInsertPosition = function(state, previous) {
         var sg = previous ? previous._parent : undefined;
         var num = 0;
         // need to pop back all statesets and matrices.
@@ -47,7 +47,7 @@
         osg.StateAttribute.OVERRIDE | osg.StateAttribute.ON
     );
 
-    var stateSetEarlyZ = (function () {
+    var stateSetEarlyZ = (function() {
         var fullOverride = osg.StateAttribute.OVERRIDE | osg.StateAttribute.ON;
 
         var stateSet = new osg.StateSet();
@@ -59,7 +59,7 @@
         return stateSet;
     })();
 
-    var RenderStageSplitter = function () {
+    var RenderStageSplitter = function() {
         osg.RenderStage.apply(this, arguments);
         this._binArraySorted = [];
     };
@@ -67,24 +67,24 @@
     RenderStageSplitter.prototype = osg.objectInherit(osg.RenderStage.prototype, {
         constructor: RenderStageSplitter,
 
-        isMainCamera: function () {
+        isMainCamera: function() {
             var camera = this.getCamera();
             if (camera && camera.getName() === 'MainCamera') return true;
             return false;
         },
 
-        sortBinArray: function () {
+        sortBinArray: function() {
             var binsArray = this._binArraySorted;
             binsArray.length = 0;
 
-            this._bins.forEach(function (key, bin) {
+            this._bins.forEach(function(key, bin) {
                 binsArray.push(bin);
             });
 
             binsArray.sort(sortBin);
         },
 
-        drawImplementationRenderBin: function (state, previousRenderLeaf) {
+        drawImplementationRenderBin: function(state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
             var binsArray = this._binArraySorted;
 
@@ -122,7 +122,7 @@
         },
 
         // transparent
-        drawImplementationRenderBinBackToFront: function (state, previousRenderLeaf) {
+        drawImplementationRenderBinBackToFront: function(state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
 
             var binsArray = this._binArraySorted;
@@ -148,7 +148,7 @@
         },
 
         // opaque
-        drawImplementationRenderBinFrontToBack: function (state, previousRenderLeaf) {
+        drawImplementationRenderBinFrontToBack: function(state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
 
             var binsArray = this._binArraySorted;
@@ -184,15 +184,15 @@
             return previousLeaf;
         },
 
-        useTransparencyRTT: function (state) {
+        useTransparencyRTT: function(state) {
             this.getCamera().frameBufferObjectTransparent.apply(state);
         },
 
-        useOpaqueRTT: function (state) {
+        useOpaqueRTT: function(state) {
             this.getCamera().frameBufferObject.apply(state);
         },
 
-        createFBO: function (state, texture) {
+        createFBO: function(state, texture) {
             var viewport = this.getViewport();
             var fbo = new osg.FrameBufferObject();
 
@@ -224,7 +224,7 @@
             return fbo;
         },
 
-        createCamera2RTT: function (state) {
+        createCamera2RTT: function(state) {
             var fbo;
 
             fbo = this.createFBO(state, this.getCamera()._textureOpaque);
@@ -234,18 +234,18 @@
             this.getCamera().frameBufferObjectTransparent = fbo;
         },
 
-        clearCameraColorDepth: function (state) {
+        clearCameraColorDepth: function(state) {
             state.clearColor(osg.vec4.ZERO);
             state.depthMask(true);
             state.clearDepth(this.getClearDepth());
             state.clear(osg.Camera.COLOR_BUFFER_BIT | osg.Camera.DEPTH_BUFFER_BIT);
         },
 
-        clearCameraColor: function (state) {
+        clearCameraColor: function(state) {
             state.clear(osg.Camera.COLOR_BUFFER_BIT);
         },
 
-        drawImplementationEarlyZ: function (state, previousLeaf) {
+        drawImplementationEarlyZ: function(state, previousLeaf) {
             var previous = previousLeaf;
 
             var insertStateSetPosition = getInsertPosition(state, previous);
@@ -268,7 +268,7 @@
             return previous;
         },
 
-        drawImplementation: function (state, previousRenderLeaf) {
+        drawImplementation: function(state, previousRenderLeaf) {
             if (!this.isMainCamera()) {
                 return osg.RenderStage.prototype.drawImplementation.call(
                     this,
@@ -307,12 +307,12 @@
         }
     });
 
-    var Example = function () {
+    var Example = function() {
         ExampleOSGJS.call(this);
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        createCameraRTT: function (textureOpaque, textureTranparent) {
+        createCameraRTT: function(textureOpaque, textureTranparent) {
             var camera = new osg.Camera();
             camera.setName('MainCamera');
             camera.setViewport(new osg.Viewport(0, 0, this._canvas.width, this._canvas.height));
@@ -327,7 +327,7 @@
             return camera;
         },
 
-        createCamera: function (texture) {
+        createCamera: function(texture) {
             var camera = new osg.Camera();
             camera.setName('composer2D');
             camera.setReferenceFrame(osg.Transform.ABSOLUTE_RF);
@@ -341,7 +341,7 @@
 
         ///// UTILS
         // createTextureRTT( 'name', osg.Texture.LINEAR, osg.Texture.UNSIGNED_BYTE );
-        createTextureRTT: function (name, filter, type) {
+        createTextureRTT: function(name, filter, type) {
             var texture = new osg.Texture();
             texture.setInternalFormatType(type);
             texture.setTextureSize(this._canvas.width, this._canvas.height);
@@ -353,7 +353,7 @@
             return texture;
         },
 
-        createScene: function () {
+        createScene: function() {
             // the root node
             var scene = new osg.Node();
 
@@ -420,7 +420,7 @@
 
             var textureListDebug = [opaque, transparent];
 
-            var refreshDebugTextureList = function () {
+            var refreshDebugTextureList = function() {
                 this.createDebugTextureList(textureListDebug, {
                     horizontal: false
                 });
@@ -430,13 +430,16 @@
             window.refreshDebugTextureList = refreshDebugTextureList;
 
             // hook RenderStage
-            this._viewer.getCamera().getRenderer().setRenderStage(new RenderStageSplitter());
+            this._viewer
+                .getCamera()
+                .getRenderer()
+                .setRenderStage(new RenderStageSplitter());
         }
     });
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             example.run();
             window.example = example;

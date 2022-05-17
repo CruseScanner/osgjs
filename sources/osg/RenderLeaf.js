@@ -3,13 +3,13 @@ import StateGraph from 'osg/StateGraph';
 // just use inline function, it's faster than having the test in the code
 var applyUniformCache = [
     // apply just modelview and projection
-    function (state, modelview, model, view, projection) {
+    function(state, modelview, model, view, projection) {
         state.applyModelViewMatrix(modelview, model);
         state.applyProjectionMatrix(projection);
     },
 
     // apply model
-    function (state, modelview, model, view, projection) {
+    function(state, modelview, model, view, projection) {
         var gl = state.getGraphicContext();
         var matrixModelViewChanged = state.applyModelViewMatrix(modelview, model);
         state.applyProjectionMatrix(projection);
@@ -22,7 +22,7 @@ var applyUniformCache = [
     },
 
     // apply view
-    function (state, modelview, model, view, projection) {
+    function(state, modelview, model, view, projection) {
         var gl = state.getGraphicContext();
         var matrixModelViewChanged = state.applyModelViewMatrix(modelview, model);
         state.applyProjectionMatrix(projection);
@@ -35,7 +35,7 @@ var applyUniformCache = [
     },
 
     // applyModelAndViewUniform
-    function (state, modelview, model, view, projection) {
+    function(state, modelview, model, view, projection) {
         var gl = state.getGraphicContext();
         var matrixModelViewChanged = state.applyModelViewMatrix(modelview, model);
         state.applyProjectionMatrix(projection);
@@ -52,7 +52,7 @@ var applyUniformCache = [
     }
 ];
 
-var CacheUniformApply = function (state, program) {
+var CacheUniformApply = function(state, program) {
     this.modelUniform = program._uniformsCache[state._modelMatrix.getName()];
     this.viewUniform = program._uniformsCache[state._viewMatrix.getName()];
 
@@ -63,7 +63,7 @@ var CacheUniformApply = function (state, program) {
     this.apply = applyUniformCache[cacheIndex];
 };
 
-var RenderLeaf = function () {
+var RenderLeaf = function() {
     this._parent = undefined;
     this._geometry = undefined;
     this._depth = 0.0;
@@ -75,7 +75,7 @@ var RenderLeaf = function () {
 };
 
 RenderLeaf.prototype = {
-    reset: function () {
+    reset: function() {
         this._parent = undefined;
         this._geometry = undefined;
         this._depth = 0.0;
@@ -86,7 +86,7 @@ RenderLeaf.prototype = {
         this._modelView = undefined;
     },
 
-    init: function (parent, geom, projection, view, modelView, model, depth) {
+    init: function(parent, geom, projection, view, modelView, model, depth) {
         this._parent = parent;
         this._geometry = geom;
         this._depth = depth;
@@ -97,8 +97,8 @@ RenderLeaf.prototype = {
         this._modelView = modelView;
     },
 
-    drawGeometry: (function () {
-        return function (state) {
+    drawGeometry: (function() {
+        return function(state) {
             var program = state.getLastProgramApplied();
             var programInstanceID = program.getInstanceID();
             var cache = state.getCacheUniformsApplyRenderLeaf();
@@ -115,11 +115,11 @@ RenderLeaf.prototype = {
         };
     })(),
 
-    render: (function () {
+    render: (function() {
         var idLastDraw = 0;
         var lastStateSetStackSize = -1;
 
-        return function (state, previousLeaf) {
+        return function(state, previousLeaf) {
             var prevRenderGraph;
             var prevRenderGraphParent;
             var curRenderGraph = this._parent;

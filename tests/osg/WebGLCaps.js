@@ -3,8 +3,8 @@ import Texture from 'osg/Texture';
 import WebGLCaps from 'osg/WebGLCaps';
 import mockup from 'tests/mockup/mockup';
 
-export default function () {
-    test('WebGLCaps', function () {
+export default function() {
+    test('WebGLCaps', function() {
         var canvas = mockup.createCanvas(true);
         var gl = canvas.getContext();
         var webglCaps = WebGLCaps.instance(gl);

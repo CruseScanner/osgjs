@@ -18,7 +18,7 @@ var deltaYFactor = navigator.platform.indexOf('Mac') === 0 ? -1 : -3;
  * @param scrollwheel
  * @constructor
  */
-var InputSourceMouse = function (canvas, options) {
+var InputSourceMouse = function(canvas, options) {
     InputSource.call(this, canvas);
     this._defaultRatio = vec2.fromValues(1.0, 1.0);
 
@@ -42,11 +42,11 @@ var InputSourceMouse = function (canvas, options) {
 utils.createPrototypeObject(
     InputSourceMouse,
     utils.objectInherit(InputSource.prototype, {
-        getName: function () {
+        getName: function() {
             return 'Mouse';
         },
 
-        setEnable: function (name, callback, enable) {
+        setEnable: function(name, callback, enable) {
             // here we could parse the name of the event.
             // if the name is for example 'click left', only dispatch the event if the left button has ben clicked.
             // This would remove a lot of boiler plate from client code.
@@ -58,7 +58,7 @@ utils.createPrototypeObject(
             }
         },
 
-        populateEvent: function (ev, customEvent) {
+        populateEvent: function(ev, customEvent) {
             // desktop - mouse
             customEvent.canvasX = ev.offsetX === undefined ? ev.layerX : ev.offsetX;
             customEvent.canvasY = ev.offsetY === undefined ? ev.layerY : ev.offsetY;
@@ -103,7 +103,7 @@ utils.createPrototypeObject(
             }
         },
 
-        isEventRegistered: function (nativeEvent, parsedEvent) {
+        isEventRegistered: function(nativeEvent, parsedEvent) {
             nativeEvent.preventDefault();
             if (parsedEvent.action && nativeEvent.button !== parseInt(parsedEvent.action)) {
                 return false;

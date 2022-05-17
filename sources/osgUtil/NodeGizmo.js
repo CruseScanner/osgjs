@@ -13,16 +13,16 @@ import TransformEnums from 'osg/transformEnums';
 import utils from 'osg/utils';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var HideCullCallback = function () {};
+var HideCullCallback = function() {};
 HideCullCallback.prototype = {
-    cull: function () {
+    cull: function() {
         return false;
     }
 };
 
 var blendAttribute = new BlendFunc(BlendFunc.SRC_ALPHA, BlendFunc.ONE_MINUS_SRC_ALPHA);
 
-var LineCustomIntersector = function (testPlane) {
+var LineCustomIntersector = function(testPlane) {
     this._testPlane = testPlane; // intersection plane or line
     this._inter = vec3.create(); // translate distance
     LineSegmentIntersector.call(this);
@@ -30,17 +30,17 @@ var LineCustomIntersector = function (testPlane) {
 utils.createPrototypeObject(
     LineCustomIntersector,
     utils.objectInherit(LineSegmentIntersector.prototype, {
-        setTestPlane: function (testPlane) {
+        setTestPlane: function(testPlane) {
             this._testPlane = testPlane; // intersection plane or line
         },
-        getTranslateDistance: function () {
+        getTranslateDistance: function() {
             return this._inter;
         },
-        enter: (function () {
+        enter: (function() {
             var axis = vec3.create();
             var dir = vec3.create();
 
-            return function (node) {
+            return function(node) {
                 if (node._nbAxis === undefined) return true;
 
                 vec3.init(axis);
@@ -71,9 +71,9 @@ utils.createPrototypeObject(
                 return false;
             };
         })(),
-        intersectTriangle: function () {},
-        intersectLine: function () {},
-        intersectPoint: function () {}
+        intersectTriangle: function() {},
+        intersectLine: function() {},
+        intersectPoint: function() {}
     }),
     'osgUtil',
     'LineCustomIntersector'
@@ -98,7 +98,7 @@ var _TMP_MAT = mat4.create();
 //                 |                       |                         |
 //              PickArc                PickArrow                  PickPlane
 //
-var NodeGizmo = function (viewer) {
+var NodeGizmo = function(viewer) {
     MatrixTransform.call(this);
 
     this._tmask = 1; // traversal mask when picking the scene
@@ -183,7 +183,7 @@ NodeGizmo.PICK_PLANE = NodeGizmo.PICK_PLANE_X | NodeGizmo.PICK_PLANE_Y | NodeGiz
 NodeGizmo.PICK_GIZMO = NodeGizmo.PICK_ARC | NodeGizmo.PICK_ARROW | NodeGizmo.PICK_PLANE;
 
 // retrieve nearest editable node
-var GetNearestEditableNode = function () {
+var GetNearestEditableNode = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_PARENTS);
     this._editableNode = null;
 };
@@ -191,14 +191,14 @@ var GetNearestEditableNode = function () {
 utils.createPrototypeObject(
     GetNearestEditableNode,
     utils.objectInherit(NodeVisitor.prototype, {
-        reset: function () {
+        reset: function() {
             NodeVisitor.prototype.reset.call(this);
             this._editableNode = null;
         },
-        getEditableNode: function () {
+        getEditableNode: function() {
             return this._editableNode;
         },
-        apply: function (node) {
+        apply: function(node) {
             if (this._editableNode) return;
 
             var editMask = node.editMask;
@@ -215,35 +215,35 @@ utils.createPrototypeObject(
 utils.createPrototypeNode(
     NodeGizmo,
     utils.objectInherit(MatrixTransform.prototype, {
-        setRotateInLocal: function (bool) {
+        setRotateInLocal: function(bool) {
             this._rotateInLocal = bool;
         },
 
-        setTranslateInLocal: function (bool) {
+        setTranslateInLocal: function(bool) {
             this._translateInLocal = bool;
         },
 
-        setTraversalMask: function (tmask) {
+        setTraversalMask: function(tmask) {
             this._tmask = tmask;
         },
 
-        setAutoMatrixTransformInsertion: function (bool) {
+        setAutoMatrixTransformInsertion: function(bool) {
             this._autoInsertMT = bool;
         },
 
-        setCorrectPivotOnAutoInsert: function (bool) {
+        setCorrectPivotOnAutoInsert: function(bool) {
             this._correctPivotOnAutoInsert = bool;
         },
 
-        isEditing: function () {
+        isEditing: function() {
             return this._isEditing;
         },
 
-        getAttachedNode: function () {
+        getAttachedNode: function() {
             return this._attachedNode;
         },
 
-        init: function () {
+        init: function() {
             this.getOrCreateStateSet().setAttributeAndModes(new Depth(Depth.DISABLE));
             this.getOrCreateStateSet().setAttributeAndModes(new CullFace(CullFace.DISABLE));
 
@@ -273,7 +273,7 @@ utils.createPrototypeNode(
             );
         },
 
-        _insertEditNode: function (parent, node) {
+        _insertEditNode: function(parent, node) {
             var mtInsert = new MatrixTransform();
 
             mtInsert.editMask = NodeGizmo.PICK_GIZMO;
@@ -288,7 +288,7 @@ utils.createPrototypeNode(
             return mtInsert;
         },
 
-        _findEditNodeFromNodePath: function (nodepath) {
+        _findEditNodeFromNodePath: function(nodepath) {
             if (!nodepath) return null;
 
             var node = nodepath[nodepath.length - 1];
@@ -309,7 +309,7 @@ utils.createPrototypeNode(
             return this._insertEditNode(parent, node);
         },
 
-        _findEditNodeFromNode: function (node) {
+        _findEditNodeFromNode: function(node) {
             if (!node) return null;
             if (node.editMask) return node;
 
@@ -335,17 +335,17 @@ utils.createPrototypeNode(
             return this._getEditNodeVisitor.getEditableNode();
         },
 
-        attachToNodePath: function (nodepath) {
+        attachToNodePath: function(nodepath) {
             var editNode = this._findEditNodeFromNodePath(nodepath);
             this._attachEditNode(editNode, nodepath && nodepath[nodepath.length - 1]);
         },
 
-        attachToNode: function (node) {
+        attachToNode: function(node) {
             var editNode = this._findEditNodeFromNode(node);
             this._attachEditNode(editNode, node);
         },
 
-        _attachEditNode: function (editNode, userNode) {
+        _attachEditNode: function(editNode, userNode) {
             this._attachedNode = editNode;
 
             if (editNode && userNode && userNode !== editNode) {
@@ -357,7 +357,7 @@ utils.createPrototypeNode(
             this.updateGizmoMask();
         },
 
-        updateGizmoMask: function () {
+        updateGizmoMask: function() {
             if (!this._attachedNode) {
                 vec3.init(this._pivotOffset);
                 this.setNodeMask(0x0);
@@ -404,10 +404,10 @@ utils.createPrototypeNode(
             );
         },
 
-        onNodeHovered: (function () {
+        onNodeHovered: (function() {
             var hoverColor = vec4.fromValues(1.0, 1.0, 0.0, 1.0);
 
-            return function (hit) {
+            return function(hit) {
                 if (this._hoverNode)
                     this._hoverNode
                         .getStateSet()
@@ -434,7 +434,7 @@ utils.createPrototypeNode(
             };
         })(),
 
-        initNodeRotate: function () {
+        initNodeRotate: function() {
             var drawArcXYZ = GizmoGeometry.createTorusGeometry(1.0, 0.01, 6, 64, Math.PI * 2);
             var drawArc = GizmoGeometry.createTorusGeometry(1.0, 0.01, 6, 64, Math.PI);
             var pickArc = GizmoGeometry.createTorusGeometry(1.0, 0.1, 6, 64, Math.PI);
@@ -470,15 +470,15 @@ utils.createPrototypeNode(
             mtXYZ
                 .getOrCreateStateSet()
                 .addUniform(Uniform.createFloat4(vec4.fromValues(0.2, 0.2, 0.2, 1.0), 'uColor'));
-            mtX.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 1.0), 'uColor')
-            );
-            mtY.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 1.0), 'uColor')
-            );
-            mtZ.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 1.0), 'uColor')
-            );
+            mtX
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 1.0), 'uColor'));
+            mtY
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 1.0), 'uColor'));
+            mtZ
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 1.0), 'uColor'));
 
             var showAngle = this._showAngle;
             showAngle.getOrCreateStateSet().setAttributeAndModes(blendAttribute);
@@ -499,7 +499,7 @@ utils.createPrototypeNode(
             return rotate;
         },
 
-        initNodeTranslate: function () {
+        initNodeTranslate: function() {
             var aHeight = 1.5;
             var aConeHeight = 0.3;
             var pickStart = 0.5; // offset (because of the picking plane)
@@ -567,15 +567,15 @@ utils.createPrototypeNode(
             mtY.addChild(hideNode);
             mtZ.addChild(hideNode);
 
-            mtX.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 1.0), 'uColor')
-            );
-            mtY.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 1.0), 'uColor')
-            );
-            mtZ.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 1.0), 'uColor')
-            );
+            mtX
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 1.0), 'uColor'));
+            mtY
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 1.0), 'uColor'));
+            mtZ
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 1.0), 'uColor'));
 
             var translate = this._translateNode;
             translate.setNodeMask(NodeGizmo.PICK_ARROW);
@@ -585,7 +585,7 @@ utils.createPrototypeNode(
             return translate;
         },
 
-        initNodeTranslatePlane: function () {
+        initNodeTranslatePlane: function() {
             var mtPlane = new MatrixTransform();
             mat4.fromTranslation(mtPlane.getMatrix(), vec3.fromValues(0.5, 0.5, 0.0));
             mat4.mul(
@@ -614,15 +614,15 @@ utils.createPrototypeNode(
             mtY.addChild(mtPlane);
             mtZ.addChild(mtPlane);
 
-            mtX.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 0.3), 'uColor')
-            );
-            mtY.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 0.3), 'uColor')
-            );
-            mtZ.getOrCreateStateSet().addUniform(
-                Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 0.3), 'uColor')
-            );
+            mtX
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(1.0, 0.0, 0.0, 0.3), 'uColor'));
+            mtY
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 1.0, 0.0, 0.3), 'uColor'));
+            mtZ
+                .getOrCreateStateSet()
+                .addUniform(Uniform.createFloat4(vec4.fromValues(0.0, 0.0, 1.0, 0.3), 'uColor'));
 
             var plane = this._planeNode;
             plane.setNodeMask(NodeGizmo.PICK_PLANE);
@@ -633,11 +633,11 @@ utils.createPrototypeNode(
             return plane;
         },
 
-        updateArcRotation: (function () {
+        updateArcRotation: (function() {
             var qTmp = quat.create();
             var quatx = quat.setAxisAngle(quat.create(), [0.0, 1.0, 0.0], -Math.PI * 0.5);
             var quaty = quat.setAxisAngle(quat.create(), [1.0, 0.0, 0.0], -Math.PI * 0.5);
-            return function (eye) {
+            return function(eye) {
                 var rotateNode = this._rotateNode;
                 var arcs = rotateNode.getChildren();
                 // eye arc
@@ -665,7 +665,7 @@ utils.createPrototypeNode(
             };
         })(),
 
-        getTransformType: function (nodeIn) {
+        getTransformType: function(nodeIn) {
             // should probably be a visitor with traverse parents instead
             var node = nodeIn;
             while (node.getParents().length > 0) {
@@ -678,19 +678,19 @@ utils.createPrototypeNode(
             return TransformEnums.RELATIVE_RF;
         },
 
-        getAttachedNodeWorldMatrix: function () {
+        getAttachedNodeWorldMatrix: function() {
             var worldMat = this._attachedNode.getWorldMatrix(undefined, _TMP_MAT);
             return mat4.translate(worldMat, worldMat, this._pivotOffset);
         },
 
-        update: (function () {
+        update: (function() {
             var eye = vec3.create();
             var worldTrans = vec3.create();
             var tmpVec = vec3.create();
 
             var tmpMat = mat4.create();
 
-            return function () {
+            return function() {
                 if (!this._attachedNode) return;
 
                 var ttype = this.getTransformType(this._attachedNode);
@@ -765,12 +765,12 @@ utils.createPrototypeNode(
             };
         })(),
 
-        computeNearestIntersection: (function () {
-            var sortByRatio = function (a, b) {
+        computeNearestIntersection: (function() {
+            var sortByRatio = function(a, b) {
                 return a._ratio - b._ratio;
             };
 
-            return function (e, tmask) {
+            return function(e, tmask) {
                 // canvas to webgl coord
                 var viewer = this._viewer;
                 var canvas = this._canvas;
@@ -788,30 +788,30 @@ utils.createPrototypeNode(
             };
         })(),
 
-        setOnlyGizmoPicking: function () {
+        setOnlyGizmoPicking: function() {
             // enable picking only for the gizmo
             this._viewer.getCamera().addChild(this);
             this._viewer.getSceneData().setNodeMask(0x0);
             this.setNodeMask(~0x0);
         },
 
-        setOnlyScenePicking: function () {
+        setOnlyScenePicking: function() {
             this._viewer.getCamera().removeChild(this);
             this._viewer.getSceneData().setNodeMask(~0x0);
             this.setNodeMask(NodeGizmo.NO_PICK);
         },
 
-        pickGizmo: function (e, tmask) {
+        pickGizmo: function(e, tmask) {
             this.setOnlyGizmoPicking();
             var hit = this.computeNearestIntersection(e, tmask);
             this.setOnlyScenePicking();
             return hit;
         },
 
-        getCanvasPositionFromWorldPoint: (function () {
+        getCanvasPositionFromWorldPoint: (function() {
             var mat = mat4.create();
 
-            return function (worldPoint, out) {
+            return function(worldPoint, out) {
                 var cam = this._viewer.getCamera();
 
                 var screenPoint = out;
@@ -839,7 +839,7 @@ utils.createPrototypeNode(
             };
         })(),
 
-        onMouseDown: function (e) {
+        onMouseDown: function(e) {
             vec2.set(this._downCanvasCoord, e.canvasX, e.canvasY);
             if (!this._hoverNode || !this._attachedNode) return;
 
@@ -864,7 +864,7 @@ utils.createPrototypeNode(
             }
         },
 
-        saveEditMatrices: function () {
+        saveEditMatrices: function() {
             mat4.copy(this._editLocal, this._attachedNode.getMatrix());
             // save the world translation
             var wm = this.getAttachedNodeWorldMatrix();
@@ -872,14 +872,11 @@ utils.createPrototypeNode(
             // save the inv of world rotation + scale
             mat4.copy(this._editWorldScaleRot, wm);
             // removes translation
-            this._editWorldScaleRot[12] =
-                this._editWorldScaleRot[13] =
-                this._editWorldScaleRot[14] =
-                    0.0;
+            this._editWorldScaleRot[12] = this._editWorldScaleRot[13] = this._editWorldScaleRot[14] = 0.0;
             mat4.invert(this._editInvWorldScaleRot, this._editWorldScaleRot);
         },
 
-        startRotateEdit: function (e) {
+        startRotateEdit: function(e) {
             var gizmoMat = this._rotateNode.getWorldMatrix(undefined, _TMP_MAT);
 
             // center of gizmo on screen
@@ -922,7 +919,7 @@ utils.createPrototypeNode(
             this._editLineOrigin[1] = e.canvasY;
         },
 
-        startTranslateEdit: function (e) {
+        startTranslateEdit: function(e) {
             var origin = this._editLineOrigin;
             var dir = this._editLineDirection;
 
@@ -951,7 +948,7 @@ utils.createPrototypeNode(
             vec2.sub(offset, offset, origin);
         },
 
-        startPlaneEdit: function (e) {
+        startPlaneEdit: function(e) {
             var origin = this._editLineOrigin; // just used to determine the 2d offset
 
             // 3d origin (center of gizmo)
@@ -966,25 +963,25 @@ utils.createPrototypeNode(
             vec2.sub(offset, offset, origin);
         },
 
-        drawLineCanvasDebug: function (x1, y1, x2, y2) {
+        drawLineCanvasDebug: function(x1, y1, x2, y2) {
             this._debugNode.setNodeMask(NodeGizmo.NO_PICK);
             var buffer = this._debugNode.getChildren()[0].getAttributes().Vertex;
-            buffer.getElements()[0] = (x1 / this._canvas.clientWidth) * 2 - 1.0;
+            buffer.getElements()[0] = x1 / this._canvas.clientWidth * 2 - 1.0;
             buffer.getElements()[1] =
-                ((this._canvas.clientHeight - y1) / this._canvas.clientHeight) * 2 - 1.0;
-            buffer.getElements()[2] = (x2 / this._canvas.clientWidth) * 2 - 1.0;
+                (this._canvas.clientHeight - y1) / this._canvas.clientHeight * 2 - 1.0;
+            buffer.getElements()[2] = x2 / this._canvas.clientWidth * 2 - 1.0;
             buffer.getElements()[3] =
-                ((this._canvas.clientHeight - y2) / this._canvas.clientHeight) * 2 - 1.0;
+                (this._canvas.clientHeight - y2) / this._canvas.clientHeight * 2 - 1.0;
             buffer.dirty();
         },
 
-        pickAndSelect: function (e) {
+        pickAndSelect: function(e) {
             this.setNodeMask(0x0);
             var hit = this.computeNearestIntersection(e, this._tmask);
             this.attachToNodePath(hit ? hit._nodePath : hit);
         },
 
-        onMouseUp: function (e) {
+        onMouseUp: function(e) {
             this._viewer.setEnableManipulator(true);
             if (this._debugNode) this._debugNode.setNodeMask(0x0);
 
@@ -998,7 +995,7 @@ utils.createPrototypeNode(
             this.updateGizmoMask();
         },
 
-        onMouseMove: function (e) {
+        onMouseMove: function(e) {
             if (!this._attachedNode) return;
             var hit;
             if (this._isEditing === false) {
@@ -1015,7 +1012,7 @@ utils.createPrototypeNode(
             else if (par === this._planeNode) this.updatePlaneEdit(e);
         },
 
-        updateRotateEdit: (function () {
+        updateRotateEdit: (function() {
             var mrot = mat4.create();
             var vec = vec2.create();
             var vecX = vec3.fromValues(1.0, 0.0, 0.0);
@@ -1023,7 +1020,7 @@ utils.createPrototypeNode(
             var vecZ = vec3.fromValues(0.0, 0.0, 1.0);
             var negatePivot = vec3.create();
 
-            return function (e) {
+            return function(e) {
                 var origin = this._editLineOrigin;
                 var dir = this._editLineDirection;
 
@@ -1038,7 +1035,7 @@ utils.createPrototypeNode(
                 }
 
                 var minClient = Math.min(this._canvas.clientWidth, this._canvas.clientHeight);
-                var angle = (7 * dist) / minClient;
+                var angle = 7 * dist / minClient;
                 angle %= Math.PI * 2;
 
                 var nbAxis = this._hoverNode._nbAxis;
@@ -1065,11 +1062,11 @@ utils.createPrototypeNode(
             };
         })(),
 
-        updateTranslateEdit: (function () {
+        updateTranslateEdit: (function() {
             var vec = vec2.create();
             var tra = vec3.create();
 
-            return function (e) {
+            return function(e) {
                 var origin = this._editLineOrigin;
                 var dir = this._editLineDirection;
 
@@ -1125,11 +1122,11 @@ utils.createPrototypeNode(
             };
         })(),
 
-        updatePlaneEdit: (function () {
+        updatePlaneEdit: (function() {
             var vec = vec2.create();
             var tra = vec3.create();
 
-            return function (e) {
+            return function(e) {
                 vec2.set(vec, e.canvasX, e.canvasY);
                 vec2.sub(vec, vec, this._editOffset);
 

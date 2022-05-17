@@ -5,14 +5,14 @@ import NodeVisitor from 'osg/NodeVisitor';
 import UpdateMatrixTransform from 'osgAnimation/UpdateMatrixTransform';
 import Bone from 'osgAnimation/Bone';
 
-var ResetRestPoseVisitor = function () {
+var ResetRestPoseVisitor = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
 };
 
 utils.createPrototypeObject(
     ResetRestPoseVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.getTypeID() === Bone.getTypeID()) {
                 var cb = node.getUpdateCallback();
                 if (cb instanceof UpdateMatrixTransform) {
@@ -33,18 +33,18 @@ utils.createPrototypeObject(
 
 var resetter = new ResetRestPoseVisitor();
 
-var Skeleton = function () {
+var Skeleton = function() {
     MatrixTransform.call(this);
 };
 
 utils.createPrototypeNode(
     Skeleton,
     utils.objectInherit(MatrixTransform.prototype, {
-        setDefaultUpdateCallback: function () {
+        setDefaultUpdateCallback: function() {
             this.addUpdateCallback(new UpdateSkeleton());
         },
 
-        setRestPose: function () {
+        setRestPose: function() {
             this.accept(resetter);
         }
     }),

@@ -5,7 +5,7 @@ import NodeVisitor from 'osg/NodeVisitor';
 import primitiveSet from 'osg/primitiveSet';
 import { vec3 } from 'osg/glMatrix';
 
-var TangentSpaceGenerator = function () {
+var TangentSpaceGenerator = function() {
     NodeVisitor.call(this);
     this._T = undefined;
     this._B = undefined;
@@ -16,16 +16,16 @@ var TangentSpaceGenerator = function () {
 utils.createPrototypeObject(
     TangentSpaceGenerator,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (node.getTypeID() === Geometry.getTypeID()) this.generate(node, this._texCoordUnit);
             else this.traverse(node);
         },
 
-        setTexCoordUnit: function (texCoordUnit) {
+        setTexCoordUnit: function(texCoordUnit) {
             this._texCoordUnit = texCoordUnit;
         },
 
-        computePrimitiveSet: function (geometry, primitive) {
+        computePrimitiveSet: function(geometry, primitive) {
             // no indices -> exit
             if (!primitive.getIndices) return;
 
@@ -52,7 +52,7 @@ utils.createPrototypeObject(
             }
         },
 
-        generate: function (geometry, texCoordUnit) {
+        generate: function(geometry, texCoordUnit) {
             this._texCoordUnit = texCoordUnit;
 
             if (this._texCoordUnit === undefined) this._texCoordUnit = 0;
@@ -63,7 +63,7 @@ utils.createPrototypeObject(
             this._B = new utils.Float32Array(size);
             this._N = new utils.Float32Array(size);
 
-            geometry.getPrimitiveSetList().forEach(function (primitive) {
+            geometry.getPrimitiveSetList().forEach(function(primitive) {
                 this.computePrimitiveSet(geometry, primitive);
             }, this);
 
@@ -109,7 +109,7 @@ utils.createPrototypeObject(
             geometry.getAttributes().Tangent = new BufferArray('ARRAY_BUFFER', tangents, 4);
         },
 
-        compute: function (primitive, vx, nx, tx, ia, ib, ic) {
+        compute: function(primitive, vx, nx, tx, ia, ib, ic) {
             var i0 = primitive.index(ia);
             var i1 = primitive.index(ib);
             var i2 = primitive.index(ic);

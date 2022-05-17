@@ -1,20 +1,20 @@
 'use strict';
-(function () {
+(function() {
     var OSG = window.OSG;
     var osg = OSG.osg;
     var osgDB = OSG.osgDB;
     var ExampleOSGJS = window.ExampleOSGJS;
 
-    var Example = function () {
+    var Example = function() {
         ExampleOSGJS.call(this);
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        run: function () {
+        run: function() {
             ExampleOSGJS.prototype.run.call(this);
         },
 
-        createScene: function () {
+        createScene: function() {
             // Forr gltf download testing
             // var self = this;
             // osgDB.readNodeURL( 'microphone/Microphone.gltf' ).then( function ( node ) {
@@ -23,25 +23,25 @@
             // } );
         },
 
-        handleDroppedFiles: function (files) {
+        handleDroppedFiles: function(files) {
             var self = this;
             //$( '#loading' ).show();
             var filesMap = {};
             filesMap[files[0].name] = files[0];
-            osgDB.fileHelper.readFileList(files).then(function (node) {
+            osgDB.fileHelper.readFileList(files).then(function(node) {
                 self.getRootNode().addChild(node);
                 self._viewer.getManipulator().computeHomePosition();
             });
         }
     });
 
-    var dragOverEvent = function (evt) {
+    var dragOverEvent = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
         evt.dataTransfer.dropEffect = 'copy';
     };
 
-    var dropEvent = function (evt) {
+    var dropEvent = function(evt) {
         evt.stopPropagation();
         evt.preventDefault();
 
@@ -50,7 +50,7 @@
     };
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             example.run();
             window.example = example;

@@ -8,11 +8,11 @@ var osgViewer = OSG.osgViewer;
 // http://dev.opera.com/articles/w3c-device-orientation-usage/#practicalconsiderations
 var orientationInfo = {};
 
-var onDeviceOrientationChangeEvent = function (rawEvtData) {
+var onDeviceOrientationChangeEvent = function(rawEvtData) {
     orientationInfo.deviceOrientation = rawEvtData;
 };
 
-var onScreenOrientationChangeEvent = function () {
+var onScreenOrientationChangeEvent = function() {
     // do not get that event at all
     orientationInfo.screenOrientation = window.orientation || 0;
 };
@@ -119,7 +119,7 @@ function computeMatrix() {
     return finalMatrix; // [ m11, m12, m13, m21, m22, m23, m31, m32, m33 ]
 }
 
-var main = function () {
+var main = function() {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     canvas.width = window.innerWidth;
@@ -145,12 +145,12 @@ var main = function () {
         numLights = 3;
 
     // That's where we update lights direction at each frame
-    var LightUpdateCallback = function () {};
+    var LightUpdateCallback = function() {};
     LightUpdateCallback.prototype = {
         _inv: [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0],
         _deviceMatrix: new Float32Array(16),
         _inverseDeviceMatrix: new Float32Array(16),
-        cameraUpdate: function (/*currentTime, node, nv*/) {
+        cameraUpdate: function(/*currentTime, node, nv*/) {
             if (orientationInfo.deviceOrientation) {
                 this._deviceMatrix = computeMatrix();
                 var m = this._deviceMatrix;
@@ -181,7 +181,7 @@ var main = function () {
                 osg.mat4.copy(viewer.getCamera().getViewMatrix(), this._inverseDeviceMatrix);
             }
         },
-        lightUpdate: function (currentTime, node /*, nv*/) {
+        lightUpdate: function(currentTime, node /*, nv*/) {
             // for all light on our mainNode (the root of our scen)
             for (i = 0; i < numLights; i++) {
                 var l = node.lights[i];
@@ -214,7 +214,7 @@ var main = function () {
                 l.setDirection(lightDir);
             }
         },
-        update: function (node, nv) {
+        update: function(node, nv) {
             var currentTime = nv.getFrameStamp().getSimulationTime();
 
             this.cameraUpdate(currentTime, node, nv);

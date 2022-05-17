@@ -9,9 +9,9 @@ import primitiveSet from 'osg/primitiveSet';
 import BufferArray from 'osg/BufferArray';
 import Geometry from 'osg/Geometry';
 
-export default function () {
-    test('LineSegmentIntersectFunctor - check primitive type', function () {
-        var checkPrimitive = function (geom, msg) {
+export default function() {
+    test('LineSegmentIntersectFunctor - check primitive type', function() {
+        var checkPrimitive = function(geom, msg) {
             var lsi = new LineSegmentIntersector();
             var iv = new IntersectionVisitor();
             iv.setIntersector(lsi);
@@ -44,13 +44,13 @@ export default function () {
             );
         };
 
-        (function () {
+        (function() {
             // triangles
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
             checkPrimitive(quad, 'Triangles indexed');
         })();
 
-        (function () {
+        (function() {
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
 
             var indexes = [];
@@ -67,7 +67,7 @@ export default function () {
             checkPrimitive(quad, 'TriangleStrip indexed');
         })();
 
-        (function () {
+        (function() {
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
 
             var indexes = [];
@@ -84,7 +84,7 @@ export default function () {
             checkPrimitive(quad, 'TriangleFan indexed');
         })();
 
-        (function () {
+        (function() {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;
@@ -127,7 +127,7 @@ export default function () {
             checkPrimitive(quad, 'Triangles not indexed');
         })();
 
-        (function () {
+        (function() {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;
@@ -162,7 +162,7 @@ export default function () {
             checkPrimitive(quad, 'TriangleStrip not indexed');
         })();
 
-        (function () {
+        (function() {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;

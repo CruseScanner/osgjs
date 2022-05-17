@@ -12,20 +12,20 @@ import { vec3 } from 'osg/glMatrix';
 import { vec4 } from 'osg/glMatrix';
 import Viewport from 'osg/Viewport';
 
-var UpdateRttCameraCallback = function (rootView, offsetView) {
+var UpdateRttCameraCallback = function(rootView, offsetView) {
     this._rootView = rootView;
     this._offsetView = offsetView;
 };
 
 UpdateRttCameraCallback.prototype = {
-    update: function (node /*, nv */) {
+    update: function(node /*, nv */) {
         var nodeView = node.getViewMatrix();
         mat4.mul(nodeView, this._offsetView, this._rootView);
         return true;
     }
 };
 
-var createTexture = function (size) {
+var createTexture = function(size) {
     var texture = new Texture();
     texture.setTextureSize(size.width, size.height);
     texture.setMinFilter('LINEAR');
@@ -33,7 +33,7 @@ var createTexture = function (size) {
     return texture;
 };
 
-var getAssembleShader = function () {
+var getAssembleShader = function() {
     var fragmentShader = [
         '#ifdef GL_ES',
         '   precision highp float;',
@@ -70,7 +70,7 @@ var getAssembleShader = function () {
 };
 
 // This camera will render both textures on the canvas in a single pass
-var createCameraCanvas = function (leftEyeTexture, rightEyeTexture, viewport) {
+var createCameraCanvas = function(leftEyeTexture, rightEyeTexture, viewport) {
     var orthoCamera = new Camera();
     orthoCamera.setViewport(viewport);
     orthoCamera.setRenderOrder(Camera.NESTED_RENDER, 0);
@@ -90,7 +90,7 @@ var createCameraCanvas = function (leftEyeTexture, rightEyeTexture, viewport) {
 };
 
 // This camera will render the scene on a texture for an eye
-var createCameraRtt = function (texture, projection) {
+var createCameraRtt = function(texture, projection) {
     var camera = new Camera();
     camera.setName('rtt camera');
     camera.setViewport(new Viewport(0.0, 0.0, texture.getWidth(), texture.getHeight()));
@@ -108,9 +108,9 @@ var createCameraRtt = function (texture, projection) {
 
 var WebVR = {};
 
-WebVR.createScene = function (viewer, rttScene, HMDdevice, rootOverride, worldFactorOverride) {
+WebVR.createScene = function(viewer, rttScene, HMDdevice, rootOverride, worldFactorOverride) {
     var root = rootOverride || new Node();
-    HMDdevice.requestAnimationFrame(function () {
+    HMDdevice.requestAnimationFrame(function() {
         var worldFactor = worldFactorOverride !== undefined ? worldFactorOverride : 1.0;
 
         var left = HMDdevice.getEyeParameters('left');

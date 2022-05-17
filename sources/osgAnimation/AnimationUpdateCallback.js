@@ -6,12 +6,12 @@ import MatrixTransform from 'osg/MatrixTransform';
  *  AnimationUpdateCallback
  *  @class AnimationUpdateCallback
  */
-var AnimationUpdateCallback = function () {
+var AnimationUpdateCallback = function() {
     Object.call(this);
 };
 
 // check if the path is animated, it could be elsewhere though
-AnimationUpdateCallback.checkPathIsAnimated = function (path) {
+AnimationUpdateCallback.checkPathIsAnimated = function(path) {
     for (var i = 0, nbNodes = path.length; i < nbNodes; ++i) {
         var node = path[i];
 
@@ -30,8 +30,8 @@ AnimationUpdateCallback.checkPathIsAnimated = function (path) {
 utils.createPrototypeObject(
     AnimationUpdateCallback,
     utils.objectInherit(Object.prototype, {
-        computeChannels: function () {},
-        reset: function () {}
+        computeChannels: function() {},
+        reset: function() {}
     }),
     'osgAnimation',
     'AnimationUpdateCallback'

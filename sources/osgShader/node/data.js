@@ -8,7 +8,7 @@ var sprintf = shaderUtils.sprintf;
 // TODO: add precision
 // type {string} vec3/4/2, float, int, etc.
 // prefix {string} vec3/4/2, float, int, etc.
-var Variable = function (type, prefix) {
+var Variable = function(type, prefix) {
     Node.call(this);
     this._name = 'Variable';
     this._prefix = prefix;
@@ -19,27 +19,27 @@ var Variable = function (type, prefix) {
 utils.createPrototypeObject(
     Variable,
     utils.objectInherit(Node.prototype, {
-        getType: function () {
+        getType: function() {
             return this._type;
         },
 
-        getVariable: function () {
+        getVariable: function() {
             return this._prefix;
         },
 
-        setValue: function (value) {
+        setValue: function(value) {
             this._value = value;
             return this;
         },
 
-        toString: function () {
+        toString: function() {
             var str = this._name + ' ' + this._prefix;
             if (this._type) str += ' (' + this._type + ')';
             str += ' - id:' + this._id;
             return str;
         },
 
-        declare: function () {
+        declare: function() {
             if (this._value !== undefined) {
                 return sprintf('%s %s = %s;', [this._type, this.getVariable(), this._value]);
             } else {
@@ -47,11 +47,11 @@ utils.createPrototypeObject(
             }
         },
 
-        isEmpty: function () {
+        isEmpty: function() {
             return this._value === undefined && this._inputs.length === 0;
         },
 
-        reset: function () {
+        reset: function() {
             this._inputs = [];
             this._outputs = null;
             this._value = undefined;
@@ -64,14 +64,14 @@ utils.createPrototypeObject(
 
 // Constant Variable
 // help glsl compiler and make sure no one writes in it :)
-var Constant = function (type, prefix) {
+var Constant = function(type, prefix) {
     Variable.call(this, type, prefix);
 };
 
 utils.createPrototypeObject(
     Constant,
     utils.objectInherit(Variable.prototype, {
-        declare: function () {
+        declare: function() {
             return sprintf('const %s %s = %s;', [this._type, this.getVariable(), this._value]);
         }
     }),
@@ -79,7 +79,7 @@ utils.createPrototypeObject(
     'Constant'
 );
 
-var Uniform = function (type, prefix, size) {
+var Uniform = function(type, prefix, size) {
     Variable.call(this, type, prefix);
     this._size = size;
 };
@@ -87,11 +87,11 @@ var Uniform = function (type, prefix, size) {
 utils.createPrototypeObject(
     Uniform,
     utils.objectInherit(Variable.prototype, {
-        declare: function () {
+        declare: function() {
             return undefined;
         },
 
-        globalDeclaration: function () {
+        globalDeclaration: function() {
             if (this._size) {
                 return sprintf('uniform %s %s[%s];', [this._type, this.getVariable(), this._size]);
             } else {
@@ -104,18 +104,18 @@ utils.createPrototypeObject(
 );
 
 // Vertex Attribute Variables
-var Attribute = function (type, prefix) {
+var Attribute = function(type, prefix) {
     Variable.call(this, type, prefix);
 };
 
 utils.createPrototypeObject(
     Attribute,
     utils.objectInherit(Variable.prototype, {
-        declare: function () {
+        declare: function() {
             return undefined;
         },
 
-        globalDeclaration: function () {
+        globalDeclaration: function() {
             return sprintf('attribute %s %s;', [this._type, this.getVariable()]);
         }
     }),
@@ -123,18 +123,18 @@ utils.createPrototypeObject(
     'Attribute'
 );
 
-var Varying = function (type, prefix) {
+var Varying = function(type, prefix) {
     Variable.call(this, type, prefix);
 };
 
 utils.createPrototypeObject(
     Varying,
     utils.objectInherit(Variable.prototype, {
-        declare: function () {
+        declare: function() {
             return undefined;
         },
 
-        globalDeclaration: function () {
+        globalDeclaration: function() {
             return sprintf('varying %s %s;', [this._type, this.getVariable()]);
         }
     }),
@@ -142,18 +142,18 @@ utils.createPrototypeObject(
     'Varying'
 );
 
-var Sampler = function (type, prefix) {
+var Sampler = function(type, prefix) {
     Variable.call(this, type, prefix);
 };
 
 utils.createPrototypeObject(
     Sampler,
     utils.objectInherit(Variable.prototype, {
-        declare: function () {
+        declare: function() {
             return undefined;
         },
 
-        globalDeclaration: function () {
+        globalDeclaration: function() {
             return sprintf('uniform %s %s;', [this._type, this.getVariable()]);
         }
     }),
@@ -164,7 +164,7 @@ utils.createPrototypeObject(
 // Graph Root Node Abstract Class
 // Derive from that for new outputs
 // gl_FragDepth, etc.
-var Output = function (type, wholeName) {
+var Output = function(type, wholeName) {
     Variable.call(this, type, wholeName);
 };
 
@@ -172,14 +172,14 @@ utils.createPrototypeObject(
     Output,
     utils.objectInherit(Variable.prototype, {
         _unique: true,
-        isUnique: function () {
+        isUnique: function() {
             return this._unique;
         },
-        outputs: function () {
+        outputs: function() {
             /* do nothing for variable */
             return this;
         },
-        getVariable: function () {
+        getVariable: function() {
             return this._prefix;
         }
     }),
@@ -188,7 +188,7 @@ utils.createPrototypeObject(
 );
 
 // Graph Root Nodes
-var glFragColor = function () {
+var glFragColor = function() {
     Output.call(this, 'vec4', 'gl_FragColor');
     this._name = 'glFragColor';
 };
@@ -200,7 +200,7 @@ utils.createPrototypeObject(
     'glFragColor'
 );
 
-var glPosition = function () {
+var glPosition = function() {
     Output.call(this, 'vec4', 'gl_Position');
     this._name = 'glPosition';
 };
@@ -212,7 +212,7 @@ utils.createPrototypeObject(
     'glPosition'
 );
 
-var glPointSize = function () {
+var glPointSize = function() {
     Output.call(this, 'float', 'gl_PointSize');
     this._name = 'glPointSize';
 };
@@ -224,7 +224,7 @@ utils.createPrototypeObject(
     'glPointSize'
 );
 
-var Define = function (name) {
+var Define = function(name) {
     Node.call(this);
     this._defineName = name;
     this._defineValue = '';
@@ -233,11 +233,11 @@ utils.createPrototypeObject(
     Define,
     utils.objectInherit(Node.prototype, {
         type: 'Define',
-        setValue: function (value) {
+        setValue: function(value) {
             this._defineValue = value;
             return this;
         },
-        getDefines: function () {
+        getDefines: function() {
             return ['#define ' + this._defineName + ' ' + this._defineValue];
         }
     }),

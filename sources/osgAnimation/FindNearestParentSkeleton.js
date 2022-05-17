@@ -6,7 +6,7 @@ import Skeleton from 'osgAnimation/Skeleton';
  * FindNearestParentSkeleton
  */
 
-var FindNearestParentSkeleton = function () {
+var FindNearestParentSkeleton = function() {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_PARENTS);
     this._root = undefined;
 
@@ -17,7 +17,7 @@ var FindNearestParentSkeleton = function () {
 utils.createPrototypeObject(
     FindNearestParentSkeleton,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function (node) {
+        apply: function(node) {
             if (this._root) return;
 
             if (node.typeID === Skeleton.typeID) {

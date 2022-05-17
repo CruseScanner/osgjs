@@ -1,54 +1,54 @@
 import Polytope from 'osg/Polytope';
 
-var CullingSet = function () {
+var CullingSet = function() {
     this._mask = CullingSet.DEFAULT_CULLING;
     this._frustum = new Polytope();
 };
 
 CullingSet.prototype = {
-    reset: function () {
+    reset: function() {
         this._mask = CullingSet.DEFAULT_CULLING;
         this._frustum.clear();
     },
-    setCullingMask: function (mask) {
+    setCullingMask: function(mask) {
         this._mask = mask;
     },
-    getCullingMask: function () {
+    getCullingMask: function() {
         return this._mask;
     },
-    setFrustum: function (frustum) {
+    setFrustum: function(frustum) {
         this._frustum = frustum;
     },
-    getFrustum: function () {
+    getFrustum: function() {
         return this._frustum;
     },
-    getCurrentResultMask: function () {
+    getCurrentResultMask: function() {
         return this._frustum.getCurrentMask();
     },
-    pushCurrentMask: function () {
+    pushCurrentMask: function() {
         this._frustum.pushCurrentMask();
     },
-    popCurrentMask: function () {
+    popCurrentMask: function() {
         this._frustum.popCurrentMask();
     },
-    resetCullingMask: function () {
+    resetCullingMask: function() {
         this._frustum.setResultMask(this._frustum.getCurrentMask());
     },
-    isBoundingBoxCulled: function (bbox) {
+    isBoundingBoxCulled: function(bbox) {
         if (this._mask & CullingSet.VIEW_FRUSTUM_CULLING) {
             // is it outside the view frustum...
             if (!this._frustum.containsBoundingBox(bbox)) return true;
         }
         return false;
     },
-    isBoundingSphereCulled: function (bs) {
+    isBoundingSphereCulled: function(bs) {
         if (this._mask & CullingSet.VIEW_FRUSTUM_CULLING) {
             // is it outside the view frustum...
             if (!this._frustum.containsBoundingSphere(bs)) return true;
         }
         return false;
     },
-    isVerticesCulled: function (vertices) {
+    isVerticesCulled: function(vertices) {
         if (this._mask & CullingSet.VIEW_FRUSTUM_CULLING) {
             // is it outside the view frustum...
             if (!this._frustum.containsVertices(vertices)) return true;

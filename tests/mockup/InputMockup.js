@@ -4,14 +4,14 @@ import P from 'bluebird';
 import fs from 'fs';
 import notify from 'osg/notify';
 
-var InputMockup = function (json, identifier) {
+var InputMockup = function(json, identifier) {
     Input.call(this, json, identifier);
 };
 
 utils.createPrototypeObject(
     InputMockup,
     utils.objectInherit(Input.prototype, {
-        requestFile: function (url, options) {
+        requestFile: function(url, options) {
             var nurl = url.replace('file://', '');
             var data;
             if (options && options.responseType) {
@@ -30,7 +30,7 @@ utils.createPrototypeObject(
             return P.resolve(data);
         },
 
-        fetchImage: function (image, url, options) {
+        fetchImage: function(image, url, options) {
             var checkInlineImage = 'data:image/';
             // crossOrigin does not work for inline data image
             var isInlineImage = url.substring(0, checkInlineImage.length) === checkInlineImage;
@@ -40,8 +40,8 @@ utils.createPrototypeObject(
             image.setImage(img);
             img.src = url;
 
-            return new P(function (resolve) {
-                img.onerror = function () {
+            return new P(function(resolve) {
+                img.onerror = function() {
                     notify.warn('warning use white texture as fallback instead of ' + url);
                     image.setImage(Input.imageFallback);
                     image.setImage(Input.imageFallback);
@@ -49,7 +49,7 @@ utils.createPrototypeObject(
                     resolve(image);
                 };
 
-                img.onload = function () {
+                img.onload = function() {
                     if (options.imageOnload) options.imageOnload.call(image);
                     resolve(image);
                 };

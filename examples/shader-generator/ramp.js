@@ -1,9 +1,9 @@
-(function () {
+(function() {
     'use strict';
 
     var osg = window.OSG.osg;
 
-    var RampAttribute = function () {
+    var RampAttribute = function() {
         osg.StateAttribute.call(this);
         this._attributeEnable = false;
     };
@@ -15,15 +15,15 @@
         osg.objectInherit(osg.StateAttribute.prototype, {
             attributeType: 'Ramp',
 
-            cloneType: function () {
+            cloneType: function() {
                 return new RampAttribute();
             },
 
-            setAttributeEnable: function (state) {
+            setAttributeEnable: function(state) {
                 this._attributeEnable = state;
             },
 
-            getAttributeEnable: function () {
+            getAttributeEnable: function() {
                 return this._attributeEnable;
             },
 
@@ -33,7 +33,7 @@
             // up to how you want to handle your shaders
             // if you dont want to trigger rebuild of shader then instead you an use a
             // uniform and keep always the same hash
-            getHash: function () {
+            getHash: function() {
                 return this.getType() + this._attributeEnable.toString();
             }
         }),

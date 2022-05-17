@@ -3,13 +3,13 @@ import mockup from 'tests/mockup/mockup';
 import TextureManager from 'osg/TextureManager';
 import Texture from 'osg/Texture';
 
-export default function () {
-    test('TextureManager', function () {
+export default function() {
+    test('TextureManager', function() {
         var tm = new TextureManager();
         var gl = mockup.createFakeRenderer();
         var batch0 = [];
         var batch1 = [];
-        (function () {
+        (function() {
             for (var i = 0, l = 4; i < l; i++) {
                 var to = tm.generateTextureObject(
                     gl,
@@ -23,7 +23,7 @@ export default function () {
             }
         })();
 
-        (function () {
+        (function() {
             for (var i = 0, l = 2; i < l; i++) {
                 var to = tm.generateTextureObject(
                     gl,
@@ -59,11 +59,11 @@ export default function () {
             'check orphan texture 512x1024 null'
         );
 
-        batch1.forEach(function (to) {
+        batch1.forEach(function(to) {
             tm.releaseTextureObject(to);
         });
 
-        batch0.forEach(function (to) {
+        batch0.forEach(function(to) {
             tm.releaseTextureObject(to);
         });
 
@@ -103,12 +103,12 @@ export default function () {
         );
     });
 
-    test('TextureManager flushDeletedTextureObjects', function () {
+    test('TextureManager flushDeletedTextureObjects', function() {
         var tm = new TextureManager();
         var gl = mockup.createFakeRenderer();
         var batch0 = [];
         // Create a bunch of texture objects
-        (function () {
+        (function() {
             for (var i = 0, l = 40; i < l; i++) {
                 var to = tm.generateTextureObject(
                     gl,
@@ -123,7 +123,7 @@ export default function () {
         })();
 
         // Release all TO's;
-        batch0.forEach(function (to) {
+        batch0.forEach(function(to) {
             tm.releaseTextureObject(to);
         });
 

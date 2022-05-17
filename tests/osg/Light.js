@@ -9,9 +9,9 @@ import { mat4 } from 'osg/glMatrix';
 import { vec3 } from 'osg/glMatrix';
 import { vec4 } from 'osg/glMatrix';
 
-export default function () {
-    test('Light', function () {
-        (function () {
+export default function() {
+    test('Light', function() {
+        (function() {
             var l0 = new Light();
             l0.setLightNumber(0);
 
@@ -39,7 +39,7 @@ export default function () {
             assert.equal(l0.getQuadraticAttenuation(), 0);
         })();
 
-        (function () {
+        (function() {
             var canvas = mockup.createCanvas();
             var viewer = new mockup.Viewer(canvas);
             viewer.init();
@@ -57,13 +57,13 @@ export default function () {
             var state = viewer.getState();
 
             var fakeRenderer = mockup.createFakeRenderer();
-            fakeRenderer.validateProgram = function () {
+            fakeRenderer.validateProgram = function() {
                 return true;
             };
-            fakeRenderer.getProgramParameter = function () {
+            fakeRenderer.getProgramParameter = function() {
                 return true;
             };
-            fakeRenderer.isContextLost = function () {
+            fakeRenderer.isContextLost = function() {
                 return false;
             };
             state.setGraphicContext(fakeRenderer);
@@ -75,7 +75,7 @@ export default function () {
             viewer.getInputManager().cleanup();
         })();
 
-        (function () {
+        (function() {
             var canvas = mockup.createCanvas();
             var viewer = new mockup.Viewer(canvas);
             viewer.init();

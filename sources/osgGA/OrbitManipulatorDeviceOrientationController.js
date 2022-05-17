@@ -6,7 +6,7 @@ import { vec3 } from 'osg/glMatrix';
 import FirstPersonDeviceOrientation from 'osgGA/FirstPersonManipulatorDeviceOrientationController';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var OrbitManipulatorDeviceOrientationController = function (manipulator) {
+var OrbitManipulatorDeviceOrientationController = function(manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
@@ -14,7 +14,7 @@ var OrbitManipulatorDeviceOrientationController = function (manipulator) {
 utils.createPrototypeObject(
     OrbitManipulatorDeviceOrientationController,
     utils.objectInherit(Controller.prototype, {
-        init: function () {
+        init: function() {
             this._quat = quat.create();
             this._pos = vec3.create();
 
@@ -34,7 +34,7 @@ utils.createPrototypeObject(
             manager.setEnable(InputGroups.ORBIT_MANIPULATOR_DEVICEORIENTATION, false);
         },
 
-        setDeviceOrientation: function (ev) {
+        setDeviceOrientation: function(ev) {
             if (!this._deviceOrientation) {
                 this._deviceOrientation = {};
             }
@@ -50,12 +50,12 @@ utils.createPrototypeObject(
             this._update();
         },
 
-        setScreenOrientation: function (ev) {
+        setScreenOrientation: function(ev) {
             this._screenOrientation = ev.screenOrientation;
             this._update();
         },
 
-        _update: function () {
+        _update: function() {
             if (!this._deviceOrientation || !this._screenOrientation) {
                 return;
             }

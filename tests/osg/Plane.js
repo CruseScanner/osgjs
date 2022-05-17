@@ -2,8 +2,8 @@ import { assert } from 'chai';
 import BoundingSphere from 'osg/BoundingSphere';
 import Plane from 'osg/Plane';
 
-export default function () {
-    test('Plane', function () {
+export default function() {
+    test('Plane', function() {
         var p = Plane.create();
         Plane.setNormal(p, [2, 0, 0]);
         Plane.setDistance(p, -2);

@@ -1,7 +1,7 @@
 import P from 'bluebird';
 
-var requestFileFromURL = function (url, options) {
-    return new P(function (resolve, reject) {
+var requestFileFromURL = function(url, options) {
+    return new P(function(resolve, reject) {
         var req = new XMLHttpRequest();
         req.open('GET', url, true);
 
@@ -17,7 +17,7 @@ var requestFileFromURL = function (url, options) {
 
         req.addEventListener('error', reject, false);
 
-        req.addEventListener('load', function () {
+        req.addEventListener('load', function() {
             if (req.responseType === 'arraybuffer' || req.responseType === 'blob')
                 resolve(req.response);
             else resolve(req.responseText);
@@ -27,12 +27,12 @@ var requestFileFromURL = function (url, options) {
     });
 };
 
-var requestFileFromReader = function (file, options) {
-    return new P(function (resolve) {
+var requestFileFromReader = function(file, options) {
+    return new P(function(resolve) {
         var responseType =
             options && options.responseType ? options.responseType.toLowerCase() : undefined;
         var reader = new window.FileReader();
-        reader.onload = function (data) {
+        reader.onload = function(data) {
             resolve(data.target.result);
         };
         // handle responseType
@@ -47,7 +47,7 @@ var requestFileFromReader = function (file, options) {
     });
 };
 
-var requestFile = function (urlOrFile, options) {
+var requestFile = function(urlOrFile, options) {
     if (typeof urlOrFile === 'string') {
         return requestFileFromURL(urlOrFile, options);
     } else {

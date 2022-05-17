@@ -6,7 +6,7 @@ var rejectObject = utils.rejectObject;
 
 var osgWrapper = {};
 
-osgWrapper.Object = function (input, obj) {
+osgWrapper.Object = function(input, obj) {
     var jsonObj = input.getJSON();
 
     if (jsonObj.Name) obj.setName(jsonObj.Name);
@@ -21,7 +21,7 @@ osgWrapper.Object = function (input, obj) {
     return obj;
 };
 /* jshint newcap: false */
-osgWrapper.Node = function (input, node) {
+osgWrapper.Node = function(input, node) {
     var jsonObj = input.getJSON();
 
     osgWrapper.Object(input, node);
@@ -51,9 +51,9 @@ osgWrapper.Node = function (input, node) {
         }
     }
     // Resolve first updateCallbacks and stateset.
-    return P.all(promiseArray).then(function () {
+    return P.all(promiseArray).then(function() {
         // Need to wait until the stateset and the all the callbacks are resolved
-        return P.all(queue).then(function (queueNodes) {
+        return P.all(queue).then(function(queueNodes) {
             // All the results from P.all are on the argument as an array
             // Now insert children in the right order
             var len = queueNodes.length;
@@ -63,7 +63,7 @@ osgWrapper.Node = function (input, node) {
     });
 };
 
-osgWrapper.StateSet = function (input, stateSet) {
+osgWrapper.StateSet = function(input, stateSet) {
     var jsonObj = input.getJSON();
 
     osgWrapper.Object(input, stateSet);
@@ -74,7 +74,7 @@ osgWrapper.StateSet = function (input, stateSet) {
 
     var promiseArray = [];
 
-    var createAttribute = function (jsonAttribute) {
+    var createAttribute = function(jsonAttribute) {
         var promise = input.setJSON(jsonAttribute).readObject();
         if (
             promise.isRejected() // sometimes we have some empty objects
@@ -90,7 +90,7 @@ osgWrapper.StateSet = function (input, stateSet) {
         }
     }
 
-    var createTextureAttribute = function (unit, textureAttribute) {
+    var createTextureAttribute = function(unit, textureAttribute) {
         var promise = input.setJSON(textureAttribute).readObject();
         if (
             promise.isRejected() // sometimes we have some empty objects
@@ -110,12 +110,12 @@ osgWrapper.StateSet = function (input, stateSet) {
         }
     }
 
-    return P.all(promiseArray).then(function () {
+    return P.all(promiseArray).then(function() {
         return stateSet;
     });
 };
 
-osgWrapper.Material = function (input, material) {
+osgWrapper.Material = function(input, material) {
     var jsonObj = input.getJSON();
     if (
         !jsonObj.Diffuse ||
@@ -136,7 +136,7 @@ osgWrapper.Material = function (input, material) {
     return P.resolve(material);
 };
 
-osgWrapper.BlendFunc = function (input, blend) {
+osgWrapper.BlendFunc = function(input, blend) {
     var jsonObj = input.getJSON();
     if (
         !jsonObj.SourceRGB ||
@@ -156,7 +156,7 @@ osgWrapper.BlendFunc = function (input, blend) {
     return P.resolve(blend);
 };
 
-osgWrapper.CullFace = function (input, attr) {
+osgWrapper.CullFace = function(input, attr) {
     var jsonObj = input.getJSON();
     if (jsonObj.Mode === undefined) return rejectObject('CullFace', jsonObj);
 
@@ -165,7 +165,7 @@ osgWrapper.CullFace = function (input, attr) {
     return P.resolve(attr);
 };
 
-osgWrapper.BlendColor = function (input, attr) {
+osgWrapper.BlendColor = function(input, attr) {
     var jsonObj = input.getJSON();
     if (!jsonObj.ConstantColor) return rejectObject('BlendColor', jsonObj);
 
@@ -174,7 +174,7 @@ osgWrapper.BlendColor = function (input, attr) {
     return P.resolve(attr);
 };
 
-osgWrapper.Light = function (input, light) {
+osgWrapper.Light = function(input, light) {
     var jsonObj = input.getJSON();
 
     if (
@@ -210,7 +210,7 @@ osgWrapper.Light = function (input, light) {
     return P.resolve(light);
 };
 
-osgWrapper.Texture = function (input, texture) {
+osgWrapper.Texture = function(input, texture) {
     var jsonObj = input.getJSON();
 
     osgWrapper.Object(input, texture);
@@ -226,13 +226,13 @@ osgWrapper.Texture = function (input, texture) {
         file = 'no-image-provided';
     }
 
-    return input.readImageURL(file).then(function (img) {
+    return input.readImageURL(file).then(function(img) {
         texture.setImage(img);
         return texture;
     });
 };
 
-osgWrapper.Projection = function (input, node) {
+osgWrapper.Projection = function(input, node) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Matrix) return rejectObject('Projection', jsonObj);
 
@@ -241,7 +241,7 @@ osgWrapper.Projection = function (input, node) {
     return promise;
 };
 
-osgWrapper.MatrixTransform = function (input, node) {
+osgWrapper.MatrixTransform = function(input, node) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Matrix) return rejectObject('MatrixTransform', jsonObj);
 
@@ -250,12 +250,12 @@ osgWrapper.MatrixTransform = function (input, node) {
     return promise;
 };
 
-osgWrapper.LightSource = function (input, node) {
+osgWrapper.LightSource = function(input, node) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Light) return rejectObject('LightSource', jsonObj);
 
     var promise = osgWrapper.Node(input, node);
-    return P.all([input.setJSON(jsonObj.Light).readObject(), promise]).then(function (args) {
+    return P.all([input.setJSON(jsonObj.Light).readObject(), promise]).then(function(args) {
         var light = args[0];
         //var lightsource = args[ 1 ];
         node.setLight(light);
@@ -267,7 +267,7 @@ osgWrapper.LightSource = function (input, node) {
 };
 
 // not robust, but we probably don't want to complexify the function for now
-osgWrapper.functionSortAttributes = function (a, b) {
+osgWrapper.functionSortAttributes = function(a, b) {
     if (a.indexOf('TexCoord') !== -1 && b.indexOf('TexCoord') !== -1) {
         return parseInt(a.substr(8), 10) - parseInt(b.substr(8), 10);
     }
@@ -277,7 +277,7 @@ osgWrapper.functionSortAttributes = function (a, b) {
     return 0;
 };
 
-osgWrapper.Geometry = function (input, node) {
+osgWrapper.Geometry = function(input, node) {
     var jsonObj = input.getJSON();
     if (!jsonObj.VertexAttributeList) return rejectObject('Geometry', jsonObj);
 
@@ -296,7 +296,7 @@ osgWrapper.Geometry = function (input, node) {
         promisePrimitive.then(cbAddPrimitives);
     }
 
-    var cbSetBuffer = function (name, buffer) {
+    var cbSetBuffer = function(name, buffer) {
         this.getVertexAttributeList()[name] = buffer;
     };
 
@@ -315,12 +315,12 @@ osgWrapper.Geometry = function (input, node) {
         promiseBuffer.then(cbSetBuffer.bind(node, name));
     }
 
-    return P.all(arraysPromise).then(function () {
+    return P.all(arraysPromise).then(function() {
         return node;
     });
 };
 
-osgWrapper.PagedLOD = function (input, plod) {
+osgWrapper.PagedLOD = function(input, plod) {
     var jsonObj = input.getJSON();
 
     osgWrapper.Object(input, plod);
@@ -364,7 +364,7 @@ osgWrapper.PagedLOD = function (input, plod) {
         }
     }
 
-    return P.all(queue).then(function (queueNodes) {
+    return P.all(queue).then(function(queueNodes) {
         // All the results from P.all are on the argument as an array
         var len = queueNodes.length;
         for (i = 0; i < len; i++) plod.addChildNode(queueNodes[i]);

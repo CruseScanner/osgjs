@@ -7,7 +7,7 @@ import Uniform from 'osg/Uniform';
  * @class MorphAttribute
  * @inherits StateAttribute
  */
-var MorphAttribute = function (nbTarget, disable) {
+var MorphAttribute = function(nbTarget, disable) {
     StateAttribute.call(this);
     this._nbTarget = nbTarget;
     this._enable = !disable;
@@ -26,15 +26,15 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Morph',
 
-        cloneType: function () {
+        cloneType: function() {
             return new MorphAttribute(undefined, true);
         },
 
-        hasTarget: function (name) {
+        hasTarget: function(name) {
             return !!this._targetNames[name];
         },
 
-        copyTargetNames: function (names) {
+        copyTargetNames: function(names) {
             var tNames = this._targetNames;
             var hash = '';
             var nbNames = (tNames.length = names.length);
@@ -49,7 +49,7 @@ utils.createPrototypeStateAttribute(
             this._dirtyHash = true;
         },
 
-        getOrCreateUniforms: function () {
+        getOrCreateUniforms: function() {
             var obj = MorphAttribute;
             var unifHash = this.getNumTargets();
 
@@ -62,28 +62,28 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms[unifHash];
         },
 
-        setNumTargets: function (nb) {
+        setNumTargets: function(nb) {
             this._nbTarget = nb;
             this._dirtyHash = true;
         },
 
-        getNumTargets: function () {
+        getNumTargets: function() {
             return this._nbTarget;
         },
 
-        setTargetWeights: function (targetWeight) {
+        setTargetWeights: function(targetWeight) {
             this._targetWeights = targetWeight;
         },
 
-        getTargetWeights: function () {
+        getTargetWeights: function() {
             return this._targetWeights;
         },
 
-        isEnabled: function () {
+        isEnabled: function() {
             return this._enable;
         },
 
-        getHash: function () {
+        getHash: function() {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -91,11 +91,11 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function () {
+        _computeInternalHash: function() {
             return this.getTypeMember() + this._hashNames + this.getNumTargets() + this.isEnabled();
         },
 
-        apply: function () {
+        apply: function() {
             if (!this._enable) return;
 
             var uniformMap = this.getOrCreateUniforms();

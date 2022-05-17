@@ -1,11 +1,11 @@
 import notify from 'osg/notify';
 
-var isBufferGZIP = function (arrayBuffer) {
+var isBufferGZIP = function(arrayBuffer) {
     var typedArray = new Uint8Array(arrayBuffer);
     return typedArray[0] === 0x1f && typedArray[1] === 0x8b;
 };
 
-var gunzip = function (arrayBuffer) {
+var gunzip = function(arrayBuffer) {
     var typedArray = new Uint8Array(arrayBuffer);
     var zlib = require('zlib');
 

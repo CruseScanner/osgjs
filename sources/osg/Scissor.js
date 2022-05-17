@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import StateAttribute from 'osg/StateAttribute';
 
-var Scissor = function (x, y, w, h) {
+var Scissor = function(x, y, w, h) {
     StateAttribute.call(this);
 
     this._x = x !== undefined ? x : -1;
@@ -16,34 +16,34 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Scissor',
 
-        cloneType: function () {
+        cloneType: function() {
             return new Scissor();
         },
 
-        setScissor: function (x, y, width, height) {
+        setScissor: function(x, y, width, height) {
             this._x = x;
             this._y = y;
             this._width = width;
             this._height = height;
         },
 
-        x: function () {
+        x: function() {
             return this._x;
         },
 
-        y: function () {
+        y: function() {
             return this._y;
         },
 
-        width: function () {
+        width: function() {
             return this._width;
         },
 
-        height: function () {
+        height: function() {
             return this._height;
         },
 
-        apply: function (state) {
+        apply: function(state) {
             state.applyScissor(this);
         }
     }),

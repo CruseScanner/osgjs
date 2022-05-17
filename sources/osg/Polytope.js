@@ -10,7 +10,7 @@ import PooledArray from 'osg/PooledArray';
  * When adding planes, their normals should point inwards (into the volume)
  * @class Polytope
  */
-var Polytope = function () {
+var Polytope = function() {
     this._clippingMask = 0x0;
 
     this._planeList = [
@@ -34,16 +34,16 @@ var Polytope = function () {
 utils.createPrototypeObject(
     Polytope,
     utils.objectInherit(Object.prototype, {
-        getPlanes: function () {
+        getPlanes: function() {
             return this._planeList;
         },
 
-        setPlanes: function (pl) {
+        setPlanes: function(pl) {
             this._planeList = pl;
             this.setupMask();
         },
 
-        clear: function () {
+        clear: function() {
             this._clippingMask = 0x0;
             if (this._planeList) {
                 for (var i = 0, l = this._planeList.length; i < l; ++i) {
@@ -55,7 +55,7 @@ utils.createPrototypeObject(
         },
 
         /** Create a Polytope which is a cube, centered at 0,0,0, with sides of 2 units.*/
-        setToUnitFrustum: function (withNear, withFar) {
+        setToUnitFrustum: function(withNear, withFar) {
             if (withNear === undefined) withNear = true;
 
             if (withFar === undefined) withFar = true;
@@ -71,7 +71,7 @@ utils.createPrototypeObject(
         },
 
         /** Create a Polytope which is a equivalent to BoundingBox.*/
-        setToBoundingBox: function (bb) {
+        setToBoundingBox: function(bb) {
             this._planeList.length = 0;
             this._planeList.push(vec4.set(Plane.create(), 1.0, 0.0, 0.0, -bb.getMin()[0])); // left plane.
             this._planeList.push(vec4.set(Plane.create(), -1.0, 0.0, 0.0, bb.getMax()[0])); // right plane.
@@ -82,7 +82,7 @@ utils.createPrototypeObject(
             this.setupMask();
         },
 
-        setAndTransformProvidingInverse: function (pt, matrix) {
+        setAndTransformProvidingInverse: function(pt, matrix) {
             this._referenceVertexList = pt._referenceVertexList;
             var polytopBackIndex = this._maskStack.getLength() - 1;
             var resultMask = pt._maskStack[polytopBackIndex];
@@ -118,29 +118,29 @@ utils.createPrototypeObject(
             this._maskStack.getArray()[polytopBackIndex] = this._resultMask;
         },
 
-        voidset: function (pl) {
+        voidset: function(pl) {
             this._planeList = pl;
             this.setupMask();
         },
 
-        add: function (pl) {
+        add: function(pl) {
             this._planeList.push(pl);
             this.setupMask();
         },
 
-        empty: function () {
+        empty: function() {
             return this._planeList.length === 0;
         },
 
-        setReferenceVertexList: function (vertices) {
+        setReferenceVertexList: function(vertices) {
             this._referenceVertexList = vertices;
         },
 
-        getReferenceVertexList: function () {
+        getReferenceVertexList: function() {
             return this._referenceVertexList;
         },
 
-        setupMask: function (plength) {
+        setupMask: function(plength) {
             this._resultMask = 0;
             var pMasklength = plength !== undefined ? plength : this._planeList.length;
             for (var i = 0; i < pMasklength; ++i) {
@@ -150,33 +150,33 @@ utils.createPrototypeObject(
             this._maskStack.push(this._resultMask);
         },
 
-        getCurrentMask: function () {
+        getCurrentMask: function() {
             return this._maskStack.back();
         },
 
-        setResultMask: function (mask) {
+        setResultMask: function(mask) {
             this._resultMask = mask;
         },
 
-        getResultMask: function () {
+        getResultMask: function() {
             return this._resultMask;
         },
 
-        getMaskStack: function () {
+        getMaskStack: function() {
             return this._maskStack;
         },
 
         // push but keep current mask
-        pushCurrentMask: function () {
+        pushCurrentMask: function() {
             this._maskStack.push(this._resultMask);
         },
         // pop and restore previous mask
-        popCurrentMask: function () {
+        popCurrentMask: function() {
             return this._maskStack.pop();
         },
 
         /** Check whether a vertex is contained within clipping set.*/
-        containsVertex: function (v) {
+        containsVertex: function(v) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return true;
 
@@ -194,7 +194,7 @@ utils.createPrototypeObject(
         },
 
         /** Check whether any part of vertex list is contained within clipping set.*/
-        containsVertices: function (vertices) {
+        containsVertices: function(vertices) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return true;
 
@@ -224,7 +224,7 @@ utils.createPrototypeObject(
         modifying the mask to turn off planes which wouldn't contribute to clipping
         of any internal objects.  This feature is used in osgUtil::CullVisitor
         to prevent redundant plane checking.*/
-        containsBoundingSphere: function (bs) {
+        containsBoundingSphere: function(bs) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack || !bs.valid()) return true;
 
@@ -256,7 +256,7 @@ utils.createPrototypeObject(
         modifying the mask to turn off planes which wouldn't contribute to clipping
         of any internal objects.  This feature is used in osgUtil::CullVisitor
         to prevent redundant plane checking.*/
-        containsBoundingBox: function (bb) {
+        containsBoundingBox: function(bb) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return true;
 
@@ -282,7 +282,7 @@ utils.createPrototypeObject(
         },
 
         /** Check whether all of vertex list is contained with clipping set.*/
-        containsAllOfVertices: function (vertices) {
+        containsAllOfVertices: function(vertices) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return false;
 
@@ -301,7 +301,7 @@ utils.createPrototypeObject(
         },
 
         /** Check whether the entire bounding sphere is contained within clipping set.*/
-        containsAllOfBoundingSphere: function (bs) {
+        containsAllOfBoundingSphere: function(bs) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return false;
 
@@ -320,7 +320,7 @@ utils.createPrototypeObject(
         },
 
         /** Check whether the entire bounding box is contained within clipping set.*/
-        containsAllOfBoundingBox: function (bbox) {
+        containsAllOfBoundingBox: function(bbox) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return false;
 
@@ -340,7 +340,7 @@ utils.createPrototypeObject(
 
         /** Transform the clipping set by provide a pre inverted matrix.
          * see transform for details. */
-        transformProvidingInverse: function (matrix) {
+        transformProvidingInverse: function(matrix) {
             var polytopeBack = this._maskStack.back();
             if (!polytopeBack) return;
 

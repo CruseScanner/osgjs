@@ -15,8 +15,8 @@ import MatrixTransform from 'osg/MatrixTransform';
 import Shape from 'osg/shape';
 import ReaderParser from 'osgDB/readerParser';
 
-export default function () {
-    test('SphereIntersector simple test', function () {
+export default function() {
+    test('SphereIntersector simple test', function() {
         var spi = new SphereIntersector();
         var bs = new BoundingSphere();
         bs.set(vec3.fromValues(0.0, 0.0, 0.0), 2.0);
@@ -42,7 +42,7 @@ export default function () {
     // points are : one in (0, 0, 0) and the other on picking path
     // picking is (0.1, 0.3, 0) with radius 0.15
 
-    var createSceneGeometry = function () {
+    var createSceneGeometry = function() {
         var scene = new Node();
         var cx, cy, cz, wx, wy, wz, hx, hy, hz;
         cx = cy = -0.5;
@@ -63,7 +63,7 @@ export default function () {
         return scene;
     };
 
-    test('SphereIntersector with 2 branches', function () {
+    test('SphereIntersector with 2 branches', function() {
         // right branch should be picked
         // left branch shouldn't be picked
         //
@@ -94,7 +94,7 @@ export default function () {
         var iv = new IntersectionVisitor();
         iv.setIntersector(lsi);
 
-        var testPick = function () {
+        var testPick = function() {
             lsi.reset();
             iv.reset();
             rootScene.accept(iv);
@@ -126,7 +126,7 @@ export default function () {
         testPick();
     });
 
-    test('SphereIntersector with mockup scene', function () {
+    test('SphereIntersector with mockup scene', function() {
         // mockup scene is a sphere centered in 0 with radius ~50
         var rootScene = ReaderParser.parseSceneGraph(mockup.getScene());
 
@@ -135,7 +135,7 @@ export default function () {
         var iv = new IntersectionVisitor();
         iv.setIntersector(lsi);
 
-        var testPick = function () {
+        var testPick = function() {
             lsi.reset();
             iv.reset();
             rootScene.accept(iv);

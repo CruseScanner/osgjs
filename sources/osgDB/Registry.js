@@ -6,7 +6,7 @@ import notify from 'osg/notify';
  */
 
 var Registry = {
-    instance: function () {
+    instance: function() {
         if (!Registry._instance) {
             Registry._instance = Registry;
             Registry._instance.plugins = new window.Map();
@@ -15,13 +15,13 @@ var Registry = {
     },
 
     // We register directly a plugin for a extension.
-    addReaderWriter: function (extension, plugin) {
+    addReaderWriter: function(extension, plugin) {
         if (Registry.instance().plugins.get(extension) !== undefined)
             notify.warn("the '" + extension + "' plugin already exists");
         Registry.instance().plugins.set(extension, plugin);
     },
 
-    getReaderWriterForExtension: function (name) {
+    getReaderWriterForExtension: function(name) {
         return Registry.instance().plugins.get(name);
     }
 };

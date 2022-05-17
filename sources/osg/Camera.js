@@ -11,7 +11,7 @@ import { vec4 } from 'osg/glMatrix';
  * @class Camera
  * @inherits Transform CullSettings
  */
-var Camera = function () {
+var Camera = function() {
     Transform.call(this);
     CullSettings.call(this);
 
@@ -50,129 +50,129 @@ utils.createPrototypeNode(
         CullSettings.prototype,
         utils.objectInherit(Transform.prototype, {
             // at which view this camera is attached
-            getView: function () {
+            getView: function() {
                 return this._view;
             },
 
-            setView: function (view) {
+            setView: function(view) {
                 this._view = view;
             },
 
-            getRenderer: function () {
+            getRenderer: function() {
                 return this._renderer;
             },
 
-            setRenderer: function (renderer) {
+            setRenderer: function(renderer) {
                 this._renderer = renderer;
             },
 
             // Set the final draw callback for custom operations
             // to be done after the drawing of
             // the camera's subgraph and pre render stages.
-            setFinalDrawCallback: function (cb) {
+            setFinalDrawCallback: function(cb) {
                 this._finalDrawCallback = cb;
             },
 
-            getFinalDrawCallback: function () {
+            getFinalDrawCallback: function() {
                 return this._finalDrawCallback;
             },
 
             // Set the initial draw callback for custom operations
             // to be done before the drawing of
             // the camera's subgraph and pre render stages.
-            setInitialDrawCallback: function (cb) {
+            setInitialDrawCallback: function(cb) {
                 this._initialDrawCallback = cb;
             },
 
-            getInitialDrawCallback: function () {
+            getInitialDrawCallback: function() {
                 return this._initialDrawCallback;
             },
 
-            getAttachments: function () {
+            getAttachments: function() {
                 return this._attachments;
             },
 
-            setGraphicContext: function (gc) {
+            setGraphicContext: function(gc) {
                 this._graphicContext = gc;
             },
-            getGraphicContext: function () {
+            getGraphicContext: function() {
                 return this._graphicContext;
             },
-            setClearDepth: function (depth) {
+            setClearDepth: function(depth) {
                 this.clearDepth = depth;
             },
-            getClearDepth: function () {
+            getClearDepth: function() {
                 return this.clearDepth;
             },
 
-            setClearMask: function (mask) {
+            setClearMask: function(mask) {
                 this.clearMask = mask;
             },
-            getClearMask: function () {
+            getClearMask: function() {
                 return this.clearMask;
             },
 
-            setClearColor: function (color) {
+            setClearColor: function(color) {
                 this.clearColor = color;
             },
-            getClearColor: function () {
+            getClearColor: function() {
                 return this.clearColor;
             },
 
-            setViewport: function (vp) {
+            setViewport: function(vp) {
                 this.viewport = vp;
                 this.getOrCreateStateSet().setAttributeAndModes(vp);
             },
-            getViewport: function () {
+            getViewport: function() {
                 return this.viewport;
             },
 
-            setScissor: function (scissor) {
+            setScissor: function(scissor) {
                 this._scissor = scissor;
                 this.getOrCreateStateSet().setAttributeAndModes(this._scissor);
             },
-            getScissor: function () {
+            getScissor: function() {
                 return this._scissor;
             },
 
-            setViewMatrix: function (matrix) {
+            setViewMatrix: function(matrix) {
                 this.modelviewMatrix = matrix;
             },
-            setViewMatrixAsLookAt: function (eye, center, up) {
+            setViewMatrixAsLookAt: function(eye, center, up) {
                 mat4.lookAt(this.getViewMatrix(), eye, center, up);
             },
-            setProjectionMatrix: function (matrix) {
+            setProjectionMatrix: function(matrix) {
                 this.projectionMatrix = matrix;
             },
 
             /** Set to an orthographic projection. See OpenGL glOrtho for documentation further details.*/
-            setProjectionMatrixAsOrtho: function (left, right, bottom, top, zNear, zFar) {
+            setProjectionMatrixAsOrtho: function(left, right, bottom, top, zNear, zFar) {
                 mat4.ortho(this.getProjectionMatrix(), left, right, bottom, top, zNear, zFar);
             },
-            isRenderToTextureCamera: function () {
+            isRenderToTextureCamera: function() {
                 return window.Object.keys(this._attachments).length > 0;
             },
 
-            getViewMatrix: function () {
+            getViewMatrix: function() {
                 return this.modelviewMatrix;
             },
-            getProjectionMatrix: function () {
+            getProjectionMatrix: function() {
                 return this.projectionMatrix;
             },
-            getRenderOrder: function () {
+            getRenderOrder: function() {
                 return this.renderOrder;
             },
-            setRenderOrder: function (order, orderNum) {
+            setRenderOrder: function(order, orderNum) {
                 this.renderOrder = order;
                 this.renderOrderNum = orderNum;
             },
-            getFrameBufferObject: function () {
+            getFrameBufferObject: function() {
                 return this.frameBufferObject;
             },
-            setFrameBufferObject: function (fbo) {
+            setFrameBufferObject: function(fbo) {
                 this.frameBufferObject = fbo;
             },
-            detachAll: function () {
+            detachAll: function() {
                 this._attachments = {};
 
                 if (this.frameBufferObject) {
@@ -182,7 +182,7 @@ utils.createPrototypeNode(
 
             // TODO: fix in case of shared fbo
             // TODO: fix adding a resize case
-            resetAttachments: function () {
+            resetAttachments: function() {
                 if (this.frameBufferObject) {
                     this.frameBufferObject.reset();
                     // remove framebuffer
@@ -193,7 +193,7 @@ utils.createPrototypeNode(
                 this._attachments = {};
             },
 
-            attachTexture: function (bufferComponent, texture, textureTarget) {
+            attachTexture: function(bufferComponent, texture, textureTarget) {
                 if (this.frameBufferObject) {
                     this.frameBufferObject.dirty();
                 }
@@ -211,7 +211,7 @@ utils.createPrototypeNode(
                 };
             },
 
-            attachRenderBuffer: function (bufferComponent, internalFormat) {
+            attachRenderBuffer: function(bufferComponent, internalFormat) {
                 if (this.frameBufferObject) {
                     this.frameBufferObject.dirty();
                 }
@@ -221,7 +221,7 @@ utils.createPrototypeNode(
                 };
             },
 
-            computeLocalToWorldMatrix: function (matrix /*,nodeVisitor*/) {
+            computeLocalToWorldMatrix: function(matrix /*,nodeVisitor*/) {
                 if (this.referenceFrame === TransformEnums.RELATIVE_RF) {
                     mat4.mul(matrix, matrix, this.modelviewMatrix);
                 } else {
@@ -231,9 +231,9 @@ utils.createPrototypeNode(
                 return true;
             },
 
-            computeWorldToLocalMatrix: (function () {
+            computeWorldToLocalMatrix: (function() {
                 var minverse = mat4.create();
-                return function (matrix /*, nodeVisitor */) {
+                return function(matrix /*, nodeVisitor */) {
                     mat4.invert(minverse, this.modelviewMatrix);
                     if (this.referenceFrame === TransformEnums.RELATIVE_RF) {
                         mat4.mul(matrix, minverse, matrix);

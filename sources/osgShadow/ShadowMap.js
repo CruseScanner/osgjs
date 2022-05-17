@@ -27,14 +27,14 @@ import Scissor from 'osg/Scissor';
 // Custom camera cull callback
 // we customize it just to avoid to add extra 'virtual' function
 // on the shadowTecnique class
-var CameraCullCallback = function (shadowTechnique) {
+var CameraCullCallback = function(shadowTechnique) {
     this._shadowTechnique = shadowTechnique;
 };
 
 utils.createPrototypeObject(
     CameraCullCallback,
     {
-        cull: function (node, nv) {
+        cull: function(node, nv) {
             this._shadowTechnique.getShadowedScene().nodeTraverse(nv);
 
             var cs = nv.getCurrentCullingSet();
@@ -67,7 +67,7 @@ utils.createPrototypeObject(
  *  ShadowMap provides an implementation of shadow textures.
  *  @class ShadowMap
  */
-var ShadowMap = function (settings, shadowTexture) {
+var ShadowMap = function(settings, shadowTexture) {
     ShadowTechnique.call(this);
 
     this._projectionMatrix = mat4.create();
@@ -177,10 +177,10 @@ var ShadowMap = function (settings, shadowTexture) {
 utils.createPrototypeObject(
     ShadowMap,
     utils.objectInherit(ShadowTechnique.prototype, {
-        getDepthRange: function () {
+        getDepthRange: function() {
             return this._depthRange;
         },
-        setLightFrustum: function (lf, near, far) {
+        setLightFrustum: function(lf, near, far) {
             this._lightFrustum = lf;
 
             this._depthRange[0] = near;
@@ -192,28 +192,28 @@ utils.createPrototypeObject(
                 mat4.invert(this._debugNodeFrustum.getMatrix(), this._viewMatrix);
             }
         },
-        getCamera: function () {
+        getCamera: function() {
             return this._cameraShadow;
         },
 
-        getTexture: function () {
+        getTexture: function() {
             return this._texture;
         },
 
-        isDirty: function () {
+        isDirty: function() {
             return this._dirty;
         },
         /**
          * at which Texture unit number we start adding texture shadow
          */
-        setTextureUnitBase: function (unitBase) {
+        setTextureUnitBase: function(unitBase) {
             this._textureUnitBase = unitBase;
             this._textureUnit = unitBase;
         },
 
         /* Sets  shadowSettings
-         */
-        setShadowSettings: function (shadowSettings) {
+     */
+        setShadowSettings: function(shadowSettings) {
             if (!shadowSettings) return;
 
             this._light = shadowSettings.light;
@@ -231,63 +231,63 @@ utils.createPrototypeObject(
             this.setNormalBias(shadowSettings.normalBias);
         },
 
-        setCastsShadowDrawTraversalMask: function (mask) {
+        setCastsShadowDrawTraversalMask: function(mask) {
             this._castsShadowDrawTraversalMask = mask;
         },
 
-        getCastsShadowDrawTraversalMask: function () {
+        getCastsShadowDrawTraversalMask: function() {
             return this._castsDrawShadowTraversalMask;
         },
 
-        setCastsShadowBoundsTraversalMask: function (mask) {
+        setCastsShadowBoundsTraversalMask: function(mask) {
             this._castsShadowBoundsTraversalMask = mask;
         },
 
-        getCastsShadowBoundsTraversalMask: function () {
+        getCastsShadowBoundsTraversalMask: function() {
             return this._castsShadowBoundsTraversalMask;
         },
 
-        getNormalBias: function () {
+        getNormalBias: function() {
             return this._shadowReceiveAttribute.getNormalBias();
         },
 
-        setNormalBias: function (value) {
+        setNormalBias: function(value) {
             this._shadowReceiveAttribute.setNormalBias(value);
         },
 
-        getJitterOffset: function () {
+        getJitterOffset: function() {
             return this._shadowReceiveAttribute.getJitterOffset();
         },
 
-        setJitterOffset: function (value) {
+        setJitterOffset: function(value) {
             this._shadowReceiveAttribute.setJitterOffset(value);
         },
 
-        getBias: function () {
+        getBias: function() {
             return this._shadowReceiveAttribute.getBias();
         },
 
-        setBias: function (value) {
+        setBias: function(value) {
             this._shadowReceiveAttribute.setBias(value);
             var uniform = this._casterStateSet.getUniformList().bias.getUniform();
             uniform.setFloat(value);
         },
 
-        getKernelSizePCF: function () {
+        getKernelSizePCF: function() {
             return this._shadowReceiveAttribute.getKernelSizePCF();
         },
 
-        setKernelSizePCF: function (value) {
+        setKernelSizePCF: function(value) {
             this._shadowReceiveAttribute.setKernelSizePCF(value);
         },
 
-        setShadowedScene: function (shadowedScene) {
+        setShadowedScene: function(shadowedScene) {
             ShadowTechnique.prototype.setShadowedScene.call(this, shadowedScene);
             this._receivingStateset = this._shadowedScene.getReceivingStateSet();
             this.dirty();
         },
 
-        checkLightNumber: function () {
+        checkLightNumber: function() {
             var lightNumber = this._light.getLightNumber();
 
             // if light number changed we need to remove cleanly
@@ -332,7 +332,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _rebindFbo: function () {
+        _rebindFbo: function() {
             this._cameraShadow.detachAll();
             this._cameraShadow.attachTexture(FrameBufferObject.COLOR_ATTACHMENT0, this._texture);
             this._cameraShadow.attachRenderBuffer(
@@ -342,7 +342,7 @@ utils.createPrototypeObject(
         },
 
         /** initialize the ShadowedScene and local cached data structures.*/
-        init: function (atlasTexture, lightIndex, textureUnit) {
+        init: function(atlasTexture, lightIndex, textureUnit) {
             if (!this._shadowedScene) return;
 
             this._needRedraw = true;
@@ -412,10 +412,11 @@ utils.createPrototypeObject(
         // os we set a null texture and OVERRIDE StateAttribute flag
         // only case you want to use a texture is
         // alpha masked material, then you have StateAttribute to 'PROTECTED'
-        _preventTextureBindingDuringShadowCasting: function () {
+        _preventTextureBindingDuringShadowCasting: function() {
             // prevent unnecessary texture bindings on all texture unit
-            var shouldGetMaxTextureUnits =
-                WebGLCaps.instance().getWebGLParameter('MAX_TEXTURE_IMAGE_UNITS');
+            var shouldGetMaxTextureUnits = WebGLCaps.instance().getWebGLParameter(
+                'MAX_TEXTURE_IMAGE_UNITS'
+            );
             for (var k = 0; k < shouldGetMaxTextureUnits; k++) {
                 // bind  null texture which OSGJS will not bind,
                 // effectively preventing any other texture bind
@@ -427,12 +428,12 @@ utils.createPrototypeObject(
                 );
             }
         },
-        valid: function () {
+        valid: function() {
             // checks
             return true;
         },
 
-        updateShadowTechnique: function (nv, viewportDimension, frameBufferObject) {
+        updateShadowTechnique: function(nv, viewportDimension, frameBufferObject) {
             var camera = this._cameraShadow;
             var texture = this._texture;
 
@@ -489,14 +490,14 @@ utils.createPrototypeObject(
             }
         },
 
-        updateShadowTechnic: function (/*nv*/) {
+        updateShadowTechnic: function(/*nv*/) {
             notify.log(
                 'ShadowMap.updateShadowTechnic() is deprecated, use updateShadowTechnique instead'
             );
             this.updateShadowTechnique();
         },
 
-        setTextureFiltering: function () {
+        setTextureFiltering: function() {
             var textureType;
             var texType = this.getTexturePrecision();
             switch (texType) {
@@ -521,7 +522,7 @@ utils.createPrototypeObject(
 
         // internal texture allocation
         // handle any change like resize, filter param, etc.
-        initTexture: function () {
+        initTexture: function() {
             if (!this._dirty) return;
 
             if (!this._texture) {
@@ -546,18 +547,18 @@ utils.createPrototypeObject(
 
             this._texture.dirty();
         },
-        setTexturePrecision: function (format) {
+        setTexturePrecision: function(format) {
             if (format === this._shadowReceiveAttribute.getPrecision()) return;
 
             this._shadowReceiveAttribute.setPrecision(format);
             this.dirty();
         },
 
-        getTexturePrecision: function () {
+        getTexturePrecision: function() {
             return this._shadowReceiveAttribute.getPrecision();
         },
 
-        setTextureSize: function (mapSize) {
+        setTextureSize: function(mapSize) {
             if (mapSize === this._textureSize) return;
 
             this._textureSize = mapSize;
@@ -565,18 +566,18 @@ utils.createPrototypeObject(
             this.dirty();
         },
 
-        getCasterStateSet: function () {
+        getCasterStateSet: function() {
             return this._casterStateSet;
         },
 
-        setLight: function (light) {
+        setLight: function(light) {
             if (!light || light === this._light) return;
 
             this._light = light;
             this.dirty();
         },
 
-        getUp: function (dir) {
+        getUp: function(dir) {
             //avoid dir/up wrong angle breaking computation
 
             // compute a up vector ensuring avoiding parallel vectors
@@ -603,7 +604,7 @@ utils.createPrototypeObject(
         // or we actually have to render something.
         // Empty or Bad Frustums
         // No objects, handle it gracefully
-        nearFarBounding: function () {
+        nearFarBounding: function() {
             var zNear = this._depthRange[0];
             var zFar = this._depthRange[1];
 
@@ -621,7 +622,7 @@ utils.createPrototypeObject(
             this._depthRange[1] = zFar;
         },
 
-        makePerspectiveFromBoundingBox: function (bbox, fov, eyePos, eyeDir, view, projection) {
+        makePerspectiveFromBoundingBox: function(bbox, fov, eyePos, eyeDir, view, projection) {
             var center = bbox.center(this._tmpVec);
             var radius = bbox.radius();
             var epsilon = ShadowMap.EPSILON;
@@ -653,7 +654,7 @@ utils.createPrototypeObject(
             // positional light: spot, point, area
             //  fov < 180.0
             // statically defined by spot, only needs zNear zFar estimates
-            var fovRadius = this._depthRange[0] * Math.tan((fov * Math.PI) / 180.0);
+            var fovRadius = this._depthRange[0] * Math.tan(fov * Math.PI / 180.0);
             // if scene radius is smaller than fov on scene
             // Tighten and enhance precision
             fovRadius = fovRadius > radius ? radius : fovRadius;
@@ -687,7 +688,7 @@ utils.createPrototypeObject(
             mat4.lookAtDirection(view, eyePos, eyeDir, up);
         },
 
-        makeOrthoFromBoundingBox: function (bbox, eyeDir, view, projection) {
+        makeOrthoFromBoundingBox: function(bbox, eyeDir, view, projection) {
             var center = bbox.center(this._tmpVecTercio);
 
             var radius = bbox.radius();
@@ -725,12 +726,12 @@ utils.createPrototypeObject(
             this._depthRange[1] = zFar;
         },
         /*
-         * Sync camera and light vision so that
-         * shadow map render using a camera whom
-         * settings come from the light
-         * and the scene being shadowed
-         */
-        aimShadowCastingCamera: function (cullVisitor, bbox) {
+     * Sync camera and light vision so that
+     * shadow map render using a camera whom
+     * settings come from the light
+     * and the scene being shadowed
+     */
+        aimShadowCastingCamera: function(cullVisitor, bbox) {
             var light = this._light;
 
             if (!light) {
@@ -829,7 +830,7 @@ utils.createPrototypeObject(
         // culling is done,
         // now try for a the tightest frustum
         // possible for shadowcasting
-        frameShadowCastingFrustum: function (cullVisitor) {
+        frameShadowCastingFrustum: function(cullVisitor) {
             if (!this._infiniteFrustum) {
                 CullVisitor.prototype.clampProjectionMatrix(
                     this._projectionMatrix,
@@ -848,7 +849,7 @@ utils.createPrototypeObject(
             this.setShadowUniformsReceive(false);
         },
 
-        setShadowUniformsReceive: function (noDepth) {
+        setShadowUniformsReceive: function(noDepth) {
             if (noDepth) {
                 // receiver shader can read and early out
                 vec2.set(this._depthRange, 0.0, 0.0);
@@ -872,7 +873,7 @@ utils.createPrototypeObject(
         // but we want to mark the uniform so that receiver shader can do
         // an early out.
         // ie: in shader, no texfetch
-        markSceneAsNoShadow: function () {
+        markSceneAsNoShadow: function() {
             this.setShadowUniformsReceive(true);
             // we still clear the shadow so we filled it
             this._needRedraw = false;
@@ -880,7 +881,7 @@ utils.createPrototypeObject(
 
         // Defines the frustum from light param.
         //
-        cullShadowCasting: function (cullVisitor, bbox) {
+        cullShadowCasting: function(cullVisitor, bbox) {
             if (this._debug) {
                 var min = bbox.getMin();
                 var max = bbox.getMax();
@@ -940,7 +941,7 @@ utils.createPrototypeObject(
             this._needRedraw = false;
         },
 
-        cleanReceivingStateSet: function (ignoreTexture) {
+        cleanReceivingStateSet: function(ignoreTexture) {
             if (this._receivingStateset) {
                 if (
                     this._receivingStateset.getAttribute(
@@ -968,7 +969,7 @@ utils.createPrototypeObject(
                 }
             }
         },
-        cleanSceneGraph: function (ignoreTexture) {
+        cleanSceneGraph: function(ignoreTexture) {
             // well release a lot more things when it works
             this._needRedraw = true;
             this.cleanReceivingStateSet(ignoreTexture);
@@ -979,7 +980,7 @@ utils.createPrototypeObject(
             this._shadowedScene = undefined;
         },
 
-        setDebug: function (enable) {
+        setDebug: function(enable) {
             if (enable && !this._debug) {
                 if (!this._debugNode) {
                     this._debugGeomFrustum = Debug.createDebugFrustumGeometry();
@@ -1001,14 +1002,14 @@ utils.createPrototypeObject(
             }
             this._debug = enable;
         },
-        getDebug: function () {
+        getDebug: function() {
             return this._debug;
         },
-        getLightNumber: function () {
+        getLightNumber: function() {
             return this._light.getLightNumber();
         },
 
-        getLight: function () {
+        getLight: function() {
             return this._light;
         }
     }),

@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     var P = window.P;
@@ -14,7 +14,7 @@
     var RampAttribute = window.RampAttribute;
     var NegatifAttribute = window.NegatifAttribute;
 
-    var Example = function () {
+    var Example = function() {
         this._config = {
             negatif: true,
             ramp: true,
@@ -22,7 +22,7 @@
         };
     };
 
-    var convertColor = function (color) {
+    var convertColor = function(color) {
         var r, g, b;
 
         if (color.length === 3) {
@@ -47,7 +47,7 @@
     };
 
     Example.prototype = {
-        initDatGUI: function () {
+        initDatGUI: function() {
             var controller;
             var gui = new window.dat.GUI();
 
@@ -61,26 +61,26 @@
             controller.onChange(this.updateRamp.bind(this));
         },
 
-        updateNegatif: function () {
+        updateNegatif: function() {
             this._negatifAttribute.setAttributeEnable(this._config.negatif);
         },
 
-        updateRamp: function () {
+        updateRamp: function() {
             this._rampAttribute.setAttributeEnable(this._config.ramp);
         },
 
-        updateDiffuse: function () {
+        updateDiffuse: function() {
             this._materialAttribute.setDiffuse(convertColor(this._config.diffuse));
         },
 
-        readShaders: function () {
+        readShaders: function() {
             // get shader processor
             var shaderProcessor = new osgShader.ShaderProcessor();
 
             var promise = P.resolve($.get('shaders/custom.glsl'));
 
             // register shader to the shader processor
-            promise.then(function (shader) {
+            promise.then(function(shader) {
                 var shaderLib = {
                     'custom.glsl': shader
                 };
@@ -94,7 +94,7 @@
             return promise;
         },
 
-        installCustomShaders: function () {
+        installCustomShaders: function() {
             // create a new shader generator with our own compiler
             var shaderGenerator = new osgShader.ShaderGenerator();
             shaderGenerator.setShaderCompiler(CustomCompiler);
@@ -107,13 +107,13 @@
         },
 
         // get the model
-        getOrCreateModel: function () {
+        getOrCreateModel: function() {
             if (!this._model) {
                 this._model = new osg.Node();
 
                 var request = osgDB.readNodeURL('../media/models/material-test/file.osgjs');
                 request.then(
-                    function (model) {
+                    function(model) {
                         var mt = new osg.MatrixTransform();
                         osg.mat4.fromRotation(mt.getMatrix(), -Math.PI / 2, [1, 0, 0]);
                         var bb = model.getBound();
@@ -134,7 +134,7 @@
             return this._model;
         },
 
-        createScene: function () {
+        createScene: function() {
             var root = new osg.Node();
             this._materialAttribute = new osg.Material();
             root.getOrCreateStateSet().setAttributeAndModes(this._materialAttribute);
@@ -174,14 +174,14 @@
             return root;
         },
 
-        run: function (canvas) {
+        run: function(canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, this._osgOptions);
             this._viewer = viewer;
             viewer.init();
 
             this.readShaders().then(
-                function () {
+                function() {
                     this.installCustomShaders();
                     this.initDatGUI();
 
@@ -199,7 +199,7 @@
 
     window.addEventListener(
         'load',
-        function () {
+        function() {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

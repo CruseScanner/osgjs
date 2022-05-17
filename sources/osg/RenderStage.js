@@ -16,7 +16,7 @@ import PooledResource from 'osg/PooledResource';
  * 'pre' rendering stages are used for advanced rendering techniques
  * like multistage pixel shading or impostors.
  */
-var RenderStage = function () {
+var RenderStage = function() {
     RenderBin.call(this);
     this._clearColor = vec4.create();
     this._clearDepth = undefined;
@@ -31,7 +31,7 @@ var RenderStage = function () {
     RenderStage.prototype.init.call(this);
 };
 
-var createRenderStageOrder = function () {
+var createRenderStageOrder = function() {
     return {
         renderStage: null,
         order: null
@@ -43,7 +43,7 @@ var pooledRenderStageOrder = new PooledResource(createRenderStageOrder);
 utils.createPrototypeObject(
     RenderStage,
     utils.objectInherit(RenderBin.prototype, {
-        init: function () {
+        init: function() {
             RenderBin.prototype.init.call(this);
             this._clearDepth = 1.0;
             vec4.set(this._clearColor, 0.0, 0.0, 0.0, 1.0);
@@ -58,74 +58,74 @@ utils.createPrototypeObject(
             return this;
         },
 
-        _initInternal: function () {
+        _initInternal: function() {
             this._preRenderList.length = 0;
             this._postRenderList.length = 0;
         },
 
-        reset: function () {
+        reset: function() {
             pooledRenderStageOrder.reset();
             RenderBin.prototype.reset.call(this);
             RenderStage.prototype._initInternal.call(this);
         },
 
-        setClearDepth: function (depth) {
+        setClearDepth: function(depth) {
             this._clearDepth = depth;
         },
 
-        getClearDepth: function () {
+        getClearDepth: function() {
             return this._clearDepth;
         },
 
-        setClearColor: function (color) {
+        setClearColor: function(color) {
             vec4.copy(this._clearColor, color);
         },
 
-        getClearColor: function () {
+        getClearColor: function() {
             return this._clearColor;
         },
 
-        setClearMask: function (mask) {
+        setClearMask: function(mask) {
             this._clearMask = mask;
         },
 
-        getClearMask: function () {
+        getClearMask: function() {
             return this._clearMask;
         },
 
-        setViewport: function (vp) {
+        setViewport: function(vp) {
             this._viewport = vp;
         },
 
-        getViewport: function () {
+        getViewport: function() {
             return this._viewport;
         },
 
-        setScissor: function (scissor) {
+        setScissor: function(scissor) {
             this._scissor = scissor;
         },
 
-        getScissor: function () {
+        getScissor: function() {
             return this._scissor;
         },
 
-        setCamera: function (camera) {
+        setCamera: function(camera) {
             this._camera = camera;
         },
 
-        getCamera: function () {
+        getCamera: function() {
             return this._camera;
         },
 
-        getPreRenderStageList: function () {
+        getPreRenderStageList: function() {
             return this._preRenderList;
         },
 
-        getPostRenderStageList: function () {
+        getPostRenderStageList: function() {
             return this._postRenderList;
         },
 
-        addPreRenderStage: function (rs, order) {
+        addPreRenderStage: function(rs, order) {
             for (var i = 0, l = this._preRenderList.length; i < l; i++) {
                 var render = this._preRenderList[i];
                 if (order < render.order) {
@@ -143,7 +143,7 @@ utils.createPrototypeObject(
             }
         },
 
-        addPostRenderStage: function (rs, order) {
+        addPostRenderStage: function(rs, order) {
             for (var i = 0, l = this._postRenderList.length; i < l; i++) {
                 var render = this._postRenderList[i];
                 if (order < render.order) {
@@ -161,7 +161,7 @@ utils.createPrototypeObject(
             }
         },
 
-        drawPreRenderStages: function (state, previousRenderLeaf) {
+        drawPreRenderStages: function(state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
             for (var i = 0, l = this._preRenderList.length; i < l; ++i) {
                 var sg = this._preRenderList[i].renderStage;
@@ -170,7 +170,7 @@ utils.createPrototypeObject(
             return previousLeaf;
         },
 
-        draw: function (state, previousRenderLeaf) {
+        draw: function(state, previousRenderLeaf) {
             if (this._camera && this._camera.getInitialDrawCallback()) {
                 // if we have a camera with a final callback invoke it.
                 this._camera.getInitialDrawCallback()(state);
@@ -190,7 +190,7 @@ utils.createPrototypeObject(
             return previousLeaf;
         },
 
-        sort: function () {
+        sort: function() {
             for (var i = 0, l = this._preRenderList.length; i < l; ++i) {
                 this._preRenderList[i].renderStage.sort();
             }
@@ -202,7 +202,7 @@ utils.createPrototypeObject(
             }
         },
 
-        drawPostRenderStages: function (state, previousRenderLeaf) {
+        drawPostRenderStages: function(state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
             for (var i = 0, l = this._postRenderList.length; i < l; ++i) {
                 var sg = this._postRenderList[i].renderStage;
@@ -211,7 +211,7 @@ utils.createPrototypeObject(
             return previousLeaf;
         },
 
-        applyCamera: function (state) {
+        applyCamera: function(state) {
             var gl = state.getGraphicContext();
             if (this._camera === undefined) {
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -270,7 +270,7 @@ utils.createPrototypeObject(
             fbo.apply(state);
         },
 
-        drawImplementation: function (state, previousRenderLeaf) {
+        drawImplementation: function(state, previousRenderLeaf) {
             var gl = state.getGraphicContext();
 
             this.applyCamera(state);
@@ -313,7 +313,7 @@ utils.createPrototypeObject(
     'RenderStage'
 );
 
-RenderStage.clean = function () {
+RenderStage.clean = function() {
     pooledRenderStageOrder.clean();
 };
 
