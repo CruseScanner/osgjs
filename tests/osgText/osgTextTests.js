@@ -1,5 +1,5 @@
 import Text from 'tests/osgText/Text';
 
-export default function() {
+export default function () {
     Text();
 }

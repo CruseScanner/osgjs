@@ -30,7 +30,7 @@ OSG.osgPlugins = osgPlugins;
 OSG.InputGroups = osgViewer.InputGroups;
 
 // for backward compatibility
-OSG.globalify = function() {
+OSG.globalify = function () {
     window.osg = OSG.osg;
     window.osgAnimation = OSG.osgAnimation;
     window.osgDB = OSG.osgDB;

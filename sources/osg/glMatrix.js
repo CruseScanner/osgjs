@@ -14,15 +14,15 @@ var quat = glm.quat;
 
 // osg vec3 additions
 
-vec3.create32 = function() {
+vec3.create32 = function () {
     return new Float32Array(3);
 };
 
-vec3.create64 = function() {
+vec3.create64 = function () {
     return new Float64Array(3);
 };
 
-vec3.fromValues32 = function(a, b, c) {
+vec3.fromValues32 = function (a, b, c) {
     var out = new Float32Array(3);
     out[0] = a;
     out[1] = b;
@@ -30,7 +30,7 @@ vec3.fromValues32 = function(a, b, c) {
     return out;
 };
 
-vec3.fromValues64 = function(a, b, c) {
+vec3.fromValues64 = function (a, b, c) {
     var out = new Float64Array(3);
     out[0] = a;
     out[1] = b;
@@ -38,11 +38,11 @@ vec3.fromValues64 = function(a, b, c) {
     return out;
 };
 
-vec3.init = function(out) {
+vec3.init = function (out) {
     return vec3.set(out, 0.0, 0.0, 0.0);
 };
 
-vec3.transformMat4Rotate = function(out, v, m) {
+vec3.transformMat4Rotate = function (out, v, m) {
     var x = v[0],
         y = v[1],
         z = v[2];
@@ -52,7 +52,7 @@ vec3.transformMat4Rotate = function(out, v, m) {
     return out;
 };
 
-vec3.valid = function(a) {
+vec3.valid = function (a) {
     if (mth.isNaN(a[0])) return false;
     if (mth.isNaN(a[1])) return false;
     if (mth.isNaN(a[2])) return false;
@@ -66,33 +66,33 @@ vec3.NEGATIVE_INFINITY = vec3.fromValues(-Infinity, -Infinity, -Infinity);
 
 // osg vec2 additions
 
-vec2.create32 = function() {
+vec2.create32 = function () {
     return new Float32Array(2);
 };
 
-vec2.create64 = function() {
+vec2.create64 = function () {
     return new Float64Array(2);
 };
 
-vec2.fromValues32 = function(a, b) {
+vec2.fromValues32 = function (a, b) {
     var out = new Float32Array(2);
     out[0] = a;
     out[1] = b;
     return out;
 };
 
-vec2.fromValues64 = function(a, b) {
+vec2.fromValues64 = function (a, b) {
     var out = new Float64Array(2);
     out[0] = a;
     out[1] = b;
     return out;
 };
 
-vec2.init = function(out) {
+vec2.init = function (out) {
     return vec2.set(out, 0.0, 0.0);
 };
 
-vec2.valid = function(a) {
+vec2.valid = function (a) {
     if (mth.isNaN(a[0])) return false;
     if (mth.isNaN(a[1])) return false;
     return true;
@@ -105,15 +105,15 @@ vec2.NEGATIVE_INFINITY = vec2.fromValues(-Infinity, -Infinity);
 
 // osg vec4 additions
 
-vec4.create32 = function() {
+vec4.create32 = function () {
     return new Float32Array(4);
 };
 
-vec4.create64 = function() {
+vec4.create64 = function () {
     return new Float64Array(4);
 };
 
-vec4.fromValues32 = function(a, b, c, d) {
+vec4.fromValues32 = function (a, b, c, d) {
     var out = new Float32Array(4);
     out[0] = a;
     out[1] = b;
@@ -122,7 +122,7 @@ vec4.fromValues32 = function(a, b, c, d) {
     return out;
 };
 
-vec4.fromValues64 = function(a, b, c, d) {
+vec4.fromValues64 = function (a, b, c, d) {
     var out = new Float64Array(4);
     out[0] = a;
     out[1] = b;
@@ -131,11 +131,11 @@ vec4.fromValues64 = function(a, b, c, d) {
     return out;
 };
 
-vec4.init = function(out) {
+vec4.init = function (out) {
     return vec4.set(out, 0.0, 0.0, 0.0, 0.0);
 };
 
-vec4.valid = function(a) {
+vec4.valid = function (a) {
     if (mth.isNaN(a[0])) return false;
     if (mth.isNaN(a[1])) return false;
     if (mth.isNaN(a[2])) return false;
@@ -152,17 +152,17 @@ vec4.NEGATIVE_INFINITY = vec4.fromValues(-Infinity, -Infinity, -Infinity, -Infin
 
 quat.IDENTITY = quat.create();
 
-quat.zeroRotation = function(q) {
+quat.zeroRotation = function (q) {
     return q[0] === 0.0 && q[1] === 0.0 && q[2] === 0.0 && q[3] === 1.0;
 };
 
-quat.create32 = function() {
+quat.create32 = function () {
     var out = new Float32Array(4);
     out[3] = 1.0;
     return out;
 };
 
-quat.create64 = function() {
+quat.create64 = function () {
     var out = new Float64Array(4);
     out[3] = 1.0;
     return out;
@@ -183,7 +183,7 @@ quat.init = quat.identity;
 // a and be must be normalized
 // (otherwise they're not rotation...)
 // t must be between 0 and 1
-quat.nlerp = function(out, a, b, t) {
+quat.nlerp = function (out, a, b, t) {
     var ax = a[0],
         ay = a[1],
         az = a[2],
@@ -241,13 +241,13 @@ quat.nlerp = function(out, a, b, t) {
 
 // mat3 additions
 mat3.IDENTITY = mat3.create();
-mat3.create32 = function() {
+mat3.create32 = function () {
     var out = new Float32Array(9);
     out[0] = out[4] = out[8] = 1.0;
     return out;
 };
 
-mat3.create64 = function() {
+mat3.create64 = function () {
     var out = new Float64Array(9);
     out[0] = out[4] = out[8] = 1.0;
     return out;
@@ -256,26 +256,26 @@ mat3.create64 = function() {
 // mat4 additions
 mat4.IDENTITY = mat4.create();
 
-mat4.create32 = function() {
+mat4.create32 = function () {
     var out = new Float32Array(16);
     out[0] = out[5] = out[10] = out[15] = 1.0;
     return out;
 };
 
-mat4.create64 = function() {
+mat4.create64 = function () {
     var out = new Float64Array(16);
     out[0] = out[5] = out[10] = out[15] = 1.0;
     return out;
 };
 
-mat4.setTranslation = function(out, a) {
+mat4.setTranslation = function (out, a) {
     out[12] = a[0];
     out[13] = a[1];
     out[14] = a[2];
     return out;
 };
 
-mat4.getFrustum = function(out, matrix) {
+mat4.getFrustum = function (out, matrix) {
     var right = 0.0;
     var left = 0.0;
     var top = 0.0;
@@ -296,11 +296,11 @@ mat4.getFrustum = function(out, matrix) {
     var tempNear = matrix[3 * 4 + 2] / (matrix[2 * 4 + 2] - 1.0);
     var tempFar = matrix[3 * 4 + 2] / (1.0 + matrix[2 * 4 + 2]);
 
-    left = tempNear * (matrix[2 * 4] - 1.0) / matrix[0];
-    right = tempNear * (1.0 + matrix[2 * 4]) / matrix[0];
+    left = (tempNear * (matrix[2 * 4] - 1.0)) / matrix[0];
+    right = (tempNear * (1.0 + matrix[2 * 4])) / matrix[0];
 
-    top = tempNear * (1.0 + matrix[2 * 4 + 1]) / matrix[1 * 4 + 1];
-    bottom = tempNear * (matrix[2 * 4 + 1] - 1.0) / matrix[1 * 4 + 1];
+    top = (tempNear * (1.0 + matrix[2 * 4 + 1])) / matrix[1 * 4 + 1];
+    bottom = (tempNear * (matrix[2 * 4 + 1] - 1.0)) / matrix[1 * 4 + 1];
 
     zNear = tempNear;
     zFar = tempFar;
@@ -315,7 +315,7 @@ mat4.getFrustum = function(out, matrix) {
     return true;
 };
 
-mat4.getPerspective = (function() {
+mat4.getPerspective = (function () {
     var c = {
         right: 0,
         left: 0,
@@ -324,11 +324,12 @@ mat4.getPerspective = (function() {
         zNear: 0,
         zFar: 0
     };
-    return function(out, matrix) {
+    return function (out, matrix) {
         // get frustum and compute results
         var r = mat4.getFrustum(c, matrix);
         if (r) {
-            out.fovy = 180 / Math.PI * (Math.atan(c.top / c.zNear) - Math.atan(c.bottom / c.zNear));
+            out.fovy =
+                (180 / Math.PI) * (Math.atan(c.top / c.zNear) - Math.atan(c.bottom / c.zNear));
             out.aspectRatio = (c.right - c.left) / (c.top - c.bottom);
         }
         out.zNear = c.zNear;
@@ -337,13 +338,13 @@ mat4.getPerspective = (function() {
     };
 })();
 
-mat4.getLookAt = (function() {
+mat4.getLookAt = (function () {
     var inv = mat4.create();
     var v1 = vec3.create();
     var v2 = vec3.fromValues(0.0, 1.0, 0.0);
     var v3 = vec3.fromValues(0.0, 0.0, -1.0);
 
-    return function(eye, center, up, matrix, distance) {
+    return function (eye, center, up, matrix, distance) {
         var d = distance !== undefined ? distance : 1.0;
         mat4.invert(inv, matrix);
         mat4.getTranslation(eye, inv);
@@ -354,10 +355,10 @@ mat4.getLookAt = (function() {
     };
 })();
 
-mat4.getFrustumPlanes = (function() {
+mat4.getFrustumPlanes = (function () {
     var mvp = mat4.create();
 
-    return function(out, projection, view, withNearFar) {
+    return function (out, projection, view, withNearFar) {
         mat4.mul(mvp, projection, view);
 
         var computeNearFar = !!withNearFar;
@@ -427,9 +428,9 @@ mat4.getFrustumPlanes = (function() {
 // Tightening the Precision of Perspective Rendering
 //http://www.geometry.caltech.edu/pubs/UD12.pdf
 // drop-in, just remove the one below, and rename this one
-mat4.infiniteFrustum = function(out, left, right, bottom, top, znear) {
-    var X = 2.0 * znear / (right - left);
-    var Y = 2.0 * znear / (top - bottom);
+mat4.infiniteFrustum = function (out, left, right, bottom, top, znear) {
+    var X = (2.0 * znear) / (right - left);
+    var Y = (2.0 * znear) / (top - bottom);
     var A = (right + left) / (right - left);
     var B = (top + bottom) / (top - bottom);
     var C = -1.0;
@@ -456,12 +457,12 @@ mat4.infiniteFrustum = function(out, left, right, bottom, top, znear) {
     return out;
 };
 
-mat4.lookAtDirection = (function() {
+mat4.lookAtDirection = (function () {
     var s = vec3.create();
     var u = vec3.create();
     var neg = vec3.create();
 
-    return function(out, eye, eyeDir, up) {
+    return function (out, eye, eyeDir, up) {
         var f = eyeDir;
         vec3.cross(s, f, up);
         vec3.normalize(s, s);
@@ -495,11 +496,11 @@ mat4.lookAtDirection = (function() {
     };
 })();
 
-mat4.getScale = (function() {
+mat4.getScale = (function () {
     var sx = vec3.create();
     var sy = vec3.create();
     var sz = vec3.create();
-    return function(out, matrix) {
+    return function (out, matrix) {
         sx[0] = matrix[0];
         sx[1] = matrix[4];
         sx[2] = matrix[8];
@@ -517,11 +518,11 @@ mat4.getScale = (function() {
     };
 })();
 
-mat4.getSqrScale = (function() {
+mat4.getSqrScale = (function () {
     var sx = vec3.create();
     var sy = vec3.create();
     var sz = vec3.create();
-    return function(out, matrix) {
+    return function (out, matrix) {
         sx[0] = matrix[0];
         sx[1] = matrix[4];
         sx[2] = matrix[8];
@@ -540,12 +541,12 @@ mat4.getSqrScale = (function() {
 })();
 
 var glmRotate = mat4.rotate;
-mat4.rotate = function(out, a, rad, axis) {
+mat4.rotate = function (out, a, rad, axis) {
     return glmRotate(out, a, rad, axis) || mat4.identity(out);
 };
 
 var glmFromRotate = mat4.fromRotation;
-mat4.fromRotation = function(out, rad, axis) {
+mat4.fromRotation = function (out, rad, axis) {
     return glmFromRotate(out, rad, axis) || mat4.identity(out);
 };
 

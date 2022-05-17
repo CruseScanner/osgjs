@@ -6,7 +6,7 @@ var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
 // Wait for it
-var main = function() {
+var main = function () {
     var canvas = document.getElementById('View');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -31,9 +31,9 @@ var main = function() {
         numLights = 3;
 
     // That's where we update lights direction at each frame
-    var LightUpdateCallback = function() {};
+    var LightUpdateCallback = function () {};
     LightUpdateCallback.prototype = {
-        update: function(node, nv) {
+        update: function (node, nv) {
             var currentTime = nv.getFrameStamp().getSimulationTime();
 
             // for all light on our mainNode (the root of our scen)

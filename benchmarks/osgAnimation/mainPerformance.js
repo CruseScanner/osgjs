@@ -4,15 +4,15 @@ import reportStats from 'benchmarks/reportStats';
 import Timer from 'osg/Timer';
 import BasicAnimationManager from 'osgAnimation/BasicAnimationManager';
 
-export default function() {
+export default function () {
     QUnit.module('osg Animation Loop');
 
-    QUnit.test('BasicAnimationManager Performance', function() {
+    QUnit.test('BasicAnimationManager Performance', function () {
         var basicAnimationManager = new BasicAnimationManager();
         var animations = [];
 
         // create an animation with an animation UpdateCallback in a node
-        var createAnimation = function() {
+        var createAnimation = function () {
             var index = animations.length.toString();
             var targetName = 'testUpdateMatrixTransform_' + index;
             var animation = mockup.createAnimation(
@@ -40,9 +40,9 @@ export default function() {
         //
         var time = 0.0;
         var nv = {
-            getFrameStamp: function() {
+            getFrameStamp: function () {
                 return {
-                    getSimulationTime: function() {
+                    getSimulationTime: function () {
                         return time;
                     }
                 };

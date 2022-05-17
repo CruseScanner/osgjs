@@ -5,17 +5,14 @@ import Timer from 'osg/Timer';
 import reportStats from 'benchmarks/reportStats';
 import mockupBench from 'benchmarks/mockupBench';
 
-export default function() {
-    test('CullVisitor Heavy Static Scene', function() {
+export default function () {
+    test('CullVisitor Heavy Static Scene', function () {
         var canvas = mockup.createCanvas(true);
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var cullVisitor = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var cullVisitor = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
 
         // dreaded camera no modelview
@@ -47,16 +44,13 @@ export default function() {
         reportStats(timed, 'Main CullVisitor Loop scene');
     });
 
-    test('CullVisitor Heavy Static Scene with Frustum culling (Worst Cases as Scene is Flat) ', function() {
+    test('CullVisitor Heavy Static Scene with Frustum culling (Worst Cases as Scene is Flat) ', function () {
         var canvas = mockup.createCanvas(true);
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var cullVisitor = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var cullVisitor = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
 
         // dreaded camera no modelview
@@ -89,16 +83,13 @@ export default function() {
         reportStats(timed, 'Main CullVisitor Loop scene + culling');
     });
 
-    test('CullVisitor Heavy Static Scene with 1 light And Shadows ', function() {
+    test('CullVisitor Heavy Static Scene with 1 light And Shadows ', function () {
         var canvas = mockup.createCanvas(true);
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var cullVisitor = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var cullVisitor = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
 
         // dreaded camera no modelview
@@ -134,16 +125,13 @@ export default function() {
         reportStats(timed, 'Main CullVisitor Loop scene + shadow Loop');
     });
 
-    test('Draw Pass ', function() {
+    test('Draw Pass ', function () {
         var canvas = mockup.createCanvas(true);
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var cullVisitor = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var cullVisitor = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
 
         // dreaded camera no modelview
@@ -172,10 +160,7 @@ export default function() {
         viewer.advance();
         viewer._updateVisitor.setFrameStamp(viewer.getFrameStamp());
 
-        viewer
-            .getCamera()
-            .getRenderer()
-            .cull();
+        viewer.getCamera().getRenderer().cull();
 
         console.profile();
         console.time('time');
@@ -183,10 +168,7 @@ export default function() {
 
         var nCount = 20;
         for (var n = 0; n < nCount; n++) {
-            viewer
-                .getCamera()
-                .getRenderer()
-                .draw();
+            viewer.getCamera().getRenderer().draw();
         }
 
         timed = Timer.instance().tick() - timed;
@@ -196,16 +178,13 @@ export default function() {
         reportStats(timed, 'Draw');
     });
 
-    test('Full Frame ', function() {
+    test('Full Frame ', function () {
         var canvas = mockup.createCanvas(true);
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var cullVisitor = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var cullVisitor = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
 
         // dreaded camera no modelview

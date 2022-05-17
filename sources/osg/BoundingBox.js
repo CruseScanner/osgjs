@@ -2,7 +2,7 @@ import notify from 'osg/notify';
 import utils from 'osg/utils';
 import { vec3, mat4 } from 'osg/glMatrix';
 
-var BoundingBox = function() {
+var BoundingBox = function () {
     this._min = vec3.create();
     this._max = vec3.create();
     this.init();
@@ -11,24 +11,24 @@ var BoundingBox = function() {
 utils.createPrototypeObject(
     BoundingBox,
     {
-        init: function() {
+        init: function () {
             vec3.copy(this._min, vec3.INFINITY);
             vec3.copy(this._max, vec3.NEGATIVE_INFINITY);
         },
 
-        volume: function() {
+        volume: function () {
             var v = this._max[0] - this._min[0];
             v *= this._max[1] - this._min[1];
             v *= this._max[2] - this._min[2];
             return v;
         },
 
-        copy: function(box) {
+        copy: function (box) {
             vec3.copy(this._min, box._min);
             vec3.copy(this._max, box._max);
         },
 
-        valid: function() {
+        valid: function () {
             return (
                 this._max[0] >= this._min[0] &&
                 this._max[1] >= this._min[1] &&
@@ -36,7 +36,7 @@ utils.createPrototypeObject(
             );
         },
 
-        expandByBoundingSphere: function(bs) {
+        expandByBoundingSphere: function (bs) {
             if (!bs.valid()) {
                 return;
             }
@@ -55,12 +55,12 @@ utils.createPrototypeObject(
             max[2] = Math.max(max[2], z + radius);
         },
 
-        expandByvec3: function(v) {
+        expandByvec3: function (v) {
             notify.warn('deprecated, use expandByVec3');
             this.expandByVec3(v);
         },
 
-        expandByVec3: function(v) {
+        expandByVec3: function (v) {
             var min = this._min;
             var max = this._max;
             min[0] = Math.min(min[0], v[0]);
@@ -72,7 +72,7 @@ utils.createPrototypeObject(
             max[2] = Math.max(max[2], v[2]);
         },
 
-        expandByBoundingBox: function(bb) {
+        expandByBoundingBox: function (bb) {
             if (!bb.valid()) return;
 
             var min = this._min;
@@ -90,7 +90,7 @@ utils.createPrototypeObject(
             if (bbmax[2] > max[2]) max[2] = bbmax[2];
         },
 
-        center: function(result) {
+        center: function (result) {
             var min = this._min;
             var max = this._max;
             result[0] = (min[0] + max[0]) * 0.5;
@@ -99,11 +99,11 @@ utils.createPrototypeObject(
             return result;
         },
 
-        radius: function() {
+        radius: function () {
             return Math.sqrt(this.radius2());
         },
 
-        radius2: function() {
+        radius2: function () {
             var min = this._min;
             var max = this._max;
             var dx = max[0] - min[0];
@@ -112,49 +112,49 @@ utils.createPrototypeObject(
             return 0.25 * (dx * dx + dy * dy + dz * dz);
         },
 
-        getMin: function() {
+        getMin: function () {
             return this._min;
         },
 
-        getMax: function() {
+        getMax: function () {
             return this._max;
         },
 
-        setMin: function(min) {
+        setMin: function (min) {
             vec3.copy(this._min, min);
             return this;
         },
 
-        setMax: function(max) {
+        setMax: function (max) {
             vec3.copy(this._max, max);
             return this;
         },
 
-        xMax: function() {
+        xMax: function () {
             return this._max[0];
         },
 
-        yMax: function() {
+        yMax: function () {
             return this._max[1];
         },
 
-        zMax: function() {
+        zMax: function () {
             return this._max[2];
         },
 
-        xMin: function() {
+        xMin: function () {
             return this._min[0];
         },
 
-        yMin: function() {
+        yMin: function () {
             return this._min[1];
         },
 
-        zMin: function() {
+        zMin: function () {
             return this._min[2];
         },
 
-        corner: function(pos, ret) {
+        corner: function (pos, ret) {
             /*jshint bitwise: false */
             if (pos & 1) {
                 ret[0] = this._max[0];
@@ -177,10 +177,10 @@ utils.createPrototypeObject(
 
         // http://dev.theomader.com/transform-bounding-boxes/
         // https://github.com/erich666/GraphicsGems/blob/master/gems/TransBox.c
-        transformMat4: (function() {
+        transformMat4: (function () {
             var tmpMin = vec3.create();
             var tmpMax = vec3.create();
-            return function(out, m) {
+            return function (out, m) {
                 var inMin = this.getMin();
                 var inMax = this.getMax();
 

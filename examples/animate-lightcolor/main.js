@@ -3,7 +3,7 @@ var OSG = window.OSG;
 var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
-var createScene = function() {
+var createScene = function () {
     // We create a box which will be lighted
     var group = new osg.Node();
     var size = 5;
@@ -16,16 +16,16 @@ var createScene = function() {
     return mainNode;
 };
 
-var onLoad = function() {
+var onLoad = function () {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     // we create a Callback
-    var LightUpdateCallback = function() {};
+    var LightUpdateCallback = function () {};
     LightUpdateCallback.prototype = {
-        update: function(node, nv) {
+        update: function (node, nv) {
             //every 5 seconds
             var currentTime = nv.getFrameStamp().getSimulationTime();
             currentTime = (currentTime % 5) / 5;

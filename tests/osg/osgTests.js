@@ -33,7 +33,7 @@ import Utils from 'tests/osg/Utils';
 import primitiveFunctor from 'tests/osg/primitiveFunctor';
 import WebGLCaps from 'tests/osg/WebGLCaps';
 
-export default function() {
+export default function () {
     Image();
     BlendColor();
     BoundingBox();

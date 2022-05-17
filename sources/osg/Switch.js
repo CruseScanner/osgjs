@@ -6,7 +6,7 @@ import NodeVisitor from 'osg/NodeVisitor';
  *  Switch that can switch on and off separate children
  *  @class Switch
  */
-var Switch = function() {
+var Switch = function () {
     Node.call(this);
     // This list of bools is effectively a bit mask.
     this._values = [];
@@ -16,7 +16,7 @@ var Switch = function() {
 utils.createPrototypeNode(
     Switch,
     utils.objectInherit(Node.prototype, {
-        addChild: function(node, value) {
+        addChild: function (node, value) {
             Node.prototype.addChild.call(this, node);
 
             if (value === undefined) value = true;
@@ -29,32 +29,32 @@ utils.createPrototypeNode(
             return true;
         },
 
-        setValue: function(index, value) {
+        setValue: function (index, value) {
             if (index < this._values.length) {
                 this._values[index] = value;
             }
         },
 
-        getValue: function(index) {
+        getValue: function (index) {
             if (index < this._values.length) {
                 return this._values[index];
             }
         },
 
-        setAllChildrenOff: function() {
+        setAllChildrenOff: function () {
             for (var i = 0; i < this._values.length; ++i) {
                 this._values[i] = false;
             }
         },
 
-        setAllChildrenOn: function() {
+        setAllChildrenOn: function () {
             for (var i = 0; i < this._values.length; ++i) {
                 this._values[i] = true;
             }
         },
 
-        traverse: (function() {
-            return function(visitor) {
+        traverse: (function () {
+            return function (visitor) {
                 var traversalMode = visitor.traversalMode;
 
                 switch (traversalMode) {

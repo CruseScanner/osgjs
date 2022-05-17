@@ -2,21 +2,21 @@ import { assert } from 'chai';
 import mockup from 'tests/mockup/mockup';
 import Shape from 'osg/shape';
 
-export default function() {
+export default function () {
     var canvas;
     var viewer;
 
-    beforeEach(function() {
+    beforeEach(function () {
         canvas = mockup.createCanvas();
         viewer = new mockup.Viewer(canvas);
     });
 
-    afterEach(function() {
+    afterEach(function () {
         mockup.removeCanvas(canvas);
         viewer.getInputManager().cleanup();
     });
-    test('Viewer', function() {
-        (function() {
+    test('Viewer', function () {
+        (function () {
             assert.isOk(viewer.getCamera() !== undefined, 'Check camera creation');
             assert.isOk(viewer.getCamera().getViewport() !== undefined, 'Check camera viewport');
             assert.isOk(viewer.getCamera().getRenderer() !== undefined, 'Check camera Renderer');
@@ -29,21 +29,18 @@ export default function() {
             );
         })();
 
-        (function() {
-            var createScene = function() {
+        (function () {
+            var createScene = function () {
                 return Shape.createTexturedBoxGeometry(0, 0, 0, 10, 10, 10);
             };
             viewer.init();
             viewer.setupManipulator();
 
             viewer.setSceneData(createScene());
-            viewer.getCamera().getRenderer().draw = function() {}; // do nothing
+            viewer.getCamera().getRenderer().draw = function () {}; // do nothing
             viewer.frame();
 
-            var cullvisitor = viewer
-                .getCamera()
-                .getRenderer()
-                .getCullVisitor();
+            var cullvisitor = viewer.getCamera().getRenderer().getCullVisitor();
             // with auto compute near far
             assert.approximately(cullvisitor._computedFar, 31.30036755335, 1e-5, 'check far');
             assert.approximately(cullvisitor._computedNear, 18.6996324495, 1e-5, 'check near');
@@ -62,7 +59,7 @@ export default function() {
         })();
 
         // test device
-        (function() {
+        (function () {
             var mouseInput = viewer.getInputManager().getInputSource('Mouse');
             var keyboardInput = viewer.getInputManager().getInputSource('Keyboard');
 
@@ -71,27 +68,27 @@ export default function() {
         })();
 
         // test context lost
-        (function() {
-            viewer.setContextLostCallback(function() {
+        (function () {
+            viewer.setContextLostCallback(function () {
                 assert.isOk(true, 'detected contextLost Lost');
             });
 
-            window.cancelAnimationFrame = function() {
+            window.cancelAnimationFrame = function () {
                 assert.isOk(true, 'context lost does cancel render loop');
             };
 
             viewer.init();
 
-            var createScene = function() {
+            var createScene = function () {
                 return Shape.createTexturedBoxGeometry(0, 0, 0, 10, 10, 10);
             };
             viewer.setupManipulator();
             viewer.setSceneData(createScene());
-            viewer.getCamera().getRenderer().draw = function() {}; // do nothing
+            viewer.getCamera().getRenderer().draw = function () {}; // do nothing
 
             var renderCount = 0;
 
-            viewer.beginFrame = function() {
+            viewer.beginFrame = function () {
                 renderCount++;
             };
 

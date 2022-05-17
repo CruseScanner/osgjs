@@ -11,8 +11,8 @@ if (mockup.isNodeContext()) {
     Input = require('osgDB/Input').default;
 }
 
-export default function() {
-    test('StateSet - MultiTextures', function() {
+export default function () {
+    test('StateSet - MultiTextures', function () {
         var tree = {
             stateset: {
                 material: {
@@ -65,7 +65,7 @@ export default function() {
         assert.isOk(textureCheck, 'check old texture');
     });
 
-    test('StateSet - BlendFunc, Material', function(done) {
+    test('StateSet - BlendFunc, Material', function (done) {
         var tree = {
             'osg.Node': {
                 StateSet: {
@@ -111,7 +111,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getStateSet() !== undefined, 'check last StateSet');
                 assert.isOk(
                     result.getStateSet().getAttribute('BlendFunc') !== undefined,
@@ -141,7 +141,7 @@ export default function() {
             });
     });
 
-    test('Geometry Cube UserData', function(done) {
+    test('Geometry Cube UserData', function (done) {
         var tree = {
             'osg.Geometry': {
                 Name: 'Cube',
@@ -206,156 +206,20 @@ export default function() {
                 VertexAttributeList: {
                     Normal: {
                         Elements: [
-                            0,
-                            0,
-                            -1,
-                            0,
-                            0,
-                            -1,
-                            0,
-                            0,
-                            -1,
-                            0,
-                            0,
-                            -1,
-                            0,
-                            -0,
-                            1,
-                            0,
-                            -0,
-                            1,
-                            0,
-                            -0,
-                            1,
-                            0,
-                            -0,
-                            1,
-                            1,
-                            -0,
-                            0,
-                            1,
-                            -0,
-                            0,
-                            1,
-                            -0,
-                            0,
-                            1,
-                            -0,
-                            0,
-                            -0,
-                            -1,
-                            -0,
-                            -0,
-                            -1,
-                            -0,
-                            -0,
-                            -1,
-                            -0,
-                            -0,
-                            -1,
-                            -0,
-                            -1,
-                            0,
-                            -0,
-                            -1,
-                            0,
-                            -0,
-                            -1,
-                            0,
-                            -0,
-                            -1,
-                            0,
-                            -0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            1,
-                            0,
-                            0,
-                            1,
-                            0
+                            0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, -0, 1, 0, -0, 1, 0, -0, 1, 0,
+                            -0, 1, 1, -0, 0, 1, -0, 0, 1, -0, 0, 1, -0, 0, -0, -1, -0, -0, -1, -0,
+                            -0, -1, -0, -0, -1, -0, -1, 0, -0, -1, 0, -0, -1, 0, -0, -1, 0, -0, 0,
+                            1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0
                         ],
                         ItemSize: 3,
                         Type: 'ARRAY_BUFFER'
                     },
                     Vertex: {
                         Elements: [
-                            1,
-                            1,
-                            -1,
-                            1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            -1,
-                            1,
-                            -1,
-                            1,
-                            1,
-                            1,
-                            1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            -1,
-                            -1,
-                            1,
-                            1
+                            1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, 1, -1, -1,
+                            1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, -1, 1, -1, -1, 1, -1,
+                            1, -1, -1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, 1,
+                            1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1
                         ],
                         ItemSize: 3,
                         Type: 'ARRAY_BUFFER'
@@ -366,42 +230,8 @@ export default function() {
                         DrawElementUShort: {
                             Indices: {
                                 Elements: [
-                                    0,
-                                    1,
-                                    3,
-                                    1,
-                                    2,
-                                    3,
-                                    4,
-                                    5,
-                                    7,
-                                    5,
-                                    6,
-                                    7,
-                                    8,
-                                    9,
-                                    11,
-                                    9,
-                                    10,
-                                    11,
-                                    12,
-                                    13,
-                                    15,
-                                    13,
-                                    14,
-                                    15,
-                                    16,
-                                    17,
-                                    19,
-                                    17,
-                                    18,
-                                    19,
-                                    20,
-                                    21,
-                                    23,
-                                    21,
-                                    22,
-                                    23
+                                    0, 1, 3, 1, 2, 3, 4, 5, 7, 5, 6, 7, 8, 9, 11, 9, 10, 11, 12, 13,
+                                    15, 13, 14, 15, 16, 17, 19, 17, 18, 19, 20, 21, 23, 21, 22, 23
                                 ],
                                 ItemSize: 1,
                                 Type: 'ELEMENT_ARRAY_BUFFER'
@@ -416,7 +246,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getStateSet() !== undefined, 'check geometry StateSet');
                 assert.isOk(
                     result.getStateSet().getUserData() !== undefined,
@@ -432,17 +262,12 @@ export default function() {
                     'check triangles first index'
                 );
                 assert.isOk(
-                    result
-                        .getPrimitiveSetList()[0]
-                        .getIndices()
-                        .getElements().length === 36,
+                    result.getPrimitiveSetList()[0].getIndices().getElements().length === 36,
                     'check triangles indices'
                 );
                 assert.isOk(
-                    result
-                        .getPrimitiveSetList()[0]
-                        .getIndices()
-                        .getElements().length === result.getPrimitiveSetList()[0].getCount(),
+                    result.getPrimitiveSetList()[0].getIndices().getElements().length ===
+                        result.getPrimitiveSetList()[0].getCount(),
                     'check triangles count'
                 );
                 assert.isOk(
@@ -453,27 +278,13 @@ export default function() {
             });
     });
 
-    test('MatrixTransform', function(done) {
+    test('MatrixTransform', function (done) {
         var tree = {
             'osg.MatrixTransform': {
                 Name: 'Lamp',
                 Matrix: [
-                    -0.2909,
-                    0.9552,
-                    -0.0552,
-                    0,
-                    -0.7711,
-                    -0.1999,
-                    0.6045,
-                    0,
-                    0.5664,
-                    0.2184,
-                    0.7947,
-                    0,
-                    4.0762,
-                    1.0055,
-                    5.9039,
-                    1
+                    -0.2909, 0.9552, -0.0552, 0, -0.7711, -0.1999, 0.6045, 0, 0.5664, 0.2184,
+                    0.7947, 0, 4.0762, 1.0055, 5.9039, 1
                 ],
                 Children: [
                     {
@@ -488,14 +299,14 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getName() === 'Lamp', 'check matrix transform');
                 assert.isOk(result.getMatrix()[0] === -0.2909, 'check matrix transform content');
                 done();
             });
     });
 
-    test('BasicAnimationManager', function(done) {
+    test('BasicAnimationManager', function (done) {
         var tree = {
             'osg.Node': {
                 UniqueID: 0,
@@ -767,7 +578,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getUpdateCallbackList().length === 1, 'check update callback');
                 assert.isOk(
                     result.getUpdateCallback().getAnimations()['Take 001'] !== undefined,
@@ -784,7 +595,7 @@ export default function() {
             });
     });
 
-    test('FloatLerpChannel', function(done) {
+    test('FloatLerpChannel', function (done) {
         var tree = {
             'osgAnimation.FloatLerpChannel': {
                 Name: 'euler_x',
@@ -794,34 +605,11 @@ export default function() {
                         Array: {
                             Float32Array: {
                                 Elements: [
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159,
-                                    -3.14159
+                                    -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
+                                    -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
+                                    -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
+                                    -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
+                                    -3.14159, -3.14159, -3.14159, -3.14159
                                 ],
                                 Size: 28
                             }
@@ -833,34 +621,10 @@ export default function() {
                         Array: {
                             Float32Array: {
                                 Elements: [
-                                    0,
-                                    0.133333,
-                                    0.166667,
-                                    0.2,
-                                    0.233333,
-                                    0.266667,
-                                    0.3,
-                                    0.333333,
-                                    0.866667,
-                                    0.9,
-                                    0.933333,
-                                    0.966667,
-                                    1,
-                                    1.76667,
-                                    1.8,
-                                    1.83333,
-                                    1.86667,
-                                    1.9,
-                                    1.93333,
-                                    1.96667,
-                                    2,
-                                    2.3,
-                                    2.33333,
-                                    2.36667,
-                                    2.4,
-                                    2.43333,
-                                    2.46667,
-                                    2.5
+                                    0, 0.133333, 0.166667, 0.2, 0.233333, 0.266667, 0.3, 0.333333,
+                                    0.866667, 0.9, 0.933333, 0.966667, 1, 1.76667, 1.8, 1.83333,
+                                    1.86667, 1.9, 1.93333, 1.96667, 2, 2.3, 2.33333, 2.36667, 2.4,
+                                    2.43333, 2.46667, 2.5
                                 ],
                                 Size: 28
                             }
@@ -877,7 +641,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.keys.length === 28, 'Check keys FloatLerpChannel');
                 assert.isOk(result.times.length === 28, 'Check times FloatLerpChannel');
                 assert.isOk(result.target === 'Cube', 'Check TargetName FloatLerpChannel');
@@ -885,7 +649,7 @@ export default function() {
             });
     });
 
-    test('QuatSlerpChannel', function(done) {
+    test('QuatSlerpChannel', function (done) {
         var tree = {
             'osgAnimation.QuatSlerpChannel': {
                 Name: 'rotate_x',
@@ -896,12 +660,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -914,12 +673,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -932,12 +686,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -950,12 +699,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -983,7 +727,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.keys.length === 28, 'Check keys QuatSlerpChannel');
                 assert.isOk(result.times.length === 7, 'Check times QuatSlerpChannel');
                 assert.isOk(result.target === 'Cube', 'Check TargetName QuatSlerpChannel');
@@ -991,7 +735,7 @@ export default function() {
             });
     });
 
-    test('QuatLerpChannel', function(done) {
+    test('QuatLerpChannel', function (done) {
         var tree = {
             'osgAnimation.QuatLerpChannel': {
                 Name: 'rotate_x',
@@ -1002,12 +746,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -1020,12 +759,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -1038,12 +772,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -1056,12 +785,7 @@ export default function() {
                             Array: {
                                 Float32Array: {
                                     Elements: [
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
-                                        -3.14159,
+                                        -3.14159, -3.14159, -3.14159, -3.14159, -3.14159, -3.14159,
                                         -3.14159
                                     ],
                                     Size: 7
@@ -1090,7 +814,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.keys.length === 28, 'Check keys QuatSlerpChannel');
                 assert.isOk(result.times.length === 7, 'Check times QuatSlerpChannel');
                 assert.isOk(result.target === 'Cube', 'Check TargetName QuatSlerpChannel');
@@ -1098,7 +822,7 @@ export default function() {
             });
     });
 
-    test('FloatCubicBezierChannel', function(done) {
+    test('FloatCubicBezierChannel', function (done) {
         var tree = {
             'osgAnimation.FloatCubicBezierChannel': {
                 Name: 'rotateX',
@@ -1153,7 +877,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.keys.length === 3, 'Check keys FloatCubicBezierChannel');
                 assert.isOk(result.times.length === 1, 'Check times FloatCubicBezierChannel');
                 assert.isOk(mockup.checkNear(result.keys[0], 3.5708), 'Ckeck Position');
@@ -1164,7 +888,7 @@ export default function() {
             });
     });
 
-    test('Vec3CubicBezierChannel', function(done) {
+    test('Vec3CubicBezierChannel', function (done) {
         var tree = {
             'osgAnimation.Vec3CubicBezierChannel': {
                 Name: 'scale',
@@ -1285,7 +1009,7 @@ export default function() {
         input
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.keys.length === 27, 'Check keys Vec3CubicBezierChannel');
                 assert.isOk(result.times.length === 3, 'Check times Vec3CubicBezierChannel');
                 assert.isOk(mockup.checkNear(result.keys[15], 0.92923402), 'Check value');
@@ -1294,7 +1018,7 @@ export default function() {
             });
     });
 
-    test('StackedTransform', function(done) {
+    test('StackedTransform', function (done) {
         var tree = {
             'osg.MatrixTransform': {
                 Name: 'Cube',
@@ -1347,7 +1071,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(
                     result.getUpdateCallbackList().length === 1,
                     'check osgAnimation.UpdateMatrixTransform callback'
@@ -1360,7 +1084,7 @@ export default function() {
             });
     });
 
-    test('DrawArray', function(done) {
+    test('DrawArray', function (done) {
         var tree = {
             'osg.Geometry': {
                 PrimitiveSetList: [
@@ -1379,10 +1103,10 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 return result;
             })
-            .then(function(geom) {
+            .then(function (geom) {
                 var result = geom.getPrimitiveSetList()[0];
                 assert.isOk(
                     result.getMode() === primitiveSet.TRIANGLES,
@@ -1394,7 +1118,7 @@ export default function() {
             });
     });
 
-    test('DrawArrays', function(done) {
+    test('DrawArrays', function (done) {
         var tree2 = {
             'osg.Geometry': {
                 PrimitiveSetList: [
@@ -1413,10 +1137,10 @@ export default function() {
         new Input()
             .setJSON(tree2)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 return result.getPrimitiveSetList()[0];
             })
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(
                     result.getMode() === primitiveSet.TRIANGLES,
                     'check DrawArray triangles'
@@ -1427,7 +1151,7 @@ export default function() {
             });
     });
 
-    test('DrawArrayLengths', function(done) {
+    test('DrawArrayLengths', function (done) {
         var tree = {
             'osg.Geometry': {
                 PrimitiveSetList: [
@@ -1446,10 +1170,10 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 return result.getPrimitiveSetList()[0];
             })
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(
                     result.getMode() === primitiveSet.TRIANGLES,
                     'check DrawArrayLengths triangles'
@@ -1460,7 +1184,7 @@ export default function() {
             });
     });
 
-    test('LightSource', function(done) {
+    test('LightSource', function (done) {
         var tree = {
             'osg.LightSource': {
                 Name: 'Lamp.005',
@@ -1485,13 +1209,13 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getLight() !== undefined, 'check if LightSource has a light');
                 done();
             });
     });
 
-    test('Text', function(done) {
+    test('Text', function (done) {
         var tree = {
             'osgText.Text': {
                 UniqueID: 1,
@@ -1507,7 +1231,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result.getText() === 'test', 'check text');
                 assert.isOk(result.getAutoRotateToScreen() === 1, 'check autoRotateToScreen');
                 assert.isOk(result.getCharacterSize() === 20, 'check characterSize');
@@ -1519,7 +1243,7 @@ export default function() {
             });
     });
 
-    test('PagedLOD', function(done) {
+    test('PagedLOD', function (done) {
         var tree = {
             'osg.PagedLOD': {
                 UniqueID: 1,
@@ -1540,7 +1264,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(result._rangeMode === 1, 'check RangeMode');
                 assert.isOk(result._perRangeDataList.length === 2, 'check children number');
                 assert.isOk(
@@ -1557,7 +1281,7 @@ export default function() {
             });
     });
 
-    test('Node Children Ordering', function(done) {
+    test('Node Children Ordering', function (done) {
         var tree = {
             'osg.Node': {
                 UniqueID: 2,
@@ -1598,7 +1322,7 @@ export default function() {
         new Input()
             .setJSON(tree)
             .readObject()
-            .then(function(result) {
+            .then(function (result) {
                 assert.isOk(
                     result.getChildren()[0].getName() === 'cow',
                     'the first node should be cow'

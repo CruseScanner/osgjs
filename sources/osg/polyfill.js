@@ -2,37 +2,37 @@
 if (window.Set && window.Map && window.Uint8ClampedArray) {
     // This file contains needed polyfills mainly for IE11
     if (!Math.sign) {
-        Math.sign = function(a) {
+        Math.sign = function (a) {
             return a > 0.0 ? 1.0 : a < 0.0 ? -1.0 : 0.0;
         };
     }
 
     if (!Math.log2) {
-        Math.log2 = function(x) {
+        Math.log2 = function (x) {
             return Math.log(x) * Math.LOG2E;
         };
     }
 
     if (!Math.log10) {
-        Math.log10 = function(x) {
+        Math.log10 = function (x) {
             return Math.log(x) * Math.LOG10E;
         };
     }
 
     if (!String.prototype.endsWith) {
-        String.prototype.endsWith = function(str) {
+        String.prototype.endsWith = function (str) {
             return this.slice(-str.length) === str;
         };
     }
 
     if (!String.prototype.startsWith) {
-        String.prototype.startsWith = function(str) {
+        String.prototype.startsWith = function (str) {
             return this.slice(0, str.length) === str;
         };
     }
 
     if (!Float32Array.prototype.slice) {
-        var _slicePolyfill = function(start, end) {
+        var _slicePolyfill = function (start, end) {
             return new this.constructor(this.subarray(start, end));
         };
 
@@ -52,7 +52,7 @@ if (window.Set && window.Map && window.Uint8ClampedArray) {
     var hasConstructorParameterSupport = setTest.has('test');
     if (!hasConstructorParameterSupport) {
         var nativeSetConstructor = window.Set;
-        window.Set = function(init) {
+        window.Set = function (init) {
             var set = new nativeSetConstructor();
             if (init) {
                 for (var i = 0; i < init.length; ++i) {

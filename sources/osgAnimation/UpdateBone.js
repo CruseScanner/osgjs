@@ -8,7 +8,7 @@ import NodeVisitor from 'osg/NodeVisitor';
  *  UpdateBone
  *  @class UpdateBone
  */
-var UpdateBone = function() {
+var UpdateBone = function () {
     UpdateMatrixTransform.call(this);
 };
 
@@ -16,7 +16,7 @@ var UpdateBone = function() {
 utils.createPrototypeObject(
     UpdateBone,
     utils.objectInherit(UpdateMatrixTransform.prototype, {
-        update: function(node, nv) {
+        update: function (node, nv) {
             if (nv.getVisitorType() === NodeVisitor.UPDATE_VISITOR) {
                 if (node.className && node.className() !== 'Bone') {
                     notify.warn('Warning: UpdateBone set on non-Bone object.');

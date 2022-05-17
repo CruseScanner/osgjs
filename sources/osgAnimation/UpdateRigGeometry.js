@@ -5,14 +5,14 @@ import FindNearestParentSkeleton from 'osgAnimation/FindNearestParentSkeleton';
 
 // converted from C++ probably it could be merged into RigGeometry
 // it could probably inlined into RigGeometry code
-var UpdateRigGeometry = function() {
+var UpdateRigGeometry = function () {
     ObjectBase.call(this);
 };
 
 utils.createPrototypeObject(
     UpdateRigGeometry,
     utils.objectInherit(ObjectBase.prototype, {
-        init: function(geom) {
+        init: function (geom) {
             var finder = new FindNearestParentSkeleton();
             if (geom.getParents().length > 1)
                 notify.warn(
@@ -34,7 +34,7 @@ utils.createPrototypeObject(
             geom.setPathToSkeleton(finder._pathToRoot);
         },
 
-        update: function(node /*, nv*/) {
+        update: function (node /*, nv*/) {
             // Circular ref
             if (node && node.className() !== 'RigGeometry') return true;
 

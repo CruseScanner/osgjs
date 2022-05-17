@@ -5,7 +5,7 @@ import Shader from 'osg/Shader';
 import Compiler from 'osgShader/Compiler';
 import ShaderProcessor from 'osgShader/ShaderProcessor';
 
-var ShaderGenerator = function() {
+var ShaderGenerator = function () {
     this._cache = {};
 
     // ShaderProcessor singleton used by ShaderGenerator
@@ -20,26 +20,26 @@ var ShaderGenerator = function() {
 
 ShaderGenerator.prototype = {
     // setShaderCompiler that will be used to createShader
-    setShaderCompiler: function(ShaderCompiler) {
+    setShaderCompiler: function (ShaderCompiler) {
         this._ShaderCompiler = ShaderCompiler;
         if (!ShaderCompiler._validAttributeTypeMemberCache)
             this._computeStateAttributeCache(ShaderCompiler);
     },
 
-    getShaderCompiler: function() {
+    getShaderCompiler: function () {
         return this._ShaderCompiler;
     },
 
-    getShaderProcessor: function() {
+    getShaderProcessor: function () {
         return this._shaderProcessor;
     },
 
-    setShaderProcessor: function(shaderProcessor) {
+    setShaderProcessor: function (shaderProcessor) {
         this._shaderProcessor = shaderProcessor;
     },
 
     // filter input types and write the result in the outputs array
-    filterAttributeTypes: function(attribute) {
+    filterAttributeTypes: function (attribute) {
         // works for attribute that contains isEnabled
         // Light, Shadow. It let us to filter them to build a shader if not enabled
         if (attribute.isEnabled && !attribute.isEnabled()) return true;
@@ -48,7 +48,7 @@ ShaderGenerator.prototype = {
     },
 
     // get actives attribute that comes from state listed by compiler cache type
-    getActiveAttributeList: function(state, list) {
+    getActiveAttributeList: function (state, list) {
         var hash = '';
         var _attributeArray = state._attributeArray;
         var cacheType = this._ShaderCompiler._validAttributeTypeMemberCache;
@@ -70,7 +70,7 @@ ShaderGenerator.prototype = {
     },
 
     // create a hash from actives attribute listed by compiler cache type
-    getActiveAttributeListCache: function(state) {
+    getActiveAttributeListCache: function (state) {
         var hash = '';
 
         var cacheType = this._ShaderCompiler._validAttributeTypeMemberCache;
@@ -90,7 +90,7 @@ ShaderGenerator.prototype = {
     },
 
     // create a hash from actives texture attribute listed by compiler cache type
-    getActiveTextureAttributeListCache: function(state) {
+    getActiveTextureAttributeListCache: function (state) {
         var hash = '';
 
         var cacheType = this._ShaderCompiler._validTextureAttributeTypeMemberCache;
@@ -124,7 +124,7 @@ ShaderGenerator.prototype = {
     },
 
     // get actives texture attribute that comes from state
-    getActiveTextureAttributeList: function(state, list) {
+    getActiveTextureAttributeList: function (state, list) {
         var hash = '';
         var _attributeArrayList = state._textureAttributeArrayList;
         var i, l;
@@ -155,7 +155,7 @@ ShaderGenerator.prototype = {
         return hash;
     },
 
-    getActiveUniforms: function(state, attributeList, textureAttributeList) {
+    getActiveUniforms: function (state, attributeList, textureAttributeList) {
         var uniforms = {};
 
         for (var i = 0, l = attributeList.length; i < l; i++) {
@@ -191,7 +191,7 @@ ShaderGenerator.prototype = {
         return uniforms;
     },
 
-    _computeStateAttributeCache: function(CompilerShader) {
+    _computeStateAttributeCache: function (CompilerShader) {
         var typeMemberNames = CompilerShader.stateAttributeConfig.attribute || [];
         var validTypeMemberList = [];
         var typeMemberName;
@@ -238,7 +238,7 @@ ShaderGenerator.prototype = {
         CompilerShader._validTextureAttributeTypeMemberCache = cache;
     },
 
-    _createWaitingProgram: function(state, attributes, textureAttributes) {
+    _createWaitingProgram: function (state, attributes, textureAttributes) {
         var vsDefault =
             'attribute vec3 Vertex;uniform mat4 uModelViewMatrix;uniform mat4 uProjectionMatrix;void main(void) {  gl_Position = vec4(10.0,10.0,10.0,1.0);}\n';
 
@@ -257,11 +257,11 @@ ShaderGenerator.prototype = {
         return program;
     },
 
-    getOrCreateProgram: (function() {
+    getOrCreateProgram: (function () {
         var textureAttributes = [];
         var attributes = [];
 
-        return function(state) {
+        return function (state) {
             // extract valid attributes
             var hash =
                 this.getActiveAttributeListCache(state) +
@@ -278,12 +278,12 @@ ShaderGenerator.prototype = {
         };
     })(),
 
-    _getProgram: function(hash) {
+    _getProgram: function (hash) {
         return this._cache[hash];
     },
 
     // slow path to generate shader
-    _createProgram: function(hash, state, attributes, textureAttributes) {
+    _createProgram: function (hash, state, attributes, textureAttributes) {
         attributes.length = 0;
         textureAttributes.length = 0;
 
@@ -326,7 +326,7 @@ ShaderGenerator.prototype = {
 
         return program;
     },
-    resetCache: function() {
+    resetCache: function () {
         this._cache = {};
     }
 };

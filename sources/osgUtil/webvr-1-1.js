@@ -21,7 +21,7 @@ if ('getVRDisplays' in navigator) {
     // If the browser has a WebVR implementation but does not include the 1.1
     // functionality patch it with JS.
     if (!('VRFrameData' in window)) {
-        window.VRFrameData = function() {
+        window.VRFrameData = function () {
             this.leftProjectionMatrix = new Float32Array(16);
             this.leftViewMatrix = new Float32Array(16);
             this.rightProjectionMatrix = new Float32Array(16);
@@ -29,7 +29,7 @@ if ('getVRDisplays' in navigator) {
             this.pose = null;
         };
 
-        window.VRDisplay.prototype.getFrameData = (function() {
+        window.VRDisplay.prototype.getFrameData = (function () {
             var defaultOrientation = new Float32Array([0, 0, 0, 1]);
             var defaultPosition = new Float32Array([0, 0, 0]);
 
@@ -55,7 +55,7 @@ if ('getVRDisplays' in navigator) {
                 mat4.invert(view, view);
             }
 
-            return function(frameData) {
+            return function (frameData) {
                 var pose = this.getPose();
                 if (!pose) return false;
 

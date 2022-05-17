@@ -5,7 +5,7 @@ import shaderUtils from 'osgShader/utils';
 import shaderLib from 'osgShader/shaderLib';
 import shadowLib from 'osgShadow/shaderLib';
 
-var Factory = function() {
+var Factory = function () {
     this._nodes = new window.Map();
 
     this.extractFunctions(shaderLib, 'lights.glsl');
@@ -24,25 +24,25 @@ var Factory = function() {
 };
 
 Factory.prototype = {
-    registerNodes: function(obj) {
+    registerNodes: function (obj) {
         for (var key in obj) {
             this.registerNode(key, obj[key]);
         }
     },
 
-    registerNode: function(name, constructor) {
+    registerNode: function (name, constructor) {
         if (this._nodes.has(name)) {
             notify.warn('Node ' + name + ' already registered');
         }
         this._nodes.set(name, constructor);
     },
 
-    extractFunctions: function(lib, filename) {
+    extractFunctions: function (lib, filename) {
         this.registerNodes(shaderUtils.extractFunctions(lib, filename));
     },
 
     // extra argument are passed to the constructor of the node
-    getNode: function(name) {
+    getNode: function (name) {
         var Constructor = this._nodes.get(name);
         if (!Constructor) {
             // Means either:

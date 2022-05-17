@@ -1,15 +1,15 @@
-(function() {
+(function () {
     'use strict';
 
     var ExampleOSGJS = window.ExampleOSGJS;
     var osg = window.OSG.osg;
 
     // we create a Callback
-    var FPSUpdateCallback = function(config) {
+    var FPSUpdateCallback = function (config) {
         this._config = config;
     };
     FPSUpdateCallback.prototype = {
-        update: function(node, nv) {
+        update: function (node, nv) {
             var currentTime = 1000.0 * nv.getFrameStamp().getDeltaTime();
             var frameNumber = nv.getFrameStamp().getFrameNumber();
             if (frameNumber % 60 === 1) {
@@ -25,7 +25,7 @@
     };
 
     // inherits for the ExampleOSGJS prototype
-    var Example = function() {
+    var Example = function () {
         ExampleOSGJS.call(this);
 
         var that = this;
@@ -44,17 +44,17 @@
             ms: 0.0,
             fps: 0.0,
 
-            update: function() {
+            update: function () {
                 that._rootItems.removeChildren();
                 that._rootItems.addChild(that.createItems(that._config.deep));
             },
 
-            frustumCulling: function() {
+            frustumCulling: function () {
                 that._viewer
                     .getCamera()
                     .setEnableFrustumCulling(!that._viewer.getCamera().getEnableFrustumCulling());
             },
-            loseContext: function() {
+            loseContext: function () {
                 var gl = this._viewer.getGraphicContext();
                 var ext = gl.getExtension('WEBGL_lose_context');
                 if (!ext) {
@@ -62,7 +62,7 @@
                     return;
                 }
                 ext.loseContext();
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     ext.restoreContext(gl);
                 }, 0);
             }.bind(this)
@@ -78,7 +78,7 @@
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        createComplexStateSet: function() {
+        createComplexStateSet: function () {
             // to stress test the internal system state.push/popStateSet and applyStateSet
             if (this._indexStateSet === undefined) this._indexStateSet = 0;
 
@@ -116,13 +116,13 @@
             return stateSet;
         },
 
-        createItem: function() {
+        createItem: function () {
             var item;
             if (this._config.instance && this._item) {
                 item = this._item;
             } else {
                 var quadSizeX = this._config.quadSize;
-                var quadSizeY = quadSizeX * 9 / 16.0;
+                var quadSizeY = (quadSizeX * 9) / 16.0;
                 item = osg.createTexturedQuadGeometry(
                     -quadSizeX / 2.0,
                     -quadSizeY / 2.0,
@@ -147,7 +147,7 @@
             return item;
         },
 
-        getTexture: function() {
+        getTexture: function () {
             var numTex = this._config.numTextures;
             if (!this._config.texture || numTex === 0) return undefined;
             if (this._texture.length === numTex)
@@ -183,12 +183,12 @@
             return texture;
         },
 
-        createItems: function(deep) {
+        createItems: function (deep) {
             var scale = Math.pow(2, deep - 1);
 
             var root = new osg.MatrixTransform();
             var nbx = this._config.items;
-            var nby = Math.floor(nbx * 9 / 16.0);
+            var nby = Math.floor((nbx * 9) / 16.0);
             if (deep === this._config.deep) {
                 this._config.nbTotalItems = 0;
                 this._config.nbTotalNodes = 0;
@@ -223,7 +223,7 @@
                     } else {
                         var s = nbx * deep * scale * 1.1;
                         x = (-nbx * 0.5 + 0.5 + i) * s;
-                        y = (-nby * 0.5 + 0.5 + j) * (s * 9 / 16.0);
+                        y = (-nby * 0.5 + 0.5 + j) * ((s * 9) / 16.0);
                         //osg.log([x,y]);
                         osg.mat4.fromTranslation(mt.getMatrix(), [x, y, 0]);
                         mt.addChild(this.createItems(deep - 1));
@@ -235,7 +235,7 @@
             return root;
         },
 
-        initDatGUI: function() {
+        initDatGUI: function () {
             this._gui = new window.dat.GUI();
 
             // ui
@@ -271,7 +271,7 @@
             this._gui.add(this._config, 'ms').listen();
         },
 
-        getOrCreateModel: function() {
+        getOrCreateModel: function () {
             this._rootItems = new osg.Node();
 
             this._rootItems.addUpdateCallback(new FPSUpdateCallback(this._config));
@@ -284,7 +284,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
         },

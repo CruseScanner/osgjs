@@ -3,8 +3,8 @@ var WebGL2RenderingContext = window.WebGL2RenderingContext;
 
 var contextList = [WebGLRenderingContext, WebGL2RenderingContext];
 
-var glProxy = function(f, c) {
-    return function() {
+var glProxy = function (f, c) {
+    return function () {
         c.apply(this, arguments);
         f.apply(this, arguments);
     };
@@ -21,34 +21,34 @@ var statsVertices = 0,
     statsFaces = 0,
     statsLines = 0;
 
-var init = function() {
+var init = function () {
     var hasContext = false;
     for (var i = 0; i < contextList.length; i++) {
         var WebGLContext = contextList[i];
         if (!WebGLContext) continue;
 
         hasContext = true;
-        WebGLContext.prototype.drawArrays = glProxy(WebGLContext.prototype.drawArrays, function() {
+        WebGLContext.prototype.drawArrays = glProxy(WebGLContext.prototype.drawArrays, function () {
             totalDrawArraysCalls++;
             if (arguments[0] === this.POINTS) totalPoints += arguments[2];
             else totalVertices += arguments[2];
         });
         WebGLContext.prototype.drawElements = glProxy(
             WebGLContext.prototype.drawElements,
-            function() {
+            function () {
                 totalDrawElementsCalls++;
                 totalFaces += arguments[1] / 3;
                 totalVertices += arguments[1];
             }
         );
 
-        WebGLContext.prototype.useProgram = glProxy(WebGLContext.prototype.useProgram, function() {
+        WebGLContext.prototype.useProgram = glProxy(WebGLContext.prototype.useProgram, function () {
             totalUseProgramCalls++;
         });
 
         WebGLContext.prototype.bindTexture = glProxy(
             WebGLContext.prototype.bindTexture,
-            function() {
+            function () {
                 totalBindTexures++;
             }
         );
@@ -56,7 +56,7 @@ var init = function() {
     return hasContext;
 };
 
-var update = function(stats) {
+var update = function (stats) {
     var bufferStats = stats.getBufferStats();
     var nbVertexes = bufferStats.getNbVertexes();
     var drawElements = bufferStats.getCharacterPrimitive();

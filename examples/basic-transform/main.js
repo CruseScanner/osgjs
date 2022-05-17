@@ -4,7 +4,7 @@ var OSG = window.OSG;
 var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
-var onLoad = function() {
+var onLoad = function () {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     // Here we create a MatrixTransform Node

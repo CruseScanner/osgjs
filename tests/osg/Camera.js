@@ -4,8 +4,8 @@ import Camera from 'osg/Camera';
 import { mat4 } from 'osg/glMatrix';
 import TransformEnums from 'osg/transformEnums';
 
-export default function() {
-    test('Camera', function() {
+export default function () {
+    test('Camera', function () {
         var matrix = mat4.ortho(mat4.create(), -1, 1, -1, 1, -2, 2);
         var camera = new Camera();
         camera.setProjectionMatrixAsOrtho(-1, 1, -1, 1, -2, 2);
@@ -16,7 +16,7 @@ export default function() {
         );
     });
 
-    test('Camera absolute vs relative', function() {
+    test('Camera absolute vs relative', function () {
         var rotation = mat4.fromRotation(mat4.create(), -Math.PI * 0.5, [1.0, 0.0, 0.0]);
         var translate = mat4.fromTranslation(mat4.create(), [1, 0, 0]);
         var invRotation = mat4.create();

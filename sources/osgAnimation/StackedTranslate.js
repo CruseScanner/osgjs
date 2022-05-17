@@ -7,7 +7,7 @@ import Target from 'osgAnimation/target';
 /**
  *  StackedTranslate
  */
-var StackedTranslate = function(name, translate) {
+var StackedTranslate = function (name, translate) {
     Object.call(this);
     this._target = Target.createVec3Target(translate || vec3.ZERO);
     if (name) this.setName(name);
@@ -16,24 +16,24 @@ var StackedTranslate = function(name, translate) {
 utils.createPrototypeObject(
     StackedTranslate,
     utils.objectInherit(Object.prototype, {
-        init: function(translate) {
+        init: function (translate) {
             this.setTranslate(translate);
             vec3.copy(this._target.defaultValue, translate);
         },
 
-        setTranslate: function(translate) {
+        setTranslate: function (translate) {
             vec3.copy(this._target.value, translate);
         },
 
-        getTarget: function() {
+        getTarget: function () {
             return this._target;
         },
 
-        resetToDefaultValue: function() {
+        resetToDefaultValue: function () {
             this.setTranslate(this._target.defaultValue);
         },
 
-        applyToMatrix: function(m) {
+        applyToMatrix: function (m) {
             mat4.translate(m, m, this._target.value);
         }
     }),

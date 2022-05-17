@@ -4,9 +4,9 @@ import BoundingBox from 'osg/BoundingBox';
 import ReaderParser from 'osgDB/readerParser';
 import { vec3 } from 'osg/glMatrix';
 
-export default function() {
-    test('BoundingBox', function() {
-        (function() {
+export default function () {
+    test('BoundingBox', function () {
+        (function () {
             var bb = new BoundingBox();
             var bb0 = [-0.5, 0, -2];
             var bb1 = [1, 0, -1];
@@ -39,7 +39,7 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var bb = new BoundingBox();
             bb._min = vec3.fromValues(1.0, 2.0, 3.0);
             bb._max = vec3.fromValues(4.0, 5.0, 6.0);

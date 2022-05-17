@@ -5,7 +5,7 @@ import { vec3 } from 'osg/glMatrix';
 import { quat } from 'osg/glMatrix';
 import Target from 'osgAnimation/target';
 
-var StackedRotateAxis = function(name, axis, angle) {
+var StackedRotateAxis = function (name, axis, angle) {
     Object.call(this);
     this._axis = vec3.fromValues(0, 0, 1);
     if (axis) vec3.copy(this._axis, axis);
@@ -16,33 +16,33 @@ var StackedRotateAxis = function(name, axis, angle) {
 utils.createPrototypeObject(
     StackedRotateAxis,
     utils.objectInherit(Object.prototype, {
-        init: function(axis, angle) {
+        init: function (axis, angle) {
             this.setAxis(axis);
             this.setAngle(angle);
             this._target.defaultValue = angle;
         },
 
-        setAxis: function(axis) {
+        setAxis: function (axis) {
             vec3.copy(this._axis, axis);
         },
 
-        setAngle: function(angle) {
+        setAngle: function (angle) {
             this._target.value = angle;
         },
 
-        getTarget: function() {
+        getTarget: function () {
             return this._target;
         },
 
-        resetToDefaultValue: function() {
+        resetToDefaultValue: function () {
             this.setAngle(this._target.defaultValue);
         },
 
-        applyToMatrix: (function() {
+        applyToMatrix: (function () {
             var matrixTmp = mat4.create();
             var quatTmp = quat.create();
 
-            return function(m) {
+            return function (m) {
                 var axis = this._axis;
                 var qtmp = quatTmp;
                 var mtmp = matrixTmp;

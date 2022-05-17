@@ -58,14 +58,14 @@
  * visible.
  */
 
-var WebGLUtils = (function() {
+var WebGLUtils = (function () {
     /**
      * Creates the HTLM for a failure message
      * @param {string} canvasContainerId id of container of th
      *        canvas.
      * @return {string} The html.
      */
-    var makeFailHTML = function(msg) {
+    var makeFailHTML = function (msg) {
         return (
             '' +
             '<div style="margin: auto; width:500px;z-index:10000;margin-top:20em;text-align:center;">' +
@@ -110,7 +110,7 @@ var WebGLUtils = (function() {
      * tag to an error message with the correct links for WebGL.
      * @return {WebGLRenderingContext} The created context.
      */
-    var setupWebGL = function(
+    var setupWebGL = function (
         /** Element */
         canvas,
         /** WebGLContextCreationAttributes */
@@ -136,7 +136,7 @@ var WebGLUtils = (function() {
         if (canvas.addEventListener) {
             canvas.addEventListener(
                 'webglcontextcreationerror',
-                function(event) {
+                function (event) {
                     opt_onError(event.statusMessage);
                 },
                 false
@@ -158,7 +158,7 @@ var WebGLUtils = (function() {
      * @param {names} list of webgl context type to try
      * @return {!WebGLContext} The created context.
      */
-    var checkAndCreate3DContext = function(canvas, opt_attribs, names) {
+    var checkAndCreate3DContext = function (canvas, opt_attribs, names) {
         var context = null;
         for (var ii = 0; ii < names.length; ++ii) {
             try {
@@ -177,7 +177,7 @@ var WebGLUtils = (function() {
      * @param {!opt_attribs} webgl context options
      * @return {!WebGLContext} The created context.
      */
-    var create3DContext = function(canvas, opt_attribs) {
+    var create3DContext = function (canvas, opt_attribs) {
         var context;
         // only try to enable if URl options ?webgl2=1
         if (opt_attribs && opt_attribs.webgl2) {
@@ -208,14 +208,14 @@ var WebGLUtils = (function() {
  * way.
  */
 if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = (function() {
+    window.requestAnimationFrame = (function () {
         return (
             window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame ||
             window.oRequestAnimationFrame ||
             window.msRequestAnimationFrame ||
-            function(
+            function (
                 /* function FrameRequestCallback */ callback,
                 /* DOMElement Element */ element
             ) {
@@ -226,7 +226,7 @@ if (!window.requestAnimationFrame) {
 }
 
 if (!window.cancelRequestAnimFrame) {
-    window.cancelAnimationFrame = (function() {
+    window.cancelAnimationFrame = (function () {
         return (
             window.cancelAnimationFrame ||
             window.webkitCancelRequestAnimationFrame ||

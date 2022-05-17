@@ -38,7 +38,7 @@ import notify from 'osg/notify';
 // - first and second respectively represents the left and right sub children
 // We know that a node is a leaf if first is negative, in that case the range will be defined by
 // [ -first - 1, -first-1 + second ]
-var KdNode = function(first, second) {
+var KdNode = function (first, second) {
     this._bb = new BoundingBox();
     this._first = first;
     this._second = second;
@@ -48,41 +48,41 @@ var KdNode = function(first, second) {
     this._nodeRayEnd = vec3.create();
 };
 
-var InfoCollector = function() {
+var InfoCollector = function () {
     this._numVertexIndices = 0;
 };
 
 InfoCollector.prototype = {
-    apply: function(node) {
+    apply: function (node) {
         if (!node.getAttributes().Vertex) return;
         primitiveIndexFunctor(node, this);
     },
 
-    operatorPoint: function() {
+    operatorPoint: function () {
         this._numVertexIndices += 2;
     },
 
-    operatorLine: function() {
+    operatorLine: function () {
         this._numVertexIndices += 3;
     },
 
-    operatorTriangle: function() {
+    operatorTriangle: function () {
         this._numVertexIndices += 4;
     }
 };
 
-var PrimitiveIndicesCollector = function(buildKdTree) {
+var PrimitiveIndicesCollector = function (buildKdTree) {
     this._buildKdTree = buildKdTree;
     this._numIndices = 0;
 };
 
 PrimitiveIndicesCollector.prototype = {
-    apply: function(node) {
+    apply: function (node) {
         if (!node.getAttributes().Vertex) return;
         primitiveIndexFunctor(node, this);
     },
 
-    operatorPoint: function(i0) {
+    operatorPoint: function (i0) {
         var vertices = this._buildKdTree._kdTree.getVertices();
         var iv = i0 * 3;
         this._buildKdTree._kdTree.addPoint(i0);
@@ -95,7 +95,7 @@ PrimitiveIndicesCollector.prototype = {
         this._numIndices++;
     },
 
-    operatorLine: function(i0, i1) {
+    operatorLine: function (i0, i1) {
         if (i0 === i1) return;
         var vertices = this._buildKdTree._kdTree.getVertices();
         var iv0 = i0 * 3;
@@ -132,7 +132,7 @@ PrimitiveIndicesCollector.prototype = {
         this._numIndices++;
     },
 
-    operatorTriangle: function(i0, i1, i2) {
+    operatorTriangle: function (i0, i1, i2) {
         if (i0 === i1 || i0 === i2 || i1 === i2) return;
 
         var vertices = this._buildKdTree._kdTree.getVertices();
@@ -176,7 +176,7 @@ PrimitiveIndicesCollector.prototype = {
     }
 };
 
-var BuildKdTree = function(kdTree) {
+var BuildKdTree = function (kdTree) {
     this._kdTree = kdTree;
     this._bb = new BoundingBox();
     this._primitiveIndices = undefined; // Uint32Array
@@ -186,7 +186,7 @@ var BuildKdTree = function(kdTree) {
 };
 
 BuildKdTree.prototype = {
-    build: function(options, geom) {
+    build: function (options, geom) {
         var targetTris = options._targetNumTrianglesPerLeaf;
         var vertexAttrib = geom.getVertexAttributeList().Vertex;
         if (!vertexAttrib) return false;
@@ -264,7 +264,7 @@ BuildKdTree.prototype = {
         return this._kdTree.getNodes().length > 0;
     },
 
-    computeDivisions: function(options) {
+    computeDivisions: function (options) {
         this._stackLength = options._maxNumLevels;
         var max = this._bb._max;
         var min = this._bb._min;
@@ -285,7 +285,7 @@ BuildKdTree.prototype = {
     // and it ends here
     // If it's a node, then it puts the splitting axis position on the median population
     // On the same time it reorders the triangle index array
-    divide: function(options, bb, nodeIndex, level) {
+    divide: function (options, bb, nodeIndex, level) {
         var kdTree = this._kdTree;
         var primitives = this._primitiveIndices;
         var nodes = kdTree.getNodes();
@@ -395,7 +395,7 @@ BuildKdTree.prototype = {
     },
     // It computes the bounding box of the node so that the box contains all the triangles
     // of the cell
-    computeNodeBox: function(node, istart, iend) {
+    computeNodeBox: function (node, istart, iend) {
         var minx = Infinity,
             miny = Infinity,
             minz = Infinity,
@@ -436,7 +436,7 @@ BuildKdTree.prototype = {
     }
 };
 
-var KdTree = function() {
+var KdTree = function () {
     this._vertices = null;
     this._kdNodes = [];
     this._primitiveIndices = undefined;
@@ -448,50 +448,50 @@ var KdTree = function() {
 utils.createPrototypeObject(
     KdTree,
     {
-        getVertices: function() {
+        getVertices: function () {
             return this._vertices;
         },
-        setVertices: function(vertices) {
+        setVertices: function (vertices) {
             this._vertices = vertices;
         },
 
-        getNumPrimitiveIndices: function() {
+        getNumPrimitiveIndices: function () {
             return this._numPrimitiveIndices;
         },
 
-        getNumVertexIndices: function() {
+        getNumVertexIndices: function () {
             return this._numVertexIndices;
         },
 
-        setPrimitiveIndices: function(indices) {
+        setPrimitiveIndices: function (indices) {
             this._primitiveIndices = indices;
         },
-        getPrimitiveIndices: function() {
+        getPrimitiveIndices: function () {
             return this._primitiveIndices;
         },
 
         // vector containing the primitive vertex index data packed as no_vertice_indices then vertex indices
         // ie. for points it's (1, p0), for lines (2, p0, p1) etc.
-        setVertexIndices: function(indices) {
+        setVertexIndices: function (indices) {
             this._vertexIndices = indices;
         },
 
-        getVertexIndices: function() {
+        getVertexIndices: function () {
             return this._vertexIndices;
         },
 
-        getNodes: function() {
+        getNodes: function () {
             return this._kdNodes;
         },
 
-        addPoint: function(p0) {
+        addPoint: function (p0) {
             var i = this._numVertexIndices;
             this._primitiveIndices[this._numPrimitiveIndices++] = i;
             this._vertexIndices[this._numVertexIndices++] = 1;
             this._vertexIndices[this._numVertexIndices++] = p0;
         },
 
-        addLine: function(p0, p1) {
+        addLine: function (p0, p1) {
             var i = this._numVertexIndices;
             this._primitiveIndices[this._numPrimitiveIndices++] = i;
             this._vertexIndices[this._numVertexIndices++] = 2;
@@ -499,7 +499,7 @@ utils.createPrototypeObject(
             this._vertexIndices[this._numVertexIndices++] = p1;
         },
 
-        addTriangle: function(p0, p1, p2) {
+        addTriangle: function (p0, p1, p2) {
             var i = this._numVertexIndices;
             this._primitiveIndices[this._numPrimitiveIndices++] = i;
             this._vertexIndices[this._numVertexIndices++] = 3;
@@ -508,16 +508,16 @@ utils.createPrototypeObject(
             this._vertexIndices[this._numVertexIndices++] = p2;
         },
 
-        addNode: function(node) {
+        addNode: function (node) {
             this._kdNodes.push(node);
             return this._kdNodes.length - 1;
         },
-        build: function(options, geom) {
+        build: function (options, geom) {
             var buildTree = new BuildKdTree(this);
             return buildTree.build(options, geom);
         },
 
-        _intersectFunctor: function(functor, node) {
+        _intersectFunctor: function (functor, node) {
             // treat as a leaf
             var istart = -node._first - 1;
             var iend = istart + node._second;
@@ -542,7 +542,7 @@ utils.createPrototypeObject(
             }
         },
 
-        intersect: function(functor, node) {
+        intersect: function (functor, node) {
             if (node._first < 0) {
                 this._intersectFunctor(functor, node);
                 return;
@@ -559,7 +559,7 @@ utils.createPrototypeObject(
                 functor.leave();
             }
         },
-        intersectLineSegment: function(functor, node, ls, le) {
+        intersectLineSegment: function (functor, node, ls, le) {
             if (node._first < 0) {
                 this._intersectFunctor(functor, node);
                 return;

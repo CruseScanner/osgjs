@@ -13,7 +13,7 @@ import { vec2 } from 'osg/glMatrix';
  * @class ShadowTextureAtlas
  * @inherits TextureAttribute
  */
-var ShadowTextureAtlas = function() {
+var ShadowTextureAtlas = function () {
     Texture.call(this);
 
     this._uniforms = {};
@@ -34,34 +34,34 @@ ShadowTextureAtlas.uniforms = {};
 utils.createPrototypeStateAttribute(
     ShadowTextureAtlas,
     utils.objectInherit(Texture.prototype, {
-        cloneType: function() {
+        cloneType: function () {
             return new ShadowTextureAtlas();
         },
 
-        getLightNumberArray: function() {
+        getLightNumberArray: function () {
             return this._lightNumberArray;
         },
 
-        hasLightNumber: function(lightNum) {
+        hasLightNumber: function (lightNum) {
             return this._lightNumberArray.indexOf(lightNum) !== -1;
         },
 
-        setLightNumberArray: function(lightNumberArray) {
+        setLightNumberArray: function (lightNumberArray) {
             this._lightNumberArray = lightNumberArray;
             this._dirtyHash = true;
         },
 
-        getUniformName: function(lightNumber, name) {
+        getUniformName: function (lightNumber, name) {
             var prefix = 'Shadow_' + this.getType() + lightNumber.toString();
             return 'u' + prefix + '_' + name;
         },
 
-        setInternalFormatType: function(value) {
+        setInternalFormatType: function (value) {
             Texture.prototype.setInternalFormatType.call(this, value);
             this._dirtyHash = true;
         },
 
-        createUniforms: function(lightNumber, uniforms) {
+        createUniforms: function (lightNumber, uniforms) {
             uniforms['ViewRight_' + lightNumber] = Uniform.createFloat4(
                 this.getUniformName(lightNumber, 'viewRight')
             );
@@ -84,7 +84,7 @@ utils.createPrototypeStateAttribute(
             uniforms['RenderSize_' + lightNumber] = uniforms['RenderSize'];
         },
 
-        getOrCreateUniforms: function(unit) {
+        getOrCreateUniforms: function (unit) {
             // uniform are once per CLASS attribute, not per instance
             var obj = ShadowTextureAtlas;
             notify.assert(unit !== undefined || this._lightNumberArray.length !== 0);
@@ -114,23 +114,23 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms[unit];
         },
 
-        setViewMatrix: function(lightNumber, viewMatrix) {
+        setViewMatrix: function (lightNumber, viewMatrix) {
             this._viewMatrices[lightNumber] = viewMatrix;
         },
 
-        setProjection: function(lightNumber, projection) {
+        setProjection: function (lightNumber, projection) {
             this._projection[lightNumber] = projection;
         },
 
-        setDepthRange: function(lighNumber, depthRange) {
+        setDepthRange: function (lighNumber, depthRange) {
             this._depthRanges[lighNumber] = depthRange;
         },
 
-        setLightShadowMapSize: function(lightNumber, dimension) {
+        setLightShadowMapSize: function (lightNumber, dimension) {
             this._mapSizes[lightNumber] = dimension;
         },
 
-        apply: function(state, texUnit) {
+        apply: function (state, texUnit) {
             // Texture stuff: call parent class method
             Texture.prototype.apply.call(this, state, texUnit);
 
@@ -165,14 +165,14 @@ utils.createPrototypeStateAttribute(
             uniformMap['RenderSize'].setFloat2(this._renderSize);
         },
 
-        setTextureSize: function(w, h) {
+        setTextureSize: function (w, h) {
             this._renderSize[0] = 1.0 / w;
             this._renderSize[1] = 1.0 / h;
             Texture.prototype.setTextureSize.call(this, w, h);
             this.dirty();
         },
 
-        _computeInternalHash: function() {
+        _computeInternalHash: function () {
             var hash = this.getTypeMember();
             for (var i = 0, l = this._lightNumberArray.length; i < l; i++) {
                 hash += '_' + this._lightNumberArray[i];
@@ -181,7 +181,7 @@ utils.createPrototypeStateAttribute(
             return hash;
         },
 
-        getHash: function() {
+        getHash: function () {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();

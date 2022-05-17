@@ -2,7 +2,7 @@ import utils from 'osg/utils';
 import NodeVisitor from 'osg/NodeVisitor';
 import MorphGeometry from 'osgAnimation/MorphGeometry';
 
-var DisplayGraphNode = function(selectables) {
+var DisplayGraphNode = function (selectables) {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
 
     this._selectables = selectables;
@@ -17,7 +17,7 @@ var DisplayGraphNode = function(selectables) {
 utils.createPrototypeObject(
     DisplayGraphNode,
     utils.objectInherit(NodeVisitor.prototype, {
-        getColorFromClassName: function(name) {
+        getColorFromClassName: function (name) {
             switch (name) {
                 case 'ShadowedScene':
                     return '#3D3D3D';
@@ -52,19 +52,19 @@ utils.createPrototypeObject(
             }
         },
 
-        createGraph: function(root) {
+        createGraph: function (root) {
             this.reset();
             root.accept(this);
         },
 
-        reset: function() {
+        reset: function () {
             this._nodeList.length = 0;
             this._linkList.length = 0;
             this._uniqueNodes.clear();
             this._uniqueEdges.clear();
         },
 
-        apply: function(node) {
+        apply: function (node) {
             if (node._isNormalDebug) return;
 
             if (!this._uniqueNodes.has(node.getInstanceID())) {
@@ -89,7 +89,7 @@ utils.createPrototypeObject(
         },
 
         // Create an array to display the matrix
-        createMatrixGrid: function(node, matrixArray) {
+        createMatrixGrid: function (node, matrixArray) {
             var nodeMatrix = '';
 
             nodeMatrix += '<table><tr><td>' + matrixArray[0] + '</td>';
@@ -115,13 +115,13 @@ utils.createPrototypeObject(
             return nodeMatrix;
         },
 
-        getLabel: function(obj) {
+        getLabel: function (obj) {
             var label = obj.className() + ' (' + obj.getInstanceID() + ')';
             if (obj.getName && obj.getName()) label += '\n' + obj.getName();
             return label;
         },
 
-        generateNode: function(g, node) {
+        generateNode: function (g, node) {
             var description = '';
             if (node.getMatrix && node.getMatrix()) {
                 description += '<br /><br />' + this.createMatrixGrid(node, node.getMatrix());
@@ -136,7 +136,7 @@ utils.createPrototypeObject(
             });
         },
 
-        generateStateSet: function(g, node) {
+        generateStateSet: function (g, node) {
             var stateSet = node.getStateSet();
             var stateSetID = stateSet.getInstanceID();
 
@@ -159,7 +159,7 @@ utils.createPrototypeObject(
             });
         },
 
-        generateSourceGeometry: function(g, node) {
+        generateSourceGeometry: function (g, node) {
             var sourceGeom = node.getSourceGeometry();
             var sourceGeomID = sourceGeom.getInstanceID();
 
@@ -178,7 +178,7 @@ utils.createPrototypeObject(
         },
 
         // Subfunction of createGraph, will iterate to create all the node and link in dagre
-        generateNodeAndLink: function(g) {
+        generateNodeAndLink: function (g) {
             for (var i = 0, ni = this._nodeList.length; i < ni; i++) {
                 var node = this._nodeList[i];
 

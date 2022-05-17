@@ -1,4 +1,4 @@
-var Graph = function() {
+var Graph = function () {
     this._values = new Float32Array(Graph.maxGraphValue);
     this._index = 0;
     this._maxValue = 0.0;
@@ -7,23 +7,23 @@ var Graph = function() {
 };
 Graph.maxGraphValue = 120;
 Graph.prototype = {
-    getIndex: function() {
+    getIndex: function () {
         return this._index;
     },
-    getValues: function() {
+    getValues: function () {
         return this._values;
     },
-    setDisplayPosition: function(x, y) {
+    setDisplayPosition: function (x, y) {
         this._x = x;
         this._y = y;
     },
-    getX: function() {
+    getX: function () {
         return this._x;
     },
-    getY: function() {
+    getY: function () {
         return this._y;
     },
-    addValue: function(value, uvColor) {
+    addValue: function (value, uvColor) {
         var index = this._index;
         this._maxValue = value > this._maxValue ? value : this._maxValue;
         this._maxValue *= 0.99;

@@ -2,7 +2,7 @@ import OrbitManipulatorHammerController from 'osgGA/OrbitManipulatorHammerContro
 import InputGroups from 'osgViewer/input/InputConstants';
 import utils from 'osg/utils';
 
-var FirstPersonManipulatorHammerController = function(manipulator) {
+var FirstPersonManipulatorHammerController = function (manipulator) {
     OrbitManipulatorHammerController.call(this, manipulator);
     this._timer = false;
 };
@@ -10,7 +10,7 @@ var FirstPersonManipulatorHammerController = function(manipulator) {
 utils.createPrototypeObject(
     FirstPersonManipulatorHammerController,
     utils.objectInherit(OrbitManipulatorHammerController.prototype, {
-        _initInputs: function() {
+        _initInputs: function () {
             OrbitManipulatorHammerController.prototype._initInputs.call(
                 this,
                 InputGroups.FPS_MANIPULATOR_TOUCH

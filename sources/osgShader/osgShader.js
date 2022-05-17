@@ -17,7 +17,7 @@ lib.utils = utils;
 
 lib.node = {};
 lib.node.Node = Node; // used for inheritance
-nodeFactory._nodes.forEach(function(value, key) {
+nodeFactory._nodes.forEach(function (value, key) {
     lib.node[key] = value;
 });
 

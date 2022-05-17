@@ -26,7 +26,7 @@ import InputGroups from 'osgViewer/input/InputConstants';
  *  - Spacebar resets the view.
  */
 
-var CADManipulator = function(options) {
+var CADManipulator = function (options) {
     Manipulator.call(this, options);
     this._tmpHomePosition = vec3.create();
     this._intersectionVisitor = new IntersectionVisitor();
@@ -37,7 +37,7 @@ var CADManipulator = function(options) {
     this.init();
 };
 
-CADManipulator.Interpolator = function() {
+CADManipulator.Interpolator = function () {
     this._current = vec2.create();
     this._target = vec2.create();
     this._delta = vec2.create();
@@ -48,19 +48,19 @@ CADManipulator.Interpolator = function() {
 };
 
 CADManipulator.Interpolator.prototype = {
-    setWidth: function(width) {
+    setWidth: function (width) {
         this._width = width;
     },
-    setHeight: function(height) {
+    setHeight: function (height) {
         this._height = height;
     },
-    reset: function() {
+    reset: function () {
         for (var i = 0, l = this._current.length; i < l; i++) {
             this._current[i] = this._target[i] = 0;
         }
         this._reset = true;
     },
-    update: function() {
+    update: function () {
         var d0;
         var d1;
         if (this._width === undefined) d0 = 0;
@@ -73,19 +73,19 @@ CADManipulator.Interpolator.prototype = {
         this._current[1] = this._target[1];
         return this._delta;
     },
-    set: function() {
+    set: function () {
         for (var i = 0, l = this._current.length; i < l; i++) {
             this._current[i] = this._target[i] = arguments[i];
         }
         this._reset = false;
     },
-    isReset: function() {
+    isReset: function () {
         return this._reset;
     },
-    getCurrent: function() {
+    getCurrent: function () {
         return this._current;
     },
-    setTarget: function() {
+    setTarget: function () {
         for (var i = 0, l = this._target.length; i < l; i++) {
             if (this._reset) {
                 this._target[i] = this._current[i] = arguments[i];
@@ -95,15 +95,15 @@ CADManipulator.Interpolator.prototype = {
         }
         this._reset = false;
     },
-    addTarget: function() {
+    addTarget: function () {
         for (var i = 0; i < arguments.length; i++) {
             this._target[i] += arguments[i];
         }
     },
-    getTarget: function() {
+    getTarget: function () {
         return this._target;
     },
-    getDelta: function() {
+    getDelta: function () {
         return this._delta;
     }
 };
@@ -115,7 +115,7 @@ CADManipulator.ControllerList = ['StandardMouseKeyboard', 'Hammer'];
 utils.createPrototypeObject(
     CADManipulator,
     utils.objectInherit(Manipulator.prototype, {
-        init: function() {
+        init: function () {
             this._distance = 25.0;
             this._target = vec3.create();
             this._upz = vec3.fromValues(0.0, 0.0, 1.0);
@@ -153,7 +153,7 @@ utils.createPrototypeObject(
             // instance of controller
             var self = this;
 
-            CADManipulator.ControllerList.forEach(function(value) {
+            CADManipulator.ControllerList.forEach(function (value) {
                 if (CADManipulator[value] !== undefined) {
                     if (self._controllerList[value]) {
                         self._controllerList[value].init();
@@ -164,53 +164,53 @@ utils.createPrototypeObject(
             });
         },
 
-        setViewer: function(viewer) {
+        setViewer: function (viewer) {
             this._viewer = viewer;
         },
 
-        reset: function() {
+        reset: function () {
             this.init();
         },
 
-        setEnable: function(enabled) {
+        setEnable: function (enabled) {
             this.getInputManager().setEnable(InputGroups.CAD_MANIPULATOR, enabled);
         },
 
-        setNode: function(node) {
+        setNode: function (node) {
             this._node = node;
         },
 
-        setPivotPoint: function(pivotPoint) {
+        setPivotPoint: function (pivotPoint) {
             // First calculate offset
             vec3.copy(this._pivotPoint, pivotPoint);
         },
 
-        setTarget: (function() {
+        setTarget: (function () {
             var eyePos = vec3.create();
-            return function(target) {
+            return function (target) {
                 vec3.copy(this._target, target);
                 this.getEyePosition(eyePos);
                 this._distance = vec3.distance(target, eyePos);
             };
         })(),
 
-        setEyePosition: function(eye) {
+        setEyePosition: function (eye) {
             vec3.copy(this._eye, eye);
             this._distance = vec3.distance(this._target, eye);
         },
 
-        setHomePosition: function(eye, center, up) {
+        setHomePosition: function (eye, center, up) {
             this._homeEye = eye;
             this._homeCenter = center;
             this._homeUp = up;
         },
 
-        computeHomePosition: (function() {
+        computeHomePosition: (function () {
             var f = vec3.create();
             var s = vec3.create();
             var u = vec3.create();
             var result = mat4.create();
-            return function(boundStrategy) {
+            return function (boundStrategy) {
                 var bs = this.getHomeBoundingSphere(boundStrategy);
                 if (!bs) return;
                 this.setDistance(this.getHomeDistance(bs));
@@ -274,60 +274,60 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setZoomFactor: function(f) {
+        setZoomFactor: function (f) {
             this._zoomFactor = f;
         },
 
-        setRotateFactor: function(f) {
+        setRotateFactor: function (f) {
             this._rotateFactor = f;
         },
 
-        setPanFactor: function(f) {
+        setPanFactor: function (f) {
             this._panFactor = f;
         },
 
-        setDistance: function(d) {
+        setDistance: function (d) {
             this._distance = d;
         },
 
         // If set to true, intersections are computed against points and lines
-        setUsePolytopeIntersector: function(upi) {
+        setUsePolytopeIntersector: function (upi) {
             this._usePolytopeIntersector = upi;
         },
 
-        getUsePolytopeIntersector: function() {
+        getUsePolytopeIntersector: function () {
             return this._usePolytopeIntersector;
         },
 
-        getDistance: function() {
+        getDistance: function () {
             return this._distance;
         },
 
-        zoom: function(ratio) {
+        zoom: function (ratio) {
             this._distance = ratio;
         },
 
-        getRotateInterpolator: function() {
+        getRotateInterpolator: function () {
             return this._rotate;
         },
 
-        getPanInterpolator: function() {
+        getPanInterpolator: function () {
             return this._pan;
         },
 
-        getZoomInterpolator: function() {
+        getZoomInterpolator: function () {
             return this._zoom;
         },
 
-        getIntersectionVisitor: function() {
+        getIntersectionVisitor: function () {
             return this._intersectionVisitor;
         },
 
-        getLineSegmentIntersector: function() {
+        getLineSegmentIntersector: function () {
             return this._lineSegmentIntersector;
         },
 
-        getOrCreatePolytopeIntersector: function() {
+        getOrCreatePolytopeIntersector: function () {
             if (this._polytopeIntersector === undefined) {
                 this._polytopeIntersector = new PolytopeIntersector();
                 this._polytopeIntersector.setIntersectionLimit(
@@ -340,20 +340,20 @@ utils.createPrototypeObject(
             return this._polytopeIntersector;
         },
 
-        getTarget: function(target) {
+        getTarget: function (target) {
             vec3.copy(target, this._target);
             return target;
         },
 
-        getEyePosition: function(eye) {
+        getEyePosition: function (eye) {
             if (this._eye === undefined) this.computeEyePosition(this._target, this._distance, eye);
             else vec3.copy(eye, this._eye);
         },
 
-        computeEyePosition: (function() {
+        computeEyePosition: (function () {
             var tmpDist = vec3.create();
             var tmpInverse = mat4.create();
-            return function(target, distance, eye) {
+            return function (target, distance, eye) {
                 mat4.invert(tmpInverse, this._rotation);
                 tmpDist[1] = distance;
                 vec3.transformMat4(eye, tmpDist, tmpInverse);
@@ -361,33 +361,33 @@ utils.createPrototypeObject(
             };
         })(),
 
-        computePan: (function() {
+        computePan: (function () {
             var trans = vec3.create();
             var rotPos = vec3.create();
             var speedTmp = vec3.create();
-            return function(dx, dy, rotMat) {
+            return function (dx, dy, rotMat) {
                 var speed =
                     vec3.length(vec3.sub(speedTmp, this._eye, this._pivotPoint)) / this._panFactor;
                 if (speed < 10) speed = 10;
-                trans[0] = dx * speed / 2;
-                trans[1] = dy * speed / 2;
+                trans[0] = (dx * speed) / 2;
+                trans[1] = (dy * speed) / 2;
                 trans[2] = 0;
                 vec3.transformMat4(rotPos, trans, rotMat);
                 vec3.add(this._eye, this._eye, rotPos);
             };
         })(),
 
-        computeZoom: (function() {
+        computeZoom: (function () {
             var vectorDistance = vec3.create();
             var speedDist = vec3.create();
-            return function(dz) {
+            return function (dz) {
                 var zoomSpeed = dz * this._zoomFactor;
                 vec3.sub(vectorDistance, this._pivotPoint, this._eye);
                 vec3.add(this._eye, this._eye, vec3.scale(speedDist, vectorDistance, zoomSpeed));
             };
         })(),
 
-        computeRotation: (function() {
+        computeRotation: (function () {
             var rightNormalized = vec3.create();
             var right = vec3.create();
             var dir = vec3.create();
@@ -398,7 +398,7 @@ utils.createPrototypeObject(
             var tmp = vec3.create();
             var rightScalar = vec3.create();
 
-            return function(yawDelta, pitchDelta) {
+            return function (yawDelta, pitchDelta) {
                 vec3.transformQuat(right, this._right, this._orientation);
                 vec3.normalize(rightNormalized, right);
                 vec3.sub(dir, this._eye, this._pivotPoint);
@@ -429,10 +429,10 @@ utils.createPrototypeObject(
             };
         })(),
 
-        update: (function() {
+        update: (function () {
             var rotMat = mat4.create();
             var transMat = mat4.create();
-            return function(nv) {
+            return function (nv) {
                 var dt = nv.getFrameStamp().getDeltaTime();
 
                 var mouseFactor = 10;
@@ -452,14 +452,14 @@ utils.createPrototypeObject(
                 mat4.invert(this._inverseMatrix, this._inverseMatrix);
             };
         })(),
-        getInverseMatrix: function() {
+        getInverseMatrix: function () {
             return this._inverseMatrix;
         },
 
-        computeIntersections: (function() {
+        computeIntersections: (function () {
             var hits = [];
             var pTrans = vec3.create();
-            return function(posX, posY) {
+            return function (posX, posY) {
                 var viewer = this._camera.getView();
 
                 var cam = this._camera;
@@ -491,7 +491,7 @@ utils.createPrototypeObject(
                     iv.setIntersector(pi);
                     viewer.getCamera().accept(iv);
                     hits = pi.getIntersections();
-                    hits.sort(function(a, b) {
+                    hits.sort(function (a, b) {
                         return a._distance - b._distance;
                     });
                     if (hits.length > 0) {
@@ -505,10 +505,10 @@ utils.createPrototypeObject(
             };
         })(),
 
-        getPositionRelativeToCanvas: (function() {
+        getPositionRelativeToCanvas: (function () {
             var offset = vec2.create();
             var pos = vec2.create();
-            return function(x, y) {
+            return function (x, y) {
                 var canvas = this._camera._graphicContext.canvas;
                 this.getOffsetRect(canvas, offset);
                 var ratioX = canvas.width / canvas.clientWidth;
@@ -519,21 +519,21 @@ utils.createPrototypeObject(
             };
         })(),
 
-        getCanvasCenter: (function() {
+        getCanvasCenter: (function () {
             var offset = vec2.create();
             var pos = vec2.create();
-            return function() {
+            return function () {
                 var canvas = this._camera.getGraphicContext().canvas;
                 this.getOffsetRect(canvas, offset);
                 var ratioX = canvas.width / canvas.clientWidth;
                 var ratioY = canvas.height / canvas.clientHeight;
-                pos[0] = canvas.clientWidth / 2 * ratioX;
-                pos[1] = canvas.clientHeight / 2 * ratioY;
+                pos[0] = (canvas.clientWidth / 2) * ratioX;
+                pos[1] = (canvas.clientHeight / 2) * ratioY;
                 return pos;
             };
         })(),
 
-        getOffsetRect: function(elem, offset) {
+        getOffsetRect: function (elem, offset) {
             var box = elem.getBoundingClientRect();
             var body = document.body;
             var docElem = document.documentElement;

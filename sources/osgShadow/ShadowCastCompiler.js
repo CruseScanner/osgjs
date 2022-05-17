@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import Compiler from 'osgShader/Compiler';
 
-var CompilerShadowCast = function() {
+var CompilerShadowCast = function () {
     Compiler.apply(this, arguments);
 };
 
@@ -13,11 +13,11 @@ Compiler.setStateAttributeConfig(CompilerShadowCast, config);
 utils.createPrototypeObject(
     CompilerShadowCast,
     utils.objectInherit(Compiler.prototype, {
-        getCompilerName: function() {
+        getCompilerName: function () {
             return 'ShadowCast';
         },
 
-        initAttributes: function() {
+        initAttributes: function () {
             var attributes = this._attributes;
 
             for (var i = 0, l = attributes.length; i < l; i++) {
@@ -37,10 +37,10 @@ utils.createPrototypeObject(
             }
         },
 
-        registerTextureAttributes: function() {},
+        registerTextureAttributes: function () {},
 
         // Depth Shadow Map Casted from Light POV Depth encoded in color buffer
-        createShadowCastDepth: function(out) {
+        createShadowCastDepth: function (out) {
             var defines = this._shadowCastAttribute.getDefines();
 
             var node = this.getNode('ShadowCast')
@@ -50,7 +50,7 @@ utils.createPrototypeObject(
                 })
                 .outputs({ result: out });
 
-            node.getDefines = function() {
+            node.getDefines = function () {
                 return defines;
             };
 
@@ -59,7 +59,7 @@ utils.createPrototypeObject(
 
         // encapsulate for easier overwrite by user defined compiler
         // that would inherint from this compiler Do not merge with above method
-        createFragmentShaderGraph: function() {
+        createFragmentShaderGraph: function () {
             var frag = this.getNode('glFragColor');
             return [this.createShadowCastDepth(frag)];
         }

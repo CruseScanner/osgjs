@@ -8,7 +8,7 @@ import Timer from 'osg/Timer';
  * in one webgl call
  * @class VertexArrayObject
  */
-var VertexArrayObject = function() {
+var VertexArrayObject = function () {
     GLObject.call(this);
     // maybe could inherit from Object
     this._instanceID = Object.getInstanceID();
@@ -21,14 +21,14 @@ var VertexArrayObject = function() {
 VertexArrayObject._sDeletedGLVertexArrayObjectCache = new window.Map();
 
 // static method to delete Program
-VertexArrayObject.deleteGLVertexArrayObject = function(gl, buffer) {
+VertexArrayObject.deleteGLVertexArrayObject = function (gl, buffer) {
     if (!VertexArrayObject._sDeletedGLVertexArrayObjectCache.has(gl))
         VertexArrayObject._sDeletedGLVertexArrayObjectCache.set(gl, []);
     VertexArrayObject._sDeletedGLVertexArrayObjectCache.get(gl).push(buffer);
 };
 
 // static method to flush all the cached glPrograms which need to be deleted in the GL context specified
-VertexArrayObject.flushDeletedGLVertexArrayObjects = function(gl, availableTime) {
+VertexArrayObject.flushDeletedGLVertexArrayObjects = function (gl, availableTime) {
     // if no time available don't try to flush objects.
     if (availableTime <= 0.0) return availableTime;
     if (!VertexArrayObject._sDeletedGLVertexArrayObjectCache.has(gl)) return availableTime;
@@ -44,7 +44,7 @@ VertexArrayObject.flushDeletedGLVertexArrayObjects = function(gl, availableTime)
     return availableTime - elapsedTime;
 };
 
-VertexArrayObject.flushAllDeletedGLVertexArrayObjects = function(gl) {
+VertexArrayObject.flushAllDeletedGLVertexArrayObjects = function (gl) {
     if (!VertexArrayObject._sDeletedGLVertexArrayObjectCache.has(gl)) return;
     var deleteList = VertexArrayObject._sDeletedGLVertexArrayObjectCache.get(gl);
     var numBuffers = deleteList.length;
@@ -54,7 +54,7 @@ VertexArrayObject.flushAllDeletedGLVertexArrayObjects = function(gl) {
     }
 };
 
-VertexArrayObject.onLostContext = function(gl) {
+VertexArrayObject.onLostContext = function (gl) {
     if (!VertexArrayObject._sDeletedGLVertexArrayObjectCache.has(gl)) return;
     var deleteList = VertexArrayObject._sDeletedGLVertexArrayObjectCache.get(gl);
     deleteList.length = 0;
@@ -63,16 +63,16 @@ VertexArrayObject.onLostContext = function(gl) {
 utils.createPrototypeObject(
     VertexArrayObject,
     utils.objectInherit(GLObject.prototype, {
-        getInstanceID: function() {
+        getInstanceID: function () {
             return this._instanceID;
         },
 
-        invalidate: function() {
+        invalidate: function () {
             this._vaoObject = undefined;
             this.dirty();
         },
 
-        releaseGLObjects: function() {
+        releaseGLObjects: function () {
             if (this._vaoObject !== undefined && this._gl !== undefined) {
                 VertexArrayObject.deleteGLVertexArrayObject(this._gl, this._vaoObject);
                 GLObject.removeObject(this._gl, this);
@@ -80,12 +80,12 @@ utils.createPrototypeObject(
             this.invalidate();
         },
 
-        create: function(gl) {
+        create: function (gl) {
             this._vaoObject = gl.createVertexArray();
             this._dirty = false;
         },
 
-        bind: function(gl) {
+        bind: function (gl) {
             if (!this._gl) {
                 this.setGraphicContext(gl);
             }
@@ -96,11 +96,11 @@ utils.createPrototypeObject(
             gl.bindVertexArray(this._vaoObject);
         },
 
-        dirty: function() {
+        dirty: function () {
             this._dirty = true;
         },
 
-        isDirty: function() {
+        isDirty: function () {
             return this._dirty;
         }
     }),

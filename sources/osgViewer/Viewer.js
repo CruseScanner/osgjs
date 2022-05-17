@@ -32,7 +32,7 @@ import RenderBin from 'osg/RenderBin';
 import RenderStage from 'osg/RenderStage';
 import StateGraph from 'osg/StateGraph';
 
-var Viewer = function(canvas, userOptions, error) {
+var Viewer = function (canvas, userOptions, error) {
     View.call(this);
 
     this._startTick = Timer.instance().tick();
@@ -65,7 +65,7 @@ var Viewer = function(canvas, userOptions, error) {
 utils.createPrototypeObject(
     Viewer,
     utils.objectInherit(View.prototype, {
-        initInputManager: function(options, canvas) {
+        initInputManager: function (options, canvas) {
             var inputManager = new InputManager();
             this._inputManager = inputManager;
 
@@ -92,7 +92,7 @@ utils.createPrototypeObject(
 
             inputManager.addMappings(
                 { 'viewer.internals:hmdConnect': 'vrdisplayconnected' },
-                function(ev) {
+                function (ev) {
                     this.setVRDisplay(ev.vrDisplay);
                 }.bind(this)
             );
@@ -100,7 +100,7 @@ utils.createPrototypeObject(
             inputManager.setParam('pixelRatio', [this._devicePixelRatio, this._devicePixelRatio]);
         },
 
-        _initInputSource: function(sourceClass, optionName, defaultSrcElem, options) {
+        _initInputSource: function (sourceClass, optionName, defaultSrcElem, options) {
             var opt = options.InputSources ? options.InputSources[optionName] : undefined;
             if (opt) {
                 if (opt.enable !== false) {
@@ -112,11 +112,11 @@ utils.createPrototypeObject(
             }
         },
 
-        getInputManager: function() {
+        getInputManager: function () {
             return this._inputManager;
         },
 
-        initOptions: function(userOptions) {
+        initOptions: function (userOptions) {
             // use default options
             var options = new Options();
 
@@ -133,15 +133,12 @@ utils.createPrototypeObject(
 
             // Check if Frustum culling is enabled to calculate the clip planes
             if (options.getBoolean('enableFrustumCulling') === true)
-                this.getCamera()
-                    .getRenderer()
-                    .getCullVisitor()
-                    .setEnableFrustumCulling(true);
+                this.getCamera().getRenderer().getCullVisitor().setEnableFrustumCulling(true);
 
             return options;
         },
 
-        initWebGLContext: function(canvas, options, error) {
+        initWebGLContext: function (canvas, options, error) {
             // #FIXME see tojiro's blog for webgl lost context stuffs
             if (options.get('SimulateWebGLLostContext')) {
                 canvas = WebGLDebugUtils.makeLostContextSimulatingCanvas(canvas);
@@ -154,7 +151,7 @@ utils.createPrototypeObject(
             //www.khronos.org/registry/webgl/specs/latest/1.0/#WEBGLCONTEXTEVENT
             canvas.addEventListener(
                 'webglcontextlost',
-                function(event) {
+                function (event) {
                     this.contextLost();
                     if (this._forceRestoreContext !== false) {
                         event.preventDefault();
@@ -165,7 +162,7 @@ utils.createPrototypeObject(
 
             canvas.addEventListener(
                 'webglcontextrestored',
-                function() {
+                function () {
                     this.contextRestored();
                 }.bind(this),
                 false
@@ -184,7 +181,7 @@ utils.createPrototypeObject(
         // allow user to acknowledge the context lost
         // (display a message, etc.)
         // - callback return false: no attempt to restore
-        setContextLostCallback: function(callback) {
+        setContextLostCallback: function (callback) {
             this._contextLostCallback = callback;
             // just in case callback registration
             // happens after the context lost
@@ -193,11 +190,11 @@ utils.createPrototypeObject(
             }
         },
 
-        setContextRestoreCallback: function(callback) {
+        setContextRestoreCallback: function (callback) {
             this._contextRestoreCallback = callback;
         },
 
-        contextLost: function() {
+        contextLost: function () {
             notify.log('webgl context lost');
             if (this._contextLostCallback) {
                 this._forceRestoreContext = this._contextLostCallback();
@@ -206,7 +203,7 @@ utils.createPrototypeObject(
             window.cancelAnimationFrame(this._requestID);
         },
 
-        contextRestored: function() {
+        contextRestored: function () {
             if (this._forceRestoreContext === false) {
                 notify.log('webgl context restore not supported - please reload the page - ');
                 return;
@@ -217,7 +214,7 @@ utils.createPrototypeObject(
             notify.log('webgl context restored');
         },
 
-        restoreContext: function() {
+        restoreContext: function () {
             var gl = this.getGraphicContext();
 
             Shader.onLostContext(gl);
@@ -229,10 +226,7 @@ utils.createPrototypeObject(
 
             GLObject.onLostContext(gl);
 
-            this.getCamera()
-                .getRenderer()
-                .getState()
-                .resetCaches();
+            this.getCamera().getRenderer().getState().resetCaches();
 
             // if it's a different GPU, different webglcaps
             this.initWebGLCaps(gl, true);
@@ -256,21 +250,19 @@ utils.createPrototypeObject(
             this._runImplementation();
         },
 
-        init: function() {
+        init: function () {
             //this._done = false;
         },
 
-        getUpdateVisitor: function() {
+        getUpdateVisitor: function () {
             return this._updateVisitor;
         },
 
-        getState: function() {
-            return this.getCamera()
-                .getRenderer()
-                .getState();
+        getState: function () {
+            return this.getCamera().getRenderer().getState();
         },
 
-        initStats: function(options) {
+        initStats: function (options) {
             var timerGPU = TimerGPU.instance(this.getGraphicContext());
 
             if (!options.getBoolean('stats')) {
@@ -288,21 +280,18 @@ utils.createPrototypeObject(
             timerGPU.setCallback(this.callbackTimerGPU.bind(this));
         },
 
-        callbackTimerGPU: function(average, queryID) {
+        callbackTimerGPU: function (average, queryID) {
             if (this._stats) this._stats.getCounter(queryID).set(average / 1e6);
         },
 
-        getViewerStats: function() {
+        getViewerStats: function () {
             return this._stats;
         },
 
-        renderingTraversal: function() {
+        renderingTraversal: function () {
             this.getState()._frameStamp = this._frameStamp;
 
-            if (this.getScene().getSceneData())
-                this.getScene()
-                    .getSceneData()
-                    .getBound();
+            if (this.getScene().getSceneData()) this.getScene().getSceneData().getBound();
 
             if (this.getCamera()) {
                 var stats = this._stats;
@@ -347,7 +336,7 @@ utils.createPrototypeObject(
             }
         },
 
-        updateTraversal: function() {
+        updateTraversal: function () {
             var stats = this._stats;
 
             if (stats) stats.getCounter('update').start();
@@ -367,7 +356,7 @@ utils.createPrototypeObject(
             if (stats) stats.getCounter('update').end();
         },
 
-        advance: function(simulationTime) {
+        advance: function (simulationTime) {
             var sTime = simulationTime;
 
             if (sTime === undefined) sTime = Number.MAX_VALUE;
@@ -385,7 +374,7 @@ utils.createPrototypeObject(
             frameStamp.setDeltaTime(frameStamp.getSimulationTime() - lastSimulationTime); // compute delta since last tick
         },
 
-        beginFrame: function() {
+        beginFrame: function () {
             var stats = this._stats;
 
             if (stats) {
@@ -396,7 +385,7 @@ utils.createPrototypeObject(
             }
         },
 
-        endFrame: function() {
+        endFrame: function () {
             var frameNumber = this.getFrameStamp().getFrameNumber();
 
             // update texture stats
@@ -414,11 +403,11 @@ utils.createPrototypeObject(
             }
         },
 
-        checkNeedToDoFrame: function() {
+        checkNeedToDoFrame: function () {
             return this._requestContinousUpdate || this._requestRedraw;
         },
 
-        frame: function() {
+        frame: function () {
             // _contextLost check for code calling viewer::frame directly
             // (likely force preload gl resource or direct render control )
             if (this._contextLost) return;
@@ -456,38 +445,38 @@ utils.createPrototypeObject(
             if (this._hmd && this._hmd.isPresenting) this._hmd.submitFrame();
         },
 
-        setDone: function(bool) {
+        setDone: function (bool) {
             this._done = bool;
         },
 
-        done: function() {
+        done: function () {
             return this._done;
         },
 
-        render: function() {
+        render: function () {
             if (!this.done()) {
                 this._requestID = this._requestAnimationFrame(this.renderBinded, this._canvas);
                 this.frame();
             }
         },
 
-        _runImplementation: function() {
+        _runImplementation: function () {
             this.render();
         },
 
-        run: function() {
+        run: function () {
             this._runImplementation();
         },
 
-        setVRDisplay: function(hmd) {
+        setVRDisplay: function (hmd) {
             this._hmd = hmd;
         },
 
-        getVRDisplay: function() {
+        getVRDisplay: function () {
             return this._hmd;
         },
 
-        setPresentVR: function(doPresentVR) {
+        setPresentVR: function (doPresentVR) {
             if (!this._hmd) {
                 notify.warn('no hmd device provided to the viewer!');
                 return P.reject();
@@ -511,7 +500,7 @@ utils.createPrototypeObject(
             }
         },
 
-        setupManipulator: function(manipulator /*, dontBindDefaultEvent */) {
+        setupManipulator: function (manipulator /*, dontBindDefaultEvent */) {
             if (manipulator === undefined) {
                 manipulator = new OrbitManipulator({ inputManager: this._inputManager });
             }
@@ -528,7 +517,7 @@ utils.createPrototypeObject(
         },
 
         // updateViewport
-        updateViewport: function() {
+        updateViewport: function () {
             var gl = this.getGraphicContext();
             var canvas = gl.canvas;
 
@@ -562,7 +551,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        setManipulator: function(manipulator) {
+        setManipulator: function (manipulator) {
             this.setEnableManipulator(false);
 
             if (!manipulator.getCamera()) manipulator.setCamera(this.getCamera());
@@ -571,12 +560,12 @@ utils.createPrototypeObject(
             View.prototype.setManipulator.call(this, manipulator);
         },
 
-        setEnableManipulator: function(bool) {
+        setEnableManipulator: function (bool) {
             if (!this._manipulator) return;
             this._manipulator.setEnable(bool);
         },
 
-        dispose: function() {
+        dispose: function () {
             RenderBin.clean();
             RenderStage.clean();
             StateGraph.pooledStateGraph.clean();

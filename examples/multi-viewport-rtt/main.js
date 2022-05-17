@@ -1,11 +1,11 @@
-(function() {
+(function () {
     'use strict';
 
     var ExampleOSGJS = window.ExampleOSGJS;
     var osg = window.OSG.osg;
 
     // inherits for the ExampleOSGJS prototype
-    var Example = function() {
+    var Example = function () {
         ExampleOSGJS.call(this);
 
         this._config = {
@@ -14,7 +14,7 @@
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        createCameraSharedRTT: function(texture, clearColor, index, num) {
+        createCameraSharedRTT: function (texture, clearColor, index, num) {
             var camera = new osg.Camera();
             camera.setName('camera ' + index);
             var size = texture.getWidth() / num;
@@ -36,7 +36,7 @@
             return camera;
         },
 
-        createCameraFinal: function(texture) {
+        createCameraFinal: function (texture) {
             var texturedQuadUsingTargetTexture = osg.createTexturedQuadGeometry(
                 -1,
                 -1,
@@ -68,7 +68,7 @@
             return camera;
         },
 
-        getOrCreateModel: function() {
+        getOrCreateModel: function () {
             var node = new osg.Node();
 
             var mtx = new osg.MatrixTransform();
@@ -86,7 +86,7 @@
             return node;
         },
 
-        createScene: function() {
+        createScene: function () {
             var num = 4;
             var width = this._canvas.width / num;
             var height = this._canvas.height;
@@ -125,7 +125,7 @@
                 camera.setProjectionMatrix(
                     osg.mat4.perspective(
                         osg.mat4.create(),
-                        Math.PI / 180 * 60,
+                        (Math.PI / 180) * 60,
                         width / height,
                         0.1,
                         100.0
@@ -149,7 +149,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
         },

@@ -1,7 +1,7 @@
 import { mat4 } from 'osg/glMatrix';
 import TransformEnums from 'osg/transformEnums';
 
-var computeLocalToWorld = function(nodePath, ignoreCameras, userMatrix, nodePathIndex) {
+var computeLocalToWorld = function (nodePath, ignoreCameras, userMatrix, nodePathIndex) {
     var ignoreCamera = ignoreCameras;
     var nodePathLength = nodePathIndex !== undefined ? nodePathIndex : nodePath.length;
     if (ignoreCamera === undefined) ignoreCamera = true;

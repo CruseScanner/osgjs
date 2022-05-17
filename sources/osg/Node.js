@@ -13,7 +13,7 @@ import TransformEnums from 'osg/transformEnums';
  *  Node that can contains child node
  *  @class Node
  */
-var Node = function() {
+var Node = function () {
     Object.call(this);
 
     this.children = [];
@@ -39,7 +39,7 @@ var Node = function() {
 };
 
 var pooledMatrix = new PooledResource(mat4.create);
-var nodeGetMat = function() {
+var nodeGetMat = function () {
     var matrix = pooledMatrix.getOrCreateObject();
     return mat4.identity(matrix);
 };
@@ -52,16 +52,16 @@ utils.createPrototypeNode(
       Return StateSet and create it if it does not exist yet
       @type StateSet
    */
-        getOrCreateStateSet: function() {
+        getOrCreateStateSet: function () {
             if (!this.stateset) this.setStateSet(new StateSet());
             return this.stateset;
         },
 
-        getStateSet: function() {
+        getStateSet: function () {
             return this.stateset;
         },
 
-        accept: function(nv) {
+        accept: function (nv) {
             if (nv.validNodeMask(this)) {
                 nv.pushOntoNodePath(this);
                 nv.apply(this);
@@ -69,7 +69,7 @@ utils.createPrototypeNode(
             }
         },
 
-        dirtyBound: function() {
+        dirtyBound: function () {
             if (this._boundingSphereComputed === true || this._boundingBoxComputed === true) {
                 this._boundingSphereComputed = false;
                 this._boundingBoxComputed = false;
@@ -80,15 +80,15 @@ utils.createPrototypeNode(
             }
         },
 
-        setNodeMask: function(mask) {
+        setNodeMask: function (mask) {
             this.nodeMask = mask;
         },
 
-        getNodeMask: function() {
+        getNodeMask: function () {
             return this.nodeMask;
         },
 
-        setStateSet: function(stateSet) {
+        setStateSet: function (stateSet) {
             if (this.stateset === stateSet) return;
 
             var deltaUpdate = 0;
@@ -111,7 +111,7 @@ utils.createPrototypeNode(
             this.stateset = stateSet;
         },
 
-        _updateNumChildrenRequeringUpdateTraversal: function(delta) {
+        _updateNumChildrenRequeringUpdateTraversal: function (delta) {
             if (this._numChildrenRequiringUpdateTraversal === 0 && this._parents.length) {
                 // the number of callbacks has changed, need to pass this
                 // on to parents so they know whether app traversal is
@@ -124,7 +124,7 @@ utils.createPrototypeNode(
             }
         },
 
-        setNumChildrenRequiringUpdateTraversal: function(num) {
+        setNumChildrenRequiringUpdateTraversal: function (num) {
             // if no changes just return.
             if (this._numChildrenRequiringUpdateTraversal === num) return;
 
@@ -154,18 +154,18 @@ utils.createPrototypeNode(
             this._numChildrenRequiringUpdateTraversal = num;
         },
 
-        getNumChildrenRequiringUpdateTraversal: function() {
+        getNumChildrenRequiringUpdateTraversal: function () {
             return this._numChildrenRequiringUpdateTraversal;
         },
 
         /** Get update node callback, called during update traversal.
       @type Oject
    */
-        getUpdateCallback: function() {
+        getUpdateCallback: function () {
             return this._updateCallbacks[0];
         },
 
-        addUpdateCallback: function(cb) {
+        addUpdateCallback: function (cb) {
             var hasExistingCallback = Boolean(this._updateCallbacks.length);
             this._updateCallbacks.push(cb);
 
@@ -173,7 +173,7 @@ utils.createPrototypeNode(
             if (!hasExistingCallback) this._updateNumChildrenRequeringUpdateTraversal(1);
         },
 
-        removeUpdateCallback: function(cb) {
+        removeUpdateCallback: function (cb) {
             var arrayIdx = this._updateCallbacks.indexOf(cb);
             if (arrayIdx === -1) return;
             this._updateCallbacks.splice(arrayIdx, 1);
@@ -181,7 +181,7 @@ utils.createPrototypeNode(
             // send the signal when no more callback
             if (!this._updateCallbacks.length) this._updateNumChildrenRequeringUpdateTraversal(-1);
         },
-        getUpdateCallbackList: function() {
+        getUpdateCallbackList: function () {
             return this._updateCallbacks;
         },
 
@@ -206,14 +206,14 @@ utils.createPrototypeNode(
 
       @param Oject callback
    */
-        setCullCallback: function(cb) {
+        setCullCallback: function (cb) {
             this._cullCallback = cb;
         },
-        getCullCallback: function() {
+        getCullCallback: function () {
             return this._cullCallback;
         },
 
-        hasChild: function(child) {
+        hasChild: function (child) {
             for (var i = 0, l = this.children.length; i < l; i++) {
                 if (this.children[i] === child) {
                     return true;
@@ -222,7 +222,7 @@ utils.createPrototypeNode(
             return false;
         },
 
-        addChild: function(child) {
+        addChild: function (child) {
             if (this.children.indexOf(child) !== -1) return undefined;
 
             this.children.push(child);
@@ -253,30 +253,30 @@ utils.createPrototypeNode(
             return child;
         },
 
-        getChildren: function() {
+        getChildren: function () {
             return this.children;
         },
-        getNumChildren: function() {
+        getNumChildren: function () {
             return this.children.length;
         },
-        getChild: function(num) {
+        getChild: function (num) {
             return this.children[num];
         },
-        getParents: function() {
+        getParents: function () {
             return this._parents;
         },
 
-        addParent: function(parent) {
+        addParent: function (parent) {
             this._parents.push(parent);
         },
 
-        removeParent: function(parent) {
+        removeParent: function (parent) {
             var idx = this._parents.indexOf(parent);
             if (idx === -1) return;
             this._parents.splice(idx, 1);
         },
 
-        removeChildren: function() {
+        removeChildren: function () {
             var children = this.children;
             var nbChildren = children.length;
             if (!nbChildren) return;
@@ -303,7 +303,7 @@ utils.createPrototypeNode(
         },
 
         // preserve order
-        removeChild: function(child) {
+        removeChild: function (child) {
             var children = this.children;
             var id = children.indexOf(child);
             if (id === -1) return;
@@ -321,7 +321,7 @@ utils.createPrototypeNode(
                 );
         },
 
-        traverse: function(visitor) {
+        traverse: function (visitor) {
             var children = this.children;
             for (var i = 0, l = children.length; i < l; i++) {
                 var child = children[i];
@@ -329,7 +329,7 @@ utils.createPrototypeNode(
             }
         },
 
-        ascend: function(visitor) {
+        ascend: function (visitor) {
             var parents = this._parents;
             for (var i = 0, l = parents.length; i < l; i++) {
                 var parent = parents[i];
@@ -337,7 +337,7 @@ utils.createPrototypeNode(
             }
         },
 
-        getBoundingBox: function() {
+        getBoundingBox: function () {
             if (!this._boundingBoxComputed) {
                 this.computeBoundingBox(this._boundingBox);
                 this._boundingBoxComputed = true;
@@ -345,7 +345,7 @@ utils.createPrototypeNode(
             return this._boundingBox;
         },
 
-        computeBoundingBox: function(bbox) {
+        computeBoundingBox: function (bbox) {
             // circular dependency... not sure if the global visitor instance should be instancied here
             var ComputeBoundsVisitor = require('osg/ComputeBoundsVisitor').default;
             var cbv = (ComputeBoundsVisitor.instance =
@@ -358,11 +358,11 @@ utils.createPrototypeNode(
             return bbox;
         },
 
-        getBoundingSphere: function() {
+        getBoundingSphere: function () {
             return this.getBound();
         },
 
-        getBound: function() {
+        getBound: function () {
             if (!this._boundingSphereComputed) {
                 this.computeBoundingSphere(this._boundingSphere);
                 this._boundingSphereComputed = true;
@@ -370,7 +370,7 @@ utils.createPrototypeNode(
             return this._boundingSphere;
         },
 
-        computeBoundingSphere: function(bSphere) {
+        computeBoundingSphere: function (bSphere) {
             var children = this.children;
             var l = children.length;
 
@@ -399,18 +399,18 @@ utils.createPrototypeNode(
         },
 
         // matrixCreate allow user handling of garbage collection of matrices
-        getWorldMatrices: (function() {
-            var CollectParentPaths = function() {
+        getWorldMatrices: (function () {
+            var CollectParentPaths = function () {
                 this.nodePaths = [];
                 this.halt = undefined;
                 NodeVisitor.call(this, NodeVisitor.TRAVERSE_PARENTS);
             };
             CollectParentPaths.prototype = utils.objectInherit(NodeVisitor.prototype, {
-                reset: function() {
+                reset: function () {
                     this.nodePath.length = 0;
                     this.nodePaths.length = 0;
                 },
-                apply: function(node) {
+                apply: function (node) {
                     if (
                         node._parents.length === 0 ||
                         node === this.halt ||
@@ -448,7 +448,7 @@ utils.createPrototypeNode(
         })(),
 
         // same as getWorldMatrices GC: Perf WIN
-        getWorldMatrix: function(halt, matrix) {
+        getWorldMatrix: function (halt, matrix) {
             // pass allocator on master
             var matrixList = this.getWorldMatrices(halt, nodeGetMat);
 
@@ -462,7 +462,7 @@ utils.createPrototypeNode(
             return matrix;
         },
 
-        setCullingActive: function(value) {
+        setCullingActive: function (value) {
             if (this._cullingActive === value) return;
             if (this._numChildrenWithCullingDisabled === 0 && this._parents.length > 0) {
                 var delta = 0;
@@ -479,11 +479,11 @@ utils.createPrototypeNode(
             this._cullingActive = value;
         },
 
-        getCullingActive: function() {
+        getCullingActive: function () {
             return this._cullingActive;
         },
 
-        isCullingActive: function() {
+        isCullingActive: function () {
             return (
                 this._numChildrenWithCullingDisabled === 0 &&
                 this._cullingActive &&
@@ -491,7 +491,7 @@ utils.createPrototypeNode(
             );
         },
 
-        setNumChildrenWithCullingDisabled: function(num) {
+        setNumChildrenWithCullingDisabled: function (num) {
             if (this._numChildrenWithCullingDisabled === num) return;
             if (this._cullingActive && this._parents.length > 0) {
                 var delta = 0;
@@ -508,11 +508,11 @@ utils.createPrototypeNode(
             this._numChildrenWithCullingDisabled = num;
         },
 
-        getNumChildrenWithCullingDisabled: function() {
+        getNumChildrenWithCullingDisabled: function () {
             return this._numChildrenWithCullingDisabled;
         },
 
-        releaseGLObjects: function() {
+        releaseGLObjects: function () {
             if (this.stateset !== undefined) this.stateset.releaseGLObjects();
         }
     }),

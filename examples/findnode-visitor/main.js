@@ -5,7 +5,7 @@ var OSG = window.OSG;
 var osg = OSG.osg;
 var osgViewer = OSG.osgViewer;
 
-var onLoad = function() {
+var onLoad = function () {
     // The 3D canvas.
     var canvas = document.getElementById('View');
     var viewer;
@@ -26,18 +26,18 @@ var onLoad = function() {
 
     // Here we create a new form of
     // Scene Graph Visitor
-    var FindByNameVisitor = function(name) {
+    var FindByNameVisitor = function (name) {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
         this._name = name;
     };
 
     FindByNameVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
         // in found we'll store our resulting matching node
-        init: function() {
+        init: function () {
             this.found = undefined;
         },
         // the crux of it
-        apply: function(node) {
+        apply: function (node) {
             if (node.getName() === this._name) {
                 this.found = node;
                 return;

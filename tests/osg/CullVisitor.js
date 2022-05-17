@@ -19,18 +19,15 @@ import Viewport from 'osg/Viewport';
 import View from 'osgViewer/View';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function() {
-    test('CullVisitor', function() {
+export default function () {
+    test('CullVisitor', function () {
         console.log('toto');
         var canvas = mockup.createCanvas();
         var viewer = new mockup.Viewer(canvas);
         viewer.setupManipulator();
         viewer.init();
         viewer.frame();
-        var uv = viewer
-            .getCamera()
-            .getRenderer()
-            .getCullVisitor();
+        var uv = viewer.getCamera().getRenderer().getCullVisitor();
         var root = new Node();
         root.setName('a');
         var b = new Node();
@@ -43,17 +40,17 @@ export default function() {
         var callb = 0;
         var callc = 0;
 
-        var fb = function() {};
+        var fb = function () {};
         fb.prototype = {
-            cull: function(/*node, nv*/) {
+            cull: function (/*node, nv*/) {
                 callb = 1;
                 return false;
             }
         };
 
-        var fc = function() {};
+        var fc = function () {};
         fc.prototype = {
-            cull: function(/*node, nv*/) {
+            cull: function (/*node, nv*/) {
                 callc = 1;
                 return true;
             }
@@ -74,9 +71,9 @@ export default function() {
         viewer.getInputManager().cleanup();
     });
     return;
-    test('CullVisitor 2', function() {
+    test('CullVisitor 2', function () {
         // check render stage and render bin
-        (function() {
+        (function () {
             var canvas = mockup.createCanvas();
             var viewer = new mockup.Viewer(canvas);
             viewer.setupManipulator();
@@ -119,16 +116,16 @@ export default function() {
         })();
 
         // check render stage and render bin
-        (function() {
+        (function () {
             var state = new State(new ShaderGeneratorProxy());
             var fakeRenderer = mockup.createFakeRenderer();
-            fakeRenderer.validateProgram = function() {
+            fakeRenderer.validateProgram = function () {
                 return true;
             };
-            fakeRenderer.getProgramParameter = function() {
+            fakeRenderer.getProgramParameter = function () {
                 return true;
             };
-            fakeRenderer.isContextLost = function() {
+            fakeRenderer.isContextLost = function () {
                 return false;
             };
 
@@ -175,7 +172,7 @@ export default function() {
         })();
 
         // check the computation of nearfar
-        (function() {
+        (function () {
             var camera0 = new Camera();
 
             var mt = new MatrixTransform();
@@ -187,7 +184,7 @@ export default function() {
             mat4.lookAt(camera0.getViewMatrix(), [-10, 0, 10], [0, 0, 10], [0, 1, 0]);
             mat4.perspective(
                 camera0.getProjectionMatrix(),
-                Math.PI / 180 * 60,
+                (Math.PI / 180) * 60,
                 800 / 600,
                 1.0,
                 1000.0
@@ -195,7 +192,7 @@ export default function() {
 
             var stack = [];
 
-            var setCullSettings = function(settings) {
+            var setCullSettings = function (settings) {
                 if (this._computedNear !== undefined) {
                     stack.push([this._computedNear, this._computedFar]);
                 }
@@ -203,7 +200,7 @@ export default function() {
             };
             var resultProjection;
 
-            var popProjectionMatrix = function() {
+            var popProjectionMatrix = function () {
                 resultProjection = this._projectionMatrixStack.back();
                 CullVisitor.prototype.popProjectionMatrix.call(this);
             };
@@ -221,22 +218,8 @@ export default function() {
 
             camera0.accept(cull);
             var supposedProjection = [
-                1.299038105676658,
-                0,
-                0,
-                0,
-                0,
-                1.7320508075688774,
-                0,
-                0,
-                0,
-                0,
-                -1.9423076923076918,
-                -1,
-                0,
-                0,
-                -14.417307692307686,
-                0
+                1.299038105676658, 0, 0, 0, 0, 1.7320508075688774, 0, 0, 0, 0, -1.9423076923076918,
+                -1, 0, 0, -14.417307692307686, 0
             ];
             assert.isOk(
                 mockup.checkNear(stack[1][0], 5),
@@ -257,7 +240,7 @@ export default function() {
         })();
 
         // check the computation of nearfar with camera in position that it reverses near far
-        (function() {
+        (function () {
             var camera0 = new Camera();
 
             var mt = new MatrixTransform();
@@ -269,7 +252,7 @@ export default function() {
             mat4.lookAt(camera0.getViewMatrix(), [0, 0, 20], [0, 0, 10], [0, 1, 0]);
             mat4.perspective(
                 camera0.getProjectionMatrix(),
-                Math.PI / 180 * 60,
+                (Math.PI / 180) * 60,
                 800 / 600,
                 1.0,
                 1000.0
@@ -277,7 +260,7 @@ export default function() {
 
             var stack = [];
 
-            var setCullSettings = function(settings) {
+            var setCullSettings = function (settings) {
                 if (this._computedNear !== undefined) {
                     stack.push([this._computedNear, this._computedFar]);
                 }
@@ -287,28 +270,14 @@ export default function() {
 
             var resultProjection;
 
-            var popProjectionMatrix = function() {
+            var popProjectionMatrix = function () {
                 resultProjection = this.getCurrentProjectionMatrix();
                 CullVisitor.prototype.popProjectionMatrix.call(this);
             };
 
             var supposedProjection = [
-                1.299038105676658,
-                0,
-                0,
-                0,
-                0,
-                1.7320508075688774,
-                0,
-                0,
-                0,
-                0,
-                -49.999750101250868,
-                -1,
-                0,
-                0,
-                -499.79750101250352,
-                0
+                1.299038105676658, 0, 0, 0, 0, 1.7320508075688774, 0, 0, 0, 0, -49.999750101250868,
+                -1, 0, 0, -499.79750101250352, 0
             ];
             var cull = new CullVisitor();
             var rs = new RenderStage();
@@ -340,11 +309,11 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var camera0 = new Camera();
 
             var geom = Shape.createTexturedQuadGeometry(-5.0, -5, 0, 10, 0, 0, 0, 10, 0, 1, 1);
-            geom.getBoundingBox = function() {
+            geom.getBoundingBox = function () {
                 var bb = new BoundingBox();
                 bb._min = [-6131940, -6297390, -6356750];
                 bb._max = [6353000, 6326310, 6317430];
@@ -375,14 +344,15 @@ export default function() {
             //      var bbCornerFar = 1;
             //      var bbCornerNear = 6;
 
-            mat4.lookAt(camera0.getViewMatrix(), vec3.add(vec3.create(), eye, target), target, [
-                0,
-                0,
-                1
-            ]);
+            mat4.lookAt(
+                camera0.getViewMatrix(),
+                vec3.add(vec3.create(), eye, target),
+                target,
+                [0, 0, 1]
+            );
             mat4.perspective(
                 camera0.getProjectionMatrix(),
-                Math.PI / 180 * 60,
+                (Math.PI / 180) * 60,
                 800 / 450,
                 1.0,
                 1000.0
@@ -390,7 +360,7 @@ export default function() {
 
             var stack = [];
 
-            var setCullSettings = function(settings) {
+            var setCullSettings = function (settings) {
                 if (this._computedNear !== undefined) {
                     stack.push([this._computedNear, this._computedFar]);
                 }
@@ -400,28 +370,14 @@ export default function() {
 
             var resultProjection;
 
-            var popProjectionMatrix = function() {
+            var popProjectionMatrix = function () {
                 resultProjection = this.getCurrentProjectionMatrix();
                 CullVisitor.prototype.popProjectionMatrix.call(this);
             };
 
             var supposedProjection = [
-                0.97427857925749362,
-                0,
-                0,
-                0,
-                0,
-                1.7320508075688774,
-                0,
-                0,
-                0,
-                0,
-                -1.0241512629639544,
-                -1,
-                0,
-                0,
-                -530789.63819638337,
-                0
+                0.97427857925749362, 0, 0, 0, 0, 1.7320508075688774, 0, 0, 0, 0,
+                -1.0241512629639544, -1, 0, 0, -530789.63819638337, 0
             ];
             var cull = new CullVisitor();
             var rs = new RenderStage();
@@ -453,7 +409,7 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var q = Shape.createTexturedBoxGeometry(0, 0, 0, 1, 1, 1);
 
             var node3 = new MatrixTransform();
@@ -505,7 +461,7 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var q = Shape.createTexturedBoxGeometry(0, 0, 0, 1, 1, 1);
 
             var node0 = new MatrixTransform();
@@ -556,7 +512,7 @@ export default function() {
             mockup.removeCanvas(canvas);
         })();
 
-        (function() {
+        (function () {
             var canvas = mockup.createCanvas();
             var viewer = new mockup.Viewer(canvas);
             viewer.init();
@@ -596,13 +552,13 @@ export default function() {
 
             var state = new State(new ShaderGeneratorProxy());
             var fakeRenderer = mockup.createFakeRenderer();
-            fakeRenderer.validateProgram = function() {
+            fakeRenderer.validateProgram = function () {
                 return true;
             };
-            fakeRenderer.getProgramParameter = function() {
+            fakeRenderer.getProgramParameter = function () {
                 return true;
             };
-            fakeRenderer.isContextLost = function() {
+            fakeRenderer.isContextLost = function () {
                 return false;
             };
             state.setGraphicContext(fakeRenderer);
@@ -610,8 +566,8 @@ export default function() {
             rs.draw(state);
         })();
 
-        (function() {
-            var getFirstPositionedAttribute = function(renderStage) {
+        (function () {
+            var getFirstPositionedAttribute = function (renderStage) {
                 return renderStage.getPositionedAttribute().getArray()[0][0];
             };
             var canvas = mockup.createCanvas();
@@ -632,7 +588,7 @@ export default function() {
             mockup.removeCanvas(canvas);
         })();
 
-        (function() {
+        (function () {
             var canvas = mockup.createCanvas();
             var viewer = new mockup.Viewer(canvas, {
                 enableFrustumCulling: true
@@ -652,9 +608,9 @@ export default function() {
 
             // test done inside Camera cullcallback
             // to get all context
-            var fb = function() {};
+            var fb = function () {};
             fb.prototype = {
-                cull: function(cam, cull) {
+                cull: function (cam, cull) {
                     cull.nodePath = [];
                     cull.nodePath.push(scene);
                     cull.nodePath.push(mt);
@@ -677,9 +633,9 @@ export default function() {
 
             // test done inside Camera cullcallback
             // to get all context
-            var fb2 = function() {};
+            var fb2 = function () {};
             fb2.prototype = {
-                cull: function(cam, cull) {
+                cull: function (cam, cull) {
                     cull.nodePath = [];
                     cull.nodePath.push(scene);
                     cull.nodePath.push(mt);
@@ -704,9 +660,9 @@ export default function() {
 
             // test done inside Camera cullcallback
             // to get all context
-            var fb3 = function() {};
+            var fb3 = function () {};
             fb3.prototype = {
-                cull: function(cam, cull) {
+                cull: function (cam, cull) {
                     cull.nodePath = [];
                     cull.nodePath.push(scene);
                     cull.nodePath.push(mt);
@@ -728,8 +684,8 @@ export default function() {
         })();
     });
 
-    test('CullVisitor World/View matrix', function() {
-        var checkLeaf = function(leaf) {
+    test('CullVisitor World/View matrix', function () {
+        var checkLeaf = function (leaf) {
             var tmp = mat4.create();
             mat4.mul(tmp, leaf._view, leaf._model);
 

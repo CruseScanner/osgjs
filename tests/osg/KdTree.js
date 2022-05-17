@@ -12,8 +12,8 @@ import LineSegmentIntersector from 'osgUtil/LineSegmentIntersector';
 import IntersectionVisitor from 'osgUtil/IntersectionVisitor';
 import SphereIntersector from 'osgUtil/SphereIntersector';
 
-export default function() {
-    test('KdTree', function() {
+export default function () {
+    test('KdTree', function () {
         //   0-3
         //   |\|
         //   1-2
@@ -21,14 +21,14 @@ export default function() {
         // 1 being [0, 0, 0]
         // 3 being [1, 1, 0]
 
-        var createTrianglesIndexed = function() {
+        var createTrianglesIndexed = function () {
             // triangles
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
 
             return quad;
         };
 
-        var createTriangleStripIndex = function() {
+        var createTriangleStripIndex = function () {
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
 
             var indexes = [];
@@ -46,7 +46,7 @@ export default function() {
             return quad;
         };
 
-        var createTriangleFanIndexed = function() {
+        var createTriangleFanIndexed = function () {
             var quad = Shape.createTexturedQuadGeometry(0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1);
 
             var indexes = [];
@@ -64,7 +64,7 @@ export default function() {
             return quad;
         };
 
-        var createTrianglesNotIndexed = function() {
+        var createTrianglesNotIndexed = function () {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;
@@ -108,7 +108,7 @@ export default function() {
             return quad;
         };
 
-        var createTriangleStripNotIndexed = function() {
+        var createTriangleStripNotIndexed = function () {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;
@@ -144,7 +144,7 @@ export default function() {
             return quad;
         };
 
-        var createTriangleFanNotIndexed = function() {
+        var createTriangleFanNotIndexed = function () {
             var cornerx = 0,
                 cornery = 0,
                 cornerz = 0;
@@ -180,7 +180,7 @@ export default function() {
             return quad;
         };
 
-        var createGeometry = function() {
+        var createGeometry = function () {
             var geom1 = createTrianglesIndexed();
             var geom2 = createTrianglesNotIndexed();
             var geom3 = createTriangleStripIndex();

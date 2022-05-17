@@ -8,18 +8,18 @@ import Program from 'osg/Program';
 import Texture from 'osg/Texture';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function() {
-    test('ShaderGenerator', function() {
-        (function() {
+export default function () {
+    test('ShaderGenerator', function () {
+        (function () {
             var state = new State(new ShaderGeneratorProxy());
             var fakeRenderer = mockup.createFakeRenderer();
-            fakeRenderer.validateProgram = function() {
+            fakeRenderer.validateProgram = function () {
                 return true;
             };
-            fakeRenderer.getProgramParameter = function() {
+            fakeRenderer.getProgramParameter = function () {
                 return true;
             };
-            fakeRenderer.isContextLost = function() {
+            fakeRenderer.isContextLost = function () {
                 return false;
             };
             state.setGraphicContext(fakeRenderer);
@@ -37,16 +37,16 @@ export default function() {
             assert.isOk(true, 'check not exception on material generator use');
         })();
 
-        (function() {
+        (function () {
             var state = new State(new ShaderGeneratorProxy());
             var fakeRenderer = mockup.createFakeRenderer();
-            fakeRenderer.validateProgram = function() {
+            fakeRenderer.validateProgram = function () {
                 return true;
             };
-            fakeRenderer.getProgramParameter = function() {
+            fakeRenderer.getProgramParameter = function () {
                 return true;
             };
-            fakeRenderer.isContextLost = function() {
+            fakeRenderer.isContextLost = function () {
                 return false;
             };
             state.setGraphicContext(fakeRenderer);

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -6,15 +6,15 @@
     var osgViewer = OSG.osgViewer;
     var $ = window.$;
 
-    var Example = function() {
+    var Example = function () {
         var self = this;
 
         this._config = {
             url: 'https://krpano.com/videoserver/cat-test-video-320x240.mp4',
-            PLAY: function() {
+            PLAY: function () {
                 if (self._currentImageStream) self._currentImageStream.play();
             },
-            STOP: function() {
+            STOP: function () {
                 if (self._currentImageStream) self._currentImageStream.stop();
             }
         };
@@ -25,11 +25,11 @@
     };
 
     Example.prototype = {
-        initDatGUI: function() {
+        initDatGUI: function () {
             var gui = new window.dat.GUI();
             var controller = gui.add(this._config, 'url');
             controller.onFinishChange(
-                function() {
+                function () {
                     this.recreateScene();
                 }.bind(this)
             );
@@ -40,7 +40,7 @@
         },
 
         // get the model
-        getOrCreateModel: function(width, height) {
+        getOrCreateModel: function (width, height) {
             if (!this._model) {
                 // check osg/shape.js to see arguements of createTexturedQuadGeometry
                 this._model = osg.createTexturedQuadGeometry(
@@ -59,13 +59,13 @@
             return this._model;
         },
 
-        recreateScene: function() {
+        recreateScene: function () {
             this._scene.removeChildren();
             var model = this.createTextureVideo();
             this._scene.addChild(model);
         },
 
-        createTextureVideo: function() {
+        createTextureVideo: function () {
             var root = new osg.Node();
 
             var videoElement = $('video')[0];
@@ -77,7 +77,7 @@
             videoElement.crossOrigin = 'anonymous';
             videoElement.src = this._config.url;
 
-            videoElement.onerror = function() {
+            videoElement.onerror = function () {
                 var err = 'unknown error';
                 switch (videoElement.error.code) {
                     case 1:
@@ -100,7 +100,7 @@
             this._currentImageStream = image;
 
             image.whenReady().then(
-                function(imageStream) {
+                function (imageStream) {
                     var w, h;
                     w = imageStream.getWidth();
                     h = imageStream.getHeight();
@@ -123,7 +123,7 @@
             return root;
         },
 
-        run: function(canvas) {
+        run: function (canvas) {
             var viewer;
             viewer = new osgViewer.Viewer(canvas, this._osgOptions);
             this._viewer = viewer;
@@ -141,7 +141,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var P = window.P;
     var OSG = window.OSG;
     var osg = OSG.osg;
@@ -10,7 +10,7 @@
     var EnvironmentSphericalHarmonics = window.EnvironmentSphericalHarmonics;
     var IntegrateBRDFMap = window.IntegrateBRDFMap;
 
-    var Environment = function() {
+    var Environment = function () {
         this._config = undefined;
         this._promises = [];
         this._panoramaUE4 = {};
@@ -21,19 +21,16 @@
     };
 
     Environment.prototype = {
-        loadPackage: function(urlOfFile) {
+        loadPackage: function (urlOfFile) {
             var self = this;
 
-            return osgDB.fileHelper.unzip(urlOfFile).then(function(filesMap) {
+            return osgDB.fileHelper.unzip(urlOfFile).then(function (filesMap) {
                 return self.readZipContent(filesMap, urlOfFile);
             });
         },
 
-        readZipContent: function(filesMap, url) {
-            var envName = url
-                .split('/')
-                .pop()
-                .split('.zip')[0];
+        readZipContent: function (filesMap, url) {
+            var envName = url.split('/').pop().split('.zip')[0];
             this.name = envName;
 
             var promises = [];
@@ -43,13 +40,13 @@
                 this._files[name] = data;
             }
             return P.all(promises).then(
-                function() {
+                function () {
                     return this.init(null, this._files['config.json']);
                 }.bind(this)
             );
         },
 
-        getImage: function(type, encoding, format) {
+        getImage: function (type, encoding, format) {
             var results = this.getTextures(type, encoding, format);
 
             if (!results.length) return undefined;
@@ -57,9 +54,9 @@
             return results[0].images[0];
         },
 
-        getTextures: function(type, encoding, format) {
+        getTextures: function (type, encoding, format) {
             var textures = this._config.textures;
-            var results = textures.filter(function(texture) {
+            var results = textures.filter(function (texture) {
                 return (
                     texture.encoding === encoding &&
                     texture.format === format &&
@@ -70,11 +67,11 @@
             return results;
         },
 
-        getFormatList: function() {
+        getFormatList: function () {
             return Object.keys(this._cubemapUE4);
         },
 
-        init: function(url, config) {
+        init: function (url, config) {
             var formatList = ['FLOAT', 'RGBE', 'RGBM', 'LUV'];
 
             this._config = config;
@@ -94,7 +91,7 @@
 
             // read all panorama format U4
             formatList.forEach(
-                function(key) {
+                function (key) {
                     var str = key.toLowerCase();
 
                     var texture = this.getImage('specular_ue4', str, 'panorama');
@@ -111,7 +108,7 @@
 
             // read all cubemap format U4
             formatList.forEach(
-                function(key) {
+                function (key) {
                     var str = key.toLowerCase();
                     var texture = this.getImage('specular_ue4', str, 'cubemap');
                     if (texture === undefined) return;
@@ -124,7 +121,7 @@
                 }.bind(this)
             );
 
-            (function() {
+            (function () {
                 var texture = this.getImage('brdf_ue4', 'rg16', 'lut');
 
                 var file = texture.file;
@@ -135,7 +132,7 @@
 
             // read all background cubemap
             formatList.forEach(
-                function(key) {
+                function (key) {
                     var str = key.toLowerCase();
                     var texture = this.getImage('background', str, 'cubemap');
                     if (texture === undefined) return;
@@ -161,35 +158,35 @@
             return this.getPromise();
         },
 
-        getPromise: function() {
+        getPromise: function () {
             return P.all(this._promises);
         },
 
-        getIntegrateBRDF: function() {
+        getIntegrateBRDF: function () {
             return this._integrateBRDF;
         },
-        getPanoramaUE4: function() {
+        getPanoramaUE4: function () {
             return this._panoramaUE4;
         },
-        getCubemapUE4: function() {
+        getCubemapUE4: function () {
             return this._cubemapUE4;
         },
-        getCubemapMipMapped: function() {
+        getCubemapMipMapped: function () {
             return this._cubemapPackedFloat;
         },
-        getSpherical: function() {
+        getSpherical: function () {
             return this._spherical;
         },
-        getCubemapIrradiance: function() {
+        getCubemapIrradiance: function () {
             return this._cubemapIrradiance;
         },
-        getBackgroundCubemap: function() {
+        getBackgroundCubemap: function () {
             return this._backgroundCubemap;
         },
-        getBackgroundPanorama: function() {
+        getBackgroundPanorama: function () {
             return this._backgroundPanorama;
         },
-        getConfig: function() {
+        getConfig: function () {
             return this._config;
         }
     };

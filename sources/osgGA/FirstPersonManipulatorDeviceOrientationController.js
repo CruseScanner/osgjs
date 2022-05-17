@@ -6,7 +6,7 @@ import InputGroups from 'osgViewer/input/InputConstants';
 
 var degtorad = Math.PI / 180.0; // Degree-to-Radian conversion
 
-var makeRotateFromEuler = function(q, x, y, z, order) {
+var makeRotateFromEuler = function (q, x, y, z, order) {
     // http://www.mathworks.com/matlabcentral/fileexchange/
     // 20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
     // content/SpinCalc.m
@@ -52,12 +52,12 @@ var makeRotateFromEuler = function(q, x, y, z, order) {
     return q;
 };
 
-var FirstPersonManipulatorDeviceOrientationController = function(manipulator) {
+var FirstPersonManipulatorDeviceOrientationController = function (manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
 
-FirstPersonManipulatorDeviceOrientationController.computeQuaternion = (function() {
+FirstPersonManipulatorDeviceOrientationController.computeQuaternion = (function () {
     var screenTransform = quat.create();
     var worldTransform = quat.fromValues(-Math.sqrt(0.5), 0.0, 0.0, Math.sqrt(0.5)); // - PI/2 around the x-axis
 
@@ -69,7 +69,7 @@ FirstPersonManipulatorDeviceOrientationController.computeQuaternion = (function(
     // device was pointing when device orientation was first requested. The compass
     // heading is available in the webkitCompassHeading parameter.
 
-    return function(q, deviceOrientation, screenOrientation) {
+    return function (q, deviceOrientation, screenOrientation) {
         var alpha = deviceOrientation.alpha * degtorad;
         var beta = deviceOrientation.beta * degtorad;
         var gamma = deviceOrientation.gamma * degtorad;
@@ -112,7 +112,7 @@ FirstPersonManipulatorDeviceOrientationController.computeQuaternion = (function(
 utils.createPrototypeObject(
     FirstPersonManipulatorDeviceOrientationController,
     utils.objectInherit(Controller.prototype, {
-        init: function() {
+        init: function () {
             this._quat = quat.create();
             this._pos = vec3.create();
             this._deviceOrientation = undefined;
@@ -131,7 +131,7 @@ utils.createPrototypeObject(
             manager.setEnable(InputGroups.FPS_MANIPULATOR_DEVICEORIENTATION, false);
         },
 
-        setDeviceOrientation: function(ev) {
+        setDeviceOrientation: function (ev) {
             if (!this._deviceOrientation) {
                 this._deviceOrientation = {};
             }
@@ -147,12 +147,12 @@ utils.createPrototypeObject(
             this._update();
         },
 
-        setScreenOrientation: function(ev) {
+        setScreenOrientation: function (ev) {
             this._screenOrientation = ev.screenOrientation;
             this._update();
         },
 
-        _update: function() {
+        _update: function () {
             if (!this._deviceOrientation || !this._screenOrientation) {
                 return;
             }

@@ -14,7 +14,7 @@ import utils from 'osg/utils';
 /**
  * [ComputeFrustumBoundsVisitor get a scene bounds limited by a light and camera frustum]
  */
-var ComputeMultiFrustumBoundsVisitor = function() {
+var ComputeMultiFrustumBoundsVisitor = function () {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ALL_CHILDREN);
 
     this._pooledMatrix = new PooledResource(mat4.create);
@@ -32,7 +32,7 @@ var ComputeMultiFrustumBoundsVisitor = function() {
 utils.createPrototypeObject(
     ComputeMultiFrustumBoundsVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        reset: function(traversalMask, worldLightPos, cameraFrustum, cameraNearFar, lightFrustum) {
+        reset: function (traversalMask, worldLightPos, cameraFrustum, cameraNearFar, lightFrustum) {
             this.setTraversalMask(traversalMask);
 
             this._cameraFrustum = cameraFrustum;
@@ -51,11 +51,11 @@ utils.createPrototypeObject(
             this._bb.init();
         },
 
-        getBoundingBox: function() {
+        getBoundingBox: function () {
             return this._bb;
         },
 
-        getCameraPlaneMaskForLightNear: function(point, cameraFrustum, len) {
+        getCameraPlaneMaskForLightNear: function (point, cameraFrustum, len) {
             var selectorMask = 0x1;
             var resultMask = 15;
             var i;
@@ -82,7 +82,7 @@ utils.createPrototypeObject(
             return resultMask;
         },
 
-        applyTransform: function(transform) {
+        applyTransform: function (transform) {
             var matrix = this._pooledMatrix.getOrCreateObject();
             mat4.copy(matrix, this._matrixStack.back());
             transform.computeLocalToWorldMatrix(matrix, this);
@@ -116,9 +116,9 @@ utils.createPrototypeObject(
 
             this.popMatrix();
         },
-        applyBoundingBox: (function() {
+        applyBoundingBox: (function () {
             var bbOut = new BoundingBox();
-            return function(bbox) {
+            return function (bbox) {
                 var matrix = this._matrixStack.back();
                 if (mat4.exactEquals(matrix, mat4.IDENTITY)) {
                     this._bb.expandByBoundingBox(bbox);
@@ -129,7 +129,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        apply: function(node) {
+        apply: function (node) {
             var typeID = node.getTypeID();
 
             if (node instanceof MatrixTransform) {
@@ -164,11 +164,11 @@ utils.createPrototypeObject(
             this.traverse(node);
         },
 
-        pushMatrix: function(matrix) {
+        pushMatrix: function (matrix) {
             this._matrixStack.push(matrix);
         },
 
-        popMatrix: function() {
+        popMatrix: function () {
             this._matrixStack.pop();
         }
     }),

@@ -11,27 +11,27 @@ if (mockup.isNodeContext()) {
     Input = require('osgDB/Input').default;
 }
 
-export default function() {
+export default function () {
     var ImageTest = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 
-    test('Input.readImageURL', function(done) {
+    test('Input.readImageURL', function (done) {
         var input = new Input();
         input.setPrefixURL('testXtest');
         input
             .readImageURL(ImageTest)
-            .then(function(image) {
+            .then(function (image) {
                 assert.isOk(image.getURL() === ImageTest, 'check image src');
                 done();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });
 
-    test('Input.readImageURL with readImageURL replacement', function(done) {
+    test('Input.readImageURL with readImageURL replacement', function (done) {
         var called = false;
         var input = new Input();
-        var readImageURLReplacement = function(url /*, options*/) {
+        var readImageURLReplacement = function (url /*, options*/) {
             called = true;
             return input.readImageURL(url);
         };
@@ -39,16 +39,16 @@ export default function() {
             .readImageURL(ImageTest, {
                 readImageURL: readImageURLReplacement
             })
-            .then(function(/*image*/) {
+            .then(function (/*image*/) {
                 assert.equal(called, true, 'check image src');
                 done();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });
 
-    test('Input.readImageURL inline dataimage with crossOrigin', function(done) {
+    test('Input.readImageURL inline dataimage with crossOrigin', function (done) {
         var input = new Input();
         var url = 'error-404';
 
@@ -57,7 +57,7 @@ export default function() {
                 imageCrossOrigin: 'Anonymous',
                 imageLoadingUsePromise: true
             })
-            .then(function(img) {
+            .then(function (img) {
                 assert.isOk(img instanceof Image, 'with promise : returned image');
                 assert.isOk(
                     img.getImage().src.substr(-9) !== url,
@@ -66,16 +66,16 @@ export default function() {
 
                 done();
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });
 
-    test('Input.fetchImage', function() {
+    test('Input.fetchImage', function () {
         var input = new Input();
         input.setPrefixURL('testXtest');
 
-        (function() {
+        (function () {
             var img = new Image();
             input.fetchImage(img, ImageTest, {
                 imageCrossOrigin: 'anonymous'
@@ -86,7 +86,7 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var img = new Image();
             input.fetchImage(img, 'http://osgjs.org/image.png', {
                 imageCrossOrigin: 'anonymous'
@@ -95,7 +95,7 @@ export default function() {
         })();
     });
 
-    test('Input.readArrayBuffer-old', function(done) {
+    test('Input.readArrayBuffer-old', function (done) {
         var ba = {
             Elements: [0.01727, -0.00262, 3.0],
             ItemSize: 3,
@@ -105,22 +105,22 @@ export default function() {
         var input = new Input(ba);
         input
             .readBufferArray()
-            .then(function(/*value*/) {
+            .then(function (/*value*/) {
                 return input
                     .setJSON({
                         UniqueID: 10
                     })
                     .readBufferArray();
             })
-            .then(function(o2) {
+            .then(function (o2) {
                 assert.isOk(o2.getElements()[2] === 3.0, 'readBufferArray check same unique id');
                 done();
             });
     });
 
-    test('Input.readBinaryArrayURL with replacement option', function(done) {
+    test('Input.readBinaryArrayURL with replacement option', function (done) {
         var calledBinaryArray = false;
-        var readBinaryArrayURL = function(/*url, options*/) {
+        var readBinaryArrayURL = function (/*url, options*/) {
             calledBinaryArray = true;
             return P.resolve();
         };
@@ -129,15 +129,15 @@ export default function() {
             .readBinaryArrayURL('toto', {
                 readBinaryArrayURL: readBinaryArrayURL
             })
-            .then(function(/*value*/) {
+            .then(function (/*value*/) {
                 assert.isOk(calledBinaryArray, true, 'readBinaryArray replacement has been called');
                 done();
             });
     });
 
-    test('Input.readNodeURL with replacement option', function(done) {
+    test('Input.readNodeURL with replacement option', function (done) {
         var calledNodeURL = false;
-        var readNodeURL = function(/*url, options*/) {
+        var readNodeURL = function (/*url, options*/) {
             calledNodeURL = true;
             return P.resolve();
         };
@@ -146,22 +146,22 @@ export default function() {
             .readNodeURL('toto', {
                 readNodeURL: readNodeURL
             })
-            .then(function(/*value*/) {
+            .then(function (/*value*/) {
                 assert.isOk(calledNodeURL, true, 'readNodeURL replacement has been called');
                 done();
             });
     });
 
-    test('Input.getObjectWrapper', function() {
-        (function() {
+    test('Input.getObjectWrapper', function () {
+        (function () {
             var input = new Input();
             var obj = input.getObjectWrapper('osg.Node');
             assert.isOk(obj.getName() !== '', 'getObjectWrapper check osg.Node.getName');
             assert.isOk(obj.addChild !== undefined, 'getObjectWrapper check osg.addChild');
         })();
 
-        (function() {
-            var ProxyNode = function() {
+        (function () {
+            var ProxyNode = function () {
                 this._proxy = true;
             };
             var input = new Input();
@@ -171,7 +171,7 @@ export default function() {
         })();
     });
 
-    test('Input.readObject - Material', function(done) {
+    test('Input.readObject - Material', function (done) {
         var obj = {
             'osg.Material': {
                 UniqueID: 10,
@@ -187,7 +187,7 @@ export default function() {
         var input = new Input(obj);
         input
             .readObject()
-            .then(function() {
+            .then(function () {
                 return input
                     .setJSON({
                         'osg.Material': {
@@ -196,13 +196,13 @@ export default function() {
                     })
                     .readObject();
             })
-            .then(function(o2) {
+            .then(function (o2) {
                 assert.isOk(o2.getName() === 'FloorBorder1', 'readObject check same unique id');
                 done();
             });
     });
 
-    test('Input.computeURL use prefix', function(done) {
+    test('Input.computeURL use prefix', function (done) {
         var input = new Input();
         assert.isOk(input.computeURL('toto') === 'toto', 'check default computeURL');
         input.setPrefixURL(undefined);
@@ -212,7 +212,7 @@ export default function() {
         done();
     });
 
-    test('Input.readPrimitiveSet', function(done) {
+    test('Input.readPrimitiveSet', function (done) {
         var input = new Input({
             DrawArrays: {
                 UniqueID: 10,
@@ -223,7 +223,7 @@ export default function() {
         });
         input
             .readPrimitiveSet()
-            .then(function(/*value */) {
+            .then(function (/*value */) {
                 return input
                     .setJSON({
                         DrawArrays: {
@@ -232,13 +232,13 @@ export default function() {
                     })
                     .readPrimitiveSet();
             })
-            .then(function(o2) {
+            .then(function (o2) {
                 assert.isOk(o2.getCount() === 3540, 'readPrimitiveSet check same unique id');
                 done();
             });
     });
 
-    test('Input.readBufferArray - inline', function(done) {
+    test('Input.readBufferArray - inline', function (done) {
         var ba = {
             Array: {
                 Uint16Array: {
@@ -253,14 +253,14 @@ export default function() {
         var input = new Input(ba);
         input
             .readBufferArray()
-            .then(function() {
+            .then(function () {
                 return input
                     .setJSON({
                         UniqueID: 10
                     })
                     .readBufferArray();
             })
-            .then(function(o2) {
+            .then(function (o2) {
                 assert.isOk(
                     o2.getElements()[2] === 3.0,
                     'readBufferArray with new array typed inlined'
@@ -269,7 +269,7 @@ export default function() {
             });
     });
 
-    test('Input.readBufferArray - external', function(done) {
+    test('Input.readBufferArray - external', function (done) {
         var ba = {
             Array: {
                 Uint16Array: {
@@ -282,9 +282,9 @@ export default function() {
             UniqueID: 10
         };
 
-        var a = (function() {
+        var a = (function () {
             var input = new Input(ba);
-            return input.readBufferArray().then(function(buffer) {
+            return input.readBufferArray().then(function (buffer) {
                 assert.isOk(
                     buffer.getElements()[2] === 10,
                     'readBufferArray with new array typed external file'
@@ -293,25 +293,25 @@ export default function() {
             });
         })();
 
-        var b = (function() {
+        var b = (function () {
             var calledProgress = false;
-            var progress = function() {
+            var progress = function () {
                 calledProgress = true;
             };
             var input = new Input(ba);
             input.setProgressXHRCallback(progress);
-            return input.readBufferArray().then(function(/*buffer*/) {
+            return input.readBufferArray().then(function (/*buffer*/) {
                 assert.isOk(calledProgress === true, 'readBufferArray check progress callback');
                 return P.resolve();
             });
         })();
 
-        P.all([a, b]).then(function() {
+        P.all([a, b]).then(function () {
             done();
         });
     });
 
-    test('Input.readBufferArray - external offset', function(done) {
+    test('Input.readBufferArray - external offset', function (done) {
         var ba = {
             TexCoord0: {
                 UniqueID: 202,
@@ -338,15 +338,15 @@ export default function() {
                 Type: 'ARRAY_BUFFER'
             }
         };
-        (function() {
+        (function () {
             var input = new Input(ba);
             var arraysPromise = [];
             var buffers = {};
 
-            var createVertexAttribute = function(name, jsonAttribute) {
+            var createVertexAttribute = function (name, jsonAttribute) {
                 var promise = input.setJSON(jsonAttribute).readBufferArray();
                 arraysPromise.push(promise);
-                promise.then(function(buffer) {
+                promise.then(function (buffer) {
                     if (buffer !== undefined) {
                         buffers[name] = buffer;
                     }
@@ -357,7 +357,7 @@ export default function() {
             createVertexAttribute('Tangent', ba.Tangent);
             createVertexAttribute('TexCoord0', ba.TexCoord0);
 
-            P.all(arraysPromise).then(function() {
+            P.all(arraysPromise).then(function () {
                 var tc = buffers.TexCoord0.getElements();
                 var tcl = tc.length;
                 assert.equal(

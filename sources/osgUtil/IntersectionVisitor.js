@@ -5,7 +5,7 @@ import PooledResource from 'osg/PooledResource';
 import PooledArray from 'osg/PooledArray';
 import TransformEnums from 'osg/transformEnums';
 
-var IntersectionVisitor = function() {
+var IntersectionVisitor = function () {
     NodeVisitor.call(this);
     // We could need to use a stack of intersectors in case we want
     // to use several intersectors. Right now we use only one.
@@ -23,7 +23,7 @@ var IntersectionVisitor = function() {
 utils.createPrototypeObject(
     IntersectionVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        reset: function() {
+        reset: function () {
             this._pooledMatrix.reset();
             this._viewStack.reset();
             this._modelStack.reset();
@@ -35,58 +35,58 @@ utils.createPrototypeObject(
             this._projectionStack.push(mat4.IDENTITY);
             this._windowStack.push(mat4.IDENTITY);
         },
-        setIntersector: function(intersector) {
+        setIntersector: function (intersector) {
             this._intersector = intersector;
         },
-        getIntersector: function() {
+        getIntersector: function () {
             return this._intersector;
         },
         // Model matrix
-        pushModelMatrix: function(matrix) {
+        pushModelMatrix: function (matrix) {
             this._modelStack.push(matrix);
         },
-        getModelMatrix: function() {
+        getModelMatrix: function () {
             return this._modelStack.back();
         },
-        popModelMatrix: function() {
+        popModelMatrix: function () {
             return this._modelStack.pop();
         },
         // View Matrix
-        pushViewMatrix: function(matrix) {
+        pushViewMatrix: function (matrix) {
             this._viewStack.push(matrix);
         },
-        getViewMatrix: function() {
+        getViewMatrix: function () {
             return this._viewStack.back();
         },
-        popViewMatrix: function() {
+        popViewMatrix: function () {
             return this._viewStack.pop();
         },
         // Projection Matrix
-        pushProjectionMatrix: function(matrix) {
+        pushProjectionMatrix: function (matrix) {
             this._projectionStack.push(matrix);
         },
-        getProjectionMatrix: function() {
+        getProjectionMatrix: function () {
             return this._projectionStack.back();
         },
-        popProjectionMatrix: function() {
+        popProjectionMatrix: function () {
             return this._projectionStack.pop();
         },
         // Window Matrix
-        pushWindowMatrix: function(matrix) {
+        pushWindowMatrix: function (matrix) {
             this._windowStack.push(matrix);
         },
-        pushWindowMatrixUsingViewport: function(viewport) {
+        pushWindowMatrixUsingViewport: function (viewport) {
             this._windowStack.push(
                 viewport.computeWindowMatrix(this._pooledMatrix.getOrCreateObject())
             );
         },
-        getWindowMatrix: function() {
+        getWindowMatrix: function () {
             return this._windowStack.back();
         },
-        popWindowMatrix: function() {
+        popWindowMatrix: function () {
             return this._windowStack.pop();
         },
-        getTransformation: (function() {
+        getTransformation: (function () {
             // We should move this to the intersector when we need to use different coordinate frames
             // Now we only support WINDOW coordinate frame
 
@@ -95,7 +95,7 @@ utils.createPrototypeObject(
             // but currently it's the ony fix we have
             var mat = mat4.create64();
 
-            return function() {
+            return function () {
                 mat4.copy(mat, this.getWindowMatrix());
                 mat4.mul(mat, mat, this.getProjectionMatrix());
                 mat4.mul(mat, mat, this.getViewMatrix());
@@ -105,12 +105,12 @@ utils.createPrototypeObject(
             };
         })(),
 
-        enter: function(node) {
+        enter: function (node) {
             // Call to each intersector
             return this._intersector.enter(node);
         },
 
-        apply: function(node) {
+        apply: function (node) {
             // Here we need to decide which apply method to use
             if (node.getViewMatrix) {
                 // It's a Camera
@@ -126,7 +126,7 @@ utils.createPrototypeObject(
             }
         },
 
-        applyCamera: function(camera) {
+        applyCamera: function (camera) {
             // We use an absolute reference frame for simplicity
             var vp = camera.getViewport();
             if (vp !== undefined) {
@@ -176,7 +176,7 @@ utils.createPrototypeObject(
             this._intersector.setCurrentTransformation(this.getTransformation());
         },
 
-        applyNode: function(node) {
+        applyNode: function (node) {
             if (!this.enter(node)) return;
             // As this part of the code is potentially executed a lot of times we don't use instanceof
             // https://jsperf.com/instanceof-performance/25
@@ -190,7 +190,7 @@ utils.createPrototypeObject(
             }
         },
 
-        applyTransform: function(node) {
+        applyTransform: function (node) {
             // Now only use PROJECTION coordinate frame
             if (!this.enter(node)) return;
             // Accumulate Transform

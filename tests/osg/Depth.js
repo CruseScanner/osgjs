@@ -4,8 +4,8 @@ import Depth from 'osg/Depth';
 import State from 'osg/State';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function() {
-    test('Depth', function() {
+export default function () {
+    test('Depth', function () {
         var n = new Depth();
         assert.isOk(n._near === 0.0, 'Check near');
         assert.isOk(n._far === 1.0, 'Check far');

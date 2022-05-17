@@ -5,9 +5,9 @@ import Shader from 'osg/Shader';
 import Program from 'osg/Program';
 import Texture from 'osg/Texture';
 
-export default function() {
-    test('StateSet', function() {
-        (function() {
+export default function () {
+    test('StateSet', function () {
+        (function () {
             var stateset = new StateSet();
             var uniform;
             uniform = stateset.getUniform('test');
@@ -18,7 +18,7 @@ export default function() {
             assert.isOk(uniform !== undefined, 'Check getting an existant uniform');
         })();
 
-        (function() {
+        (function () {
             var ss = new StateSet();
             var t = new Texture();
             ss.setTextureAttributeAndModes(1, t);
@@ -35,7 +35,7 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var ss = new StateSet();
 
             function getShader() {

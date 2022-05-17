@@ -8,7 +8,7 @@ import { vec4 } from 'osg/glMatrix';
  *  @memberOf osg
  *  @extends StateAttribute
  */
-var BlendColor = function(color) {
+var BlendColor = function (color) {
     StateAttribute.call(this);
     this._constantColor = vec4.create();
     vec4.set(this._constantColor, 1.0, 1.0, 1.0, 1.0);
@@ -24,7 +24,7 @@ utils.createPrototypeStateAttribute(
     BlendColor,
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'BlendColor',
-        cloneType: function() {
+        cloneType: function () {
             return new BlendColor();
         },
 
@@ -32,13 +32,13 @@ utils.createPrototypeStateAttribute(
          *
          * @param {} color
          */
-        setConstantColor: function(color) {
+        setConstantColor: function (color) {
             vec4.copy(this._constantColor, color);
         },
-        getConstantColor: function() {
+        getConstantColor: function () {
             return this._constantColor;
         },
-        apply: function(state) {
+        apply: function (state) {
             var gl = state.getGraphicContext();
             gl.blendColor(
                 this._constantColor[0],

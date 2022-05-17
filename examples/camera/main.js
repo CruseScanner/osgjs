@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -31,7 +31,7 @@
             rttSize[1],
             0
         );
-        osgDB.readImageURL('textures/sol_trauma_periph.png').then(function(image) {
+        osgDB.readImageURL('textures/sol_trauma_periph.png').then(function (image) {
             var texture = new osg.Texture();
             texture.setImage(image);
             textureQuad.getOrCreateStateSet().setTextureAttributeAndModes(0, texture);
@@ -84,7 +84,7 @@
         return root;
     }
 
-    var main = function() {
+    var main = function () {
         var viewer = new osgViewer.Viewer(document.getElementById('View'));
         viewer.init();
         viewer.setSceneData(createScene());

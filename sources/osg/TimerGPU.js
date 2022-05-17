@@ -12,14 +12,14 @@ queries, that way you can track a particular of gl command for examples
 
 */
 
-var TimerGPU = function(gl) {
+var TimerGPU = function (gl) {
     this._enabled = false;
     this.reset(gl);
 };
 
 TimerGPU.FRAME_COUNT = 0;
 
-TimerGPU.instance = function(gl, force) {
+TimerGPU.instance = function (gl, force) {
     if (!TimerGPU._instance) {
         TimerGPU._instance = new TimerGPU(gl);
     } else if (gl && (TimerGPU._instance.getContext() !== gl || force)) {
@@ -30,7 +30,7 @@ TimerGPU.instance = function(gl, force) {
 };
 
 TimerGPU.prototype = {
-    reset: function(gl) {
+    reset: function (gl) {
         if (gl) {
             var ext = WebGLCaps.instance(gl).getDisjointTimerQuery();
             if (!ext) return this;
@@ -69,17 +69,17 @@ TimerGPU.prototype = {
         this._queryCount = 0;
         this._nbOpened = 0;
     },
-    getContext: function() {
+    getContext: function () {
         return this._gl;
     },
-    setContext: function(gl) {
+    setContext: function (gl) {
         this._gl = gl;
     },
-    setFrameAverageCount: function(val) {
+    setFrameAverageCount: function (val) {
         this._frameAverageCount = val;
     },
 
-    clearQueries: function() {
+    clearQueries: function () {
         var glQueries = this._glQueries;
         for (var i = 0, nbQueries = glQueries.length; i < nbQueries; ++i) {
             var query = glQueries[i];
@@ -92,29 +92,29 @@ TimerGPU.prototype = {
         this._queriesByID = {};
     },
 
-    supportTimeStamp: function() {
+    supportTimeStamp: function () {
         return this._hasTimeStamp;
     },
 
     // many browser doesn't yet have
     // the marvellous gpu timers
-    enable: function() {
+    enable: function () {
         // enable only if we have the extension
         this._enabled = !!this._ext;
     },
 
-    disable: function() {
+    disable: function () {
         this._enabled = false;
     },
-    isEnabled: function() {
+    isEnabled: function () {
         return this._enabled;
     },
 
-    setCallback: function(cb) {
+    setCallback: function (cb) {
         this._callback = cb;
     },
 
-    createUserQuery: function(queryID) {
+    createUserQuery: function (queryID) {
         var query;
         if (this._hasTimeStamp) {
             query = this.createGLQuery();
@@ -133,7 +133,7 @@ TimerGPU.prototype = {
         return query;
     },
 
-    createGLQuery: function() {
+    createGLQuery: function () {
         var query = {};
         query._isWaiting = false; // wait typically 1 or 2 frames
         query._pollingStartQuery = undefined; // gl query object
@@ -149,7 +149,7 @@ TimerGPU.prototype = {
         return query;
     },
 
-    getOrCreateLastGLQuery: function() {
+    getOrCreateLastGLQuery: function () {
         var query = this._glQueries[this._queryCount - 1];
         if (query) return query;
 
@@ -158,7 +158,7 @@ TimerGPU.prototype = {
         return query;
     },
 
-    beginCurrentQuery: function() {
+    beginCurrentQuery: function () {
         if (this._nbOpened === 0) return;
 
         this._queryCount++;
@@ -169,7 +169,7 @@ TimerGPU.prototype = {
         }
     },
 
-    endCurrentQuery: function() {
+    endCurrentQuery: function () {
         if (this._nbOpened === 0) return;
 
         if (!this.getOrCreateLastGLQuery()._isWaiting) {
@@ -177,7 +177,7 @@ TimerGPU.prototype = {
         }
     },
 
-    getAvailableQueryByID: function(queryID) {
+    getAvailableQueryByID: function (queryID) {
         var query = this._queriesByID[queryID];
         if (!query) {
             query = this._queriesByID[queryID] = this.createUserQuery(queryID);
@@ -208,7 +208,7 @@ TimerGPU.prototype = {
     },
 
     // start recording time if query already exist, don't recreate
-    start: function(queryID) {
+    start: function (queryID) {
         // If timing currently disabled or glTimer does not exist, exit early.
         if (!this._enabled) {
             return undefined;
@@ -231,7 +231,7 @@ TimerGPU.prototype = {
     },
 
     // stop query recording (if running) polls for results
-    end: function(queryID) {
+    end: function (queryID) {
         if (!this._enabled) {
             return;
         }
@@ -252,7 +252,7 @@ TimerGPU.prototype = {
         }
     },
 
-    computeQueryAverageTime: function(query) {
+    computeQueryAverageTime: function (query) {
         var average = 0;
         var glQueries = this._glQueries;
 
@@ -265,7 +265,7 @@ TimerGPU.prototype = {
         return average;
     },
 
-    computeFullAverageTime: function(query) {
+    computeFullAverageTime: function (query) {
         var average = this.computeQueryAverageTime(query);
 
         if (average < 0) return -1;
@@ -283,7 +283,7 @@ TimerGPU.prototype = {
         return average;
     },
 
-    pollQueries: function() {
+    pollQueries: function () {
         TimerGPU.FRAME_COUNT++;
         this._queryCount = 0;
         this._nbOpened = 0;
@@ -322,7 +322,7 @@ TimerGPU.prototype = {
         }
     },
 
-    pollQuery: function(query) {
+    pollQuery: function (query) {
         query._isWaiting = false;
 
         // last to be queried

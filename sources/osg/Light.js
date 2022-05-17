@@ -9,7 +9,7 @@ import { vec4 } from 'osg/glMatrix';
 // use the same kind of opengl lights
 // see http://www.glprogramming.com/red/chapter05.html
 
-var Light = function(lightNum, disable) {
+var Light = function (lightNum, disable) {
     StateAttribute.call(this);
 
     var lightNumber = lightNum !== undefined ? lightNum : 0;
@@ -51,19 +51,19 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Light',
 
-        cloneType: function() {
+        cloneType: function () {
             return new Light(this._lightNumber, true);
         },
 
-        getTypeMember: function() {
+        getTypeMember: function () {
             return this.attributeType + this._lightNumber;
         },
 
-        getUniformName: function(name) {
+        getUniformName: function (name) {
             return 'u' + this.getTypeMember() + '_' + name;
         },
 
-        getHash: function() {
+        getHash: function () {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -71,10 +71,10 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function() {
+        _computeInternalHash: function () {
             return this.getTypeMember() + this.getLightType() + this.isEnabled().toString();
         },
-        getOrCreateUniforms: function() {
+        getOrCreateUniforms: function () {
             var obj = Light;
             var typeMember = this.getTypeMember();
 
@@ -103,125 +103,125 @@ utils.createPrototypeStateAttribute(
 
         // enable / disable is not implemented in uniform
         // we should add it
-        isEnabled: function() {
+        isEnabled: function () {
             return this._enable;
         },
 
-        setEnabled: function(bool) {
+        setEnabled: function (bool) {
             this._enable = bool;
             this._dirtyHash = true;
         },
 
         // colors
-        setAmbient: function(a) {
+        setAmbient: function (a) {
             vec4.copy(this._ambient, a);
         },
 
-        getAmbient: function() {
+        getAmbient: function () {
             return this._ambient;
         },
 
-        setDiffuse: function(a) {
+        setDiffuse: function (a) {
             vec4.copy(this._diffuse, a);
         },
 
-        getDiffuse: function() {
+        getDiffuse: function () {
             return this._diffuse;
         },
 
-        setSpecular: function(a) {
+        setSpecular: function (a) {
             vec4.copy(this._specular, a);
         },
 
-        getSpecular: function() {
+        getSpecular: function () {
             return this._specular;
         },
 
         // position, also used for directional light
         // position[3] === 0 means directional
         // see creating lightsources http://www.glprogramming.com/red/chapter05.html
-        setPosition: function(a) {
+        setPosition: function (a) {
             vec4.copy(this._position, a);
         },
 
-        getPosition: function() {
+        getPosition: function () {
             return this._position;
         },
 
         // unused for directional
-        setDirection: function(a) {
+        setDirection: function (a) {
             vec3.copy(this._direction, a);
         },
 
-        getDirection: function() {
+        getDirection: function () {
             return this._direction;
         },
 
-        setSpotCutoff: function(a) {
+        setSpotCutoff: function (a) {
             this._spotCutoff = a;
         },
 
-        getSpotCutoff: function() {
+        getSpotCutoff: function () {
             return this._spotCutoff;
         },
 
-        setSpotBlend: function(a) {
+        setSpotBlend: function (a) {
             this._spotBlend = a;
         },
 
-        getSpotBlend: function() {
+        getSpotBlend: function () {
             return this._spotBlend;
         },
 
         // set/get the color of the ground
-        setGround: function(a) {
+        setGround: function (a) {
             vec3.copy(this._ground, a);
         },
 
-        getGround: function() {
+        getGround: function () {
             return this._ground;
         },
 
         // attenuation coeff
-        setConstantAttenuation: function(value) {
+        setConstantAttenuation: function (value) {
             this._attenuation[0] = value;
         },
 
-        getConstantAttenuation: function() {
+        getConstantAttenuation: function () {
             return this._attenuation[0];
         },
 
-        setLinearAttenuation: function(value) {
+        setLinearAttenuation: function (value) {
             this._attenuation[1] = value;
         },
 
-        getLinearAttenuation: function() {
+        getLinearAttenuation: function () {
             return this._attenuation[1];
         },
 
-        setQuadraticAttenuation: function(value) {
+        setQuadraticAttenuation: function (value) {
             this._attenuation[2] = value;
         },
 
-        getQuadraticAttenuation: function() {
+        getQuadraticAttenuation: function () {
             return this._attenuation[2];
         },
 
-        setLightType: function(type) {
+        setLightType: function (type) {
             if (type === Light.DIRECTION) return this.setLightAsDirection();
             else if (type === Light.SPOT) return this.setLightAsSpot();
             else if (type === Light.HEMI) return this.setLightAsHemi();
             return this.setLightAsPoint();
         },
 
-        getLightType: function() {
+        getLightType: function () {
             if (this.isDirectionLight()) return Light.DIRECTION;
             else if (this.isSpotLight()) return Light.SPOT;
             else if (this.isHemiLight()) return Light.HEMI;
             return Light.POINT;
         },
 
-        setLightAsSpot: function() {
+        setLightAsSpot: function () {
             vec4.set(this._position, 0.0, 0.0, 0.0, 1.0);
             vec3.set(this._direction, 0.0, 0.0, -1.0);
             this._ground[3] = -1.0;
@@ -229,46 +229,46 @@ utils.createPrototypeStateAttribute(
             this._dirtyHash = true;
         },
 
-        setLightAsPoint: function() {
+        setLightAsPoint: function () {
             vec4.set(this._position, 0.0, 0.0, 0.0, 1.0);
             vec3.set(this._direction, 0.0, 0.0, -1.0);
             this._ground[3] = -1.0;
             this._dirtyHash = true;
         },
 
-        setLightAsDirection: function() {
+        setLightAsDirection: function () {
             vec4.set(this._position, 0.0, 0.0, 1.0, 0.0);
             this._spotCutoff = 180;
             this._ground[3] = -1.0;
             this._dirtyHash = true;
         },
 
-        setLightAsHemi: function() {
+        setLightAsHemi: function () {
             vec4.set(this._position, 0.0, 0.0, 1.0, 0.0);
             this._spotCutoff = 180;
             this._ground[3] = 1.0;
             this._dirtyHash = true;
         },
 
-        setLightNumber: function(unit) {
+        setLightNumber: function (unit) {
             this._lightNumber = unit;
             this._dirtyHash = true;
         },
 
-        getLightNumber: function() {
+        getLightNumber: function () {
             return this._lightNumber;
         },
 
         // internal helper
-        isSpotLight: function() {
+        isSpotLight: function () {
             return this._spotCutoff < 180.0;
         },
 
-        isDirectionLight: function() {
+        isDirectionLight: function () {
             return this._position[3] === 0.0 && this._ground[3] === -1.0;
         },
 
-        isHemiLight: function() {
+        isHemiLight: function () {
             return this._ground[3] === 1.0;
         },
 
@@ -276,7 +276,7 @@ utils.createPrototypeStateAttribute(
         // world (node refAbsolute)
         // world+camera (camera is refAbsolute)
         // world+camera+camera+... (camera relative...)
-        applyPositionedUniform: function(matrix) {
+        applyPositionedUniform: function (matrix) {
             var uniformMap = this.getOrCreateUniforms();
 
             var modelView = uniformMap.modelViewMatrix.getInternalArray();
@@ -291,13 +291,13 @@ utils.createPrototypeStateAttribute(
             vec3.transformMat3(viewDirection, this._direction, modelViewNormal);
         },
 
-        apply: function() {
+        apply: function () {
             if (!this._enable) return;
 
             var uniformMap = this.getOrCreateUniforms();
 
             if (this.isSpotLight()) {
-                var spotsize = Math.cos(this._spotCutoff * Math.PI / 180.0);
+                var spotsize = Math.cos((this._spotCutoff * Math.PI) / 180.0);
                 uniformMap.spotCutOff.setFloat(spotsize);
                 uniformMap.spotBlend.setFloat((1.0 - spotsize) * this._spotBlend);
             }

@@ -11,9 +11,9 @@ var Plane = utils.objectInherit(vec4, {
     INTERSECT: 2,
     OUTSIDE: 3,
     /* Transform the plane */
-    transformProvidingInverse: function() {
+    transformProvidingInverse: function () {
         var iplane = Plane.create();
-        return function(p, m) {
+        return function (p, m) {
             //Matrix.transformVec4PostMult( matrix, plane, iplane );
             var x = p[0];
             var y = p[1];
@@ -31,7 +31,7 @@ var Plane = utils.objectInherit(vec4, {
         };
     },
 
-    normalizeEquation: function(plane) {
+    normalizeEquation: function (plane) {
         // multiply the coefficients of the plane equation with a constant factor so that the equation a^2+b^2+c^2 = 1 holds.
         var inv = 1.0 / Math.sqrt(plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2]);
         plane[0] *= inv;
@@ -40,31 +40,31 @@ var Plane = utils.objectInherit(vec4, {
         plane[3] *= inv;
     },
     /*only the normal Component*/
-    getNormal: function(plane, result) {
+    getNormal: function (plane, result) {
         result[0] = plane[0];
         result[1] = plane[1];
         result[2] = plane[2];
         return result;
     },
-    setNormal: function(plane, normal) {
+    setNormal: function (plane, normal) {
         plane[0] = normal[0];
         plane[1] = normal[1];
         plane[2] = normal[2];
     },
     /* only the distance getter*/
-    getDistance: function(plane) {
+    getDistance: function (plane) {
         return plane[3];
     },
-    setDistance: function(plane, distance) {
+    setDistance: function (plane, distance) {
         plane[3] = distance;
     },
 
     /* using the plane equation, compute distance to plane of a point*/
-    distanceToPlane: function(plane, position) {
+    distanceToPlane: function (plane, position) {
         return plane[0] * position[0] + plane[1] * position[1] + plane[2] * position[2] + plane[3];
     },
 
-    intersectsOrContainsBoundingSphere: function(plane, bSphere) {
+    intersectsOrContainsBoundingSphere: function (plane, bSphere) {
         if (!bSphere.valid()) return Plane.OUTSIDE;
         var position = bSphere.center();
         var radius = bSphere.radius();
@@ -77,13 +77,13 @@ var Plane = utils.objectInherit(vec4, {
         return Plane.INSIDE;
     },
 
-    instersectsBoundingSphere: function(plane, bSphere) {
+    instersectsBoundingSphere: function (plane, bSphere) {
         return this.intersectsOrContainsBoundingSphere(plane, bSphere) === Plane.INTERSECT;
     },
 
-    intersectsOrContainsBoundingBox: (function() {
+    intersectsOrContainsBoundingBox: (function () {
         var retCorner = vec3.create();
-        return function(plane, bbox) {
+        return function (plane, bbox) {
             var upperBBCorner =
                 (plane[0] >= 0.0 ? 1 : 0) | (plane[1] >= 0.0 ? 2 : 0) | (plane[2] >= 0.0 ? 4 : 0);
             var lowerBBCorner = ~upperBBCorner & 7;
@@ -96,11 +96,11 @@ var Plane = utils.objectInherit(vec4, {
         };
     })(),
 
-    intersectsBoundingBox: function(plane, bbox, absPlane) {
+    intersectsBoundingBox: function (plane, bbox, absPlane) {
         return this.intersectsOrContainsBoundingBox(plane, bbox, absPlane) === Plane.INTERSECT;
     },
 
-    intersectOrContainsVertices: function(plane, vertices) {
+    intersectOrContainsVertices: function (plane, vertices) {
         var side = -1;
         // all points must be on one side only
         for (var i = 0; i < vertices.length; i++) {
@@ -118,7 +118,7 @@ var Plane = utils.objectInherit(vec4, {
         }
         return side > 0 ? Plane.INSIDE : Plane.OUTSIDE;
     },
-    intersectVertices: function(plane, vertices) {
+    intersectVertices: function (plane, vertices) {
         return this.intersectOrContainsVertices(plane, vertices) === Plane.INTERSECT;
     }
 });

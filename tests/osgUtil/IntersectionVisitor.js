@@ -7,31 +7,31 @@ import { vec3 } from 'osg/glMatrix';
 import Shape from 'osg/shape';
 import TransformEnums from 'osg/transformEnums';
 
-export default function() {
-    var DummyIntersector = function() {
+export default function () {
+    var DummyIntersector = function () {
         this.point = [0.5, 0.5, 0.5];
         this.stackTransforms = [];
     };
 
     DummyIntersector.prototype = {
-        enter: function() {
+        enter: function () {
             return true;
         },
-        setCurrentTransformation: function(matrix) {
+        setCurrentTransformation: function (matrix) {
             mat4.invert(matrix, matrix);
             this.stackTransforms.push(vec3.transformMat4(vec3.create(), this.point, matrix));
         },
-        intersect: function() {
+        intersect: function () {
             return true;
         }
     };
 
-    test('IntersectionVisitor with 1 camera', function() {
+    test('IntersectionVisitor with 1 camera', function () {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
         );
 
         camera.addChild(Shape.createTexturedQuadGeometry(-0.5, -0.5, 0, 1, 0, 0, 0, 1, 0, 1, 1));
@@ -49,19 +49,19 @@ export default function() {
         );
     });
 
-    test('IntersectionVisitor with second relative camera', function() {
+    test('IntersectionVisitor with second relative camera', function () {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
         );
 
         var camera2 = new Camera();
         camera2.setViewport(new Viewport());
         camera2.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera2.setProjectionMatrix(
-            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
         );
 
         camera2.addChild(Shape.createTexturedQuadGeometry(-0.5, -0.5, 0, 1, 0, 0, 0, 1, 0, 1, 1));
@@ -81,12 +81,12 @@ export default function() {
         );
     });
 
-    test('IntersectionVisitor with second absolute camera', function() {
+    test('IntersectionVisitor with second absolute camera', function () {
         var camera = new Camera();
         camera.setViewport(new Viewport());
         camera.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera.setProjectionMatrix(
-            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
         );
 
         var camera2 = new Camera();
@@ -94,7 +94,7 @@ export default function() {
         camera2.setViewport(new Viewport());
         camera2.setViewMatrix(mat4.lookAt(mat4.create(), [0, 0, -10], [0, 0, 0], [0, 1, 0]));
         camera2.setProjectionMatrix(
-            mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 0.1, 100.0)
+            mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 0.1, 100.0)
         );
 
         camera2.addChild(Shape.createTexturedQuadGeometry(-0.5, -0.5, 0, 1, 0, 0, 0, 1, 0, 1, 1));

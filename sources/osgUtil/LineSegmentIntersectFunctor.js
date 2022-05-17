@@ -3,7 +3,7 @@ import { vec3 } from 'osg/glMatrix';
 import { mat4 } from 'osg/glMatrix';
 import IntersectFunctor from 'osgUtil/IntersectFunctor';
 
-var LineSegmentIntersection = function() {
+var LineSegmentIntersection = function () {
     IntersectFunctor.Intersection.call(this);
 
     this._localIntersectionNormal = vec3.clone(vec3.ONE);
@@ -20,7 +20,7 @@ var LineSegmentIntersection = function() {
 };
 
 // Settings are needed.
-var LineSegmentIntersectFunctor = function() {
+var LineSegmentIntersectFunctor = function () {
     IntersectFunctor.call(this);
 
     this._threshold = 0.0; // only used for lines and points
@@ -39,7 +39,7 @@ var LineSegmentIntersectFunctor = function() {
 utils.createPrototypeObject(
     LineSegmentIntersectFunctor,
     utils.objectInherit(IntersectFunctor.prototype, {
-        set: function(start, end, threshold) {
+        set: function (start, end, threshold) {
             this._start = start;
             this._end = end;
             vec3.sub(this._d, end, start);
@@ -55,7 +55,7 @@ utils.createPrototypeObject(
             if (threshold !== undefined) this._threshold = threshold;
         },
 
-        enter: function(bbox, s, e) {
+        enter: function (bbox, s, e) {
             var min = bbox._min;
             var xmin = min[0];
             var ymin = min[1];
@@ -162,11 +162,11 @@ utils.createPrototypeObject(
             return true;
         },
 
-        intersectPoint: (function() {
+        intersectPoint: (function () {
             var tmp = vec3.create();
             var dir = vec3.create();
 
-            return function(v0, p0) {
+            return function (v0, p0) {
                 // https://www.geometrictools.com/GTEngine/Include/Mathematics/GteDistPointSegment.h
                 var st = this._start;
 
@@ -194,7 +194,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        intersectLine: (function() {
+        intersectLine: (function () {
             var u = vec3.create();
             var v = vec3.create();
             var w = vec3.create();
@@ -202,7 +202,7 @@ utils.createPrototypeObject(
             var closest0 = vec3.create();
             var closest1 = vec3.create();
 
-            return function(v0, v1, p0, p1) {
+            return function (v0, v1, p0, p1) {
                 // https://www.geometrictools.com/GTEngine/Samples/Geometrics/DistanceSegments3/DistanceSegments3.cpp
                 var epsilon = 0.00000001;
                 vec3.sub(u, v1, v0);
@@ -288,7 +288,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        intersectTriangle: (function() {
+        intersectTriangle: (function () {
             var normal = vec3.create();
             var e2 = vec3.create();
             var e1 = vec3.create();
@@ -297,7 +297,7 @@ utils.createPrototypeObject(
             var qvec = vec3.create();
             var epsilon = 1e-20;
 
-            return function(v0, v1, v2, p0, p1, p2) {
+            return function (v0, v1, v2, p0, p1, p2) {
                 var d = this._d;
 
                 vec3.sub(e2, v2, v0);
@@ -354,12 +354,12 @@ utils.createPrototypeObject(
             };
         })(),
 
-        operatorPoint: function(p0) {
+        operatorPoint: function (p0) {
             if (this._threshold <= 0.0) return;
             IntersectFunctor.prototype.operatorPoint.call(this, p0);
         },
 
-        operatorLine: function(p0, p1) {
+        operatorLine: function (p0, p1) {
             if (this._threshold <= 0.0) return;
             IntersectFunctor.prototype.operatorLine.call(this, p0, p1);
         }

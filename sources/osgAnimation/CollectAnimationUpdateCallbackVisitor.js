@@ -3,7 +3,7 @@ import NodeVisitor from 'osg/NodeVisitor';
 import AnimationUpdateCallback from 'osgAnimation/AnimationUpdateCallback';
 
 // search into a subgraph all target
-var CollectAnimationUpdateCallbackVisitor = function() {
+var CollectAnimationUpdateCallbackVisitor = function () {
     NodeVisitor.call(this);
     this._animationUpdateCallback = {};
 };
@@ -11,11 +11,11 @@ var CollectAnimationUpdateCallbackVisitor = function() {
 utils.createPrototypeObject(
     CollectAnimationUpdateCallbackVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        getAnimationUpdateCallbackMap: function() {
+        getAnimationUpdateCallbackMap: function () {
             return this._animationUpdateCallback;
         },
 
-        apply: function(node) {
+        apply: function (node) {
             var cbs = node.getUpdateCallbackList();
 
             // collect and remove animation update callback

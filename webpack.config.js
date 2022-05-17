@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 /*eslint-env node*/
 
 var webpack = require('webpack');
@@ -59,6 +59,7 @@ var externals = [
 ];
 
 var mainlibConfig = {
+    stats: 'verbose',
     entry: {
         OSG: ['./sources/OSG.js']
     },
@@ -71,10 +72,10 @@ var mainlibConfig = {
     externals: externals,
     resolve: resolve,
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.(frag|vert|glsl)$/,
-                loader: 'raw-loader'
+                use: 'raw-loader'
             }
         ]
     },
@@ -97,18 +98,21 @@ var testconfig = {
         libraryTarget: 'umd',
         library: 'OSG'
     },
-    node: {
-        fs: 'empty'
+    resolve: {
+        fallback: {
+            fs: false
+        }
     },
     target: 'node',
     externals: externals,
     resolve: resolve,
+    mode: 'development',
     module: {
-        loaders: [
+        rules: [
             {
                 // shaders
                 test: /\.(frag|vert|glsl)$/,
-                loader: 'raw-loader'
+                use: 'raw-loader'
             }
         ]
     },

@@ -2,7 +2,7 @@ import utils from 'osg/utils';
 import NodeVisitor from 'osg/NodeVisitor';
 import KdTree from 'osg/KdTree';
 
-var KdTreeBuilder = function(options) {
+var KdTreeBuilder = function (options) {
     NodeVisitor.call(this);
     this._buildOptions = {
         _numVerticesProcessed: 0,
@@ -23,7 +23,7 @@ var KdTreeBuilder = function(options) {
 utils.createPrototypeObject(
     KdTreeBuilder,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function(node) {
+        apply: function (node) {
             if (node.getShape) {
                 var shape = node.getShape();
                 // we test if the kdTree is already built and if we can build it (null means we skip it)

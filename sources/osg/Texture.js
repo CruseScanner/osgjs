@@ -8,10 +8,10 @@ import GLObject from 'osg/GLObject';
 import TextureManager from 'osg/TextureManager';
 import WebglCaps from 'osg/WebGLCaps';
 
-var ImageBitmap = window.ImageBitmap || function() {};
+var ImageBitmap = window.ImageBitmap || function () {};
 
 // helper
-var isPowerOf2 = function(x) {
+var isPowerOf2 = function (x) {
     /*jshint bitwise: false */
     return x !== 0 && (x & (~x + 1)) === x;
     /*jshint bitwise: true */
@@ -26,7 +26,7 @@ var isPowerOf2 = function(x) {
  * it will end blank
  * @inherits StateAttribute
  */
-var Texture = function() {
+var Texture = function () {
     StateAttribute.call(this);
     GLObject.call(this);
     this.setDefaultParameters();
@@ -38,7 +38,7 @@ var Texture = function() {
     this._textureNull = true;
 };
 
-var checkAndFixEnum = function(mode, fallback) {
+var checkAndFixEnum = function (mode, fallback) {
     var value = Texture[mode];
 
     if (value === undefined) {
@@ -175,7 +175,7 @@ Texture.RG32F = 0x8230;
 Texture.RGB32F = 0x8815;
 Texture.RGBA32F = 0x8814;
 
-var createMapGl2ToGl1 = function() {
+var createMapGl2ToGl1 = function () {
     var map = {};
 
     map[Texture.R8] = Texture.LUMINANCE;
@@ -203,7 +203,7 @@ var createMapGl2ToGl1 = function() {
     return map;
 };
 
-var createMapGl1ToGl2 = function() {
+var createMapGl1ToGl2 = function () {
     var map = {};
 
     var float = {};
@@ -239,13 +239,13 @@ var internalFormatGl1ToGl2 = createMapGl1ToGl2();
 Texture._sTextureManager = new window.Map();
 
 // Getter for textureManager
-Texture.getTextureManager = function(gl) {
+Texture.getTextureManager = function (gl) {
     if (!Texture._sTextureManager.has(gl)) Texture._sTextureManager.set(gl, new TextureManager());
 
     return Texture._sTextureManager.get(gl);
 };
 
-Texture.getEnumFromString = function(v) {
+Texture.getEnumFromString = function (v) {
     var value = v;
 
     if (typeof value === 'string') value = checkAndFixEnum(value, v);
@@ -260,28 +260,28 @@ utils.createPrototypeStateAttribute(
         utils.objectInherit(StateAttribute.prototype, {
             attributeType: 'Texture',
 
-            cloneType: function() {
+            cloneType: function () {
                 return new Texture();
             },
 
-            invalidate: function() {
+            invalidate: function () {
                 this._textureObject = undefined;
                 this.dirty();
             },
 
-            dirty: function() {
+            dirty: function () {
                 this._dirty = true;
             },
 
-            isDirty: function() {
+            isDirty: function () {
                 return this._dirty;
             },
 
-            isTextureNull: function() {
+            isTextureNull: function () {
                 return this._textureNull;
             },
 
-            getOrCreateUniforms: function(unit) {
+            getOrCreateUniforms: function (unit) {
                 if (Texture.uniforms === undefined) {
                     Texture.uniforms = [];
                 }
@@ -307,7 +307,7 @@ utils.createPrototypeStateAttribute(
                 return Texture.uniforms[unit];
             },
 
-            setDefaultParameters: function() {
+            setDefaultParameters: function () {
                 this._image = undefined;
                 this._magFilter = Texture.LINEAR;
                 this._minFilter = Texture.LINEAR;
@@ -328,23 +328,23 @@ utils.createPrototypeStateAttribute(
             },
 
             // check https://www.khronos.org/registry/webgl/specs/latest/1.0/#PIXEL_STORAGE_PARAMETERS
-            setColorSpaceConversion: function(enumValue) {
+            setColorSpaceConversion: function (enumValue) {
                 this._colorSpaceConversion = enumValue;
             },
 
-            setFlipY: function(bool) {
+            setFlipY: function (bool) {
                 this._flipY = bool;
             },
 
-            getTextureTarget: function() {
+            getTextureTarget: function () {
                 return this._textureTarget;
             },
 
-            getTextureObject: function() {
+            getTextureObject: function () {
                 return this._textureObject;
             },
 
-            setTextureSize: function(w, h) {
+            setTextureSize: function (w, h) {
                 var maxSize = WebglCaps.instance().getWebGLParameter('MAX_TEXTURE_SIZE');
 
                 if (w !== this._textureWidth || h !== this._textureHeight) this.dirty();
@@ -382,7 +382,7 @@ utils.createPrototypeStateAttribute(
                 this._textureNull = false;
             },
 
-            init: function(state) {
+            init: function (state) {
                 if (!this._gl) {
                     this.setGraphicContext(state.getGraphicContext());
                 }
@@ -403,29 +403,29 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            addApplyTexImage2DCallback: function(callback) {
+            addApplyTexImage2DCallback: function (callback) {
                 var index = this._applyTexImage2DCallbacks.indexOf(callback);
                 if (index < 0) {
                     this._applyTexImage2DCallbacks.push(callback);
                 }
             },
 
-            removeApplyTexImage2DCallback: function(callback) {
+            removeApplyTexImage2DCallback: function (callback) {
                 var index = this._applyTexImage2DCallbacks.indexOf(callback);
                 if (index >= 0) {
                     this._applyTexImage2DCallbacks.splice(index, 1);
                 }
             },
 
-            getWidth: function() {
+            getWidth: function () {
                 return this._textureWidth;
             },
 
-            getHeight: function() {
+            getHeight: function () {
                 return this._textureHeight;
             },
 
-            releaseGLObjects: function() {
+            releaseGLObjects: function () {
                 if (
                     this._textureObject !== undefined &&
                     this._textureObject !== null &&
@@ -437,15 +437,15 @@ utils.createPrototypeStateAttribute(
                 this.invalidate();
             },
 
-            getWrapT: function() {
+            getWrapT: function () {
                 return this._wrapT;
             },
 
-            getWrapS: function() {
+            getWrapS: function () {
                 return this._wrapS;
             },
 
-            setWrapS: function(value) {
+            setWrapS: function (value) {
                 if (typeof value === 'string') {
                     this._wrapS = checkAndFixEnum(value, Texture.CLAMP_TO_EDGE);
                 } else {
@@ -455,7 +455,7 @@ utils.createPrototypeStateAttribute(
                 this.dirtyTextureParameters();
             },
 
-            setWrapT: function(value) {
+            setWrapT: function (value) {
                 if (typeof value === 'string') {
                     this._wrapT = checkAndFixEnum(value, Texture.CLAMP_TO_EDGE);
                 } else {
@@ -470,38 +470,38 @@ utils.createPrototypeStateAttribute(
             // dirty parameters only regenarate parameter
             // dirty texture object needs to release a texture and
             // re allocate one
-            dirtyTextureParameters: function() {
+            dirtyTextureParameters: function () {
                 this.dirty(); // make everything dirty for now
                 this.dirtyMipmap();
                 this.dirtyTextureObject();
             },
 
-            dirtyTextureObject: function() {
+            dirtyTextureObject: function () {
                 this._dirtyTextureObject = true;
                 this.dirtyMipmap();
                 this.dirty(); // make everything dirty for now
             },
 
-            getMinFilter: function() {
+            getMinFilter: function () {
                 return this._minFilter;
             },
 
-            getMagFilter: function() {
+            getMagFilter: function () {
                 return this._magFilter;
             },
 
             // https://www.opengl.org/registry/specs/EXT/texture_filter_anisotropic.txt
-            setMaxAnisotropy: function(multiplier) {
+            setMaxAnisotropy: function (multiplier) {
                 this._maxAnisotropy = multiplier;
                 this.dirtyTextureParameters();
             },
 
-            getMaxAnisotropy: function() {
+            getMaxAnisotropy: function () {
                 return this._maxAnisotropy;
             },
 
             // some value enable mipmapping
-            setMinFilter: function(value) {
+            setMinFilter: function (value) {
                 if (typeof value === 'string') {
                     this._minFilter = checkAndFixEnum(value, Texture.LINEAR);
                 } else {
@@ -512,7 +512,7 @@ utils.createPrototypeStateAttribute(
             },
 
             // Either Linear or nearest.
-            setMagFilter: function(value) {
+            setMagFilter: function (value) {
                 if (typeof value === 'string') {
                     this._magFilter = checkAndFixEnum(value, Texture.LINEAR);
                 } else {
@@ -522,7 +522,7 @@ utils.createPrototypeStateAttribute(
                 this.dirtyTextureParameters();
             },
 
-            setImage: function(img, imageFormat) {
+            setImage: function (img, imageFormat) {
                 var image = img;
                 if (
                     img instanceof window.Image ||
@@ -548,11 +548,11 @@ utils.createPrototypeStateAttribute(
                 this.dirty();
             },
 
-            getImage: function() {
+            getImage: function () {
                 return this._image;
             },
 
-            setImageFormat: function(format) {
+            setImageFormat: function (format) {
                 var imageFormat = format;
                 if (imageFormat) {
                     if (typeof imageFormat === 'string') imageFormat = Texture[imageFormat];
@@ -563,7 +563,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            setInternalFormatType: function(value) {
+            setInternalFormatType: function (value) {
                 // UNSIGNED_BYTE, HALF_FLOAT, FLOAT
 
                 if (typeof value === 'string') {
@@ -573,15 +573,15 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            getInternalFormatType: function() {
+            getInternalFormatType: function () {
                 return this._type;
             },
 
-            setUnrefImageDataAfterApply: function(bool) {
+            setUnrefImageDataAfterApply: function (bool) {
                 this._unrefImageDataAfterApply = bool;
             },
 
-            checkIsCompressed: function(format) {
+            checkIsCompressed: function (format) {
                 var fo = format || this._internalFormat;
                 switch (fo) {
                     case Texture.COMPRESSED_RGB_S3TC_DXT1_EXT:
@@ -602,7 +602,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            setInternalFormat: function(formatSource) {
+            setInternalFormat: function (formatSource) {
                 // RGB, RGBA, ALPHA, LUMINANCE, LUMINANCE_ALPHA
                 // RGB16F, RGB32F, etc...
                 // DEPTH_COMPONENT, DEPTH_STENCIL
@@ -620,22 +620,22 @@ utils.createPrototypeStateAttribute(
                 this._internalFormat = format;
             },
 
-            getInternalFormat: function() {
+            getInternalFormat: function () {
                 return this._internalFormat;
             },
 
-            isDirtyMipmap: function() {
+            isDirtyMipmap: function () {
                 return this._dirtyMipmap;
             },
 
             // Will cause the mipmaps to be regenerated on the next bind of the texture
             // Nothing will be done if the minFilter is not of the form XXX_MIPMAP_XXX
             // TODO : not to be used if the texture is compressed !
-            dirtyMipmap: function() {
+            dirtyMipmap: function () {
                 this._dirtyMipmap = true;
             },
 
-            applyFilterParameter: function(gl, target) {
+            applyFilterParameter: function (gl, target) {
                 var powerOfTwo = isPowerOf2(this._textureWidth) && isPowerOf2(this._textureHeight);
                 if (!powerOfTwo) {
                     // NPOT non support in webGL explained here
@@ -667,7 +667,7 @@ utils.createPrototypeStateAttribute(
                 gl.texParameteri(target, gl.TEXTURE_WRAP_T, this._wrapT);
             },
 
-            generateMipmap: function(gl, target) {
+            generateMipmap: function (gl, target) {
                 this._dirtyMipmap = false;
                 if (!this.hasMipmapFilter()) return;
 
@@ -710,7 +710,7 @@ utils.createPrototypeStateAttribute(
             },
 
             // return true if contains a mipmap filter
-            hasMipmapFilter: function() {
+            hasMipmapFilter: function () {
                 return (
                     this._minFilter === Texture.NEAREST_MIPMAP_NEAREST ||
                     this._minFilter === Texture.LINEAR_MIPMAP_NEAREST ||
@@ -719,7 +719,7 @@ utils.createPrototypeStateAttribute(
                 );
             },
 
-            applyTexImage2D: function(gl) {
+            applyTexImage2D: function (gl) {
                 var args = Array.prototype.slice.call(arguments, 1);
 
                 // use parameters of pixel store
@@ -738,7 +738,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            computeTextureFormat: function() {
+            computeTextureFormat: function () {
                 if (!this._internalFormat) {
                     this._internalFormat = this._imageFormat || Texture.RGBA;
                     this._imageFormat = this._internalFormat;
@@ -747,7 +747,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            applyImage: function(gl) {
+            applyImage: function (gl) {
                 var internalFormat = this._getInternalFormatGL();
                 var image = this._image || null;
                 var data = image && this._image.getImage();
@@ -793,7 +793,7 @@ utils.createPrototypeStateAttribute(
                 if (image) image.setDirty(false);
             },
 
-            apply: function(state) {
+            apply: function (state) {
                 var gl = state.getGraphicContext();
                 // if need to release the texture
                 if (this._dirtyTextureObject) {
@@ -867,7 +867,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            _getInternalFormatGL: function() {
+            _getInternalFormatGL: function () {
                 var internalFormat = this._internalFormat;
 
                 // gl1
@@ -880,7 +880,7 @@ utils.createPrototypeStateAttribute(
                 return (map && map[internalFormat]) || internalFormat;
             },
 
-            _getTypeGL: function() {
+            _getTypeGL: function () {
                 if (this._type === Texture.HALF_FLOAT && !WebglCaps.instance().isWebGL2())
                     return Texture.HALF_FLOAT_OES;
                 return this._type;
@@ -893,13 +893,13 @@ utils.createPrototypeStateAttribute(
 
 Texture.textureNull = new Texture();
 
-Texture.createFromImage = function(image, format) {
+Texture.createFromImage = function (image, format) {
     var a = new Texture();
     a.setImage(image, format);
     return a;
 };
 
-Texture.createFromCanvas = function(canvas, format) {
+Texture.createFromCanvas = function (canvas, format) {
     return Texture.createFromImage(canvas, format);
 };
 

@@ -28,11 +28,11 @@ import MorphGeometry from 'osgAnimation/MorphGeometry';
 import PooledArray from 'osg/PooledArray';
 import PooledResource from 'osg/PooledResource';
 
-var createRenderLeaf = function() {
+var createRenderLeaf = function () {
     return new RenderLeaf();
 };
 
-var createCullSettings = function() {
+var createCullSettings = function () {
     return new CullSettings();
 };
 
@@ -40,7 +40,7 @@ var createCullSettings = function() {
  * CullVisitor traverse the tree and collect Matrix/State for the rendering traverse
  * @class CullVisitor
  */
-var CullVisitor = function() {
+var CullVisitor = function () {
     NodeVisitor.call(this, NodeVisitor.TRAVERSE_ACTIVE_CHILDREN);
     CullSettings.call(this);
     CullStack.call(this);
@@ -87,7 +87,7 @@ utils.createPrototypeObject(
         utils.objectInherit(NodeVisitor.prototype, {
             applyFunctionArray: cullVisitorHelper.applyFunctionArray,
 
-            distance: function(coord, matrix) {
+            distance: function (coord, matrix) {
                 return -(
                     coord[0] * matrix[2] +
                     coord[1] * matrix[6] +
@@ -96,15 +96,15 @@ utils.createPrototypeObject(
                 );
             },
 
-            getComputedNear: function() {
+            getComputedNear: function () {
                 return this._computedNear;
             },
 
-            getComputedFar: function() {
+            getComputedFar: function () {
                 return this._computedFar;
             },
 
-            resetStats: function() {
+            resetStats: function () {
                 this._numCamera = 0;
                 this._numMatrixTransform = 0;
                 this._numProjection = 0;
@@ -113,21 +113,21 @@ utils.createPrototypeObject(
                 this._numGeometry = 0;
             },
 
-            handleCullCallbacksAndTraverse: function(node) {
+            handleCullCallbacksAndTraverse: function (node) {
                 var ccb = node.getCullCallback();
                 if (ccb && !ccb.cull(node, this)) return;
                 this.traverse(node);
             },
 
-            getCurrentCamera: function() {
+            getCurrentCamera: function () {
                 return this._currentRenderBin.getStage().getCamera();
             },
 
-            updateCalculatedNearFar: (function() {
+            updateCalculatedNearFar: (function () {
                 var nearVec = vec3.create();
                 var farVec = vec3.create();
 
-                return function(matrix, drawable) {
+                return function (matrix, drawable) {
                     var bb = drawable.getBoundingBox();
                     var dNear, dFar;
 
@@ -159,22 +159,22 @@ utils.createPrototypeObject(
                 };
             })(),
 
-            setStateGraph: function(sg) {
+            setStateGraph: function (sg) {
                 this._rootStateGraph = sg;
                 this._currentStateGraph = sg;
             },
-            setRenderStage: function(rg) {
+            setRenderStage: function (rg) {
                 this._rootRenderStage = rg;
                 this._currentRenderBin = rg;
             },
-            setRenderer: function(renderer) {
+            setRenderer: function (renderer) {
                 this._renderer = renderer;
             },
-            getRenderer: function() {
+            getRenderer: function () {
                 return this._renderer;
             },
 
-            reset: function() {
+            reset: function () {
                 CullStack.prototype.reset.call(this);
 
                 this._pooledLeaf.reset();
@@ -190,22 +190,22 @@ utils.createPrototypeObject(
                 this._computedFar = Number.NEGATIVE_INFINITY;
             },
 
-            getCurrentRenderBin: function() {
+            getCurrentRenderBin: function () {
                 return this._currentRenderBin;
             },
 
-            setCurrentRenderBin: function(rb) {
+            setCurrentRenderBin: function (rb) {
                 this._currentRenderBin = rb;
             },
 
             // mimic the osg implementation
             // in osg you can push 0, in this case an identity matrix will be loaded
-            addPositionedAttribute: function(matrix, attribute) {
+            addPositionedAttribute: function (matrix, attribute) {
                 var m = matrix ? matrix : this._identityMatrix;
                 this._currentRenderBin.getStage().addPositionAttribute(m, attribute);
             },
 
-            pushStateSet: function(stateset) {
+            pushStateSet: function (stateset) {
                 this._currentStateGraph = this._currentStateGraph.findOrInsert(stateset);
                 if (stateset.getBinName() !== undefined) {
                     var renderBinStack = this._renderBinStack;
@@ -221,7 +221,7 @@ utils.createPrototypeObject(
              * Move the current state group to the parent of the popped
              * state group.
              */
-            popStateSet: function() {
+            popStateSet: function () {
                 var currentStateGraph = this._currentStateGraph;
                 var stateset = currentStateGraph.getStateSet();
                 this._currentStateGraph = currentStateGraph.getParent();
@@ -235,7 +235,7 @@ utils.createPrototypeObject(
                 }
             },
 
-            popProjectionMatrix: function() {
+            popProjectionMatrix: function () {
                 if (this._computeNearFar === true && this._computedFar >= this._computedNear) {
                     var m = this.getCurrentProjectionMatrix();
                     if (this._clampProjectionMatrixCallback !== undefined) {
@@ -257,7 +257,7 @@ utils.createPrototypeObject(
                 CullStack.prototype.popProjectionMatrix.call(this);
             },
 
-            clampProjectionMatrix: function(projection, znear, zfar, nearFarRatio, resultNearFar) {
+            clampProjectionMatrix: function (projection, znear, zfar, nearFarRatio, resultNearFar) {
                 var epsilon = 1e-6;
                 if (zfar < znear - epsilon) {
                     notify.log(
@@ -357,30 +357,30 @@ utils.createPrototypeObject(
                 return true;
             },
 
-            popCameraModelViewProjectionMatrix: function() {
+            popCameraModelViewProjectionMatrix: function () {
                 this.popModelViewMatrix();
                 this.popProjectionMatrix();
             },
 
-            pushCameraModelViewProjectionMatrix: function(camera, modelview, projection) {
+            pushCameraModelViewProjectionMatrix: function (camera, modelview, projection) {
                 this.pushModelViewMatrix(modelview);
                 this.pushProjectionMatrix(projection);
             },
 
-            apply: function(node) {
+            apply: function (node) {
                 this.applyFunctionArray[node.nodeTypeID].call(this, node);
             },
 
-            createOrReuseRenderLeaf: function() {
+            createOrReuseRenderLeaf: function () {
                 return this._pooledLeaf.getOrCreateObject();
             },
 
-            createOrReuseRenderStage: function(classInstance) {
+            createOrReuseRenderStage: function (classInstance) {
                 var type = !classInstance ? 'RenderStage' : classInstance.className();
 
                 if (!this._pooledRenderStages[type]) {
                     var classCtor = !classInstance ? RenderStage : classInstance.constructor;
-                    var createRenderStage = function() {
+                    var createRenderStage = function () {
                         return new classCtor();
                     };
                     this._pooledRenderStages[type] = new PooledResource(createRenderStage);
@@ -392,7 +392,7 @@ utils.createPrototypeObject(
             // the idea is to avoid heavy copy-paste for the rigGeometry apply
             // since the only difference is that we want to push an additional state
             // Maybe it will be useful when we'll add morph target geometry or something...
-            postPushGeometry: function(cull, node) {
+            postPushGeometry: function (cull, node) {
                 var sourceGeometry;
                 var geometryStateSetAnimation;
 
@@ -413,7 +413,7 @@ utils.createPrototypeObject(
             },
 
             // same comment as above (postPushGeometry)
-            prePopGeometry: function(cull, node) {
+            prePopGeometry: function (cull, node) {
                 if (node instanceof RigGeometry) {
                     var sourceGeometry = node.getSourceGeometry();
 
@@ -427,7 +427,7 @@ utils.createPrototypeObject(
                 }
             },
 
-            pushLeaf: function(node, depth) {
+            pushLeaf: function (node, depth) {
                 var leafs = this._currentStateGraph.getLeafs();
                 if (!leafs.getLength()) {
                     this._currentRenderBin.addStateGraph(this._currentStateGraph);
@@ -456,7 +456,7 @@ utils.createPrototypeObject(
 // Camera cull visitor call
 // ANY CHANGE, any change : double check in rendere Camera code
 // for the first camera
-var cameraApply = function(camera) {
+var cameraApply = function (camera) {
     this._numCamera++;
 
     var stateset = camera.getStateSet();
@@ -538,13 +538,9 @@ var cameraApply = function(camera) {
         this.setCurrentRenderBin(renderBin);
 
         if (camera.getRenderOrder() === Camera.PRE_RENDER) {
-            this.getCurrentRenderBin()
-                .getStage()
-                .addPreRenderStage(rtts, camera.renderOrderNum);
+            this.getCurrentRenderBin().getStage().addPreRenderStage(rtts, camera.renderOrderNum);
         } else {
-            this.getCurrentRenderBin()
-                .getStage()
-                .addPostRenderStage(rtts, camera.renderOrderNum);
+            this.getCurrentRenderBin().getStage().addPostRenderStage(rtts, camera.renderOrderNum);
         }
     }
 
@@ -562,7 +558,7 @@ var cameraApply = function(camera) {
     if (stateset) this.popStateSet();
 };
 
-var matrixTransformApply = function(node) {
+var matrixTransformApply = function (node) {
     this._numMatrixTransform++;
 
     // Camera and lights must enlarge node parent bounding boxes for this not to cull
@@ -592,7 +588,7 @@ var matrixTransformApply = function(node) {
     this.popCurrentMask();
 };
 
-var projectionApply = function(node) {
+var projectionApply = function (node) {
     this._numProjection++;
 
     var lastMatrixStack = this.getCurrentProjectionMatrix();
@@ -613,7 +609,7 @@ var projectionApply = function(node) {
 // here it's treated as a group node for culling
 // as there's isn't any in osgjs
 // so frustumCulling is done here
-var nodeApply = function(node) {
+var nodeApply = function (node) {
     this._numNode++;
 
     // Camera and lights must enlarge node parent bounding boxes for this not to cull
@@ -635,7 +631,7 @@ var nodeApply = function(node) {
     this.popCurrentMask();
 };
 
-var lightSourceApply = function(node) {
+var lightSourceApply = function (node) {
     this._numLightSource++;
 
     var stateset = node.getStateSet();
@@ -655,7 +651,7 @@ var lightSourceApply = function(node) {
 
 var tempVec = vec3.create();
 var loggedOnce = false;
-var geometryApply = function(node) {
+var geometryApply = function (node) {
     this._numGeometry++;
 
     var modelview = this.getCurrentModelViewMatrix();

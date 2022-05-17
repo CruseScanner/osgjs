@@ -1,4 +1,4 @@
-var Controller = function(manipulator) {
+var Controller = function (manipulator) {
     this._manipulator = manipulator;
     this._enable = true;
 };
@@ -6,14 +6,14 @@ var Controller = function(manipulator) {
 Controller.prototype = {
     // All eventProxy must check isEnabled before injecting
     // event into Controllers
-    isEnabled: function() {
+    isEnabled: function () {
         return this._enable;
     },
 
     // called to enable/disable a Controller
     // it should be customized for controller that keeps states
     // on events
-    setEnable: function(bool) {
+    setEnable: function (bool) {
         this._enable = bool;
     }
 };

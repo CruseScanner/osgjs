@@ -3,7 +3,7 @@ import utils from 'osg/utils';
 import { vec2 } from 'osg/glMatrix';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var OrbitManipulatorGamePadController = function(manipulator) {
+var OrbitManipulatorGamePadController = function (manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
@@ -11,7 +11,7 @@ var OrbitManipulatorGamePadController = function(manipulator) {
 utils.createPrototypeObject(
     OrbitManipulatorGamePadController,
     utils.objectInherit(Controller.prototype, {
-        init: function() {
+        init: function () {
             this._delay = 0.15;
             this._zoomFactor = 0.5;
             this._rotateFactor = 5.0;
@@ -82,7 +82,7 @@ utils.createPrototypeObject(
             // }
         },
 
-        pan: function(delta) {
+        pan: function (delta) {
             var panTarget = this._pan.getTarget();
             this._pan.setTarget(
                 panTarget[0] - delta[0] * this._panFactor,
@@ -90,15 +90,15 @@ utils.createPrototypeObject(
             );
         },
 
-        addZoom: function(ev) {
+        addZoom: function (ev) {
             this._zoom.addTarget(-ev.value * this._zoomFactor);
         },
 
-        addRotateX: function(ev) {
+        addRotateX: function (ev) {
             this._rotate.addTarget(-ev.value * this._rotateFactor);
         },
 
-        addRotateY: function(ev) {
+        addRotateY: function (ev) {
             this._rotate.addTarget(0, ev.value * this._rotateFactor);
         }
     })

@@ -19,16 +19,16 @@ var ReaderParser = {};
 ReaderParser.ObjectWrapper = {};
 ReaderParser.ObjectWrapper.serializers = {};
 
-ReaderParser.readImage = function(url, options) {
+ReaderParser.readImage = function (url, options) {
     return ReaderParser.registry().readImageURL(url, options);
 };
 ReaderParser.readImageURL = ReaderParser.readImage; // alias
 
-ReaderParser.readBinaryArrayURL = function(url, options) {
+ReaderParser.readBinaryArrayURL = function (url, options) {
     return ReaderParser.registry().readBinaryArrayURL(url, options);
 };
 
-ReaderParser.readNodeURL = function(url, options) {
+ReaderParser.readNodeURL = function (url, options) {
     var extension = url.substr(url.lastIndexOf('.') + 1);
     var readerWriter = Registry.instance().getReaderWriterForExtension(extension);
     if (readerWriter !== undefined) return readerWriter.readNodeURL(url, options);
@@ -37,7 +37,7 @@ ReaderParser.readNodeURL = function(url, options) {
     return ReaderParser.registry().readNodeURL(url, options);
 };
 
-ReaderParser.registry = function() {
+ReaderParser.registry = function () {
     var Input = require('osgDB/Input').default;
     if (ReaderParser.registry._input === undefined) {
         ReaderParser.registry._input = new Input();
@@ -45,7 +45,7 @@ ReaderParser.registry = function() {
     return ReaderParser.registry._input;
 };
 
-ReaderParser.parseSceneGraph = function(node, options) {
+ReaderParser.parseSceneGraph = function (node, options) {
     if (node.Version !== undefined && node.Version > 0) {
         utils.time('osgjs.metric:ReaderParser.parseSceneGraph', notify.INFO);
 
@@ -84,22 +84,22 @@ ReaderParser.parseSceneGraph = function(node, options) {
     return undefined;
 };
 
-ReaderParser.parseSceneGraphDeprecated = function(node) {
-    var getFieldBackwardCompatible = function(field, json) {
+ReaderParser.parseSceneGraphDeprecated = function (node) {
+    var getFieldBackwardCompatible = function (field, json) {
         var value = json[field];
         if (value === undefined) {
             value = json[field.toLowerCase()];
         }
         return value;
     };
-    var setName = function(osgjs, json) {
+    var setName = function (osgjs, json) {
         var name = getFieldBackwardCompatible('Name', json);
         if (name && osgjs.setName !== undefined) {
             osgjs.setName(name);
         }
     };
 
-    var setMaterial = function(osgjs, json) {
+    var setMaterial = function (osgjs, json) {
         setName(osgjs, json);
         osgjs.setAmbient(getFieldBackwardCompatible('Ambient', json));
         osgjs.setDiffuse(getFieldBackwardCompatible('Diffuse', json));
@@ -108,7 +108,7 @@ ReaderParser.parseSceneGraphDeprecated = function(node) {
         osgjs.setShininess(getFieldBackwardCompatible('Shininess', json));
     };
 
-    var setBlendFunc = function(osgjs, json) {
+    var setBlendFunc = function (osgjs, json) {
         setName(osgjs, json);
         osgjs.setSourceRGB(json.SourceRGB);
         osgjs.setSourceAlpha(json.SourceAlpha);
@@ -116,7 +116,7 @@ ReaderParser.parseSceneGraphDeprecated = function(node) {
         osgjs.setDestinationAlpha(json.DestinationAlpha);
     };
 
-    var setTexture = function(osgjs, json) {
+    var setTexture = function (osgjs, json) {
         var magFilter = json.MagFilter || json['mag_filter'] || undefined;
         if (magFilter) {
             osgjs.setMagFilter(magFilter);
@@ -135,15 +135,15 @@ ReaderParser.parseSceneGraphDeprecated = function(node) {
         }
         var file = getFieldBackwardCompatible('File', json);
         ReaderParser.readImage(file)
-            .then(function(img) {
+            .then(function (img) {
                 osgjs.setImage(img);
             })
-            .catch(function() {
+            .catch(function () {
                 notify.log("Can't read image");
             });
     };
 
-    var setStateSet = function(osgjs, json) {
+    var setStateSet = function (osgjs, json) {
         setName(osgjs, json);
         var textures =
             getFieldBackwardCompatible('Textures', json) ||

@@ -55,7 +55,7 @@ var checkUniformCache = [
     }
 ];
 
-var State = function(shaderGeneratorProxy) {
+var State = function (shaderGeneratorProxy) {
     Object.call(this);
 
     this._excludeUniforms = {
@@ -143,11 +143,11 @@ utils.createPrototypeObject(
         // If you are writing a custom renderStage or overriding RenderLeaf.drawGeometry and add new uniform and custom
         // behavior then it can make sense to add uniforms here.
         // To make it work you should add your uniforms before the rendering (usually before viewer.run())
-        getExcludeUniforms: function() {
+        getExcludeUniforms: function () {
             return this._excludeUniforms;
         },
 
-        resetCaches: function() {
+        resetCaches: function () {
             this._currentVAO = null;
             this._currentIndexVBO = null;
 
@@ -159,81 +159,80 @@ utils.createPrototypeObject(
             this._programCommonUniformsCache = {};
         },
 
-        applyColorMask: function(attribute) {
+        applyColorMask: function (attribute) {
             this._stateCache.applyColorMaskAttribute(attribute);
         },
 
-        applyBlendFunc: function(attribute) {
+        applyBlendFunc: function (attribute) {
             this._stateCache.applyBlendFuncAttribute(attribute);
         },
 
-        applyCullFace: function(attribute) {
+        applyCullFace: function (attribute) {
             this._stateCache.applyCullFaceAttribute(attribute);
         },
 
-        applyDepth: function(attribute) {
+        applyDepth: function (attribute) {
             this._stateCache.applyDepthAttribute(attribute);
         },
 
-        applyViewport: function(attribute) {
+        applyViewport: function (attribute) {
             this._stateCache.applyViewportAttribute(attribute);
         },
 
-        applyScissor: function(attribute) {
+        applyScissor: function (attribute) {
             this._stateCache.applyScissorAttribute(attribute);
         },
 
-        viewport: function(x, y, width, height) {
+        viewport: function (x, y, width, height) {
             this._stateCache.viewport(x, y, width, height);
         },
 
-        depthMask: function(value) {
+        depthMask: function (value) {
             this._stateCache.depthMask(value);
         },
 
-        clearDepth: function(value) {
+        clearDepth: function (value) {
             this._stateCache.clearDepth(value);
         },
 
-        clearColor: function(value) {
+        clearColor: function (value) {
             this._stateCache.clearColor(value);
         },
 
-        clear: function(mask) {
+        clear: function (mask) {
             this._stateCache.clear(this._graphicContext, mask);
         },
 
-        drawGeometry: function(geom) {
+        drawGeometry: function (geom) {
             this._stateCache.drawGeometry(this._graphicContext, geom);
         },
 
-        getCacheUniformsApplyRenderLeaf: function() {
+        getCacheUniformsApplyRenderLeaf: function () {
             return this._programCommonUniformsCache;
         },
 
-        setGraphicContext: function(graphicContext) {
+        setGraphicContext: function (graphicContext) {
             this._graphicContext = graphicContext;
-            this._extVAO = WebGLCaps.instance(graphicContext).getWebGLExtension(
-                'OES_vertex_array_object'
-            );
+            this._extVAO =
+                WebGLCaps.instance(graphicContext).getWebGLExtension('OES_vertex_array_object');
         },
 
-        getGraphicContext: function() {
+        getGraphicContext: function () {
             return this._graphicContext;
         },
 
-        getShaderGeneratorProxy: function() {
+        getShaderGeneratorProxy: function () {
             return this._shaderGeneratorProxy;
         },
 
-        pushCheckOverride: function(stack, object, maskValue) {
+        pushCheckOverride: function (stack, object, maskValue) {
             var result = this._evaluateOverrideObjectOnStack(stack, object, maskValue);
             // override and protected case
             if (result !== object) stack.push(result, stack._back.value);
             else stack.push(object, maskValue);
         },
 
-        _evaluateOverrideObjectOnStack: function(stack, object, maskValue) {
+        _evaluateOverrideObjectOnStack: function (stack, object, maskValue) {
             var back = stack._back;
             // object can be a Uniform, an Attribute, or a shader generator name
             if (stack._length === 0) {
@@ -248,7 +247,7 @@ utils.createPrototypeObject(
             }
         },
 
-        pushStateSet: function(stateset) {
+        pushStateSet: function (stateset) {
             this._numPushStateSet++;
             this._stateSets.push(stateset);
 
@@ -286,14 +285,14 @@ utils.createPrototypeObject(
                 );
         },
 
-        getStateSetStackSize: function() {
+        getStateSetStackSize: function () {
             return this._stateSets.getLength();
         },
 
-        insertStateSet: (function() {
+        insertStateSet: (function () {
             var tmpStack = new PooledArray();
             var tmpStackArray = tmpStack.getArray();
-            return function(pos, stateSet) {
+            return function (pos, stateSet) {
                 tmpStack.reset();
                 var length = this.getStateSetStackSize();
                 while (length > pos) {
@@ -310,10 +309,10 @@ utils.createPrototypeObject(
             };
         })(),
 
-        removeStateSet: (function() {
+        removeStateSet: (function () {
             var tmpStack = new PooledArray();
             var tmpStackArray = tmpStack.getArray();
-            return function(pos) {
+            return function (pos) {
                 var length = this.getStateSetStackSize();
                 if (pos >= length) {
                     notify.warn('Warning State:removeStateSet ' + pos + ' out of range');
@@ -342,23 +341,23 @@ utils.createPrototypeObject(
         // needed because we use a cache during the frame to avoid
         // applying uniform or operation. At each frame we need to
         // invalidate those informations
-        resetCacheFrame: function() {
+        resetCacheFrame: function () {
             this._lastAppliedModelViewMatrix = this._lastAppliedProjectionMatrix = undefined;
         },
 
-        resetStats: function() {
+        resetStats: function () {
             this._numApply = 0;
             this._numPushStateSet = 0;
         },
 
         // apply program if needed
-        applyProgram: function(program) {
+        applyProgram: function (program) {
             if (this._program === program) return;
             this._program = program;
             this.getGraphicContext().useProgram(program);
         },
 
-        applyModelViewMatrix: (function() {
+        applyModelViewMatrix: (function () {
             var normal = mat3.create();
 
             return function StateApplyModelViewMatrix(matrix, matrixModel) {
@@ -412,7 +411,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        applyProjectionMatrix: function(matrix) {
+        applyProjectionMatrix: function (matrix) {
             if (this._lastAppliedProjectionMatrix === matrix) return;
 
             this._lastAppliedProjectionMatrix = matrix;
@@ -426,7 +425,7 @@ utils.createPrototypeObject(
             }
         },
 
-        getCurrentShaderGeneratorStateSet: function(stateset) {
+        getCurrentShaderGeneratorStateSet: function (stateset) {
             var programStack = this._programAttribute;
             var stateSetProgramPair = stateset._attributeArray[this._programType];
 
@@ -459,7 +458,7 @@ utils.createPrototypeObject(
             return shaderGenerator;
         },
 
-        _applyAttributeMapStateSet: function(_attributeArray, stateSetAttributeArray) {
+        _applyAttributeMapStateSet: function (_attributeArray, stateSetAttributeArray) {
             var max =
                 _attributeArray.length > stateSetAttributeArray.length
                     ? _attributeArray.length
@@ -522,7 +521,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _applyTextureAttributeMapListStateSet: function(
+        _applyTextureAttributeMapListStateSet: function (
             _textureAttributeArrayList,
             stateSetTextureAttributeArrayList
         ) {
@@ -631,7 +630,7 @@ utils.createPrototypeObject(
             }
         },
 
-        applyStateSet: function(stateset) {
+        applyStateSet: function (stateset) {
             this._numApply++;
 
             var previousProgram = this.getLastProgramApplied();
@@ -671,13 +670,13 @@ utils.createPrototypeObject(
             }
         },
 
-        popAllStateSets: function() {
+        popAllStateSets: function () {
             while (this._stateSets._length) {
                 this.popStateSet();
             }
         },
 
-        popStateSet: function() {
+        popStateSet: function () {
             if (!this._stateSets._length) return;
 
             var stateset = this._stateSets.pop();
@@ -711,7 +710,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _createAttributeStack: function(_attributeArray, typeIndex, globalDefault) {
+        _createAttributeStack: function (_attributeArray, typeIndex, globalDefault) {
             utils.arrayDense(typeIndex, _attributeArray);
             var attributeStack = new StackObjectPairPool();
             attributeStack._globalDefault = globalDefault;
@@ -721,7 +720,7 @@ utils.createPrototypeObject(
             return attributeStack;
         },
 
-        haveAppliedAttribute: function(attribute) {
+        haveAppliedAttribute: function (attribute) {
             if (!attribute) return;
 
             var attributeArray = this._attributeArray;
@@ -738,7 +737,7 @@ utils.createPrototypeObject(
             attributeStack._changed = true;
         },
 
-        applyAttribute: function(attribute) {
+        applyAttribute: function (attribute) {
             var index = utils.getOrCreateStateAttributeTypeMemberIndex(attribute);
 
             var attributeArray = this._attributeArray;
@@ -755,7 +754,7 @@ utils.createPrototypeObject(
             this._applyAttributeStack(attribute, attributeStack);
         },
 
-        _applyAttributeStack: function(attribute, attributeStack) {
+        _applyAttributeStack: function (attribute, attributeStack) {
             if (attributeStack._lastApplied === attribute) return false;
 
             if (attribute.apply) attribute.apply(this);
@@ -764,7 +763,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        _applyTextureAttribute: function(unit, attribute, attributeStack) {
+        _applyTextureAttribute: function (unit, attribute, attributeStack) {
             if (attributeStack._lastApplied === attribute) return false;
 
             attributeStack._lastApplied = attribute;
@@ -780,7 +779,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        applyTextureAttribute: function(unit, attribute) {
+        applyTextureAttribute: function (unit, attribute) {
             var index = utils.getOrCreateTextureStateAttributeTypeMemberIndex(attribute);
             var textureUnitAttributeArray = this.getOrCreateTextureAttributeArray(unit);
             var attributeStack = textureUnitAttributeArray[index];
@@ -796,11 +795,11 @@ utils.createPrototypeObject(
             this._applyTextureAttribute(unit, attribute, attributeStack);
         },
 
-        getLastProgramApplied: function() {
+        getLastProgramApplied: function () {
             return this._programAttribute._lastApplied;
         },
 
-        applyDefault: function() {
+        applyDefault: function () {
             this.popAllStateSets();
 
             this._currentShaderGenerator = undefined;
@@ -809,7 +808,7 @@ utils.createPrototypeObject(
             this.applyTextureAttributeMapList(this._textureAttributeArrayList);
         },
 
-        applyAttributeMap: function(_attributeArray) {
+        applyAttributeMap: function (_attributeArray) {
             var attributeStack;
             for (var i = 0, l = _attributeArray.length; i < l; i++) {
                 attributeStack = _attributeArray[i];
@@ -831,7 +830,7 @@ utils.createPrototypeObject(
             }
         },
 
-        pushUniformsList: function(uniformMap, stateSetUniformMap) {
+        pushUniformsList: function (uniformMap, stateSetUniformMap) {
             /*jshint bitwise: false */
             var name;
             var uniform;
@@ -849,13 +848,13 @@ utils.createPrototypeObject(
             /*jshint bitwise: true */
         },
 
-        popUniformsList: function(uniformMap, stateSetUniformMap) {
+        popUniformsList: function (uniformMap, stateSetUniformMap) {
             for (var key in stateSetUniformMap) {
                 uniformMap[key].pop();
             }
         },
 
-        applyTextureAttributeMapList: function(textureAttributeArrayList) {
+        applyTextureAttributeMapList: function (textureAttributeArrayList) {
             var gl = this._graphicContext;
             var textureAttributeArray;
 
@@ -893,7 +892,7 @@ utils.createPrototypeObject(
             }
         },
 
-        setGlobalDefaultAttribute: function(attribute) {
+        setGlobalDefaultAttribute: function (attribute) {
             var index = utils.getOrCreateStateAttributeTypeMemberIndex(attribute);
             if (index >= this._attributeArray.length || !this._attributeArray[index]) {
                 this._createAttributeStack(this._attributeArray, index, attribute);
@@ -902,14 +901,14 @@ utils.createPrototypeObject(
             }
         },
 
-        getGlobalDefaultAttribute: function(typeMember) {
+        getGlobalDefaultAttribute: function (typeMember) {
             var _attributeArray = this._attributeArray;
             var index = utils.getIdFromTypeMember(typeMember);
             if (index === undefined || index >= _attributeArray.length) return undefined;
             return _attributeArray[index] ? _attributeArray[index]._globalDefault : undefined;
         },
 
-        setGlobalDefaultTextureAttribute: function(unit, attribute) {
+        setGlobalDefaultTextureAttribute: function (unit, attribute) {
             var attributeArray = this.getOrCreateTextureAttributeArray(unit);
             var index = utils.getOrCreateTextureStateAttributeTypeMemberIndex(attribute);
 
@@ -920,21 +919,21 @@ utils.createPrototypeObject(
             }
         },
 
-        getGlobalDefaultTextureAttribute: function(unit, typeMember) {
+        getGlobalDefaultTextureAttribute: function (unit, typeMember) {
             var attributeArray = this.getOrCreateTextureAttributeArray(unit);
             var index = utils.getTextureIdFromTypeMember(typeMember);
             if (index === undefined || index >= attributeArray.length) return undefined;
             return attributeArray[index] ? attributeArray[index]._globalDefault : undefined;
         },
 
-        getOrCreateTextureAttributeArray: function(unit) {
+        getOrCreateTextureAttributeArray: function (unit) {
             utils.arrayDense(unit, this._textureAttributeArrayList);
 
             if (!this._textureAttributeArrayList[unit]) this._textureAttributeArrayList[unit] = [];
             return this._textureAttributeArrayList[unit];
         },
 
-        pushAttributeMap: function(_attributeArray, stateSetAttributeArray, validAttributeArray) {
+        pushAttributeMap: function (_attributeArray, stateSetAttributeArray, validAttributeArray) {
             /*jshint bitwise: false */
             var attributeStack;
             var stateSetAttributeArrayLength = stateSetAttributeArray.length;
@@ -961,7 +960,7 @@ utils.createPrototypeObject(
             }
         },
 
-        popAttributeMap: function(_attributeArray, stateSetAttributeArray, activeAttribute) {
+        popAttributeMap: function (_attributeArray, stateSetAttributeArray, activeAttribute) {
             for (var i = 0, l = activeAttribute.length; i < l; i++) {
                 var index = activeAttribute[i];
                 var attributeStack = _attributeArray[index];
@@ -971,7 +970,7 @@ utils.createPrototypeObject(
             }
         },
 
-        setIndexArray: function(array) {
+        setIndexArray: function (array) {
             var gl = this._graphicContext;
 
             if (this._currentIndexVBO !== array) {
@@ -984,7 +983,7 @@ utils.createPrototypeObject(
             }
         },
 
-        lazyDisablingOfVertexAttributes: function() {
+        lazyDisablingOfVertexAttributes: function () {
             var keys = this._vertexAttribMap._keys;
             for (var i = 0, l = keys.length; i < l; i++) {
                 var attr = keys[i];
@@ -994,7 +993,7 @@ utils.createPrototypeObject(
             }
         },
 
-        enableVertexColor: function() {
+        enableVertexColor: function () {
             var program = this._programAttribute._lastApplied;
 
             if (
@@ -1018,7 +1017,7 @@ utils.createPrototypeObject(
             }
         },
 
-        disableVertexColor: function() {
+        disableVertexColor: function () {
             var program = this._programAttribute._lastApplied;
 
             if (
@@ -1042,7 +1041,7 @@ utils.createPrototypeObject(
             }
         },
 
-        applyDisablingOfVertexAttributes: function() {
+        applyDisablingOfVertexAttributes: function () {
             var keys = this._vertexAttribMap._keys;
             for (var i = 0, l = keys.length; i < l; i++) {
                 if (this._vertexAttribMap._disable[keys[i]] === true) {
@@ -1054,7 +1053,7 @@ utils.createPrototypeObject(
             }
         },
 
-        clearVertexAttribCache: function() {
+        clearVertexAttribCache: function () {
             var vertexAttribMap = this._vertexAttribMap;
             var keys = vertexAttribMap._keys;
             for (var i = 0, l = keys.length; i < l; i++) {
@@ -1072,7 +1071,7 @@ utils.createPrototypeObject(
          *  return true if binded the vao and false
          *  if was already binded
          */
-        setVertexArrayObject: function(vao) {
+        setVertexArrayObject: function (vao) {
             if (this._currentVAO === vao) return false;
 
             this._currentVAO = vao;
@@ -1092,7 +1091,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        setVertexAttribArray: function(attrib, array, normalize) {
+        setVertexAttribArray: function (attrib, array, normalize) {
             var vertexAttribMap = this._vertexAttribMap;
             vertexAttribMap._disable[attrib] = false;
             var gl = this._graphicContext;
@@ -1129,7 +1128,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _getActiveUniformsFromProgramAttributes: function(program, activeUniformsList) {
+        _getActiveUniformsFromProgramAttributes: function (program, activeUniformsList) {
             var _attributeArrayStack = this._attributeArray;
 
             var attributeKeys = program.getTrackAttributes().attributeKeys;
@@ -1155,7 +1154,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _getActiveUniformsFromProgramTextureAttributes: function(program, activeUniformsList) {
+        _getActiveUniformsFromProgramTextureAttributes: function (program, activeUniformsList) {
             var textureAttributeKeysList = program.getTrackAttributes().textureAttributeKeys;
             if (!textureAttributeKeysList) return;
 
@@ -1186,7 +1185,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _cacheUniformsForCustomProgram: function(program, activeUniformsList) {
+        _cacheUniformsForCustomProgram: function (program, activeUniformsList) {
             this._getActiveUniformsFromProgramAttributes(program, activeUniformsList);
 
             this._getActiveUniformsFromProgramTextureAttributes(program, activeUniformsList);
@@ -1208,10 +1207,10 @@ utils.createPrototypeObject(
             program.trackUniforms = uniformsFinal;
         },
 
-        _applyCustomProgramUniforms: (function() {
+        _applyCustomProgramUniforms: (function () {
             var activeUniformsList = [];
 
-            return function(program, stateset) {
+            return function (program, stateset) {
                 // custom program so we will iterate on uniform from the program and apply them
                 // but in order to be able to use Attribute in the state graph we will check if
                 // our program want them. It must be defined by the user
@@ -1241,7 +1240,10 @@ utils.createPrototypeObject(
                     var hasStateSetUniformPair = stateset && stateset.uniforms[uniformName];
 
                     if (!uniformStack && !hasStateSetUniformPair) {
-                        if (programTrackUniformMap === undefined || programTrackUniformMap[uniformName] === undefined) {
+                        if (
+                            programTrackUniformMap === undefined ||
+                            programTrackUniformMap[uniformName] === undefined
+                        ) {
                             this._checkErrorUniform(uniformName);
                             continue;
                         }
@@ -1269,7 +1271,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        _checkErrorUniform: function(uniformName) {
+        _checkErrorUniform: function (uniformName) {
             var unit = uniformName.substr(7);
             if (this._textureAttributeArrayList[unit] && uniformName === 'Texture' + unit) {
                 return;
@@ -1284,7 +1286,7 @@ utils.createPrototypeObject(
             notify.error('Uniform not in the scene hierarchy : ' + uniformName);
         },
 
-        _computeForeignUniforms: function(programUniformMap, activeUniformMap) {
+        _computeForeignUniforms: function (programUniformMap, activeUniformMap) {
             var foreignUniforms = [];
 
             for (var keyUniform in programUniformMap) {
@@ -1301,7 +1303,7 @@ utils.createPrototypeObject(
             return foreignUniforms;
         },
 
-        _removeUniformsNotRequiredByProgram: function(activeUniformMap, programUniformMap) {
+        _removeUniformsNotRequiredByProgram: function (activeUniformMap, programUniformMap) {
             for (var keyUniform in activeUniformMap) {
                 var location = programUniformMap[keyUniform];
                 if (location === undefined || location === null) {
@@ -1310,7 +1312,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _cacheUniformsForGeneratedProgram: function(program) {
+        _cacheUniformsForGeneratedProgram: function (program) {
             var shaderUniforms = program.getUniformsCache(); // declared in the shader
             var stateSetUniforms = program.getActiveUniforms(); // present in last stateset
 
@@ -1321,7 +1323,7 @@ utils.createPrototypeObject(
             this._removeUniformsNotRequiredByProgram(stateSetUniforms, shaderUniforms);
         },
 
-        _copyUniformEntry: function(uniform) {
+        _copyUniformEntry: function (uniform) {
             var internalArray = uniform.getInternalArray();
             var cacheData;
             if (internalArray.length < 16) {
@@ -1331,7 +1333,7 @@ utils.createPrototypeObject(
             return cacheData;
         },
 
-        _initUniformCache: function(program) {
+        _initUniformCache: function (program) {
             var activeUniformMap = program.getActiveUniforms();
 
             var foreignUniformKeys = program.getForeignUniforms();
@@ -1368,7 +1370,7 @@ utils.createPrototypeObject(
             this._programUniformCache[program._cacheUniformId].active = cacheActiveUniforms;
         },
 
-        _checkCacheAndApplyUniform: function(
+        _checkCacheAndApplyUniform: function (
             uniform,
             cacheArray,
             indexCache,
@@ -1395,7 +1397,7 @@ utils.createPrototypeObject(
         // the current uniformList ...
 
         // when we apply the shader for the first time, we want to compute the active uniforms for this shader and the list of uniforms not extracted from attributes called foreignUniforms
-        _applyGeneratedProgramUniforms: function(program, stateset) {
+        _applyGeneratedProgramUniforms: function (program, stateset) {
             var uniformMapStack = this._uniforms;
             var uniform, uniformName, uniformStack, i;
 
@@ -1488,14 +1490,14 @@ utils.createPrototypeObject(
         },
 
         // Use to detect changes in RenderLeaf between call to avoid to applyStateSet
-        _setStateSetsDrawID: function(id) {
+        _setStateSetsDrawID: function (id) {
             var values = this._stateSets.getArray();
             for (var i = 0, nbStateSets = this._stateSets.length; i < nbStateSets; i++) {
                 values[i].setDrawID(id);
             }
         },
 
-        _stateSetStackChanged: function(id, nbLast) {
+        _stateSetStackChanged: function (id, nbLast) {
             var values = this._stateSets.getArray();
             var nbStateSets = this._stateSets.length;
             if (nbLast !== nbStateSets) return true;

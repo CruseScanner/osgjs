@@ -9,8 +9,8 @@ import Geometry from 'osg/Geometry';
 import BufferArray from 'osg/BufferArray';
 import { vec3 } from 'osg/glMatrix';
 
-export default function() {
-    var createGeometry = function(primitiveType, arraysOrElements) {
+export default function () {
+    var createGeometry = function (primitiveType, arraysOrElements) {
         var g = new Geometry();
         var vertexes = new utils.Float32Array(9);
         vertexes[0] = 0;
@@ -58,14 +58,14 @@ export default function() {
         return g;
     };
 
-    test('PrimitiveFunctor Points', function() {
+    test('PrimitiveFunctor Points', function () {
         // Test DrawArrays
         var node = createGeometry(primitiveSet.POINTS, 0);
         var vertices = node.getAttributes().Vertex.getElements();
         // The callback must be defined as a closure
         var vectors = [];
         var cb = {
-            operatorPoint: function(v) {
+            operatorPoint: function (v) {
                 vectors.push(v[0]);
                 vectors.push(v[1]);
                 vectors.push(v[2]);
@@ -89,14 +89,14 @@ export default function() {
         assert.isOk(vectors[8] === 0.0, 'Vectors[ 8 ] should be 0 and result is ' + vectors[8]);
     });
 
-    test('PrimitiveFunctor Lines', function() {
+    test('PrimitiveFunctor Lines', function () {
         // Test DrawArrays
         var node = createGeometry(primitiveSet.LINES, 0);
         var vertices = node.getAttributes().Vertex.getElements();
         // The callback must be defined as a closure
         var vectors = [];
         var cb = {
-            operatorLine: function(v1, v2) {
+            operatorLine: function (v1, v2) {
                 vectors.push(v1);
                 vectors.push(v2);
             }
@@ -113,14 +113,14 @@ export default function() {
         assert.equalVector(vectors[1], [0, 0, 0]);
     });
 
-    test('PrimitiveFunctor LineStrip', function() {
+    test('PrimitiveFunctor LineStrip', function () {
         // Test DrawArrays
         var node = createGeometry(primitiveSet.LINE_STRIP, 0);
         var vertices = node.getAttributes().Vertex.getElements();
         // The callback must be defined as a closure
         var vectors = [];
         var cb = {
-            operatorLine: function(v1, v2) {
+            operatorLine: function (v1, v2) {
                 vectors.push(vec3.clone(v1));
                 vectors.push(vec3.clone(v2));
             }
@@ -141,14 +141,14 @@ export default function() {
         assert.equalVector(vectors[3], [2, 2, 0]);
     });
 
-    test('PrimitiveFunctor LineLoop', function() {
+    test('PrimitiveFunctor LineLoop', function () {
         // Test DrawArrays
         var node = createGeometry(primitiveSet.LINE_LOOP, 0);
         var vertices = node.getAttributes().Vertex.getElements();
         // The callback must be defined as a closure
         var vectors = [];
         var cb = {
-            operatorLine: function(v1, v2) {
+            operatorLine: function (v1, v2) {
                 vectors.push(vec3.clone(v1));
                 vectors.push(vec3.clone(v2));
             }
@@ -173,14 +173,14 @@ export default function() {
         assert.equalVector(vectors[5], [-2.0, 2.0, 0]);
     });
 
-    test('PrimitiveFunctor Triangle', function() {
+    test('PrimitiveFunctor Triangle', function () {
         // Test DrawArrays
         var node = createGeometry(primitiveSet.TRIANGLES, 0);
         var vertices = node.getAttributes().Vertex.getElements();
         // The callback must be defined as a closure
         var vectors = [];
         var cb = {
-            operatorTriangle: function(v1, v2, v3) {
+            operatorTriangle: function (v1, v2, v3) {
                 vectors.push(vec3.clone(v1));
                 vectors.push(vec3.clone(v2));
                 vectors.push(vec3.clone(v3));

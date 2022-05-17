@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -6,7 +6,7 @@
     var osgViewer = OSG.osgViewer;
     var osgDB = OSG.osgDB;
 
-    var getShader = function() {
+    var getShader = function () {
         var vertexshader = [
             '',
             '#ifdef GL_ES',
@@ -68,11 +68,11 @@
         return program;
     };
 
-    var loadModel = function(data, viewer, node, unifs) {
+    var loadModel = function (data, viewer, node, unifs) {
         var promise = osgDB.parseSceneGraph(data);
         // var promise = window.P.resolve( osg.createTexturedSphere( 1.0, 500, 500 ) );
 
-        promise.then(function(child) {
+        promise.then(function (child) {
             node.addChild(child);
 
             child.getOrCreateStateSet().setAttributeAndModes(getShader());
@@ -92,29 +92,29 @@
         });
     };
 
-    var loadUrl = function(url, viewer, node, unifs) {
+    var loadUrl = function (url, viewer, node, unifs) {
         osg.log('loading ' + url);
         var req = new XMLHttpRequest();
         req.open('GET', url, true);
-        req.onload = function() {
+        req.onload = function () {
             loadModel(JSON.parse(req.responseText), viewer, node, unifs);
             osg.log('success ' + url);
         };
-        req.onerror = function() {
+        req.onerror = function () {
             osg.log('error ' + url);
         };
         req.send(null);
     };
 
-    var createScene = function(viewer, unifs) {
+    var createScene = function (viewer, unifs) {
         var root = new osg.Node();
 
         loadUrl('../media/models/raceship.osgjs', viewer, root, unifs);
         root.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace(osg.CullFace.DISABLE));
 
-        var UpdateCallback = function() {
+        var UpdateCallback = function () {
             this.baseTime_ = new Date().getTime();
-            this.update = function() {
+            this.update = function () {
                 unifs.time.setFloat(new Date().getTime() - this.baseTime_);
                 return true;
             };
@@ -127,10 +127,10 @@
 
     var myReservedMatrixStack = new osg.PooledResource(osg.mat4.create);
 
-    var projectToScreen = (function() {
+    var projectToScreen = (function () {
         var mat = osg.mat4.create();
         var winMat = osg.mat4.create();
-        return function(cam, hit) {
+        return function (cam, hit) {
             osg.mat4.identity(mat);
             osg.mat4.mul(
                 mat,
@@ -158,7 +158,7 @@
         };
     })();
 
-    var onMouseMove = function(canvas, viewer, unifs, ev) {
+    var onMouseMove = function (canvas, viewer, unifs, ev) {
         // TODO maybe doing some benchmark with a lot of geometry,
         // since there's one kdtree per geometry ...
         // console.time( 'pick' );
@@ -174,7 +174,7 @@
         // console.timeEnd( 'pick' );
         // console.log( hits.length );
 
-        hits.sort(function(a, b) {
+        hits.sort(function (a, b) {
             return a._ratio - b._ratio;
         });
 
@@ -213,13 +213,7 @@
                 )
             );
 
-            si.set(
-                worldPoint,
-                viewer
-                    .getSceneData()
-                    .getBound()
-                    .radius() * 0.1
-            );
+            si.set(worldPoint, viewer.getSceneData().getBound().radius() * 0.1);
             var iv = new osgUtil.IntersectionVisitor();
             iv.setIntersector(si);
             viewer.getSceneData().accept(iv);
@@ -227,7 +221,7 @@
         }
     };
 
-    var onLoad = function() {
+    var onLoad = function () {
         var canvas = document.getElementById('View');
 
         var unifs = {

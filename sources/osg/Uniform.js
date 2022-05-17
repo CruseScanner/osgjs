@@ -4,7 +4,7 @@ import notify from 'osg/notify';
  * Uniform manage variable used in glsl shader.
  * @class Uniform
  */
-var Uniform = function(name) {
+var Uniform = function (name) {
     this._data = undefined;
     this._transpose = false;
     this._glCall = '';
@@ -14,7 +14,7 @@ var Uniform = function(name) {
     this._isMatrix = false;
 };
 
-Uniform.isUniform = function(obj) {
+Uniform.isUniform = function (obj) {
     if (typeof obj === 'object' && window.Object.getPrototypeOf(obj) === Uniform.prototype) {
         return true;
     }
@@ -23,11 +23,11 @@ Uniform.isUniform = function(obj) {
 
 /** @lends Uniform.prototype */
 Uniform.prototype = {
-    getName: function() {
+    getName: function () {
         return this._name;
     },
 
-    getType: function() {
+    getType: function () {
         return this._type;
     },
 
@@ -42,44 +42,44 @@ Uniform.prototype = {
     },
 
     // no type checking, so array should be valid
-    setInternalArray: function(array) {
+    setInternalArray: function (array) {
         notify.warn(
             'setInternalArray deprecated, please use getInternalArray instead: ' + array.length
         );
         this._data = array;
     },
 
-    getInternalArray: function() {
+    getInternalArray: function () {
         return this._data;
     },
 
-    setFloat: function(f) {
+    setFloat: function (f) {
         this._data[0] = f;
     },
 
-    setFloat1: function(f) {
+    setFloat1: function (f) {
         this._data[0] = f[0];
     },
 
-    setFloat2: function(f) {
+    setFloat2: function (f) {
         this._data[0] = f[0];
         this._data[1] = f[1];
     },
 
-    setFloat3: function(f) {
+    setFloat3: function (f) {
         this._data[0] = f[0];
         this._data[1] = f[1];
         this._data[2] = f[2];
     },
 
-    setFloat4: function(f) {
+    setFloat4: function (f) {
         this._data[0] = f[0];
         this._data[1] = f[1];
         this._data[2] = f[2];
         this._data[3] = f[3];
     },
 
-    setFloat9: function(f) {
+    setFloat9: function (f) {
         this._data[0] = f[0];
         this._data[1] = f[1];
         this._data[2] = f[2];
@@ -91,7 +91,7 @@ Uniform.prototype = {
         this._data[8] = f[8];
     },
 
-    setFloat16: function(f) {
+    setFloat16: function (f) {
         this._data[0] = f[0];
         this._data[1] = f[1];
         this._data[2] = f[2];
@@ -121,7 +121,7 @@ Uniform.prototype.setInt2 = Uniform.prototype.setFloat2;
 Uniform.prototype.setInt3 = Uniform.prototype.setFloat3;
 Uniform.prototype.setInt4 = Uniform.prototype.setFloat4;
 
-var createUniformX = function(
+var createUniformX = function (
     dataOrName,
     nameOrNbItem,
     internalArray,
@@ -148,19 +148,19 @@ var createUniformX = function(
     return uniform;
 };
 
-var createMat2 = function(nbItem) {
+var createMat2 = function (nbItem) {
     var out = new Float32Array(nbItem * 4);
     for (var i = 0; i < out.length; i += 4) out[i] = out[i + 3] = 1.0;
     return out;
 };
 
-var createMat3 = function(nbItem) {
+var createMat3 = function (nbItem) {
     var out = new Float32Array(nbItem * 9);
     for (var i = 0; i < out.length; i += 9) out[i] = out[i + 4] = out[i + 8] = 1.0;
     return out;
 };
 
-var createMat4 = function(nbItem) {
+var createMat4 = function (nbItem) {
     var out = new Float32Array(nbItem * 16);
     for (var i = 0; i < out.length; i += 16) out[i] = out[i + 5] = out[i + 10] = out[i + 15] = 1.0;
     return out;
@@ -170,14 +170,14 @@ var createMat4 = function(nbItem) {
 // name
 // data, name
 // name, nbItem
-var _getNbItem = function(itemSize, dataOrName, nameOrNbItem) {
+var _getNbItem = function (itemSize, dataOrName, nameOrNbItem) {
     if (nameOrNbItem && !nameOrNbItem.length) return nameOrNbItem; // name, nbItem
     if (typeof dataOrName !== 'string') return (dataOrName.length || 1) / itemSize; // data, name
     return 1; // name
 };
 
 // works also for float array but data must be given
-Uniform.createFloat1 = function(dataOrName, nameOrNbItem) {
+Uniform.createFloat1 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -186,7 +186,7 @@ Uniform.createFloat1 = function(dataOrName, nameOrNbItem) {
         'float'
     );
 };
-Uniform.createFloat2 = function(dataOrName, nameOrNbItem) {
+Uniform.createFloat2 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -195,7 +195,7 @@ Uniform.createFloat2 = function(dataOrName, nameOrNbItem) {
         'vec2'
     );
 };
-Uniform.createFloat3 = function(dataOrName, nameOrNbItem) {
+Uniform.createFloat3 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -204,7 +204,7 @@ Uniform.createFloat3 = function(dataOrName, nameOrNbItem) {
         'vec3'
     );
 };
-Uniform.createFloat4 = function(dataOrName, nameOrNbItem) {
+Uniform.createFloat4 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -214,7 +214,7 @@ Uniform.createFloat4 = function(dataOrName, nameOrNbItem) {
     );
 };
 
-Uniform.createInt1 = function(dataOrName, nameOrNbItem) {
+Uniform.createInt1 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -223,7 +223,7 @@ Uniform.createInt1 = function(dataOrName, nameOrNbItem) {
         'int'
     );
 };
-Uniform.createInt2 = function(dataOrName, nameOrNbItem) {
+Uniform.createInt2 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -232,7 +232,7 @@ Uniform.createInt2 = function(dataOrName, nameOrNbItem) {
         'vec2i'
     );
 };
-Uniform.createInt3 = function(dataOrName, nameOrNbItem) {
+Uniform.createInt3 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -241,7 +241,7 @@ Uniform.createInt3 = function(dataOrName, nameOrNbItem) {
         'vec3i'
     );
 };
-Uniform.createInt4 = function(dataOrName, nameOrNbItem) {
+Uniform.createInt4 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -251,7 +251,7 @@ Uniform.createInt4 = function(dataOrName, nameOrNbItem) {
     );
 };
 
-Uniform.createMatrix2 = function(dataOrName, nameOrNbItem) {
+Uniform.createMatrix2 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -262,7 +262,7 @@ Uniform.createMatrix2 = function(dataOrName, nameOrNbItem) {
     );
 };
 
-Uniform.createMatrix3 = function(dataOrName, nameOrNbItem) {
+Uniform.createMatrix3 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,
@@ -273,7 +273,7 @@ Uniform.createMatrix3 = function(dataOrName, nameOrNbItem) {
     );
 };
 
-Uniform.createMatrix4 = function(dataOrName, nameOrNbItem) {
+Uniform.createMatrix4 = function (dataOrName, nameOrNbItem) {
     return createUniformX(
         dataOrName,
         nameOrNbItem,

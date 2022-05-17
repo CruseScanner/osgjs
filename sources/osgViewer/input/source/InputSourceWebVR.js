@@ -7,7 +7,7 @@ import notify from 'osg/notify';
  * @param canvas
  * @constructor
  */
-var InputSourceWebVR = function(elem, options) {
+var InputSourceWebVR = function (elem, options) {
     InputSource.call(this);
     this._supportedEvents = [
         'vrdisplayposechanged',
@@ -34,11 +34,11 @@ var InputSourceWebVR = function(elem, options) {
 utils.createPrototypeObject(
     InputSourceWebVR,
     utils.objectInherit(InputSource.prototype, {
-        getName: function() {
+        getName: function () {
             return 'WebVR';
         },
 
-        setEnable: function(name, callback, enable) {
+        setEnable: function (name, callback, enable) {
             var callbacks = this._callbacks[name];
             if (!callbacks) {
                 callbacks = [];
@@ -64,7 +64,7 @@ utils.createPrototypeObject(
             }
         },
 
-        populateEvent: function(ev, customEvent) {
+        populateEvent: function (ev, customEvent) {
             if (ev.vrDisplay) {
                 customEvent.vrDisplay = ev.vrDisplay;
                 return;
@@ -75,19 +75,19 @@ utils.createPrototypeObject(
             if (!customEvent.worldFactor) customEvent.worldFactor = 1.0;
         },
 
-        _schedulePolling: function() {
+        _schedulePolling: function () {
             if (this._pollInterval > 0 && this._pollingTimeout === undefined) {
                 this._pollingTimeout = setInterval(this.pollHeadset.bind(this), this._pollInterval);
             }
         },
 
-        _cancelPolling: function() {
+        _cancelPolling: function () {
             if (this._pollingTimeout !== undefined) {
                 clearInterval(this._pollingTimeout);
             }
         },
 
-        pollHeadset: function() {
+        pollHeadset: function () {
             if (!navigator.getVRDisplays) {
                 this._hmd = undefined;
                 this._frameData = undefined;
@@ -99,7 +99,7 @@ utils.createPrototypeObject(
             navigator
                 .getVRDisplays()
                 .then(
-                    function(displays) {
+                    function (displays) {
                         if (displays.length === 0) {
                             this.triggerNotFoundEvent();
                             return;
@@ -125,7 +125,7 @@ utils.createPrototypeObject(
                         self._frameData = new window.VRFrameData();
                     }.bind(this)
                 )
-                .catch(function(ex) {
+                .catch(function (ex) {
                     this._hmd = undefined;
                     this._frameData = undefined;
                     this.triggerNotFoundEvent();
@@ -133,7 +133,7 @@ utils.createPrototypeObject(
                 });
         },
 
-        triggerNotFoundEvent: function() {
+        triggerNotFoundEvent: function () {
             if (this._pollInterval > 0) {
                 // we are in auto polling mode, don't trigger the event
                 return;
@@ -144,11 +144,11 @@ utils.createPrototypeObject(
             this._dispatchEvent(event, this._callbacks['vrdisplaynotfound']);
         },
 
-        setPollInterval: function(interval) {
+        setPollInterval: function (interval) {
             this._pollInterval = interval;
         },
 
-        _dispatchEvent: function(event, callbacks) {
+        _dispatchEvent: function (event, callbacks) {
             if (!callbacks) return;
 
             for (var i = 0; i < callbacks.length; i++) {
@@ -157,7 +157,7 @@ utils.createPrototypeObject(
             }
         },
 
-        poll: function() {
+        poll: function () {
             if (!this._hmd) {
                 return;
             }

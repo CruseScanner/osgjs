@@ -8,7 +8,7 @@ import { vec3 } from 'osg/glMatrix';
  *  PagedLOD that can contains paged child nodes
  *  @class PagedLod
  */
-var PagedLOD = function() {
+var PagedLOD = function () {
     Lod.call(this);
     this._perRangeDataList = [];
     this._loading = false;
@@ -25,7 +25,7 @@ var PagedLOD = function() {
  *  PerRangeData utility structure to store per range values
  *  @class PerRangeData
  */
-var PerRangeData = function() {
+var PerRangeData = function () {
     this.filename = '';
     this.function = undefined;
     this.loaded = false;
@@ -40,7 +40,7 @@ utils.createPrototypeNode(
     PagedLOD,
     utils.objectInherit(Lod.prototype, {
         // Functions here
-        setRange: function(childNo, min, max) {
+        setRange: function (childNo, min, max) {
             if (childNo >= this._range.length) {
                 var r = [];
                 r.push([min, min]);
@@ -50,19 +50,19 @@ utils.createPrototypeNode(
             this._range[childNo][1] = max;
         },
 
-        setExpiryTime: function(expiryTime) {
+        setExpiryTime: function (expiryTime) {
             this._expiryTime = expiryTime;
         },
 
-        setDatabasePath: function(path) {
+        setDatabasePath: function (path) {
             this._databasePath = path;
         },
 
-        getDatabasePath: function() {
+        getDatabasePath: function () {
             return this._databasePath;
         },
 
-        setFileName: function(childNo, filename) {
+        setFileName: function (childNo, filename) {
             // May we should expand the vector first?
             if (childNo >= this._perRangeDataList.length) {
                 var rd = new PerRangeData();
@@ -72,7 +72,7 @@ utils.createPrototypeNode(
                 this._perRangeDataList[childNo].filename = filename;
             }
         },
-        setFunction: function(childNo, func) {
+        setFunction: function (childNo, func) {
             if (childNo >= this._perRangeDataList.length) {
                 var rd = new PerRangeData();
                 rd.function = func;
@@ -82,46 +82,46 @@ utils.createPrototypeNode(
             }
         },
 
-        addChild: function(node, min, max) {
+        addChild: function (node, min, max) {
             Lod.prototype.addChild.call(this, node, min, max);
             this._perRangeDataList.push(new PerRangeData());
         },
 
-        addChildNode: function(node) {
+        addChildNode: function (node) {
             Lod.prototype.addChildNode.call(this, node);
         },
 
-        setFrameNumberOfLastTraversal: function(frameNumber) {
+        setFrameNumberOfLastTraversal: function (frameNumber) {
             this._frameNumberOfLastTraversal = frameNumber;
         },
 
-        getFrameNumberOfLastTraversal: function() {
+        getFrameNumberOfLastTraversal: function () {
             return this._frameNumberOfLastTraversal;
         },
-        setTimeStamp: function(childNo, timeStamp) {
+        setTimeStamp: function (childNo, timeStamp) {
             this._perRangeDataList[childNo].timeStamp = timeStamp;
         },
-        setFrameNumber: function(childNo, frameNumber) {
+        setFrameNumber: function (childNo, frameNumber) {
             this._perRangeDataList[childNo].frameNumber = frameNumber;
         },
-        setNumChildrenThatCannotBeExpired: function(num) {
+        setNumChildrenThatCannotBeExpired: function (num) {
             this._numChildrenThatCannotBeExpired = num;
         },
-        getNumChildrenThatCannotBeExpired: function() {
+        getNumChildrenThatCannotBeExpired: function () {
             return this._numChildrenThatCannotBeExpired;
         },
-        getDatabaseRequest: function(childNo) {
+        getDatabaseRequest: function (childNo) {
             return this._perRangeDataList[childNo].dbrequest;
         },
-        
-        setCameraForLODSelection: function(camera) {
+
+        setCameraForLODSelection: function (camera) {
             this._cameraForLODSelection = camera;
         },
-        getCameraForLODSelection: function() {
+        getCameraForLODSelection: function () {
             return this._cameraForLODSelection;
         },
 
-        removeExpiredChildren: function(expiryTime, expiryFrame, removedChildren) {
+        removeExpiredChildren: function (expiryTime, expiryFrame, removedChildren) {
             if (this.children.length <= this._numChildrenThatCannotBeExpired) return;
             var i = this.children.length - 1;
             var timed, framed;
@@ -142,14 +142,14 @@ utils.createPrototypeNode(
             }
         },
 
-        traverse: (function() {
+        traverse: (function () {
             // avoid to generate variable on the heap to limit garbage collection
             // instead create variable and use the same each time
             var zeroVector = vec3.create();
             var eye = vec3.create();
             var viewModel = mat4.create();
 
-            return function(visitor) {
+            return function (visitor) {
                 var traversalMode = visitor.traversalMode;
                 var updateTimeStamp = false;
 
@@ -170,18 +170,16 @@ utils.createPrototypeNode(
 
                         // Calculate distance from viewpoint
                         var matrix = visitor.getCurrentModelViewMatrix();
-                        
-                        if(this._cameraForLODSelection && visitor.getCurrentCamera()){
-                            var cameraModelView = this._cameraForLODSelection.getViewMatrix();  
-                            
-                            var tmp = mat4.create(); 
+
+                        if (this._cameraForLODSelection && visitor.getCurrentCamera()) {
+                            var cameraModelView = this._cameraForLODSelection.getViewMatrix();
+
+                            var tmp = mat4.create();
                             mat4.mul(tmp, cameraModelView, visitor.getCurrentModelMatrix());
-                            matrix = tmp;                            
+                            matrix = tmp;
                         }
-                        
+
                         mat4.invert(viewModel, matrix);
-
-
 
                         if (this._rangeMode === Lod.DISTANCE_FROM_EYE_POINT) {
                             vec3.transformMat4(eye, zeroVector, viewModel);
@@ -193,7 +191,7 @@ utils.createPrototypeNode(
                             var lodScale = visitor.getLODScale();
                             var viewPort = visitor.getViewport();
 
-                            if(this._cameraForLODSelection && visitor.getCurrentCamera()){
+                            if (this._cameraForLODSelection && visitor.getCurrentCamera()) {
                                 projmatrix = this._cameraForLODSelection.getProjectionMatrix();
                                 lodScale = this._cameraForLODSelection.getLODScale();
                                 viewPort = this._cameraForLODSelection.getViewport();
@@ -204,14 +202,11 @@ utils.createPrototypeNode(
                                 this.getBound(),
                                 matrix,
                                 projmatrix[0]
-                            );                            
+                            );
 
                             // Get the real area value and apply LODScale
                             requiredRange =
-                                requiredRange *
-                                viewPort.width() *
-                                viewPort.width() *
-                                0.25 /
+                                (requiredRange * viewPort.width() * viewPort.width() * 0.25) /
                                 lodScale;
                             if (requiredRange < 0)
                                 requiredRange = this._range[this._range.length - 1][0];
@@ -226,12 +221,12 @@ utils.createPrototypeNode(
                             ) {
                                 if (j < this.children.length) {
                                     if (updateTimeStamp) {
-                                        this._perRangeDataList[
-                                            j
-                                        ].timeStamp = visitor.getFrameStamp().getSimulationTime();
-                                        this._perRangeDataList[
-                                            j
-                                        ].frameNumber = visitor.getFrameStamp().getFrameNumber();
+                                        this._perRangeDataList[j].timeStamp = visitor
+                                            .getFrameStamp()
+                                            .getSimulationTime();
+                                        this._perRangeDataList[j].frameNumber = visitor
+                                            .getFrameStamp()
+                                            .getFrameNumber();
                                     }
 
                                     this.children[j].accept(visitor);
@@ -245,12 +240,12 @@ utils.createPrototypeNode(
                             var numChildren = this.children.length;
                             if (numChildren > 0 && numChildren - 1 !== lastChildTraversed) {
                                 if (updateTimeStamp) {
-                                    this._perRangeDataList[
-                                        numChildren - 1
-                                    ].timeStamp = visitor.getFrameStamp().getSimulationTime();
-                                    this._perRangeDataList[
-                                        numChildren - 1
-                                    ].frameNumber = visitor.getFrameStamp().getFrameNumber();
+                                    this._perRangeDataList[numChildren - 1].timeStamp = visitor
+                                        .getFrameStamp()
+                                        .getSimulationTime();
+                                    this._perRangeDataList[numChildren - 1].frameNumber = visitor
+                                        .getFrameStamp()
+                                        .getFrameNumber();
                                 }
 
                                 this.children[numChildren - 1].accept(visitor);
@@ -269,29 +264,24 @@ utils.createPrototypeNode(
                                 if (this._perRangeDataList[numChildren].loaded === false) {
                                     this._perRangeDataList[numChildren].loaded = true;
                                     var dbhandler = visitor.getDatabaseRequestHandler();
-                                    this._perRangeDataList[
-                                        numChildren
-                                    ].dbrequest = dbhandler.requestNodeFile(
-                                        this._perRangeDataList[numChildren].function,
-                                        this._databasePath +
-                                            this._perRangeDataList[numChildren].filename,
-                                        group,
-                                        visitor.getFrameStamp().getSimulationTime(),
-                                        priority
-                                    );
+                                    this._perRangeDataList[numChildren].dbrequest =
+                                        dbhandler.requestNodeFile(
+                                            this._perRangeDataList[numChildren].function,
+                                            this._databasePath +
+                                                this._perRangeDataList[numChildren].filename,
+                                            group,
+                                            visitor.getFrameStamp().getSimulationTime(),
+                                            priority
+                                        );
                                 } else {
                                     // Update timestamp of the request.
                                     if (
                                         this._perRangeDataList[numChildren].dbrequest !== undefined
                                     ) {
-                                        this._perRangeDataList[
-                                            numChildren
-                                        ].dbrequest._timeStamp = visitor
-                                            .getFrameStamp()
-                                            .getSimulationTime();
-                                        this._perRangeDataList[
-                                            numChildren
-                                        ].dbrequest._priority = priority;
+                                        this._perRangeDataList[numChildren].dbrequest._timeStamp =
+                                            visitor.getFrameStamp().getSimulationTime();
+                                        this._perRangeDataList[numChildren].dbrequest._priority =
+                                            priority;
                                     } else {
                                         // The DB request is undefined, so the DBPager was not accepting requests, we need to ask for the child again.
                                         this._perRangeDataList[numChildren].loaded = false;

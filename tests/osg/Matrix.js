@@ -5,8 +5,8 @@ import { vec3 } from 'osg/glMatrix';
 import { quat } from 'osg/glMatrix';
 import notify from 'osg/notify';
 
-export default function() {
-    test('Matrix.makeRotateFromQuat', function() {
+export default function () {
+    test('Matrix.makeRotateFromQuat', function () {
         var m = mat4.create();
         mat4.fromQuat(m, quat.fromValues(0.653281, 0.270598, -0.653281, 0.270598));
         assert.equalVector(
@@ -32,16 +32,16 @@ export default function() {
         );
     });
 
-    test('Matrix.getRotate', function() {
+    test('Matrix.getRotate', function () {
         var m = mat4.create();
         mat4.fromQuat(m, quat.fromValues(0.653281, 0.270598, -0.653281, 0.270598));
         var q = mat4.getRotation(quat.create(), m);
         assert.equalVector(q, quat.fromValues(0.653281, 0.270598, -0.653281, 0.270598));
     });
 
-    test('Matrix.getPerspective', function() {
+    test('Matrix.getPerspective', function () {
         var m = mat4.create();
-        mat4.perspective(m, Math.PI / 180 * 60, 800 / 200, 2.0, 500.0);
+        mat4.perspective(m, (Math.PI / 180) * 60, 800 / 200, 2.0, 500.0);
 
         var r = {};
         mat4.getPerspective(r, m);
@@ -51,7 +51,7 @@ export default function() {
         assert.equalVector(r.aspectRatio, 4.0);
     });
 
-    test('Matrix.makeLookAt', function() {
+    test('Matrix.makeLookAt', function () {
         var m = mat4.lookAt(
             mat4.create(),
             vec3.fromValues(0.0, -10, 0.0),
@@ -109,7 +109,7 @@ export default function() {
         );
     });
 
-    test('Matrix.getLookAt', function() {
+    test('Matrix.getLookAt', function () {
         var m = mat4.lookAt(
             mat4.create(),
             vec3.fromValues(0.0, -10, 0.0),
@@ -125,7 +125,7 @@ export default function() {
         assert.equalVector(up, vec3.fromValues(0.0, 0.0, 1.0));
     });
 
-    test('Matrix.transformVec3', function() {
+    test('Matrix.transformVec3', function () {
         var m = mat4.fromRotation(mat4.create(), -Math.PI / 2.0, [0.0, 1.0, 0.0]);
         var vec = vec3.fromValues(0.0, 0.0, 10);
         var inv = mat4.create();
@@ -154,7 +154,7 @@ export default function() {
             -1.799999999,
             9.9999999
         );
-        var preMultvec3 = function(s, v, result) {
+        var preMultvec3 = function (s, v, result) {
             if (result === undefined) {
                 result = mat4.create();
             }
@@ -170,7 +170,7 @@ export default function() {
         assert.equalVector(res, r0);
     });
 
-    test('Matrix.transpose', function() {
+    test('Matrix.transpose', function () {
         var m = mat4.fromValues(0.0, 1.0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         var res = mat4.transpose(mat4.create(), m);
         assert.equalVector(
@@ -191,12 +191,12 @@ export default function() {
         );
     });
 
-    test('Matrix.makeRotate', function() {
+    test('Matrix.makeRotate', function () {
         var res = mat4.fromRotation(mat4.create(), 0.0, [0.0, 0.0, 1.0]);
         assert.equalVector(res, mat4.create());
     });
 
-    test('Matrix.mult', function() {
+    test('Matrix.mult', function () {
         var width = 800;
         var height = 600;
         var translate = mat4.create();
@@ -281,7 +281,7 @@ export default function() {
         );
     });
 
-    test('Matrix.inverse4x3', function() {
+    test('Matrix.inverse4x3', function () {
         var m = mat4.fromValues(
             1.0,
             0.0,
@@ -416,7 +416,7 @@ export default function() {
         );
     });
 
-    test('Matrix.inverse', function() {
+    test('Matrix.inverse', function () {
         // var result = mat4.create();
         // var m = mat4.fromValues( -1144.3119, 23.8650, -0.12300, -0.12288, -1553.3126, -1441.499, -1.6196, -1.6180, 0.0, 0.0, 0.0, 0.0, 25190.498, 13410.539, 21.885, 21.963 );
 
@@ -447,7 +447,7 @@ export default function() {
         //    assert.isOk(true, valid);
     });
 
-    test('Matrix.makePerspective', function() {
+    test('Matrix.makePerspective', function () {
         var m = mat4.fromValues(
             1.299038105676658,
             0.0,
@@ -466,12 +466,12 @@ export default function() {
             -2.0020020020020022,
             0.0
         );
-        var res = mat4.perspective(mat4.create(), Math.PI / 180 * 60, 800 / 600, 1.0, 1000);
+        var res = mat4.perspective(mat4.create(), (Math.PI / 180) * 60, 800 / 600, 1.0, 1000);
 
         assert.isOk(mockup.checkNear(res, m), 'makePerspective should be ' + m + ' and is ' + res);
     });
 
-    test('Matrix.makeScale', function() {
+    test('Matrix.makeScale', function () {
         var m = mat4.fromValues(
             500.0,
             0.0,

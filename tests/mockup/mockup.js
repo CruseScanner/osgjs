@@ -13,15 +13,15 @@ import StackedMatrix from 'osgAnimation/StackedMatrix';
 import ViewerOriginal from 'osgViewer/Viewer';
 import Utils from 'osg/utils';
 
-var isNodeContext = function() {
+var isNodeContext = function () {
     return typeof process !== 'undefined' && process.release.name === 'node'; // eslint-disable-line no-undef
 };
 
-var isNumber = function(a) {
+var isNumber = function (a) {
     return typeof a === 'number';
 };
 
-chai.assert.equalVector = function(actual, expected, message, thresh) {
+chai.assert.equalVector = function (actual, expected, message, thresh) {
     var threshold = thresh;
     var msg = message;
 
@@ -60,11 +60,11 @@ chai.assert.equalVector = function(actual, expected, message, thresh) {
     return bool;
 };
 
-var checkNear = function(a, b, threshold) {
+var checkNear = function (a, b, threshold) {
     return chai.assert.equalVector(a, b, '', threshold);
 };
 
-var createFakeRenderer = function() {
+var createFakeRenderer = function () {
     return {
         TEXTURE0: 10,
         DEPTH_TEST: 1,
@@ -80,104 +80,104 @@ var createFakeRenderer = function() {
         TEXTURE_CUBE_MAP_NEGATIVE_Z: 0x851a,
         MAX_CUBE_MAP_TEXTURE_SIZE: 0x851c,
         UNPACK_FLIP_Y_WEBGL: 0,
-        drawBuffers: function() {},
-        drawElements: function() {},
-        createBuffer: function() {},
-        deleteBuffer: function() {},
+        drawBuffers: function () {},
+        drawElements: function () {},
+        createBuffer: function () {},
+        deleteBuffer: function () {},
 
-        colorMask: function() {},
-        clearDepth: function() {},
-        clearColor: function() {},
-        scissor: function() {},
-        blendColor: function() {},
-        enable: function() {},
-        disable: function() {},
-        depthFunc: function() {},
-        pixelStorei: function() {},
-        depthRange: function() {},
-        depthMask: function() {},
-        deleteTexture: function() {},
-        activeTexture: function() {},
-        bindTexture: function() {},
-        bufferData: function() {},
-        bindBuffer: function() {},
-        blendFunc: function() {},
-        getExtension: function() {},
-        bindAttribLocation: function() {},
-        getShaderPrecisionFormat: function() {
+        colorMask: function () {},
+        clearDepth: function () {},
+        clearColor: function () {},
+        scissor: function () {},
+        blendColor: function () {},
+        enable: function () {},
+        disable: function () {},
+        depthFunc: function () {},
+        pixelStorei: function () {},
+        depthRange: function () {},
+        depthMask: function () {},
+        deleteTexture: function () {},
+        activeTexture: function () {},
+        bindTexture: function () {},
+        bufferData: function () {},
+        bindBuffer: function () {},
+        blendFunc: function () {},
+        getExtension: function () {},
+        bindAttribLocation: function () {},
+        getShaderPrecisionFormat: function () {
             return {
                 precision: 1
             };
         },
-        getSupportedExtensions: function() {
+        getSupportedExtensions: function () {
             return {};
         },
-        enableVertexAttribArray: function() {},
-        vertexAttribPointer: function() {},
-        createTexture: function() {},
-        createFramebuffer: function() {
+        enableVertexAttribArray: function () {},
+        vertexAttribPointer: function () {},
+        createTexture: function () {},
+        createFramebuffer: function () {
             return 1;
         },
-        deleteFramebuffer: function() {},
-        bindFramebuffer: function() {},
-        framebufferTexture2D: function() {},
-        checkFramebufferStatus: function() {
+        deleteFramebuffer: function () {},
+        bindFramebuffer: function () {},
+        framebufferTexture2D: function () {},
+        checkFramebufferStatus: function () {
             return 0x8cd5;
         },
-        createRenderbuffer: function() {
+        createRenderbuffer: function () {
             return 1;
         },
-        deleteRenderbuffer: function() {},
-        bindRenderbuffer: function() {},
-        renderbufferStorage: function() {},
-        framebufferRenderbuffer: function() {},
-        clear: function() {},
-        getQuery: function() {},
-        viewport: function() {},
-        cullFace: function() {},
-        texImage2D: function() {},
-        texParameteri: function() {},
-        createShader: function() {
+        deleteRenderbuffer: function () {},
+        bindRenderbuffer: function () {},
+        renderbufferStorage: function () {},
+        framebufferRenderbuffer: function () {},
+        clear: function () {},
+        getQuery: function () {},
+        viewport: function () {},
+        cullFace: function () {},
+        texImage2D: function () {},
+        texParameteri: function () {},
+        createShader: function () {
             return 1;
         },
-        deleteShader: function() {},
-        shaderSource: function() {},
-        compileShader: function() {},
-        getShaderParameter: function() {
+        deleteShader: function () {},
+        shaderSource: function () {},
+        compileShader: function () {},
+        getShaderParameter: function () {
             return true;
         },
-        isContextLost: function() {
+        isContextLost: function () {
             return false;
         },
-        getShaderInfoLog: function() {},
-        createProgram: function() {
+        getShaderInfoLog: function () {},
+        createProgram: function () {
             return {};
         },
-        createVertexArray: function() {
+        createVertexArray: function () {
             return {};
         },
-        bindVertexArray: function() {},
-        deleteProgram: function() {},
-        attachShader: function() {},
-        validateProgram: function() {},
-        linkProgram: function() {},
-        getParameter: function() {},
-        getProgramParameter: function() {
+        bindVertexArray: function () {},
+        deleteProgram: function () {},
+        attachShader: function () {},
+        validateProgram: function () {},
+        linkProgram: function () {},
+        getParameter: function () {},
+        getProgramParameter: function () {
             return true;
         },
-        getProgramInfoLog: function() {},
-        getUniformLocation: function() {
+        getProgramInfoLog: function () {},
+        getUniformLocation: function () {
             return 0;
         },
-        getAttribLocation: function() {
+        getAttribLocation: function () {
             return 0;
         },
-        useProgram: function() {},
-        uniformMatrix4fv: function() {},
-        uniform1fv: function() {},
-        uniform4fv: function() {},
-        uniform3fv: function() {},
-        uniform1iv: function() {},
+        useProgram: function () {},
+        uniformMatrix4fv: function () {},
+        uniform1fv: function () {},
+        uniform4fv: function () {},
+        uniform3fv: function () {},
+        uniform1iv: function () {},
         canvas: {
             clientWidth: 300,
             clientHeight: 300
@@ -185,31 +185,31 @@ var createFakeRenderer = function() {
     };
 };
 
-var createFakeWebGLCanvas = function() {
+var createFakeWebGLCanvas = function () {
     var obj = {
-        addEventListener: function() {},
-        removeEventListener: function() {},
-        getContext: function(dimension) {
+        addEventListener: function () {},
+        removeEventListener: function () {},
+        getContext: function (dimension) {
             var grey = true;
             if (dimension === '2d') {
                 return {
-                    createImageData: function() {
+                    createImageData: function () {
                         return {
                             data: [0, 0, 0, 0]
                         };
                     },
-                    getImageData: function() {
+                    getImageData: function () {
                         return { data: grey ? [0, 0, 0, 0] : [1, 0, 0, 0] };
                     },
-                    putImageData: function() {},
-                    measureText: function() {
+                    putImageData: function () {},
+                    measureText: function () {
                         return {
                             width: 100
                         };
                     },
-                    fillText: function() {},
-                    clearRect: function() {},
-                    drawImage: function(img) {
+                    fillText: function () {},
+                    clearRect: function () {},
+                    drawImage: function (img) {
                         if (img.src === 'mockup/rgba32.png') grey = false;
                     }
                 };
@@ -220,26 +220,26 @@ var createFakeWebGLCanvas = function() {
         style: {
             width: 300
         },
-        getAttribute: function() {
+        getAttribute: function () {
             return 0;
         },
-        isReady: function() {
+        isReady: function () {
             return true;
         },
-        setAttribute: function() {},
+        setAttribute: function () {},
         width: 300,
         height: 300
     };
     return obj;
 };
 
-var createVec3Keyframes = function() {
+var createVec3Keyframes = function () {
     var keys = [1, 1, 1, 0, 0, 0, 3, 3, 3];
     var times = [0, 1, 2];
     return Channel.createVec3Channel(keys, times);
 };
 
-var createFloatKeyframes = function() {
+var createFloatKeyframes = function () {
     var keys = [1, 0, 3];
 
     var start = 0;
@@ -252,47 +252,30 @@ var createFloatKeyframes = function() {
     return Channel.createFloatChannel(keys, times);
 };
 
-var createFloatCubicBezierKeyframes = function() {
+var createFloatCubicBezierKeyframes = function () {
     var keys = [1, 2, 3, 0, 1, 3, 3, 4, 5];
     var times = [0, 1, 2];
     return Channel.createFloatCubicBezierChannel(keys, times);
 };
 
-var createVec3CubicBezierKeyframes = function() {
+var createVec3CubicBezierKeyframes = function () {
     var keys = [1, 1, 1, 2, 2, 2, 5, 5, 5, 6, 6, 6, 9, 9, 9, 8, 8, 8, 6, 6, 6, 6, 6, 6, 6, 6, 6];
     var times = [0, 1, 2];
     return Channel.createVec3CubicBezierChannel(keys, times);
 };
 
-var createQuatLerpKeyFrames = function() {
+var createQuatLerpKeyFrames = function () {
     var keys = [
-        1.22465e-16,
-        1.22465e-16,
-        1.22465e-16,
-        -1,
-        0.300706,
-        7.99708e-17,
-        1.53623e-16,
-        -0.953717,
-        0.382683,
-        6.62774e-17,
-        1.60008e-16,
-        -0.92388,
-        0.382683,
-        6.62774e-17,
-        1.60008e-16,
-        -0.92388,
-        0.126911,
-        -0.0991929,
-        0.119115,
-        -0.979727
+        1.22465e-16, 1.22465e-16, 1.22465e-16, -1, 0.300706, 7.99708e-17, 1.53623e-16, -0.953717,
+        0.382683, 6.62774e-17, 1.60008e-16, -0.92388, 0.382683, 6.62774e-17, 1.60008e-16, -0.92388,
+        0.126911, -0.0991929, 0.119115, -0.979727
     ];
 
     var times = [0, 0.202899, 0.456522, 1.21739, 1.47101];
     return Channel.createQuatChannel(keys, times);
 };
 
-var createAnimation = function(name, target1, target2) {
+var createAnimation = function (name, target1, target2) {
     var a = createFloatKeyframes();
     a.target = target1 || 'a';
     a.name = 'rotateX';
@@ -304,7 +287,7 @@ var createAnimation = function(name, target1, target2) {
     return Animation.createAnimation([a, b], name);
 };
 
-var createAnimationWithNegativeKey = function(name, target1, target2) {
+var createAnimationWithNegativeKey = function (name, target1, target2) {
     var a = createFloatKeyframes(-10);
     a.target = target1 || 'a';
     a.name = 'rotateX';
@@ -327,7 +310,7 @@ var stackedElement = {
     quat: StackedQuaternion
 };
 
-var createAnimationUpdateCallback = function(animations) {
+var createAnimationUpdateCallback = function (animations) {
     var cbMap = {};
 
     for (var a = 0; a < animations.length; a++) {
@@ -352,13 +335,13 @@ var createAnimationUpdateCallback = function(animations) {
     return cbMap;
 };
 
-var Viewer = function() {
+var Viewer = function () {
     ViewerOriginal.apply(this, arguments);
 };
 
 Utils.createPrototypeObject(Viewer, Utils.objectInherit(ViewerOriginal.prototype, {}));
 
-var createCanvas = function(noGL) {
+var createCanvas = function (noGL) {
     if (noGL || isNodeContext()) {
         return createFakeWebGLCanvas();
     }
@@ -375,7 +358,7 @@ var createCanvas = function(noGL) {
     return document.getElementById(t);
 };
 
-var removeCanvas = function(canvas) {
+var removeCanvas = function (canvas) {
     if (!canvas) return;
     var id = canvas.getAttribute('id');
     var parent = document.getElementById('div_' + id);
@@ -385,7 +368,7 @@ var removeCanvas = function(canvas) {
 
 document.createElementOld = document.createElement;
 
-document.createElement = function(type) {
+document.createElement = function (type) {
     if (type === 'canvas') {
         return createCanvas();
     }

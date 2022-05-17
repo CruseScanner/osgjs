@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import Object from 'osg/Object';
 
-var StateAttribute = function() {
+var StateAttribute = function () {
     Object.call(this);
 };
 
@@ -10,17 +10,17 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(Object.prototype, {
         _attributeTypeIndex: undefined,
 
-        getType: function() {
+        getType: function () {
             return this.attributeType;
         },
 
         // basically, if you want two StateAttribute with the same attributeType in a stateSet/State
         // their typeMember should be different
-        getTypeMember: function() {
+        getTypeMember: function () {
             return this.attributeType;
         },
 
-        apply: function() {},
+        apply: function () {},
 
         // getHash is used by the compiler to know if a change in a StateAttribute
         // must trigger a shader build
@@ -29,7 +29,7 @@ utils.createPrototypeStateAttribute(
         // but if you change a type or representation of your StateAttribute, then it should
         // if it impact the rendering.
         // check other attributes for examples
-        getHash: function() {
+        getHash: function () {
             return this.getType();
         }
     }),

@@ -15,7 +15,7 @@ import Viewport from 'osg/Viewport';
  * here, one shadow
  *  @class ShadowMapAtlas
  */
-var ShadowMapAtlas = function(settings) {
+var ShadowMapAtlas = function (settings) {
     this._lights = [];
     this._shadowMaps = [];
     this._viewportDimension = [];
@@ -64,11 +64,11 @@ var ShadowMapAtlas = function(settings) {
 utils.createPrototypeObject(
     ShadowMapAtlas,
     utils.objectInherit(ShadowTechnique.prototype, {
-        getTexture: function() {
+        getTexture: function () {
             return this._texture;
         },
 
-        isDirty: function(ligthtIndex) {
+        isDirty: function (ligthtIndex) {
             if (ligthtIndex !== undefined) {
                 return this._shadowMaps[ligthtIndex].isDirty();
             } else {
@@ -81,7 +81,7 @@ utils.createPrototypeObject(
         /**
          * at which Texture unit number we start adding texture shadow
          */
-        setTextureUnitBase: function(unitBase) {
+        setTextureUnitBase: function (unitBase) {
             this._textureUnitBase = unitBase;
             this._textureUnit = unitBase;
 
@@ -91,8 +91,8 @@ utils.createPrototypeObject(
         },
 
         /* Sets  shadowSettings
-        */
-        setShadowSettings: function(shadowSettings) {
+         */
+        setShadowSettings: function (shadowSettings) {
             if (!shadowSettings) return;
             this._shadowSettings = shadowSettings;
 
@@ -103,13 +103,13 @@ utils.createPrototypeObject(
             this.setTexturePrecision(shadowSettings.textureType);
         },
 
-        setCastsShadowDrawTraversalMask: function(mask) {
+        setCastsShadowDrawTraversalMask: function (mask) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setCastsShadowDrawTraversalMask(mask);
             }
         },
 
-        getCastsShadowDrawTraversalMask: function(numShadow) {
+        getCastsShadowDrawTraversalMask: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getCastsShadowDrawTraversalMask();
             } else if (this._shadowMaps.length !== 0) {
@@ -117,13 +117,13 @@ utils.createPrototypeObject(
             }
         },
 
-        setCastsShadowBoundsTraversalMask: function(mask) {
+        setCastsShadowBoundsTraversalMask: function (mask) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setCastsShadowBoundsTraversalMask(mask);
             }
         },
 
-        getCastsShadowBoundsTraversalMask: function(numShadow) {
+        getCastsShadowBoundsTraversalMask: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getCastsShadowDrawTraversalMask();
             } else if (this._shadowMaps.length !== 0) {
@@ -131,7 +131,7 @@ utils.createPrototypeObject(
             }
         },
 
-        getNormalBias: function(numShadow) {
+        getNormalBias: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getNormalBias();
             } else if (this._shadowMaps.length !== 0) {
@@ -139,13 +139,13 @@ utils.createPrototypeObject(
             }
         },
 
-        setNormalBias: function(value) {
+        setNormalBias: function (value) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setNormalBias(value);
             }
         },
 
-        getBias: function(numShadow) {
+        getBias: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getBias();
             } else if (this._shadowMaps.length !== 0) {
@@ -153,13 +153,13 @@ utils.createPrototypeObject(
             }
         },
 
-        setBias: function(value) {
+        setBias: function (value) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setBias(value);
             }
         },
 
-        getKernelSizePCF: function(numShadow) {
+        getKernelSizePCF: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getKernelSizePCF();
             } else if (this._shadowMaps.length !== 1) {
@@ -167,13 +167,13 @@ utils.createPrototypeObject(
             }
         },
 
-        setKernelSizePCF: function(value) {
+        setKernelSizePCF: function (value) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setKernelSizePCF(value);
             }
         },
 
-        setShadowedScene: function(shadowedScene) {
+        setShadowedScene: function (shadowedScene) {
             ShadowTechnique.prototype.setShadowedScene.call(this, shadowedScene);
             this._receivingStateset = this._shadowedScene.getReceivingStateSet();
 
@@ -182,13 +182,13 @@ utils.createPrototypeObject(
             }
         },
 
-        setTexturePrecision: function(value) {
+        setTexturePrecision: function (value) {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].setTexturePrecision(value);
             }
         },
 
-        getTexturePrecision: function(numShadow) {
+        getTexturePrecision: function (numShadow) {
             if (numShadow !== undefined) {
                 return this._shadowMaps[numShadow].getTexturePrecision();
             } else if (this._shadowMaps.length !== 1) {
@@ -196,7 +196,7 @@ utils.createPrototypeObject(
             }
         },
 
-        setTextureSize: function(mapSize) {
+        setTextureSize: function (mapSize) {
             if (mapSize === this._textureSize) return;
 
             //this._textureSize = mapSize;
@@ -209,11 +209,11 @@ utils.createPrototypeObject(
             this.dirty();
         },
 
-        getShadowMap: function(lightNum) {
+        getShadowMap: function (lightNum) {
             return this._shadowMaps[lightNum];
         },
 
-        addLight: function(light) {
+        addLight: function (light) {
             if (!light || this._lights.indexOf(light) !== -1) {
                 notify.warn('no light or light already added');
                 return -1;
@@ -243,7 +243,7 @@ utils.createPrototypeObject(
         },
 
         /** initialize the ShadowedScene and local cached data structures.*/
-        init: function() {
+        init: function () {
             if (!this._shadowedScene) return;
 
             this.initTexture();
@@ -272,7 +272,7 @@ utils.createPrototypeObject(
             }
         },
 
-        recomputeViewports: function() {
+        recomputeViewports: function () {
             var numViews = this._shadowMaps.length;
 
             var viewDivideY = numViews > 2 ? Math.sqrt(2 * Math.ceil(numViews / 2)) : numViews;
@@ -305,12 +305,12 @@ utils.createPrototypeObject(
             }
         },
 
-        valid: function() {
+        valid: function () {
             // checks
             return true;
         },
 
-        updateCameraClear: function() {
+        updateCameraClear: function () {
             var camera = this._cameraClear;
             var texture = this._texture;
 
@@ -336,7 +336,7 @@ utils.createPrototypeObject(
             }
         },
 
-        updateShadowTechnique: function(nv) {
+        updateShadowTechnique: function (nv) {
             this.updateCameraClear();
             var fbo = this._cameraClear.getFrameBufferObject();
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
@@ -346,7 +346,7 @@ utils.createPrototypeObject(
 
         // internal texture allocation
         // handle any change like resize, filter param, etc.
-        initTexture: function() {
+        initTexture: function () {
             if (!this._dirty) return;
 
             if (!this._texture) {
@@ -374,7 +374,7 @@ utils.createPrototypeObject(
 
         // Defines the frustum from light param.
         //
-        cullShadowCasting: function(cullVisitor, bbox) {
+        cullShadowCasting: function (cullVisitor, bbox) {
             this._cameraClear.accept(cullVisitor);
 
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
@@ -385,7 +385,7 @@ utils.createPrototypeObject(
             }
         },
 
-        isContinuousUpdate: function() {
+        isContinuousUpdate: function () {
             // need at least one shadow to be enabled
             // so that shadowedScene will continue shadowCasting
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
@@ -396,7 +396,7 @@ utils.createPrototypeObject(
             return false;
         },
 
-        needRedraw: function() {
+        needRedraw: function () {
             // need at least one shadow not dirty
             // so that shadowedScene will continue shadowCasting
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
@@ -407,7 +407,7 @@ utils.createPrototypeObject(
             return false;
         },
 
-        removeShadowMap: function(shadowMap) {
+        removeShadowMap: function (shadowMap) {
             if (this._shadowMaps.length > 0) {
                 var idx = this._shadowMaps.indexOf(shadowMap);
                 if (idx !== -1) {
@@ -433,7 +433,7 @@ utils.createPrototypeObject(
             }
         },
 
-        addShadowMap: function(shadowMap) {
+        addShadowMap: function (shadowMap) {
             if (this._shadowMaps.length > 0) {
                 if (this._shadowMaps.indexOf(shadowMap) !== -1) return;
             }
@@ -455,7 +455,7 @@ utils.createPrototypeObject(
             this.recomputeViewports();
         },
 
-        cleanReceivingStateSet: function() {
+        cleanReceivingStateSet: function () {
             if (this._receivingStateset) {
                 if (this._texture) {
                     // remove this._texture, but not if it's not this._texture
@@ -476,14 +476,14 @@ utils.createPrototypeObject(
                 }
             }
         },
-        cleanSceneGraph: function() {
+        cleanSceneGraph: function () {
             // TODO: need state
             //this._texture.releaseGLObjects();
             //this._shadowReceiveAttribute = undefined;
             this._texture = undefined;
             this._shadowedScene = undefined;
         },
-        setDebug: function(enable, lightNum) {
+        setDebug: function (enable, lightNum) {
             if (!lightNum) {
                 for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                     this._shadowMaps[i].setDebug(enable);
@@ -492,7 +492,7 @@ utils.createPrototypeObject(
                 this._shadowMaps[lightNum].setDebug(enable);
             }
         },
-        markSceneAsNoShadow: function() {
+        markSceneAsNoShadow: function () {
             for (var i = 0, l = this._shadowMaps.length; i < l; i++) {
                 this._shadowMaps[i].markSceneAsNoShadow();
             }

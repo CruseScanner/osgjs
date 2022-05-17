@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -10,9 +10,9 @@
     var cadManipulator;
     var orbitManipulator;
 
-    var createScene = function(viewer) {
+    var createScene = function (viewer) {
         var root = new osg.Node();
-        osgDB.readNodeURL('../media/models/material-test/file.osgjs').then(function(node) {
+        osgDB.readNodeURL('../media/models/material-test/file.osgjs').then(function (node) {
             root.addChild(node);
             var gizmo = new osgUtil.NodeGizmo(viewer);
             gizmo._autoInsertMT = true;
@@ -29,7 +29,7 @@
                     {
                         switch: 'keyup enter'
                     },
-                    function() {
+                    function () {
                         var manip = viewer.getManipulator();
                         if (manip === orbitManipulator) {
                             viewer.setupManipulator(cadManipulator);
@@ -43,7 +43,7 @@
         return root;
     };
 
-    var onLoad = function() {
+    var onLoad = function () {
         var canvas = document.getElementById('View');
 
         var viewer = new osgViewer.Viewer(canvas);

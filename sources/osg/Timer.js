@@ -1,11 +1,11 @@
 // user performance if available or fallback
 
-var now = (function() {
+var now = (function () {
     var w = window || global; // eslint-disable-line
 
     // if no window.performance
     if (w.performance === undefined) {
-        return function() {
+        return function () {
             return Date.now();
         };
     }
@@ -16,17 +16,17 @@ var now = (function() {
         w.performance.msNow ||
         w.performance.oNow ||
         w.performance.webkitNow ||
-        function() {
+        function () {
             return Date.now();
         };
-    return function() {
+    return function () {
         return fn.apply(w.performance, arguments);
     };
 })();
 
-var Timer = function() {};
+var Timer = function () {};
 
-Timer.instance = function() {
+Timer.instance = function () {
     if (!Timer._instance) Timer._instance = new Timer();
 
     return Timer._instance;
@@ -36,16 +36,16 @@ Timer.tick = now;
 
 Timer.prototype = {
     // delta in seconds
-    deltaS: function(t0, t1) {
+    deltaS: function (t0, t1) {
         return (t1 - t0) / 1000.0;
     },
 
     // delta in milliseconds
-    deltaM: function(t0, t1) {
+    deltaM: function (t0, t1) {
         return t1 - t0;
     },
 
-    tick: function() {
+    tick: function () {
         return now();
     }
 };

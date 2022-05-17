@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var osgShader = window.OSG.osgShader;
@@ -6,7 +6,7 @@
 
     // this compiler use basic lighting and add a node to demonstrate how to
     // customize the shader compiler
-    var CustomCompiler = function() {
+    var CustomCompiler = function () {
         osgShader.Compiler.apply(this, arguments);
     };
 
@@ -17,7 +17,7 @@
     osgShader.Compiler.setStateAttributeConfig(CustomCompiler, config);
 
     CustomCompiler.prototype = osg.objectInherit(osgShader.Compiler.prototype, {
-        getLighting: function() {
+        getLighting: function () {
             // we simply hook the getLighting function and apply our ramp and negatif attributes
             var lightOutput = osgShader.Compiler.prototype.getLighting.call(this);
 
