@@ -4,7 +4,7 @@ import PolytopeIntersector from 'tests/osgUtil/PolytopeIntersector';
 import IntersectionVisitor from 'tests/osgUtil/IntersectionVisitor';
 import SphereIntersector from 'tests/osgUtil/SphereIntersector';
 
-export default function() {
+export default function () {
     LineSegmentIntersector();
     LineSegmentIntersectFunctor();
     PolytopeIntersector();

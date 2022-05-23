@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var P = window.P;
@@ -50,7 +50,7 @@
         }
     };
 
-    var isMobileDevice = function() {
+    var isMobileDevice = function () {
         if (navigator.userAgent.match(/Mobile/i)) return true;
         if (navigator.userAgent.match(/Android/i)) return true;
         if (navigator.userAgent.match(/iPhone/i)) return true;
@@ -63,7 +63,7 @@
     };
 
     var optionsURL = {};
-    (function(options) {
+    (function (options) {
         var vars = [],
             hash;
         var indexOptions = window.location.href.indexOf('?');
@@ -82,7 +82,7 @@
         }
     })(optionsURL);
 
-    var linear2Srgb = function(value, gammaIn) {
+    var linear2Srgb = function (value, gammaIn) {
         var gamma = gammaIn;
         if (!gamma) gamma = 2.2;
         var result = 0.0;
@@ -94,13 +94,13 @@
         return result;
     };
 
-    var PBRWorkflowVisitor = function() {
+    var PBRWorkflowVisitor = function () {
         this._workflow = [];
         osg.NodeVisitor.call(this);
     };
 
     PBRWorkflowVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        apply: function(node) {
+        apply: function (node) {
             var data = node.getUserData();
             var vertexColor;
             if (data && data.pbrWorklow) {
@@ -117,7 +117,7 @@
             }
             this.traverse(node);
         },
-        getWorkflows: function() {
+        getWorkflows: function () {
             return this._workflow;
         }
     });
@@ -144,7 +144,7 @@
     var environmentList = [];
     var environmentMap = {};
 
-    var Example = function() {
+    var Example = function () {
         this._gui = new window.dat.GUI();
 
         this._shaderPath = 'shaders/';
@@ -220,37 +220,25 @@
         // Keep a reference to update it from the GUI
         this._rowMetalic = undefined;
 
-        window.printCurrentCamera = function() {
+        window.printCurrentCamera = function () {
             var eye = osg.vec3.create();
             var target = osg.vec3.create();
-            console.log(
-                'target ' +
-                    this._viewer
-                        .getManipulator()
-                        .getTarget(target)
-                        .toString()
-            );
-            console.log(
-                'eye ' +
-                    this._viewer
-                        .getManipulator()
-                        .getEyePosition(eye)
-                        .toString()
-            );
+            console.log('target ' + this._viewer.getManipulator().getTarget(target).toString());
+            console.log('eye ' + this._viewer.getManipulator().getEyePosition(eye).toString());
         }.bind(this);
     };
 
     Example.prototype = {
-        createEnvironment: function(urlOrZip, zipFileName) {
+        createEnvironment: function (urlOrZip, zipFileName) {
             var env = new Environment();
 
-            var registerEnvironment = function(envReady) {
+            var registerEnvironment = function (envReady) {
                 var name = envReady.name;
                 environmentMap[name] = envReady;
                 environmentList.push(name);
 
                 var controllers = this._gui.__controllers;
-                var controller = controllers.filter(function(cont) {
+                var controller = controllers.filter(function (cont) {
                     return cont.property === 'environment';
                 })[0];
 
@@ -261,31 +249,31 @@
 
             if (typeof urlOrZip === 'string') {
                 var url = urlOrZip;
-                return env.loadPackage(url).then(function() {
+                return env.loadPackage(url).then(function () {
                     registerEnvironment(env);
                     return env;
                 });
             }
 
             var zip = urlOrZip;
-            return env.readZipContent(zip, zipFileName).then(function() {
+            return env.readZipContent(zip, zipFileName).then(function () {
                 registerEnvironment(env);
                 return env;
             });
         },
 
-        updateConfigFromEnvironment: function(formatList) {
+        updateConfigFromEnvironment: function (formatList) {
             if (formatList.indexOf(this._config.format) === -1) this._config.format = formatList[0];
 
             var controllers = this._gui.__controllers;
-            var controller = controllers.filter(function(cont) {
+            var controller = controllers.filter(function (cont) {
                 return cont.property === 'format';
             })[0];
             controller = controller.options(formatList);
             controller.onChange(this.updateEnvironment.bind(this));
         },
 
-        setEnvironment: function(name) {
+        setEnvironment: function (name) {
             if (environmentMap[name]) {
                 this._currentEnvironment = environmentMap[name];
                 this.updateConfigFromEnvironment(this._currentEnvironment.getFormatList());
@@ -293,11 +281,11 @@
             }
         },
 
-        loadZipFile: function(fileOrBlob, zipFileName) {
+        loadZipFile: function (fileOrBlob, zipFileName) {
             var self = this;
             return osgDB.fileHelper
                 .unzip(fileOrBlob)
-                .then(function(filesMap) {
+                .then(function (filesMap) {
                     var gltfFile;
                     var environmentFormat;
                     for (var path in filesMap) {
@@ -310,39 +298,33 @@
                     if (gltfFile) {
                         return osgDB
                             .readNodeURL(gltfFile, { filesMap: filesMap })
-                            .then(function(node) {
+                            .then(function (node) {
                                 return self.loadNode(node);
                             });
                     } else if (environmentFormat) {
                         var name = zipFileName;
-                        return self.createEnvironment(zipFileName, name).then(function(env) {
+                        return self.createEnvironment(zipFileName, name).then(function (env) {
                             return self.setEnvironment(env.name);
                         });
                     }
 
                     return P.reject();
                 })
-                .catch(function() {
+                .catch(function () {
                     osg.warn('cant unzip ' + zipFileName);
                 });
         },
 
-        handleDroppedFiles: function(files) {
+        handleDroppedFiles: function (files) {
             var self = this;
             $('#loading').show();
 
-            if (
-                files.length === 1 &&
-                files[0].name
-                    .split('.')
-                    .pop()
-                    .toLowerCase() === 'zip'
-            ) {
+            if (files.length === 1 && files[0].name.split('.').pop().toLowerCase() === 'zip') {
                 return this.loadZipFile(files[0], files[0].name)
-                    .then(function() {
+                    .then(function () {
                         $('#loading').hide();
                     })
-                    .catch(function() {
+                    .catch(function () {
                         osg.warn('cant load ' + files[0].name);
                         $('#loading').hide();
                     });
@@ -350,16 +332,16 @@
 
             return osgDB.fileHelper
                 .readFileList(files)
-                .then(function(root) {
+                .then(function (root) {
                     self.loadNode(root);
                 })
-                .catch(function(fails) {
+                .catch(function (fails) {
                     $('#loading').hide();
                     osg.error("cant't read file " + fails);
                 });
         },
 
-        loadNode: function(node) {
+        loadNode: function (node) {
             $('#loading').hide();
             if (!node) return;
             var gltfFileName = node.getName();
@@ -374,47 +356,47 @@
             modelList.push(gltfFileName);
 
             var controllers = this._gui.__controllers;
-            var controller = controllers.filter(function(cont) {
+            var controller = controllers.filter(function (cont) {
                 return cont.property === 'model';
             })[0];
             controller = controller.options(modelList);
             controller.onChange(this.updateModel.bind(this));
         },
 
-        handleDroppedURL: function(url) {
+        handleDroppedURL: function (url) {
             $('#loading').show();
             return osgDB.fileHelper
                 .requestURI(url, {
                     responseType: 'blob'
                 })
                 .then(
-                    function(blob) {
-                        return this.loadZipFile(blob, url).then(function() {
+                    function (blob) {
+                        return this.loadZipFile(blob, url).then(function () {
                             $('#loading').hide();
                         });
                     }.bind(this)
                 )
-                .catch(function() {
+                .catch(function () {
                     $('#loading').hide();
                     osg.warn('cant load url ' + url);
                 });
         },
 
-        loadFiles: function() {
+        loadFiles: function () {
             var self = this;
 
             var input = $(document.createElement('input'));
             input.attr('type', 'file');
             input.attr('multiple', '');
             input.trigger('click');
-            input.on('change', function() {
+            input.on('change', function () {
                 self.handleDroppedFiles(this.files);
             });
 
             return false;
         },
 
-        setMaterial: function(stateSet, albedo, metalRoughness, specular) {
+        setMaterial: function (stateSet, albedo, metalRoughness, specular) {
             stateSet.setTextureAttributeAndModes(window.ALBEDO_TEXTURE_UNIT, albedo);
             stateSet.setTextureAttributeAndModes(
                 window.METALLIC_ROUGHNESS_TEXTURE_UNIT,
@@ -425,18 +407,18 @@
             if (this._stateSetPBR) this.updateShaderPBR();
         },
 
-        getTexture0000: function() {
+        getTexture0000: function () {
             if (!this._texture0000)
                 this._texture0000 = this.createTextureFromColor(osg.vec4.fromValues(0, 0, 0, 1));
             return this._texture0000;
         },
 
-        getTexture1111: function() {
+        getTexture1111: function () {
             if (!this._texture1111) this._texture1111 = this.createTextureFromColor(osg.vec4.ONE);
             return this._texture1111;
         },
 
-        createTextureFromColor: function(colorArg, srgb, textureOutput) {
+        createTextureFromColor: function (colorArg, srgb, textureOutput) {
             var colorInput = colorArg;
             var albedo = new osg.Uint8Array(4);
 
@@ -453,7 +435,7 @@
                 color.push(1.0);
             }
 
-            color.forEach(function(value, index) {
+            color.forEach(function (value, index) {
                 if (srgb) albedo[index] = Math.floor(255 * linear2Srgb(value));
                 else albedo[index] = Math.floor(255 * value);
             });
@@ -465,7 +447,7 @@
             return texture;
         },
 
-        createMetalRoughnessTextureFromColors: function(
+        createMetalRoughnessTextureFromColors: function (
             metalColor,
             roughnessColor,
             srgb,
@@ -475,7 +457,7 @@
             var color = new Float32Array(4);
             color[1] = roughnessColor;
             color[2] = metalColor;
-            color.forEach(function(value, index) {
+            color.forEach(function (value, index) {
                 if (srgb) albedo[index] = Math.floor(255 * linear2Srgb(value));
                 else albedo[index] = Math.floor(255 * value);
             });
@@ -487,7 +469,7 @@
             return texture;
         },
 
-        readShaders: function() {
+        readShaders: function () {
             var shaderNames = [
                 'math.glsl',
                 'cubemapVertex.glsl',
@@ -509,19 +491,19 @@
             ];
 
             var shaders = shaderNames.map(
-                function(arg) {
+                function (arg) {
                     return this._shaderPath + arg;
                 }.bind(this)
             );
 
             var promises = [];
-            shaders.forEach(function(shader) {
+            shaders.forEach(function (shader) {
                 promises.push(P.resolve($.get(shader)));
             });
 
-            return P.all(promises).then(function(args) {
+            return P.all(promises).then(function (args) {
                 var shaderNameContent = {};
-                shaderNames.forEach(function(name, idx) {
+                shaderNames.forEach(function (name, idx) {
                     shaderNameContent[name] = args[idx];
                 });
 
@@ -535,14 +517,14 @@
         //     specularMap: false
         //     aoMap: false
         // }
-        createShaderPBR: function(config) {
+        createShaderPBR: function (config) {
             var defines = [];
 
-            this._materialDefines.forEach(function(d) {
+            this._materialDefines.forEach(function (d) {
                 defines.push(d);
             });
 
-            this._modelDefines.forEach(function(d) {
+            this._modelDefines.forEach(function (d) {
                 defines.push(d);
             });
 
@@ -594,27 +576,27 @@
             return this._shaderCache[hash];
         },
 
-        updateEnvironmentBrightness: function() {
+        updateEnvironmentBrightness: function () {
             var b = this._config.brightness;
             this._envBrightnessUniform.setFloat(b);
         },
 
-        updateNormalAA: function() {
+        updateNormalAA: function () {
             var aa = this._config.normalAA ? 1 : 0;
             this._normalAA.setInt(aa);
         },
 
-        updateSpecularPeak: function() {
+        updateSpecularPeak: function () {
             var aa = this._config.specularPeak ? 1 : 0;
             this._specularPeak.setInt(aa);
         },
 
-        updateOcclusionHorizon: function() {
+        updateOcclusionHorizon: function () {
             var aa = this._config.occlusionHorizon ? 1 : 0;
             this._occlusionHorizon.setInt(aa);
         },
 
-        updateCameraPreset: function() {
+        updateCameraPreset: function () {
             var preset = CameraPresets[this._config.cameraPreset];
             if (!preset) {
                 preset = CameraPresets[Object.keys(CameraPresets)[0]];
@@ -624,13 +606,13 @@
             this._viewer.getManipulator().setEyePosition(preset.eye);
         },
 
-        updateEnvironmentRotation: function() {
+        updateEnvironmentRotation: function () {
             if (!this._environmentTransformMatrix) return;
             var rotation = this._config.envRotation;
             osg.mat4.fromRotation(this._environmentTransformMatrix, rotation, [0, 0, 1]);
         },
 
-        createEnvironmentNode: function() {
+        createEnvironmentNode: function () {
             var scene = new osg.Node();
 
             // create the environment sphere
@@ -651,18 +633,18 @@
             var mt = new osg.MatrixTransform();
             mt.addChild(geom);
 
-            var CullCallback = function() {
-                this.cull = function(node, nv) {
+            var CullCallback = function () {
+                this.cull = function (node, nv) {
                     // overwrite matrix, remove translate so environment is always at camera origin
                     osg.mat4.setTranslation(nv.getCurrentModelViewMatrix(), [0, 0, 0]);
                     var m = nv.getCurrentModelViewMatrix();
 
                     // add a rotation, because environment has the convention y up
-                    var rotateYtoZ = osg.mat4.fromRotation(osg.mat4.create(), Math.PI / 2, [
-                        1,
-                        0,
-                        0
-                    ]);
+                    var rotateYtoZ = osg.mat4.fromRotation(
+                        osg.mat4.create(),
+                        Math.PI / 2,
+                        [1, 0, 0]
+                    );
 
                     osg.mat4.mul(environmentTransform.getInternalArray(), m, rotateYtoZ);
                     //osg.mat4.copy( environmentTransform.get() , m );
@@ -683,14 +665,14 @@
             // but configure the projection matrix to always be in a short znear/zfar range to not vary depend on the scene size
             var info = {};
             var proj = [];
-            var UpdateCallback = function() {
-                this.update = function() {
+            var UpdateCallback = function () {
+                this.update = function () {
                     var rootCam = self._viewer.getCamera();
 
                     osg.mat4.getPerspective(info, rootCam.getProjectionMatrix());
                     osg.mat4.perspective(
                         proj,
-                        Math.PI / 180 * info.fovy,
+                        (Math.PI / 180) * info.fovy,
                         info.aspectRatio,
                         1.0,
                         1000.0
@@ -708,13 +690,13 @@
             return scene;
         },
 
-        createModelMaterialSample: function() {
+        createModelMaterialSample: function () {
             this._proxyModel = new osg.Node();
 
             var request = osgDB.readNodeURL('../media/models/material-test/file.osgjs');
 
             request.then(
-                function(model) {
+                function (model) {
                     var mt = new osg.MatrixTransform();
                     osg.mat4.fromRotation(mt.getMatrix(), -Math.PI / 2, [1, 0, 0]);
                     var bb = model.getBound();
@@ -741,7 +723,7 @@
             return request;
         },
 
-        updateModel: function() {
+        updateModel: function () {
             if (!this._modelSphere || !this._modelMaterial) return;
 
             this._modelSphere.setNodeMask(0x0);
@@ -826,7 +808,7 @@
             }
         },
 
-        registerModel: function(model) {
+        registerModel: function (model) {
             var modelNode = model.getNode();
 
             var config = {
@@ -839,7 +821,7 @@
             return config;
         },
 
-        getModelTestInstance: function() {
+        getModelTestInstance: function () {
             var mt = new osg.MatrixTransform();
 
             mt.addChild(this._proxyModel);
@@ -847,7 +829,7 @@
             return mt;
         },
 
-        updateRowModelsSpecularMetal: function() {
+        updateRowModelsSpecularMetal: function () {
             var specularTexture = (this._specularMetalTexture = this.createTextureFromColor(
                 PredefinedMaterials[this._config.material],
                 true,
@@ -856,7 +838,7 @@
             return specularTexture;
         },
 
-        createRowModelsSpecularMetal: function() {
+        createRowModelsSpecularMetal: function () {
             var albedo = this.getTexture0000();
 
             var specularTexture = this.updateRowModelsSpecularMetal();
@@ -887,12 +869,12 @@
             return group;
         },
 
-        updateRowModelsMetalic: function() {
+        updateRowModelsMetalic: function () {
             this._rowMetalic.removeChildren();
             this._rowMetalic.addChild(this.createRowModelsMetalic());
         },
 
-        createRowModelsMetalic: function() {
+        createRowModelsMetalic: function () {
             var albedo = this._albedoTexture;
             var roughness = this._config.roughness;
 
@@ -917,7 +899,7 @@
             return group;
         },
 
-        createRowModelsRoughness: function() {
+        createRowModelsRoughness: function () {
             var group = new osg.MatrixTransform();
             var albedo = this._albedoTexture;
             var metal, roughness;
@@ -951,7 +933,7 @@
             return group;
         },
 
-        createSampleModels: function() {
+        createSampleModels: function () {
             var group = new osg.Node();
 
             var stateSet;
@@ -1001,7 +983,7 @@
             return group;
         },
 
-        createSampleScene: function() {
+        createSampleScene: function () {
             var group = this._mainSceneNode;
 
             group.addChild(this._environmentGeometry);
@@ -1014,7 +996,7 @@
             return group;
         },
 
-        createShaderPanorama: function(defines) {
+        createShaderPanorama: function (defines) {
             var vertexshader = shaderProcessor.getShader('panoramaVertex.glsl');
             var fragmentshader = shaderProcessor.getShader('panoramaFragment.glsl', defines);
 
@@ -1026,7 +1008,7 @@
             return program;
         },
 
-        createShaderCubemap: function(defines) {
+        createShaderCubemap: function (defines) {
             var vertexshader = shaderProcessor.getShader('cubemapVertex.glsl');
             var fragmentshader = shaderProcessor.getShader('cubemapFragment.glsl', defines);
 
@@ -1038,7 +1020,7 @@
             return program;
         },
 
-        updateGlobalUniform: function(stateSet) {
+        updateGlobalUniform: function (stateSet) {
             stateSet.addUniform(this._environmentTransformUniform);
             stateSet.addUniform(this._envBrightnessUniform);
             stateSet.addUniform(this._normalAA);
@@ -1046,7 +1028,7 @@
             stateSet.addUniform(this._occlusionHorizon);
         },
 
-        setPanorama: function() {
+        setPanorama: function () {
             // set the stateSet of the environment geometry
             this.setSphericalEnv();
 
@@ -1074,7 +1056,7 @@
             stateSet.setTextureAttributeAndModes(0, texture);
         },
 
-        setCubemapSeamless: function() {
+        setCubemapSeamless: function () {
             this.setSphericalEnv();
 
             var envCubemap = this._currentEnvironment.getCubemapUE4();
@@ -1099,7 +1081,7 @@
             stateSet.setTextureAttributeAndModes(0, texture);
         },
 
-        setBackgroundEnvironment: function() {
+        setBackgroundEnvironment: function () {
             // set the stateSet of the environment geometry
             this._environmentStateSet.setAttributeAndModes(
                 this.createShaderCubemap(['#define ' + this._config.format])
@@ -1116,13 +1098,13 @@
             this._environmentStateSet.setTextureAttributeAndModes(0, textureBackground);
         },
 
-        setSphericalEnv: function() {
+        setSphericalEnv: function () {
             this._environmentStateSet.addUniform(
                 this._currentEnvironment.getSpherical()._uniformSpherical
             );
         },
 
-        createScene: function() {
+        createScene: function () {
             this._environmentGeometry = this.createEnvironmentNode();
             this._environmentStateSet = this._environmentGeometry.getOrCreateStateSet();
 
@@ -1150,7 +1132,7 @@
 
             // precompute panorama
             P.all(promises).then(
-                function() {
+                function () {
                     group.addChild(this.createSampleScene());
 
                     this.updateEnvironment();
@@ -1197,11 +1179,11 @@
             return root;
         },
 
-        readEnvConfig: function(file) {
+        readEnvConfig: function (file) {
             var d = P.defer();
             var p = P.resolve($.get(file));
 
-            p.then(function(text) {
+            p.then(function (text) {
                 var config = text;
                 d.resolve(config);
             });
@@ -1209,11 +1191,11 @@
             return d.promise;
         },
 
-        setEnableInput: function(enable) {
+        setEnableInput: function (enable) {
             this._viewer.getInputManager().setEnable(InputGroups.MANIPULATORS, enable);
         },
 
-        createGUI: function() {
+        createGUI: function () {
             var gui = this._gui;
 
             var controller;
@@ -1238,7 +1220,7 @@
 
             controller = gui.add(this._config, 'lod', 0.0, 15.01).step(0.1);
             controller.onChange(
-                function(value) {
+                function (value) {
                     this._lod.getInternalArray()[0] = value;
                 }.bind(this)
             );
@@ -1259,7 +1241,7 @@
 
             controller = gui.add(
                 {
-                    loadModel: function() {}
+                    loadModel: function () {}
                 },
                 'loadModel'
             );
@@ -1272,7 +1254,7 @@
             controller.onChange(this.updateEnvironment.bind(this));
         },
 
-        run: function(canvas) {
+        run: function (canvas) {
             var viewer = (this._viewer = new osgViewer.Viewer(canvas, {
                 preserveDrawingBuffer: true,
                 premultipliedAlpha: false
@@ -1298,7 +1280,7 @@
             ready.push(this.createModelMaterialSample());
 
             P.all(ready).then(
-                function() {
+                function () {
                     var root = this.createScene();
                     viewer.setSceneData(root);
 
@@ -1312,7 +1294,7 @@
 
                     osg.mat4.perspective(
                         viewer.getCamera().getProjectionMatrix(),
-                        Math.PI / 180 * 30,
+                        (Math.PI / 180) * 30,
                         canvas.width / canvas.height,
                         0.1,
                         1000
@@ -1331,7 +1313,7 @@
             );
         },
 
-        updateAlbedo: function() {
+        updateAlbedo: function () {
             this._albedoTexture = this.createTextureFromColor(
                 this.convertColor(this._config.albedo),
                 true,
@@ -1339,9 +1321,9 @@
             );
         },
 
-        updateShaderPBR: function() {
+        updateShaderPBR: function () {
             this._shaders.forEach(
-                function(config) {
+                function (config) {
                     var stateSet = config.stateSet;
 
                     var shaderConfig = osg.objectMix(
@@ -1360,7 +1342,7 @@
             );
         },
 
-        updateEnvironment: function() {
+        updateEnvironment: function () {
             if (!this._currentEnvironment) return;
 
             if (this._config.environmentType === 'cubemapSeamless') {
@@ -1380,7 +1362,7 @@
             this.updateShaderPBR();
         },
 
-        convertColor: function(color) {
+        convertColor: function (color) {
             var r, g, b;
 
             // rgb [255, 255, 255]
@@ -1404,13 +1386,13 @@
         }
     };
 
-    var dragOverEvent = function(evt) {
+    var dragOverEvent = function (evt) {
         evt.stopPropagation();
         evt.preventDefault();
         evt.dataTransfer.dropEffect = 'copy';
     };
 
-    var dropEvent = function(evt) {
+    var dropEvent = function (evt) {
         evt.stopPropagation();
         evt.preventDefault();
 
@@ -1426,7 +1408,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             var canvas = $('#View')[0];
             example.run(canvas);
@@ -1442,7 +1424,7 @@
             window.example = example;
             window.addEventListener(
                 'mousemove',
-                function(evt) {
+                function (evt) {
                     var button = evt.which || evt.button;
 
                     if (evt.altKey && button) {

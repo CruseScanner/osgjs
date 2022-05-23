@@ -37,7 +37,7 @@ var createQuatChannel = channelFactory.createQuatChannel;
 var createVec3Channel = channelFactory.createVec3Channel;
 var createFloatChannel = channelFactory.createFloatChannel;
 
-var ReaderWriterGLTF = function() {
+var ReaderWriterGLTF = function () {
     // Contains all the needed glTF files (.gltf, .bin, etc...)
     this._filesMap = undefined;
     this._loadedFiles = undefined;
@@ -160,7 +160,7 @@ ReaderWriterGLTF.AO_UNIFORM = 'aoMap';
 ReaderWriterGLTF.EMISSIVE_UNIFORM = 'emissiveMap';
 
 ReaderWriterGLTF.prototype = {
-    init: function() {
+    init: function () {
         this._glTFJSON = undefined;
         this._nodeAnimationTypes = [];
         this._bufferViewCache = {};
@@ -184,7 +184,7 @@ ReaderWriterGLTF.prototype = {
     // Adds variable to help to convert nodes to osgjs
     // - add parent variable to all nodes
     // - add unique node name
-    _preProcessNodes: function() {
+    _preProcessNodes: function () {
         var nodes = this._gltfJSON.nodes;
         var meshes = this._gltfJSON.meshes;
 
@@ -212,13 +212,13 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadBuffers: P.method(function() {
+    loadBuffers: P.method(function () {
         var promises = [];
         var buffers = this._gltfJSON.buffers;
         for (var i = 0; i < buffers.length; i++) {
             var buffer = buffers[i];
             promises.push(
-                this.loadURI(buffer.uri, { responseType: 'arraybuffer' }).then(function(
+                this.loadURI(buffer.uri, { responseType: 'arraybuffer' }).then(function (
                     arrayBuffer
                 ) {
                     buffer.data = arrayBuffer;
@@ -228,7 +228,7 @@ ReaderWriterGLTF.prototype = {
         return P.all(promises);
     }),
 
-    loadBufferViews: function() {
+    loadBufferViews: function () {
         var buffers = this._gltfJSON.buffers;
         var bufferViews = this._gltfJSON.bufferViews;
         for (var i = 0; i < bufferViews.length; i++) {
@@ -241,7 +241,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadAccessors: function() {
+    loadAccessors: function () {
         var bufferViews = this._gltfJSON.bufferViews;
         var accessors = this._gltfJSON.accessors;
         for (var i = 0; i < accessors.length; i++) {
@@ -276,7 +276,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _computeNodeMatrix: function(node) {
+    _computeNodeMatrix: function (node) {
         var matrix;
         if (node.matrix) {
             matrix = mat4.clone(node.matrix);
@@ -295,7 +295,7 @@ ReaderWriterGLTF.prototype = {
         return matrix;
     },
 
-    loadNodes: function() {
+    loadNodes: function () {
         var nodes = this._gltfJSON.nodes;
         var skins = this._gltfJSON.skins;
         var meshes = this._gltfJSON.meshes;
@@ -334,7 +334,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _linkNodes: function(parent) {
+    _linkNodes: function (parent) {
         var nodes = this._gltfJSON.nodes;
         var children = parent.children;
         if (!children) return;
@@ -353,7 +353,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadSkins: function() {
+    loadSkins: function () {
         var skins = this._gltfJSON.skins;
         if (!skins) return;
 
@@ -362,7 +362,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadScenes: function() {
+    loadScenes: function () {
         var nodes = this._gltfJSON.nodes;
         var scenes = this._gltfJSON.scenes;
 
@@ -389,7 +389,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _assignGeometryAttributes: function(osgjsGeometry, gltfAttributes, index) {
+    _assignGeometryAttributes: function (osgjsGeometry, gltfAttributes, index) {
         var accessors = this._gltfJSON.accessors;
         for (var attribute in gltfAttributes) {
             var accessorIndex = gltfAttributes[attribute];
@@ -401,7 +401,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _assignGeometryPrimitives: function(osgjsGeometry, primitive) {
+    _assignGeometryPrimitives: function (osgjsGeometry, primitive) {
         var accessors = this._gltfJSON.accessors;
         var indexes = accessors[primitive.indices];
         indexes.data._target = BufferArray.ELEMENT_ARRAY_BUFFER;
@@ -410,11 +410,11 @@ ReaderWriterGLTF.prototype = {
         osgjsGeometry.getPrimitiveSetList().push(osgPrimitive);
     },
 
-    _getMorphTargetName: function(mesh, index) {
+    _getMorphTargetName: function (mesh, index) {
         return mesh.osgjsNodeName + '_target_' + index.toString();
     },
 
-    _computeAbsoluteMorphData: function(baseAttributes, morphAttributes) {
+    _computeAbsoluteMorphData: function (baseAttributes, morphAttributes) {
         var accessors = this._gltfJSON.accessors;
         for (var attribute in morphAttributes) {
             var accessorIndex = morphAttributes[attribute];
@@ -435,7 +435,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _processMorphGeometry: function(mesh, primitiveIndex) {
+    _processMorphGeometry: function (mesh, primitiveIndex) {
         var primitive = mesh.primitives[primitiveIndex];
         var geometry = new MorphGeometry();
         var morphUpdateCallback = new UpdateMorph();
@@ -459,7 +459,7 @@ ReaderWriterGLTF.prototype = {
         mesh.osgjsUpdateMorph = morphUpdateCallback;
     },
 
-    loadMeshes: function() {
+    loadMeshes: function () {
         var meshes = this._gltfJSON.meshes;
         var materials = this._gltfJSON.materials;
 
@@ -520,7 +520,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadImages: function() {
+    loadImages: function () {
         var images = this._gltfJSON.images;
         if (!images) return P.resolve();
         var promises = [];
@@ -529,7 +529,7 @@ ReaderWriterGLTF.prototype = {
             var image = images[i];
             var url = window.decodeURI(image.uri);
             var promise = this.loadURI(url).then(
-                function(imageData) {
+                function (imageData) {
                     var osgjsImage = new Image();
                     osgjsImage.setImage(imageData);
                     this.osgjsImage = osgjsImage;
@@ -540,7 +540,7 @@ ReaderWriterGLTF.prototype = {
         return P.all(promises);
     },
 
-    _texture: function(gltfTexture) {
+    _texture: function (gltfTexture) {
         var textures = this._gltfJSON.textures;
         var images = this._gltfJSON.images;
         var texture = textures[gltfTexture.index];
@@ -563,7 +563,7 @@ ReaderWriterGLTF.prototype = {
         return osgjsTexture;
     },
 
-    _pbrMetallicRoughnessTextureUniforms: function() {
+    _pbrMetallicRoughnessTextureUniforms: function () {
         var stateSet = this._rootStateSet;
         if (stateSet.getUniformList()[ReaderWriterGLTF.ALBEDO_UNIFORM]) return;
 
@@ -579,7 +579,7 @@ ReaderWriterGLTF.prototype = {
         stateSet.addUniform(metalnessRoughness);
     },
 
-    _pbrMetallicRoughness: function(material, stateSet) {
+    _pbrMetallicRoughness: function (material, stateSet) {
         stateSet.setUserData({
             pbrWorklow: ReaderWriterGLTF.PBR_METAL_MODE
         });
@@ -619,7 +619,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _KHR_materials_pbrSpecularGlossinessTextureUniforms: function() {
+    _KHR_materials_pbrSpecularGlossinessTextureUniforms: function () {
         if (this._extensions['KHR_materials_pbrSpecularGlossinessTextureUniforms']) return;
         this._extensions['KHR_materials_pbrSpecularGlossinessTextureUniforms'] = true;
 
@@ -642,7 +642,7 @@ ReaderWriterGLTF.prototype = {
         stateSet.addUniform(specular);
     },
 
-    _KHR_materials_pbrSpecularGlossiness: function(material, stateSet) {
+    _KHR_materials_pbrSpecularGlossiness: function (material, stateSet) {
         stateSet.setUserData({
             pbrWorklow: ReaderWriterGLTF.PBR_SPEC_MODE
         });
@@ -681,7 +681,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadMaterials: function() {
+    loadMaterials: function () {
         var materials = this._gltfJSON.materials;
         var hasTransparentMaterial = false;
         var hasDoubleSidedMaterial = false;
@@ -768,7 +768,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    _createBone: function(nodeID) {
+    _createBone: function (nodeID) {
         var nodes = this._gltfJSON.nodes;
         var node = nodes[nodeID];
         node.usedAsBone = true;
@@ -801,7 +801,7 @@ ReaderWriterGLTF.prototype = {
         return osgjsNode;
     },
 
-    _createMatrixTransform: function(nodeID) {
+    _createMatrixTransform: function (nodeID) {
         var nodes = this._gltfJSON.nodes;
         var node = nodes[nodeID];
         var nodeAnimationTypes = this._nodeAnimationTypes;
@@ -830,7 +830,7 @@ ReaderWriterGLTF.prototype = {
         return osgjsNode;
     },
 
-    _processSkin: function(skinID) {
+    _processSkin: function (skinID) {
         var skins = this._gltfJSON.skins;
         var nodes = this._gltfJSON.nodes;
         var skin = skins[skinID];
@@ -876,7 +876,7 @@ ReaderWriterGLTF.prototype = {
         }
     },
 
-    loadAnimations: function() {
+    loadAnimations: function () {
         var animations = this._gltfJSON.animations;
         if (!animations) return;
 
@@ -937,7 +937,7 @@ ReaderWriterGLTF.prototype = {
         this._animationManager = animationManager;
     },
 
-    loadURI: P.method(function(uri, options) {
+    loadURI: P.method(function (uri, options) {
         // is base64 inline data
         if (uri.substr(0, 5) === 'data:') {
             return base64ToArrayBuffer(uri);
@@ -948,7 +948,7 @@ ReaderWriterGLTF.prototype = {
         return fileHelper.requestURI(uri, options);
     }),
 
-    readNodeURL: function(url, options) {
+    readNodeURL: function (url, options) {
         var self = this;
 
         this.init();
@@ -963,16 +963,16 @@ ReaderWriterGLTF.prototype = {
         var index = url.lastIndexOf('/');
         this._localPath = index === -1 ? '' : url.substr(0, index + 1);
         // Else it is a usual XHR request
-        return fileHelper.requestURI(url).then(function(file) {
+        return fileHelper.requestURI(url).then(function (file) {
             return self.readJSON(file);
         });
     },
 
-    readJSON: P.method(function(json, url) {
+    readJSON: P.method(function (json, url) {
         this._gltfJSON = json;
 
         return P.all([this.loadBuffers(), this.loadImages()]).then(
-            function() {
+            function () {
                 this.loadBufferViews();
                 this.loadAccessors();
                 this._preProcessNodes();

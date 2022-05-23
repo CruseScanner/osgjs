@@ -11,7 +11,7 @@ import Graph from 'osgStats/Graph';
 // values data   (4 vertexes, indexes)
 // graph data    (2 vertexes, drawArrays)
 
-var BufferStats = function() {
+var BufferStats = function () {
     this._usageHint = BufferArray.DYNAMIC_DRAW;
     // equivalent of 512 characters for caption, 128 of values characters
     // and 6 graph of 120 lines
@@ -32,10 +32,10 @@ BufferStats.greyColor = 4.0;
 BufferStats.whiteColor = 1.0;
 
 utils.createPrototypeObject(BufferStats, {
-    getGeometry: function() {
+    getGeometry: function () {
         return this._geometry;
     },
-    generateBackground: function(x, y, w, h) {
+    generateBackground: function (x, y, w, h) {
         var vertexes = this._vertexes;
         this._nbVertexes += 4;
 
@@ -62,7 +62,7 @@ utils.createPrototypeObject(BufferStats, {
         vertexes[14] = 0.0;
         vertexes[15] = BufferStats.backgroundColor;
     },
-    generateCharacter: function(x, y, w, h, ux, ux1, color) {
+    generateCharacter: function (x, y, w, h, ux, ux1, color) {
         var vertexes = this._vertexes;
         var nbVertexes = this._nbVertexes;
 
@@ -92,7 +92,7 @@ utils.createPrototypeObject(BufferStats, {
         vertexes[i++] = ux1;
         vertexes[i++] = -(0.0 + color);
     },
-    generateText: function(x, y, text, textGenerator, zColor) {
+    generateText: function (x, y, text, textGenerator, zColor) {
         var size = text.length;
         if (this._nbVertexes + size * 4 >= this._maxNbVertexes) {
             this.resize(this._maxNbVertexes * 2);
@@ -117,7 +117,7 @@ utils.createPrototypeObject(BufferStats, {
         }
         return size * characterWidth;
     },
-    generateGraph: function(graph, height) {
+    generateGraph: function (graph, height) {
         if (this._nbVertexes + Graph.maxGraphValue * 2 >= this._maxNbVertexes) {
             this.resize(this._maxNbVertexes * 2);
         }
@@ -162,7 +162,7 @@ utils.createPrototypeObject(BufferStats, {
             vertexes[vertexIndex + 7] = color;
         }
     },
-    resize: function(nbVertexes) {
+    resize: function (nbVertexes) {
         notify.log('resize buffer to ' + nbVertexes);
         this._maxNbVertexes = nbVertexes;
         var vertexes = new Float32Array(nbVertexes * 4);
@@ -209,40 +209,40 @@ utils.createPrototypeObject(BufferStats, {
         this._graphPrimitive = drawArrays;
         this._geometry.getPrimitives().push(this._graphPrimitive);
     },
-    update: function() {
+    update: function () {
         var nbTotalCharacters = this._captionNbVertexes + this._valuesNbVertexes;
-        this._characterPrimitive.setCount(nbTotalCharacters / 4 * 6);
+        this._characterPrimitive.setCount((nbTotalCharacters / 4) * 6);
         this._graphPrimitive.setCount(this._graphsNbVertexes);
         this._graphPrimitive.setFirst(nbTotalCharacters);
 
         this._geometry.getAttributes().Vertex.dirty();
     },
-    resetCaptions: function() {
+    resetCaptions: function () {
         this._nbVertexes = 0;
         this._captionNbVertexes = 0;
     },
-    resetValues: function() {
+    resetValues: function () {
         this._nbVertexes = this._captionNbVertexes;
         this._valuesNbVertexes = 0;
         this._graphsNbVertexes = 0;
     },
-    captionsEnd: function() {
+    captionsEnd: function () {
         this._captionNbVertexes = this._nbVertexes;
     },
-    valuesEnd: function() {
+    valuesEnd: function () {
         this._valuesNbVertexes = this._nbVertexes - this._captionNbVertexes;
     },
-    graphsEnd: function() {
+    graphsEnd: function () {
         this._graphsNbVertexes =
             this._nbVertexes - (this._valuesNbVertexes + this._captionNbVertexes);
     },
-    getCharacterPrimitive: function() {
+    getCharacterPrimitive: function () {
         return this._characterPrimitive;
     },
-    getGraphPrimitive: function() {
+    getGraphPrimitive: function () {
         return this._graphPrimitive;
     },
-    getNbVertexes: function() {
+    getNbVertexes: function () {
         return this._nbVertexes;
     }
 });

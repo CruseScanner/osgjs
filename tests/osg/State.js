@@ -8,9 +8,9 @@ import Texture from 'osg/Texture';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 import mockup from 'tests/mockup/mockup';
 
-export default function() {
-    test('State', function() {
-        (function() {
+export default function () {
+    test('State', function () {
+        (function () {
             var state = new State(new ShaderGeneratorProxy());
 
             var stateSet0 = new StateSet();
@@ -35,7 +35,7 @@ export default function() {
         })();
     });
 
-    test('State setGlobalDefaultTextureAttribute', function() {
+    test('State setGlobalDefaultTextureAttribute', function () {
         var state = new State(new ShaderGeneratorProxy());
 
         var texture = new Texture();
@@ -48,21 +48,21 @@ export default function() {
         );
     });
 
-    test('State applyStateSet', function() {
-        (function() {
+    test('State applyStateSet', function () {
+        (function () {
             var state = new State(new ShaderGeneratorProxy());
             var fakeRenderer = mockup.createFakeRenderer();
             var id = 0;
-            fakeRenderer.createProgram = function() {
+            fakeRenderer.createProgram = function () {
                 return id++;
             };
-            fakeRenderer.getProgramParameter = function() {
+            fakeRenderer.getProgramParameter = function () {
                 return true;
             };
 
             var textureBindCall = new Map();
 
-            fakeRenderer.bindTexture = function(target, texture) {
+            fakeRenderer.bindTexture = function (target, texture) {
                 var value = textureBindCall.get(texture);
                 if (value === undefined) value = 0;
                 value++;
@@ -80,7 +80,7 @@ export default function() {
             texture0.setName('My name is 0');
             texture0.setTextureSize(1, 1);
             texture0._textureObject = {
-                bind: function(gl) {
+                bind: function (gl) {
                     gl.bindTexture(0, 1);
                 }
             };

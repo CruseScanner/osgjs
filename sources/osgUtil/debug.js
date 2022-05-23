@@ -7,7 +7,7 @@ import Shape from 'osg/shape';
  * @param Matrix proj Projection
  * @param Vec2 dR depthRange (optional, only if proj is infinite)
  */
-var updateFrustum = function(proj, dR) {
+var updateFrustum = function (proj, dR) {
     var near, far;
     if (!dR) {
         // Get near and far from the Projection matrix.
@@ -19,16 +19,16 @@ var updateFrustum = function(proj, dR) {
     }
 
     // Get the sides of the near plane.
-    var nLeft = near * (proj[8] - 1.0) / proj[0];
-    var nRight = near * (1.0 + proj[8]) / proj[0];
-    var nTop = near * (1.0 + proj[9]) / proj[5];
-    var nBottom = near * (proj[9] - 1.0) / proj[5];
+    var nLeft = (near * (proj[8] - 1.0)) / proj[0];
+    var nRight = (near * (1.0 + proj[8])) / proj[0];
+    var nTop = (near * (1.0 + proj[9])) / proj[5];
+    var nBottom = (near * (proj[9] - 1.0)) / proj[5];
 
     // Get the sides of the far plane.
-    var fLeft = far * (proj[8] - 1.0) / proj[0];
-    var fRight = far * (1.0 + proj[8]) / proj[0];
-    var fTop = far * (1.0 + proj[9]) / proj[5];
-    var fBottom = far * (proj[9] - 1.0) / proj[5];
+    var fLeft = (far * (proj[8] - 1.0)) / proj[0];
+    var fRight = (far * (1.0 + proj[8])) / proj[0];
+    var fTop = (far * (1.0 + proj[9])) / proj[5];
+    var fBottom = (far * (proj[9] - 1.0)) / proj[5];
 
     var vBuff = this.getAttributes().Vertex;
     var v = vBuff.getElements();
@@ -72,7 +72,7 @@ var updateFrustum = function(proj, dR) {
  * Given a Camera, create a wireframe representation
  *  of its view frustum
  */
-var createDebugFrustrumGeometry = function() {
+var createDebugFrustrumGeometry = function () {
     var g = Shape.createBoundingBoxGeometry();
     g.updateGeometry = updateFrustum;
     return g;

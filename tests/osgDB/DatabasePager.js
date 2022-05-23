@@ -5,10 +5,10 @@ import Node from 'osg/Node';
 import FrameStamp from 'osg/FrameStamp';
 import notify from 'osg/notify';
 
-export default function() {
+export default function () {
     var dbpager = new DatabasePager();
     // Modify the processRequest
-    dbpager.processRequest = function(dbrequest) {
+    dbpager.processRequest = function (dbrequest) {
         this._loading = true;
         var that = this;
         // Check if the request is valid;
@@ -21,7 +21,7 @@ export default function() {
 
         // Load from function
         if (dbrequest._function !== undefined) {
-            return this.loadNodeFromFunction(dbrequest._function, dbrequest._group).then(function(
+            return this.loadNodeFromFunction(dbrequest._function, dbrequest._group).then(function (
                 child
             ) {
                 that._downloadingRequestsNumber--;
@@ -31,7 +31,7 @@ export default function() {
             });
         } else if (dbrequest._url !== '') {
             // Load from URL
-            return this.loadNodeFromURL(dbrequest._url).then(function(child) {
+            return this.loadNodeFromURL(dbrequest._url).then(function (child) {
                 that._downloadingRequestsNumber--;
                 dbrequest._loadedModel = child;
                 that._pendingNodes.push(dbrequest);
@@ -40,7 +40,7 @@ export default function() {
         }
     };
 
-    test('DatabasePager.requestNodeFile', function(done) {
+    test('DatabasePager.requestNodeFile', function (done) {
         dbpager.reset();
         var fn = function createNode(/*parent*/) {
             var n = new Node();
@@ -53,16 +53,16 @@ export default function() {
         assert.isOk(dbpager._pendingRequests.length === 1, 'Node requested');
         dbpager
             .processRequest(request)
-            .then(function() {
+            .then(function () {
                 done();
                 assert.isOk(dbpager._pendingNodes.length === 1, 'Request processed');
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });
 
-    test('DatabasePager.addLoadedDataToSceneGraph', function(done) {
+    test('DatabasePager.addLoadedDataToSceneGraph', function (done) {
         dbpager.reset();
         var fn = function createNode(/*parent*/) {
             var n = new PagedLOD();
@@ -76,7 +76,7 @@ export default function() {
         assert.isOk(dbpager._pendingRequests.length === 1, 'Node requested');
         dbpager
             .processRequest(request)
-            .then(function() {
+            .then(function () {
                 done();
                 dbpager.addLoadedDataToSceneGraph(new FrameStamp(), 0.005);
                 assert.isOk(
@@ -84,12 +84,12 @@ export default function() {
                     'we should have two plods active'
                 );
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });
 
-    test('DatabasePager.removeExpiredChildren', function(done) {
+    test('DatabasePager.removeExpiredChildren', function (done) {
         dbpager.reset();
         dbpager.setTargetMaximumNumberOfPageLOD(1);
         var fn = function createNode(/*parent*/) {
@@ -104,7 +104,7 @@ export default function() {
         assert.isOk(dbpager._pendingRequests.length === 1, 'Node requested');
         dbpager
             .processRequest(request)
-            .then(function() {
+            .then(function () {
                 done();
                 dbpager.addLoadedDataToSceneGraph(frameStamp);
                 frameStamp.setSimulationTime(10);
@@ -119,7 +119,7 @@ export default function() {
                     'we should have the child plod marked to be deleted'
                 );
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 notify.error(error);
             });
     });

@@ -3,7 +3,7 @@ import { vec3 } from 'osg/glMatrix';
 import Plane from 'osg/Plane';
 import IntersectFunctor from 'osgUtil/IntersectFunctor';
 
-var PolytopeIntersection = function() {
+var PolytopeIntersection = function () {
     IntersectFunctor.Intersection.call(this);
 
     this._intersectionPoints = [];
@@ -13,7 +13,7 @@ var PolytopeIntersection = function() {
 };
 
 // Settings are needed.
-var PolytopeIntersectFunctor = function() {
+var PolytopeIntersectFunctor = function () {
     IntersectFunctor.call(this);
 
     this._src = [];
@@ -24,13 +24,13 @@ var PolytopeIntersectFunctor = function() {
 utils.createPrototypeObject(
     PolytopeIntersectFunctor,
     utils.objectInherit(IntersectFunctor.prototype, {
-        reset: function() {
+        reset: function () {
             IntersectFunctor.prototype.reset.call(this);
             this._src = [];
             this._dest = [];
         },
 
-        enter: function(bbox) {
+        enter: function (bbox) {
             if (this._intersector.getPolytope().containsBoundingBox(bbox)) {
                 this._intersector.getPolytope().pushCurrentMask();
                 return true;
@@ -38,11 +38,11 @@ utils.createPrototypeObject(
             return false;
         },
 
-        leave: function() {
+        leave: function () {
             this._intersector.getPolytope().popCurrentMask();
         },
 
-        addIntersection: function() {
+        addIntersection: function () {
             this._src = utils.arrayUniq(this._src);
             var src = this._src;
 
@@ -70,7 +70,7 @@ utils.createPrototypeObject(
             }
         },
 
-        contains: function() {
+        contains: function () {
             var polytope = this._intersector.getPolytope();
             var planeList = polytope.getPlanes();
 
@@ -124,7 +124,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        containsPoint: function(v0) {
+        containsPoint: function (v0) {
             if (this._intersector.getPolytope().containsVertex(v0)) {
                 // initialize the set of vertices to test.
                 this._src = [];
@@ -134,7 +134,7 @@ utils.createPrototypeObject(
             return false;
         },
 
-        containsLine: function(v0, v1) {
+        containsLine: function (v0, v1) {
             // initialize the set of vertices to test.
             this._src = [];
             this._src[0] = v0;
@@ -143,7 +143,7 @@ utils.createPrototypeObject(
             return this.contains();
         },
 
-        containsTriangle: function(v0, v1, v2) {
+        containsTriangle: function (v0, v1, v2) {
             // initialize the set of vertices to test.
             this._src = [];
             this._src[0] = v0;
@@ -153,15 +153,15 @@ utils.createPrototypeObject(
             return this.contains();
         },
 
-        intersectPoint: function(v0) {
+        intersectPoint: function (v0) {
             if (this.containsPoint(v0)) this.addIntersection();
         },
 
-        intersectLine: function(v0, v1) {
+        intersectLine: function (v0, v1) {
             if (this.containsLine(v0, v1)) this.addIntersection();
         },
 
-        intersectTriangle: function(v0, v1, v2) {
+        intersectTriangle: function (v0, v1, v2) {
             if (this.containsTriangle(v0, v1, v2)) this.addIntersection();
         }
     }),

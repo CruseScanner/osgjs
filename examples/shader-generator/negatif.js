@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     var osg = window.OSG.osg;
 
-    var NegatifAttribute = function() {
+    var NegatifAttribute = function () {
         osg.StateAttribute.call(this);
         this._attributeEnable = false;
     };
@@ -15,12 +15,12 @@
         osg.objectInherit(osg.StateAttribute.prototype, {
             attributeType: 'Negatif',
 
-            cloneType: function() {
+            cloneType: function () {
                 return new NegatifAttribute();
             },
 
             // uniforms list are per ClassType
-            getOrCreateUniforms: function() {
+            getOrCreateUniforms: function () {
                 var obj = NegatifAttribute;
                 if (obj.uniforms) return obj.uniforms;
 
@@ -31,15 +31,15 @@
                 return obj.uniforms;
             },
 
-            setAttributeEnable: function(state) {
+            setAttributeEnable: function (state) {
                 this._attributeEnable = state;
             },
 
-            getAttributeEnable: function() {
+            getAttributeEnable: function () {
                 return this._attributeEnable;
             },
 
-            apply: function() {
+            apply: function () {
                 var uniforms = this.getOrCreateUniforms();
                 var value = this._attributeEnable ? 1 : 0;
                 uniforms.enable.setFloat(value);

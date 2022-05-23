@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -9,15 +9,15 @@
     var osgDB = OSG.osgDB;
     var Object = window.Object;
 
-    var FindAnimationManagerVisitor = function() {
+    var FindAnimationManagerVisitor = function () {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
         this._cb = undefined;
     };
     FindAnimationManagerVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        getAnimationManager: function() {
+        getAnimationManager: function () {
             return this._cb;
         },
-        apply: function(node) {
+        apply: function (node) {
             var cbs = node.getUpdateCallbackList();
             for (var i = 0, l = cbs.length; i < l; i++) {
                 if (cbs[0] instanceof osgAnimation.BasicAnimationManager) {
@@ -29,19 +29,19 @@
         }
     });
 
-    var HideCullCallback = function() {};
+    var HideCullCallback = function () {};
     HideCullCallback.prototype = {
-        cull: function() {
+        cull: function () {
             return false;
         }
     };
     var hideCullCallback = new HideCullCallback();
 
-    var HideBBVisitor = function() {
+    var HideBBVisitor = function () {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
     };
     HideBBVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        apply: function(node) {
+        apply: function (node) {
             if (node instanceof osgAnimation.RigGeometry) {
                 node._boundingSphereComputed = true;
                 node._boundingBoxComputed = true;
@@ -58,22 +58,22 @@
         }
     });
 
-    var FindBoneVisitor = function() {
+    var FindBoneVisitor = function () {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
         this._bones = [];
     };
     FindBoneVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        init: function() {},
-        apply: function(node) {
+        init: function () {},
+        apply: function (node) {
             if (node.className() === 'Bone') {
                 this._bones.push(node);
             }
             this.traverse(node);
         },
-        getBones: function() {
+        getBones: function () {
             return this._bones;
         },
-        getBone: function(name) {
+        getBone: function (name) {
             var bones = this.getBones();
             for (var i = 0, l = bones.length; i < l; i++) {
                 var bone = bones[i];
@@ -85,11 +85,11 @@
         }
     });
 
-    var FindSkeletonVisitor = function() {
+    var FindSkeletonVisitor = function () {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
     };
     FindSkeletonVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        apply: function(node) {
+        apply: function (node) {
             if (node instanceof osgAnimation.Skeleton) {
                 this.skl = node;
                 return;
@@ -98,7 +98,7 @@
         }
     });
 
-    var createScene = function(viewer, root, url, config, controller) {
+    var createScene = function (viewer, root, url, config, controller) {
         //init controller
         controller.count = 0;
         controller.timeFactor = 1.0;
@@ -111,7 +111,7 @@
         var request = osgDB.readNodeURL('../media/models/animation/' + url);
         root.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace(osg.CullFace.DISABLE));
 
-        request.then(function(node) {
+        request.then(function (node) {
             var i = 0;
             var l = 0;
 
@@ -136,7 +136,7 @@
                 }
             }
 
-            window.listBones = function() {
+            window.listBones = function () {
                 for (i = 0, l = bones.length; i < l; i++) {
                     var b = bones[i];
                     console.log(b.getName(), b.getMatrix());
@@ -161,11 +161,11 @@
                 var firstAnimation = animations.length ? animations[0] : undefined;
                 config.currentAnim = config.anim || firstAnimation;
                 if (config.currentAnim) {
-                    controller.play = function() {
+                    controller.play = function () {
                         animationManager.stopAllAnimation();
                         animationManager.playAnimation(config.currentAnim);
                     };
-                    controller.stop = function() {
+                    controller.stop = function () {
                         animationManager.stopAnimation(config.currentAnim);
 
                         var animationList = animationManager._activeAnimationList;
@@ -174,10 +174,10 @@
                             hash += animationList[i].name + ';';
                         window.location.hash = hash;
                     };
-                    controller.pause = function() {
+                    controller.pause = function () {
                         animationManager.togglePause();
                     };
-                    controller.bind = function() {
+                    controller.bind = function () {
                         animationManager.stopAllAnimation();
                         skl.setRestPose();
                     };
@@ -186,9 +186,9 @@
 
                     if (config['time']) {
                         var nv = {
-                            getFrameStamp: function() {
+                            getFrameStamp: function () {
                                 return {
-                                    getSimulationTime: function() {
+                                    getSimulationTime: function () {
                                         return 0;
                                     }
                                 };
@@ -214,7 +214,7 @@
                         Object.keys(controller.anims)
                     );
                     animsController.setValue(config.currentAnim);
-                    animsController.onFinishChange(function(value) {
+                    animsController.onFinishChange(function (value) {
                         //animationManager.stopAnimation( config.currentAnim );
                         config.currentAnim = value;
                         controller.play();
@@ -242,7 +242,7 @@
         return root;
     };
 
-    var onLoad = function() {
+    var onLoad = function () {
         var canvas = document.getElementById('View');
         var viewer = new osgViewer.Viewer(canvas);
         viewer.init();
@@ -256,7 +256,7 @@
         window.location.search
             .substr(1)
             .split('&')
-            .forEach(function(item) {
+            .forEach(function (item) {
                 queryDict[item.split('=')[0]] = item.split('=')[1];
             });
 
@@ -273,10 +273,10 @@
 
         var controller = (this._controller = {
             debugScene: !!this._config['debug'],
-            play: function() {},
-            stop: function() {},
-            pause: function() {},
-            bind: function() {},
+            play: function () {},
+            stop: function () {},
+            pause: function () {},
+            bind: function () {},
             count: 0,
             timeFactor: 1.0,
             isPlaying: false,
@@ -327,7 +327,7 @@
             Object.keys(this._controller.models)
         );
         //modelController.listen();
-        modelController.onFinishChange(function(value) {
+        modelController.onFinishChange(function (value) {
             if (value !== 'undefined' && value !== defaultChoice) {
                 var search = '?url=' + controller.models;
                 window.location.href = window.location.origin + window.location.pathname + search;
@@ -337,7 +337,7 @@
             }
         });
 
-        var load = function(/*value*/) {
+        var load = function (/*value*/) {
             root.removeChildren();
             createScene(viewer, root, window.models[controller.models], config, controller);
         };
@@ -359,12 +359,12 @@
         gui.add(this._controller, 'bind');
 
         var speed = gui.add(this._controller, 'timeFactor');
-        speed.onFinishChange(function(value) {
+        speed.onFinishChange(function (value) {
             window.animationManager.setTimeFactor(value);
         });
 
         var times = gui.add(this._controller, 'times', 0, 10).listen();
-        times.onChange(function(value) {
+        times.onChange(function (value) {
             var activeAnimation = window.animationManager._activeAnimationList[0];
             var animation = window.animationManager._instanceAnimations[activeAnimation.name];
             var ratio = value / 10.0;
@@ -380,7 +380,7 @@
 
         gui.add(this._controller, 'isPlaying').listen();
 
-        var update = function() {
+        var update = function () {
             requestAnimationFrame(update);
             if (!window.animationManager) return;
             controller.isPlaying = window.animationManager.isPlaying(config.currentAnim);

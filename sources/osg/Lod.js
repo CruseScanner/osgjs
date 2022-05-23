@@ -10,7 +10,7 @@ import BoundingSphere from 'osg/BoundingSphere';
  *  Lod that can contains child node
  *  @class Lod
  */
-var Lod = function() {
+var Lod = function () {
     Node.call(this);
     this._radius = -1;
     this._range = [];
@@ -31,23 +31,23 @@ utils.createPrototypeNode(
     Lod,
     utils.objectInherit(Node.prototype, {
         // Functions here
-        getRadius: function() {
+        getRadius: function () {
             return this._radius;
         },
 
         /** Set the object-space reference radius of the volume enclosed by the LOD.
          * Used to determine the bounding sphere of the LOD in the absence of any children.*/
-        setRadius: function(radius) {
+        setRadius: function (radius) {
             this._radius = radius;
         },
 
-        setCenter: function(center) {
+        setCenter: function (center) {
             if (this._centerMode !== Lod.UNION_OF_BOUNDING_SPHERE_AND_USER_DEFINED)
                 this._centerMode = Lod.USER_DEFINED_CENTER;
             this._userDefinedCenter = center;
         },
 
-        getCenter: function() {
+        getCenter: function () {
             if (
                 this._centerMode === Lod.USER_DEFINED_CENTER ||
                 this._centerMode === Lod.UNION_OF_BOUNDING_SPHERE_AND_USER_DEFINED
@@ -56,11 +56,11 @@ utils.createPrototypeNode(
             else return this.getBound().center();
         },
 
-        setCenterMode: function(centerMode) {
+        setCenterMode: function (centerMode) {
             this._centerMode = centerMode;
         },
 
-        computeBoundingSphere: function(bsphere) {
+        computeBoundingSphere: function (bsphere) {
             if (this._centerMode === Lod.USER_DEFINED_CENTER && this._radius >= 0.0) {
                 bsphere.set(this._userDefinedCenter, this._radius);
                 return bsphere;
@@ -78,32 +78,28 @@ utils.createPrototypeNode(
             }
         },
 
-        projectBoundingSphere: (function() {
+        projectBoundingSphere: (function () {
             // from http://www.iquilezles.org/www/articles/sphereproj/sphereproj.htm
             // Sample code at http://www.shadertoy.com/view/XdBGzd?
             var o = vec3.create();
-            return function(sph, camMatrix, fle) {
+            return function (sph, camMatrix, fle) {
                 vec3.transformMat4(o, sph.center(), camMatrix);
                 var r2 = sph.radius2();
                 var z2 = o[2] * o[2];
                 var l2 = vec3.sqrLen(o);
                 var area =
-                    -Math.PI *
-                    fle *
-                    fle *
-                    r2 *
-                    Math.sqrt(Math.abs((l2 - r2) / (r2 - z2))) /
+                    (-Math.PI * fle * fle * r2 * Math.sqrt(Math.abs((l2 - r2) / (r2 - z2)))) /
                     (r2 - z2);
                 return area;
             };
         })(),
 
-        setRangeMode: function(mode) {
+        setRangeMode: function (mode) {
             //TODO: check if mode is correct
             this._rangeMode = mode;
         },
 
-        addChildNode: function(node) {
+        addChildNode: function (node) {
             Node.prototype.addChild.call(this, node);
             if (this.children.length > this._range.length) {
                 var r = [];
@@ -115,7 +111,7 @@ utils.createPrototypeNode(
             return true;
         },
 
-        addChild: function(node, min, max) {
+        addChild: function (node, min, max) {
             Node.prototype.addChild.call(this, node);
 
             if (this.children.length > this._range.length) {
@@ -128,14 +124,14 @@ utils.createPrototypeNode(
             return true;
         },
 
-        traverse: (function() {
+        traverse: (function () {
             // avoid to generate variable on the heap to limit garbage collection
             // instead create variable and use the same each time
             var zeroVector = vec3.create();
             var eye = vec3.create();
             var viewModel = mat4.create();
 
-            return function(visitor) {
+            return function (visitor) {
                 var traversalMode = visitor.traversalMode;
 
                 switch (traversalMode) {
@@ -165,10 +161,10 @@ utils.createPrototypeNode(
                             );
                             // Multiply by a factor to get the real area value
                             requiredRange =
-                                requiredRange *
-                                visitor.getViewport().width() *
-                                visitor.getViewport().width() *
-                                0.25 /
+                                (requiredRange *
+                                    visitor.getViewport().width() *
+                                    visitor.getViewport().width() *
+                                    0.25) /
                                 visitor.getLODScale();
                         }
 

@@ -2,8 +2,8 @@ import { assert } from 'chai';
 import View from 'osgViewer/View';
 import mockup from 'tests/mockup/mockup';
 
-export default function() {
-    test('View', function() {
+export default function () {
+    test('View', function () {
         var gc = mockup.createFakeRenderer();
         var view = new View();
         view.setGraphicContext(gc);

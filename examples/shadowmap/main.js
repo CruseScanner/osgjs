@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var P = window.P;
@@ -13,7 +13,7 @@
     //////////////////////
     /// The sample itself is in this object.
     ///
-    var Example = function() {
+    var Example = function () {
         ExampleOSGJS.call(this);
 
         // sample default parameters
@@ -51,7 +51,7 @@
             shadowStatic: false,
             basicScene: false,
             customShadow: 'default',
-            logCamLight: function() {
+            logCamLight: function () {
                 var example = this.exampleObj;
                 var cam = example._viewer._manipulator;
                 console.groupCollapsed('Cam & Light');
@@ -172,7 +172,7 @@
 
     // That's where we update lights position/direction at each frame
     // so that the sample is not too much static
-    var LightUpdateCallback = function(light, myExample, debugNode, position, dir, target) {
+    var LightUpdateCallback = function (light, myExample, debugNode, position, dir, target) {
         this._example = myExample;
 
         this._positionX = position[0];
@@ -191,7 +191,7 @@
         this._directLightChange = false; // GUI change, mmm
     };
     LightUpdateCallback.prototype = {
-        update: function(node, nv) {
+        update: function (node, nv) {
             var currentTime = nv.getFrameStamp().getSimulationTime();
             //
             var lightPos = this._lightPos;
@@ -295,7 +295,7 @@
         /*
          *   UI user choices
          */
-        initDatGUI: function() {
+        initDatGUI: function () {
             var gui = new window.dat.GUI();
 
             var textureTypes = ['UNSIGNED_BYTE'];
@@ -385,10 +385,7 @@
             controller = gui.add(this._config, 'normalBias', 0.001, 1.0);
             controller.onChange(this.updateShadow.bind(this));
 
-            controller = gui
-                .add(this._config, 'fov')
-                .min(0.0)
-                .max(180.0);
+            controller = gui.add(this._config, 'fov').min(0.0).max(180.0);
             controller.onChange(this.updateShadow.bind(this));
 
             controller = gui.add(
@@ -401,7 +398,7 @@
             this._gui = gui;
         },
 
-        readShaders: function() {
+        readShaders: function () {
             // get shader processor
 
             var promises = [
@@ -413,7 +410,7 @@
             // register shader to the shader processor
             var allPromises = P.all(promises);
             allPromises.then(
-                function(shaders) {
+                function (shaders) {
                     this.shaderLib = {
                         'debug.glsl': shaders[0],
                         'pcss.glsl': shaders[1],
@@ -425,7 +422,7 @@
             return allPromises;
         },
 
-        testFrustumIntersections: function() {
+        testFrustumIntersections: function () {
             if (this._config.frustumTest !== this._previousFrustumTest) {
                 var manip = this._viewer._manipulator;
                 var light = this._lights[0];
@@ -437,32 +434,20 @@
                     // ideally no shadow map render, just a clear.
                     case 'no shadowed':
                         manip.setTarget([
-                            11.0721987395957,
-                            -21.171437894503,
-                            -0.713785786725304,
-                            0
+                            11.0721987395957, -21.171437894503, -0.713785786725304, 0
                         ]);
                         manip.setEyePosition([
-                            126.312857059939,
-                            59.1717582917732,
-                            89.0255465966154,
-                            0
+                            126.312857059939, 59.1717582917732, 89.0255465966154, 0
                         ]);
                         light.setPosition([49.0463080818749, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
                         break;
                     case 'no caster':
                         manip.setTarget([
-                            11.0721987395739,
-                            -21.1714378944974,
-                            -0.713785786749115,
-                            0
+                            11.0721987395739, -21.1714378944974, -0.713785786749115, 0
                         ]);
                         manip.setEyePosition([
-                            -16.4124585874524,
-                            140.853390554934,
-                            27.2350041278865,
-                            0
+                            -16.4124585874524, 140.853390554934, 27.2350041278865, 0
                         ]);
                         light.setPosition([-4.16478262048437, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -470,10 +455,7 @@
                     case 'no caster but shadowed':
                         manip.setTarget([0, 0, -5, 0]);
                         manip.setEyePosition([
-                            203.051858988223,
-                            -1.77475889513387,
-                            56.3742029870193,
-                            0
+                            203.051858988223, -1.77475889513387, 56.3742029870193, 0
                         ]);
                         light.setPosition([-48.5691198680279, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -495,16 +477,10 @@
                     // doesn't cull between light and camera
                     case 'back':
                         manip.setTarget([
-                            11.0721987395982,
-                            -21.1714378945582,
-                            -0.713785786672559,
-                            0
+                            11.0721987395982, -21.1714378945582, -0.713785786672559, 0
                         ]);
                         manip.setEyePosition([
-                            16.6808944154566,
-                            112.114764418358,
-                            11.1175579786547,
-                            0
+                            16.6808944154566, 112.114764418358, 11.1175579786547, 0
                         ]);
                         light.setPosition([9.54948142490062, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -512,26 +488,17 @@
                     case 'front':
                         manip.setTarget([0, 0, -5, 0]);
                         manip.setEyePosition([
-                            -18.8400138094453,
-                            -208.767981774991,
-                            27.5727442082625,
-                            0
+                            -18.8400138094453, -208.767981774991, 27.5727442082625, 0
                         ]);
                         light.setPosition([3.44634695972348, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
                         break;
                     case 'left':
                         manip.setEyePosition([
-                            170.822493889,
-                            -34.1670561462405,
-                            45.1069888256632,
-                            0
+                            170.822493889, -34.1670561462405, 45.1069888256632, 0
                         ]);
                         manip.setTarget([
-                            11.0721987395999,
-                            -21.1714378945369,
-                            -0.713785786700684,
-                            0
+                            11.0721987395999, -21.1714378945369, -0.713785786700684, 0
                         ]);
                         light.setPosition([9.54948142490062, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -539,10 +506,7 @@
                     case 'right':
                         manip.setTarget([0, 0, -5, 0]);
                         manip.setEyePosition([
-                            -199.86004380911345,
-                            31.942733131790295,
-                            58.52656679445649,
-                            0
+                            -199.86004380911345, 31.942733131790295, 58.52656679445649, 0
                         ]);
                         light.setPosition([-47.2792683004939, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -550,26 +514,17 @@
                     case 'top':
                         manip.setTarget([0, 0, -5, 0]);
                         manip.setEyePosition([
-                            -20.161786666401184,
-                            -63.095194777599346,
-                            196.52542954773435,
-                            0
+                            -20.161786666401184, -63.095194777599346, 196.52542954773435, 0
                         ]);
                         light.setPosition([11.246431610733037, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
                         break;
                     case 'bottom':
                         manip.setTarget([
-                            -8.797280076478858,
-                            -12.859778813688333,
-                            -8.308952702739692,
-                            0
+                            -8.797280076478858, -12.859778813688333, -8.308952702739692, 0
                         ]);
                         manip.setEyePosition([
-                            -19.370764410777106,
-                            25.581637242118962,
-                            -129.6079385994182,
-                            0
+                            -19.370764410777106, 25.581637242118962, -129.6079385994182, 0
                         ]);
                         light.setPosition([13.934303868121559, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -579,42 +534,27 @@
                     // in direction, div by 0 detect from dot
                     case 'face2face':
                         manip.setTarget([
-                            31.6858829004952,
-                            -16.6958342590879,
-                            -2.54477673437539,
-                            0
+                            31.6858829004952, -16.6958342590879, -2.54477673437539, 0
                         ]);
                         manip.setEyePosition([
-                            16.3913827111024,
-                            -142.956680258752,
-                            -13.575986033593,
-                            0
+                            16.3913827111024, -142.956680258752, -13.575986033593, 0
                         ]);
                         light.setPosition([-3.7657152005487, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
                         break;
                     case 'back2back':
                         manip.setTarget([
-                            11.0721987395739,
-                            -210.1714378944974,
-                            0.713785786749115,
-                            0
+                            11.0721987395739, -210.1714378944974, 0.713785786749115, 0
                         ]);
                         manip.setEyePosition([
-                            -16.4124585874524,
-                            140.853390554934,
-                            27.2350041278865,
-                            0
+                            -16.4124585874524, 140.853390554934, 27.2350041278865, 0
                         ]);
                         light.setPosition([-4.16478262048437, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
                         break;
                     case 'samePosition&Direction':
                         manip.setTarget([
-                            -18.8400138094453,
-                            -208.767981774991,
-                            27.5727442082625,
-                            0
+                            -18.8400138094453, -208.767981774991, 27.5727442082625, 0
                         ]);
                         manip.setEyePosition([-4.16478262048437, 50, 15, 0]);
                         light.setPosition([-4.16478262048437, 50, 15, light.getPosition().w]);
@@ -626,10 +566,7 @@
                     case 'default':
                         manip.setTarget([0, 0, -5, 0]);
                         manip.setEyePosition([
-                            -2.59786816870648e-14,
-                            -201.749553589187,
-                            60.5524036673232,
-                            0
+                            -2.59786816870648e-14, -201.749553589187, 60.5524036673232, 0
                         ]);
                         light.setPosition([7.20537602023089, 50, 15, light.getPosition().w]);
                         light.setDirection([0, -0.9977851578566089, -0.06651901052377393]);
@@ -641,7 +578,7 @@
             }
         },
 
-        updateLightsEnable: function() {
+        updateLightsEnable: function () {
             var l,
                 numLights = this._config.lightNum;
 
@@ -688,7 +625,7 @@
             for (l = 0; l < numLights; l++) this._lights[l].setEnabled(true);
         },
 
-        updateShadowStatic: function() {
+        updateShadowStatic: function () {
             var l = this._lights.length;
             // remove all lights
             while (l--) {
@@ -700,14 +637,14 @@
             }
         },
 
-        updateLightsAmbient: function() {
+        updateLightsAmbient: function () {
             var l = this._lights.length;
             var val = this._config.lightAmbient ? 0.6 : 0.0;
             while (l--) {
                 this._lights[l].setAmbient([val, val, val, 1.0]);
             }
         },
-        updateLightType: function() {
+        updateLightType: function () {
             var l;
             if (this._previousLightType !== this._config.lightType) {
                 switch (this._config.lightType) {
@@ -744,7 +681,7 @@
                 this._previousLightType = this._config.lightType;
             }
         },
-        updateShadowFormat: function() {
+        updateShadowFormat: function () {
             var texType = this._config.textureType;
             if (this._previousTextureType !== texType) {
                 var l = this._lights.length;
@@ -757,7 +694,7 @@
             this._updateRTT = true;
         },
 
-        updateShadowMapSize: function() {
+        updateShadowMapSize: function () {
             var mapsize = this._config.textureSize;
             if (this._previousTextureSize !== mapsize) {
                 var l = this._lights.length;
@@ -770,7 +707,7 @@
             }
             this._updateRTT = true;
         },
-        updateFov: function() {
+        updateFov: function () {
             if (this._previousFov !== this._config.fov) {
                 this._config.spotCutoff = this._config.fov * 0.5;
                 var l = this._lights.length;
@@ -785,7 +722,7 @@
          * try to minimize update cost and code size
          * with a single callback for all ui user changes
          */
-        updateShadow: function() {
+        updateShadow: function () {
             if (this._config.atlas && this._config.lightNum > 3) {
                 this._config.lightNum = 4;
             }
@@ -888,7 +825,7 @@
 
         // Scene to be shadowed,  and to cast  shadow from
         // Multiple parents...
-        createSceneCasterReceiver: function() {
+        createSceneCasterReceiver: function () {
             var ShadowScene = new osg.MatrixTransform();
             osg.mat4.setTranslation(ShadowScene.getMatrix(), this._config.targetPosition);
 
@@ -904,7 +841,7 @@
                 var request = osgDB.readNodeURL('../media/models/' + modelName + '/file.osgjs');
 
                 request.then(
-                    function(model) {
+                    function (model) {
                         // adds models
                         model._name = 'material-test_model_0';
                         modelNode.addChild(model);
@@ -1026,7 +963,7 @@
                 cubeNode.addChild(cubeSubNode);
             }
             var texturePath = '../media/textures/seamless/wood2.jpg';
-            osgDB.readImageURL(texturePath).then(function(cubeImage) {
+            osgDB.readImageURL(texturePath).then(function (cubeImage) {
                 var cubeTex = osg.Texture.createFromImage(cubeImage);
                 cubeTex.setWrapT('MIRRORED_REPEAT');
                 cubeTex.setWrapS('MIRRORED_REPEAT');
@@ -1050,7 +987,7 @@
                 0
             );
 
-            osgDB.readImageURL(texturePath).then(function(groundImage) {
+            osgDB.readImageURL(texturePath).then(function (groundImage) {
                 var groundTex = osg.Texture.createFromImage(groundImage);
                 groundTex.setWrapT('MIRRORED_REPEAT');
                 groundTex.setWrapS('MIRRORED_REPEAT');
@@ -1103,7 +1040,7 @@
 
             return ShadowScene;
         },
-        addShadowedLight: function(group, num, lightScale, position, target) {
+        addShadowedLight: function (group, num, lightScale, position, target) {
             if (!target) target = this._config.targetPosition;
 
             if (!position)
@@ -1221,7 +1158,7 @@
         /*
          * main sample scene shadow code using OSG interface
          */
-        createScene: function() {
+        createScene: function () {
             this._viewer.setLightingMode(osgViewer.View.LightingMode.NO_LIGHT);
             this._viewer.getCamera().setComputeNearFar(true);
             this._glContext = this._viewer.getGraphicContext();
@@ -1326,7 +1263,7 @@
             }
         },
 
-        getStatsConfig: function() {
+        getStatsConfig: function () {
             var values = {
                 gltotalframe: {
                     caption: 'Total frame',
@@ -1362,7 +1299,7 @@
         /*
          * standard run scene, but for float tex support and shader loading
          */
-        run: function() {
+        run: function () {
             var caps = osg.WebGLCaps.instance();
             this._maxVaryings = caps.getWebGLParameter('MAX_VARYING_VECTORS');
             this._maxTextureSize = caps.getWebGLParameter('MAX_TEXTURE_SIZE');
@@ -1387,10 +1324,10 @@
     // execute loaded code when ready
     window.addEventListener(
         'load',
-        function() {
+        function () {
             osg.log(osg.WebGLCaps.instance().getWebGLParameters());
             var example = new Example();
-            example.readShaders().then(function() {
+            example.readShaders().then(function () {
                 example.run();
             });
         },

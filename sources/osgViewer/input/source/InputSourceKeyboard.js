@@ -6,18 +6,18 @@ import InputSource from 'osgViewer/input/source/InputSource';
  * @param canvas
  * @constructor
  */
-var InputSourceKeyboard = function(canvas) {
+var InputSourceKeyboard = function (canvas) {
     InputSource.call(this, canvas);
     this._supportedEvents = ['keydown', 'keyup', 'keypress'];
 };
 utils.createPrototypeObject(
     InputSourceKeyboard,
     utils.objectInherit(InputSource.prototype, {
-        getName: function() {
+        getName: function () {
             return 'Keyboard';
         },
 
-        setEnable: function(name, callback, enable) {
+        setEnable: function (name, callback, enable) {
             if (enable) {
                 this._target.addEventListener(name, callback);
             } else {
@@ -25,7 +25,7 @@ utils.createPrototypeObject(
             }
         },
 
-        populateEvent: function(ev, customEvent) {
+        populateEvent: function (ev, customEvent) {
             customEvent.key = ev.key;
             customEvent.keyCode = ev.keyCode;
             customEvent.code = ev.code;
@@ -39,7 +39,7 @@ utils.createPrototypeObject(
             customEvent.metaKey = ev.metaKey;
         },
 
-        isEventRegistered: function(nativeEvent, parsedEvent) {
+        isEventRegistered: function (nativeEvent, parsedEvent) {
             if (!parsedEvent.action) {
                 return true;
             }

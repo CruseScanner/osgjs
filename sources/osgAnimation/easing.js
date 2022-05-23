@@ -153,15 +153,16 @@ function easeOutCircle(p) {
 // elastic
 //
 function easeInElastic(t) {
-    return -(1.0 * Math.pow(2, 10 * t) * Math.sin((t - 1.0 - 0.075) * 2.0 * Math.PI / 0.3));
+    return -(1.0 * Math.pow(2, 10 * t) * Math.sin(((t - 1.0 - 0.075) * 2.0 * Math.PI) / 0.3));
 }
 function easeOutElastic(t) {
-    return Math.pow(2.0, -10.0 * t) * Math.sin((t - 0.3 / 4.0) * (2.0 * Math.PI) / 0.3) + 1.0;
+    return Math.pow(2.0, -10.0 * t) * Math.sin(((t - 0.3 / 4.0) * (2.0 * Math.PI)) / 0.3) + 1.0;
 }
 function easeInOutElastic(t) {
     return (t *= 2) < 1.0
-        ? -0.5 * (1.0 * Math.pow(2, 10 * t)) * Math.sin((t - 1.0 - 0.45) * 2.0 * Math.PI / 0.45)
-        : 1.0 * Math.pow(2, -10 * (t -= 1)) * Math.sin((t - 0.45) * 2.0 * Math.PI / 0.45) * 0.5 + 1;
+        ? -0.5 * (1.0 * Math.pow(2, 10 * t)) * Math.sin(((t - 1.0 - 0.45) * 2.0 * Math.PI) / 0.45)
+        : 1.0 * Math.pow(2, -10 * (t -= 1)) * Math.sin(((t - 0.45) * 2.0 * Math.PI) / 0.45) * 0.5 +
+              1;
 }
 
 // Bounce

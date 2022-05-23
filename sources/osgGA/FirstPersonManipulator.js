@@ -21,7 +21,7 @@ import InputGroups from 'osgViewer/input/InputConstants';
  *  FirstPersonManipulator
  *  @class
  */
-var FirstPersonManipulator = function(options) {
+var FirstPersonManipulator = function (options) {
     Manipulator.call(this, options);
     this.init();
 };
@@ -42,7 +42,7 @@ FirstPersonManipulator.ControllerList = [
 utils.createPrototypeObject(
     FirstPersonManipulator,
     utils.objectInherit(Manipulator.prototype, {
-        computeHomePosition: function(boundStrategy) {
+        computeHomePosition: function (boundStrategy) {
             var bs = this.getHomeBoundingSphere(boundStrategy);
             if (!bs || !bs.valid()) return;
 
@@ -53,7 +53,7 @@ utils.createPrototypeObject(
             this.setTarget(cen);
         },
 
-        init: function() {
+        init: function () {
             this._direction = vec3.fromValues(0.0, 1.0, 0.0);
             this._eye = vec3.fromValues(0.0, 25.0, 10.0);
             this._up = vec3.fromValues(0.0, 0.0, 1.0);
@@ -82,7 +82,7 @@ utils.createPrototypeObject(
             var self = this;
 
             this._controllerList = {};
-            FirstPersonManipulator.ControllerList.forEach(function(value) {
+            FirstPersonManipulator.ControllerList.forEach(function (value) {
                 if (FirstPersonManipulator[value] !== undefined) {
                     if (self._controllerList[value]) {
                         self._controllerList[value].init();
@@ -93,7 +93,7 @@ utils.createPrototypeObject(
             });
         },
 
-        setDelay: function(dt) {
+        setDelay: function (dt) {
             this._forward.setDelay(dt);
             this._side.setDelay(dt);
             this._lookPosition.setDelay(dt);
@@ -101,31 +101,31 @@ utils.createPrototypeObject(
             this._zoom.setDelay(dt);
         },
 
-        getEyePosition: function(eye) {
+        getEyePosition: function (eye) {
             eye[0] = this._eye[0];
             eye[1] = this._eye[1];
             eye[2] = this._eye[2];
             return eye;
         },
 
-        setEyePosition: function(eye) {
+        setEyePosition: function (eye) {
             this._eye[0] = eye[0];
             this._eye[1] = eye[1];
             this._eye[2] = eye[2];
             return this;
         },
 
-        getTarget: function(pos) {
+        getTarget: function (pos) {
             var dir = vec3.scale(this._tmpGetTargetDir, this._direction, this._distance);
             vec3.add(pos, this._eye, dir);
             return pos;
         },
 
-        setEnable: function(enabled) {
+        setEnable: function (enabled) {
             this.getInputManager().setEnable(InputGroups.FPS_MANIPULATOR, enabled);
         },
 
-        setTarget: function(pos) {
+        setTarget: function (pos) {
             var dir = this._tmpGetTargetDir;
             vec3.sub(dir, pos, this._eye);
             dir[2] = 0.0;
@@ -141,27 +141,27 @@ utils.createPrototypeObject(
             vec3.copy(this._direction, dir);
         },
 
-        getLookPositionInterpolator: function() {
+        getLookPositionInterpolator: function () {
             return this._lookPosition;
         },
-        getSideInterpolator: function() {
+        getSideInterpolator: function () {
             return this._side;
         },
-        getForwardInterpolator: function() {
+        getForwardInterpolator: function () {
             return this._forward;
         },
-        getPanInterpolator: function() {
+        getPanInterpolator: function () {
             return this._pan;
         },
-        getZoomInterpolator: function() {
+        getZoomInterpolator: function () {
             return this._zoom;
         },
-        getRotateInterpolator: function() {
+        getRotateInterpolator: function () {
             // for compatibility with orbit hammer controllers
             return this._lookPosition;
         },
 
-        computeRotation: (function() {
+        computeRotation: (function () {
             var first = mat4.create();
             var rotMat = mat4.create();
 
@@ -169,7 +169,7 @@ utils.createPrototypeObject(
             var upy = vec3.fromValues(0.0, 1.0, 0.0);
             var upz = vec3.fromValues(0.0, 0.0, 1.0);
             var LIMIT = Math.PI * 0.5;
-            return function(dx, dy) {
+            return function (dx, dy) {
                 this._angleVertical += dy * 0.01;
                 this._angleHorizontal -= dx * 0.01;
                 if (this._angleVertical > LIMIT) this._angleVertical = LIMIT;
@@ -190,23 +190,23 @@ utils.createPrototypeObject(
                 }
             };
         })(),
-        reset: function() {
+        reset: function () {
             this.init();
         },
-        setDistance: function(d) {
+        setDistance: function (d) {
             this._distance = d;
         },
-        getDistance: function() {
+        getDistance: function () {
             return this._distance;
         },
-        setStepFactor: function(t) {
+        setStepFactor: function (t) {
             this._stepFactor = t;
         },
 
-        computePosition: (function() {
+        computePosition: (function () {
             var vec = vec2.create();
 
-            return function(dt) {
+            return function (dt) {
                 this._forward.update(dt);
                 this._side.update(dt);
 
@@ -242,10 +242,10 @@ utils.createPrototypeObject(
             };
         })(),
 
-        update: (function() {
+        update: (function () {
             var tmpTarget = vec3.create();
 
-            return function(nv) {
+            return function (nv) {
                 var dt = nv.getFrameStamp().getDeltaTime();
 
                 var delta = this._lookPosition.update(dt);
@@ -259,25 +259,25 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setPoseVR: function(q, pos) {
+        setPoseVR: function (q, pos) {
             this._vrEnable = true;
             quat.copy(this._vrRot, q);
             vec3.sub(this._vrTrans, pos, this._vrPos);
             vec3.copy(this._vrPos, pos);
         },
 
-        moveForward: (function() {
+        moveForward: (function () {
             var tmp = vec3.create();
-            return function(distance) {
+            return function (distance) {
                 vec3.normalize(tmp, this._direction);
                 vec3.scale(tmp, tmp, distance);
                 vec3.add(this._eye, this._eye, tmp);
             };
         })(),
 
-        strafe: (function() {
+        strafe: (function () {
             var tmp = vec3.create();
-            return function(distance) {
+            return function (distance) {
                 vec3.cross(tmp, this._direction, this._up);
                 vec3.normalize(tmp, tmp);
                 vec3.scale(tmp, tmp, distance);
@@ -285,9 +285,9 @@ utils.createPrototypeObject(
             };
         })(),
 
-        strafeVertical: (function() {
+        strafeVertical: (function () {
             var tmp = vec3.create();
-            return function(distance) {
+            return function (distance) {
                 vec3.normalize(tmp, this._up);
                 vec3.scale(tmp, tmp, distance);
                 vec3.add(this._eye, this._eye, tmp);
@@ -301,6 +301,7 @@ utils.createPrototypeObject(
 FirstPersonManipulator.DeviceOrientation = FirstPersonManipulatorDeviceOrientationController;
 FirstPersonManipulator.Hammer = FirstPersonManipulatorHammerController;
 FirstPersonManipulator.WebVR = FirstPersonManipulatorWebVRController;
-FirstPersonManipulator.StandardMouseKeyboard = FirstPersonManipulatorStandardMouseKeyboardController;
+FirstPersonManipulator.StandardMouseKeyboard =
+    FirstPersonManipulatorStandardMouseKeyboardController;
 
 export default FirstPersonManipulator;

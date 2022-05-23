@@ -99,7 +99,7 @@ var depth = composer.getInternalTexture( 'depth' );
 
 */
 
-var ComposerPostProcess = function() {
+var ComposerPostProcess = function () {
     Node.call(this);
 
     // stuffs for syncing feedback texture uniforms
@@ -191,7 +191,7 @@ ComposerPostProcess.FragmentShader = [
 utils.createPrototypeObject(
     ComposerPostProcess,
     utils.objectInherit(Node.prototype, {
-        clear: function() {
+        clear: function () {
             this._textures = {};
             this._internalPasses.length = 0;
 
@@ -210,23 +210,23 @@ utils.createPrototypeObject(
             this.removeChildren();
         },
 
-        clearShaderCache: function() {
+        clearShaderCache: function () {
             this._programs = {};
         },
 
-        getGlobalXRatio: function() {
+        getGlobalXRatio: function () {
             return this._xViewportRatio * this._xTextureRatio;
         },
 
-        getGlobalYRatio: function() {
+        getGlobalYRatio: function () {
             return this._yViewportRatio * this._yTextureRatio;
         },
 
-        setFinalPassUpScaleToScreen: function(bool) {
+        setFinalPassUpScaleToScreen: function (bool) {
             this._finalPassUpScaleToScreen = bool;
         },
 
-        _enforceFromInputParameter: function(paramName, inputTexture) {
+        _enforceFromInputParameter: function (paramName, inputTexture) {
             var texName = inputTexture.name;
             var prevTexture = this._textures[texName];
             var prevFeedbackTexture = this._textures[texName + 'FeedbackTexture'];
@@ -249,7 +249,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _updatePassInfoFromInputs: function(pass, passName, lastPassInfo) {
+        _updatePassInfoFromInputs: function (pass, passName, lastPassInfo) {
             var outTexture = this._textures[passName];
 
             var lastPassSrgb = lastPassInfo.srgb;
@@ -298,13 +298,13 @@ utils.createPrototypeObject(
             }
         },
 
-        _setInferredParameter: function(paramInfer, param, dest, src) {
+        _setInferredParameter: function (paramInfer, param, dest, src) {
             if (dest[paramInfer] === undefined) {
                 dest[paramInfer] = src[param] === undefined ? src[paramInfer] : src[param];
             }
         },
 
-        _createTextureOut: function(pass, passName, isLastPass) {
+        _createTextureOut: function (pass, passName, isLastPass) {
             var outTexture = {
                 srgb: pass.out.srgb,
                 rgbm: pass.out.rgbm,
@@ -327,7 +327,7 @@ utils.createPrototypeObject(
             return outTexture;
         },
 
-        _processUserPasses: function(userPasses) {
+        _processUserPasses: function (userPasses) {
             userPasses = this._internalPasses.concat(userPasses);
             var passes = this._preprocessUserPasses(userPasses);
 
@@ -400,7 +400,7 @@ utils.createPrototypeObject(
         // each time a texture is sampled, the usage is decremented
         // when is reaches 0 it means that the texture won't be used anymore so it can be reused
         // besides the usage number, the divisor, internal type and the filtering of the texture are used to make sure it can safely be reused
-        _hasFreeTexture: function(passName, filter, out) {
+        _hasFreeTexture: function (passName, filter, out) {
             // passName that directly matches a texture name
             if (passName === out.name && this._texturePool[passName]) {
                 return passName;
@@ -444,7 +444,7 @@ utils.createPrototypeObject(
             return;
         },
 
-        _setOrCreateTextureKey: function(usage, passName, out) {
+        _setOrCreateTextureKey: function (usage, passName, out) {
             var isLinear = this._textures[passName].filter === 'linear';
             var filterEnum = isLinear ? Texture.LINEAR : Texture.NEAREST;
 
@@ -476,7 +476,7 @@ utils.createPrototypeObject(
             this._textures[passName].key = poolKey;
         },
 
-        _addStateSet: function(pass, stateSet) {
+        _addStateSet: function (pass, stateSet) {
             for (var i = 0; i < pass.funcs.length; i++) {
                 var passName = pass.funcs[i].name;
 
@@ -484,7 +484,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _addTextureToStateSet: function(textureInfo, stateSet, unit, uniforms, isFeedback) {
+        _addTextureToStateSet: function (textureInfo, stateSet, unit, uniforms, isFeedback) {
             stateSet.addUniform(Uniform.createInt1(unit, textureInfo.uniformName));
 
             var name = textureInfo.name;
@@ -514,11 +514,11 @@ utils.createPrototypeObject(
             return undefined;
         },
 
-        _getUniformName: function(uniformName) {
+        _getUniformName: function (uniformName) {
             return 'u' + uniformName[0].toUpperCase() + uniformName.slice(1);
         },
 
-        _addTextureUniforms: function(uniformName, texture, stateSet, uniforms, isFeedback) {
+        _addTextureUniforms: function (uniformName, texture, stateSet, uniforms, isFeedback) {
             var uName = this._getUniformName(uniformName);
 
             var uSize = Uniform.createFloat2(uName + 'Size');
@@ -538,7 +538,7 @@ utils.createPrototypeObject(
             });
         },
 
-        _checkInferredParameters: function() {
+        _checkInferredParameters: function () {
             for (var key in this._textures) {
                 var tex = this._textures[key];
                 if (tex.srgb === undefined) tex.srgb = tex.srgbInferred;
@@ -546,7 +546,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _buildPass: function(index, passes) {
+        _buildPass: function (index, passes) {
             var pass = passes[index];
             var passName = pass.out.name;
 
@@ -625,13 +625,13 @@ utils.createPrototypeObject(
             }
         },
 
-        _buildGraphFromPasses: function(passes) {
+        _buildGraphFromPasses: function (passes) {
             for (var i = 0; i < passes.length; i++) {
                 this._buildPass(i, passes);
             }
         },
 
-        build: function(userPasses) {
+        build: function (userPasses) {
             this._usages = {};
 
             // process array of passes
@@ -646,7 +646,7 @@ utils.createPrototypeObject(
             this.resize(this._screenWidth, this._screenHeight);
         },
 
-        _createFeedbackLoopCameras: function(name, stateSet, outputTexture, previousTextureUnit) {
+        _createFeedbackLoopCameras: function (name, stateSet, outputTexture, previousTextureUnit) {
             var previousKey = this._textures[name + 'FeedbackTexture'].key;
             var previousTexture = this._texturePool[previousKey].texture;
 
@@ -683,7 +683,7 @@ utils.createPrototypeObject(
             return feedbackLoopData;
         },
 
-        _createFeedbackLoopCamera: function(cameraName, dstTexture, srcTexture, srcUnit) {
+        _createFeedbackLoopCamera: function (cameraName, dstTexture, srcTexture, srcUnit) {
             var stateSet = new StateSet();
             stateSet.setTextureAttributeAndModes(srcUnit, srcTexture);
 
@@ -693,7 +693,7 @@ utils.createPrototypeObject(
             return camera;
         },
 
-        _createCamera: function(name, stateSet, outputTexture) {
+        _createCamera: function (name, stateSet, outputTexture) {
             var camera = new Camera();
             camera.setName(name);
             camera.setStateSet(stateSet);
@@ -715,7 +715,7 @@ utils.createPrototypeObject(
             return camera;
         },
 
-        swapFeedbackLoopTextures: function(frame0) {
+        swapFeedbackLoopTextures: function (frame0) {
             for (var key in this._feedbackData) {
                 var data = this._feedbackData[key];
 
@@ -733,21 +733,21 @@ utils.createPrototypeObject(
             this._feedbackSwapped = true;
         },
 
-        _createFuncFromUserData: function(userFunc) {
+        _createFuncFromUserData: function (userFunc) {
             var func =
                 typeof userFunc === 'string'
                     ? { name: userFunc, file: userFunc + '.glsl' }
                     : userFunc;
 
             // now funcs.join( '_' ) only join the name of the functions instead of every members of the object
-            func.toString = function() {
+            func.toString = function () {
                 return this.name;
             };
 
             return func;
         },
 
-        _createTextureInfoFromUserData: function(userData) {
+        _createTextureInfoFromUserData: function (userData) {
             var texInfo = {
                 name: '',
                 uniformName: '',
@@ -770,7 +770,7 @@ utils.createPrototypeObject(
             return texInfo;
         },
 
-        _preprocessUserPasses: function(userPasses) {
+        _preprocessUserPasses: function (userPasses) {
             var passes = [];
 
             for (var i = 0; i < userPasses.length; i++) {
@@ -839,7 +839,7 @@ utils.createPrototypeObject(
             return passes;
         },
 
-        _canBeCollapsed: function(currentPass, nextPass) {
+        _canBeCollapsed: function (currentPass, nextPass) {
             // this won't merge passes with named textures even if they are collapsible
             // is this what we want?
             return (
@@ -853,7 +853,7 @@ utils.createPrototypeObject(
             );
         },
 
-        _collapsePasses: function(currentPass, nextPass) {
+        _collapsePasses: function (currentPass, nextPass) {
             if (!this._canBeCollapsed(currentPass, nextPass)) {
                 return false;
             }
@@ -864,7 +864,7 @@ utils.createPrototypeObject(
             currentPass.textures = this._mergeWithoutDuplicates(
                 currentPass.textures,
                 nextPass.textures,
-                function(a, b) {
+                function (a, b) {
                     return a.name === b.name;
                 }
             );
@@ -872,7 +872,7 @@ utils.createPrototypeObject(
             currentPass.uniforms = this._mergeWithoutDuplicates(
                 currentPass.uniforms,
                 nextPass.uniforms,
-                function(a, b) {
+                function (a, b) {
                     return a.getName() === b.getName();
                 }
             );
@@ -881,7 +881,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        _renameTextureAlias: function(texture, passName, lastPassName) {
+        _renameTextureAlias: function (texture, passName, lastPassName) {
             if (texture.name === '%last') {
                 texture.name = lastPassName;
                 texture.uniformName = texture.uniformName || 'TextureInput';
@@ -893,7 +893,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _createTexture: function(name, divisor, type, filter) {
+        _createTexture: function (name, divisor, type, filter) {
             var texture = new Texture();
             texture.setTextureSize(1, 1);
             texture.setInternalFormatType(type);
@@ -910,7 +910,7 @@ utils.createPrototypeObject(
             return texture;
         },
 
-        _computeHashFromPass: function(pass) {
+        _computeHashFromPass: function (pass) {
             var hash = '';
 
             for (var i = 0; i < pass.funcs.length; i++) {
@@ -931,7 +931,7 @@ utils.createPrototypeObject(
             return hash;
         },
 
-        _writeDeclarations: function(source, uniforms, textures, header) {
+        _writeDeclarations: function (source, uniforms, textures, header) {
             var str = 'uniform sampler2D TextureInput;\n';
 
             var i;
@@ -953,7 +953,7 @@ utils.createPrototypeObject(
             return source;
         },
 
-        setMethodWrapUV: function(method, threshold) {
+        setMethodWrapUV: function (method, threshold) {
             // hook every texture call to handle viewport/texture ratio
             // when reading out of texture assigned zone
 
@@ -965,7 +965,7 @@ utils.createPrototypeObject(
             this._texInfos = undefined;
         },
 
-        _getInfos: function() {
+        _getInfos: function () {
             if (this._texInfos) return this._texInfos;
 
             var bodySimple = 'texture2D(%tex, (uv) * %ratio)';
@@ -1006,7 +1006,7 @@ utils.createPrototypeObject(
             return this._texInfos;
         },
 
-        _extractTextures: function(file) {
+        _extractTextures: function (file) {
             var infos = this._getInfos();
 
             var lines = file.match(/TEXTURE_2D(?:_BIAS|_NEAREST)?_\w+\(/g);
@@ -1028,7 +1028,7 @@ utils.createPrototypeObject(
             return textures;
         },
 
-        _writeFunctionBodies: function(source, funcs, textures, collapsible) {
+        _writeFunctionBodies: function (source, funcs, textures, collapsible) {
             var colorSpacesDefines = [];
             var functionBodies = '';
             var defineKeys = {};
@@ -1096,7 +1096,7 @@ utils.createPrototypeObject(
             return source.replace('%functionBodies%', functionBodies.replace(/\\\n/g, ''));
         },
 
-        _writeMainFunction: function(source, funcs, collapsible, textureName) {
+        _writeMainFunction: function (source, funcs, collapsible, textureName) {
             source = source.replace('%firstFunc%', funcs[0].name);
 
             var arg = collapsible ? 'TEXTURE_2D_TextureInput(gTexCoord)' : '';
@@ -1129,7 +1129,7 @@ utils.createPrototypeObject(
         // an hash string is created using the user pass data before creating a program
         // shaders are stored inside a map using this string, so the composer knows there is no need to rebuild it if it already exists
 
-        _removeDuplicatedUniforms: function(source) {
+        _removeDuplicatedUniforms: function (source) {
             var lines = source.split('\n');
 
             var uniforms = {};
@@ -1156,7 +1156,7 @@ utils.createPrototypeObject(
             return lines.join('\n');
         },
 
-        _createProgram: function(pass, uniforms) {
+        _createProgram: function (pass, uniforms) {
             var hash = this._computeHashFromPass(pass);
             if (this._programs[hash] !== undefined) {
                 return this._programs[hash];
@@ -1185,7 +1185,7 @@ utils.createPrototypeObject(
             return program;
         },
 
-        resize: function(width, height) {
+        resize: function (width, height) {
             this.setScreenSize(width, height);
 
             // resize texture
@@ -1210,7 +1210,7 @@ utils.createPrototypeObject(
             this.resizeRatio();
         },
 
-        resizeRatio: function(xViewport, yViewport, xTexture, yTexture) {
+        resizeRatio: function (xViewport, yViewport, xTexture, yTexture) {
             if (xViewport !== undefined) this._xViewportRatio = xViewport;
             if (yViewport !== undefined) this._yViewportRatio = yViewport;
             if (xTexture !== undefined) this._xTextureRatio = xTexture;
@@ -1220,7 +1220,7 @@ utils.createPrototypeObject(
             this._resizeTextureUniforms();
         },
 
-        _resizeViewports: function() {
+        _resizeViewports: function () {
             var xRatio = this.getGlobalXRatio();
             var yRatio = this.getGlobalYRatio();
 
@@ -1251,7 +1251,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _resizeTextureUniforms: function() {
+        _resizeTextureUniforms: function () {
             var xRatio = this.getGlobalXRatio();
             var yRatio = this.getGlobalYRatio();
 
@@ -1299,7 +1299,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _resizeFeedbackTextureUniforms: function() {
+        _resizeFeedbackTextureUniforms: function () {
             var xRatio = this._lastXratio;
             var yRatio = this._lastYratio;
 
@@ -1320,7 +1320,7 @@ utils.createPrototypeObject(
             }
         },
 
-        cull: function() {
+        cull: function () {
             if (this._syncOnNextFrame) {
                 this._resizeFeedbackTextureUniforms();
                 this._syncOnNextFrame = false;
@@ -1339,7 +1339,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        _mergeWithoutDuplicates: function(a, b, compareFunc) {
+        _mergeWithoutDuplicates: function (a, b, compareFunc) {
             for (var i = 0; i < b.length; i++) {
                 var element = b[i];
 
@@ -1360,21 +1360,21 @@ utils.createPrototypeObject(
             return a;
         },
 
-        _getTextureSize: function(size, divisor) {
+        _getTextureSize: function (size, divisor) {
             return Math.max(1.0, Math.round(size / divisor));
         },
 
-        setScreenSize: function(width, height) {
+        setScreenSize: function (width, height) {
             this._screenWidth = width;
             this._screenHeight = height;
         },
 
-        setShaderProcessor: function(shaderProcessor) {
+        setShaderProcessor: function (shaderProcessor) {
             this._shaderProcessor = shaderProcessor;
         },
 
         // textures owned by the composer, they will be cached/reused/resized unless reusable or immuable
-        addInternalTexture: function(desc) {
+        addInternalTexture: function (desc) {
             this._internalPasses.push({
                 out: {
                     name: desc.name,
@@ -1390,23 +1390,23 @@ utils.createPrototypeObject(
         },
 
         // textures not owned by the composer, they won't be cached/reused/resized
-        addExternalTexture: function(key, texture) {
+        addExternalTexture: function (key, texture) {
             this._externalTextures[key] = texture;
         },
 
-        setInputTexture: function(key) {
+        setInputTexture: function (key) {
             this._firstTexture = key;
         },
 
-        getCameras: function() {
+        getCameras: function () {
             return this._cameras;
         },
 
-        getStateSetPass: function(passName) {
+        getStateSetPass: function (passName) {
             return this._stateSets[passName];
         },
 
-        getInternalTexture: function(alias) {
+        getInternalTexture: function (alias) {
             return this._userTextures[alias];
         }
     }),

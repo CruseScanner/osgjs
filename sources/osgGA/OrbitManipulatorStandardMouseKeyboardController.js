@@ -4,7 +4,7 @@ import osgMath from 'osg/math';
 import OrbitManipulatorEnums from 'osgGA/orbitManipulatorEnums';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var OrbitManipulatorStandardMouseKeyboardController = function(manipulator) {
+var OrbitManipulatorStandardMouseKeyboardController = function (manipulator) {
     Controller.call(this, manipulator);
     this._zoomFactor = 1;
     this.init();
@@ -13,7 +13,7 @@ var OrbitManipulatorStandardMouseKeyboardController = function(manipulator) {
 utils.createPrototypeObject(
     OrbitManipulatorStandardMouseKeyboardController,
     utils.objectInherit(Controller.prototype, {
-        init: function() {
+        init: function () {
             this._mode = undefined;
             this._inMotion = false;
 
@@ -23,7 +23,7 @@ utils.createPrototypeObject(
             );
         },
 
-        _initInputs: function(globalGroup, resetToHomeGroup) {
+        _initInputs: function (globalGroup, resetToHomeGroup) {
             var manager = this._manipulator.getInputManager();
             var setRotationMode = this.setMode.bind(
                 this,
@@ -67,11 +67,11 @@ utils.createPrototypeObject(
             manager.group(globalGroup).addMappings({ setZoomMode: 'keydown s' }, setZoomMode);
         },
 
-        getMode: function() {
+        getMode: function () {
             return this._mode;
         },
 
-        setMode: function(mode, interpolator) {
+        setMode: function (mode, interpolator) {
             if (this.getMode() === mode) {
                 return;
             }
@@ -80,19 +80,19 @@ utils.createPrototypeObject(
             this._inMotion = true;
         },
 
-        setManipulator: function(manipulator) {
+        setManipulator: function (manipulator) {
             this._manipulator = manipulator;
         },
 
-        getZoomFactor: function() {
+        getZoomFactor: function () {
             return this._zoomFactor;
         },
 
-        setZoomFactor: function(factor) {
+        setZoomFactor: function (factor) {
             this._zoomFactor = factor;
         },
 
-        move: function(ev) {
+        move: function (ev) {
             if (this._inMotion === false) {
                 return;
             }
@@ -121,40 +121,40 @@ utils.createPrototypeObject(
             }
         },
 
-        startPan: function(ev) {
+        startPan: function (ev) {
             var pan = this._manipulator.getPanInterpolator();
             this.setMode(OrbitManipulatorEnums.PAN, pan);
             pan.reset();
             pan.set(ev.canvasX, -ev.canvasY);
         },
 
-        startRotate: function(ev) {
+        startRotate: function (ev) {
             var rotate = this._manipulator.getRotateInterpolator();
             this.setMode(OrbitManipulatorEnums.ROTATE, rotate);
             rotate.reset();
             rotate.set(ev.canvasX, -ev.canvasY);
         },
 
-        startZoom: function(ev) {
+        startZoom: function (ev) {
             var zoom = this._manipulator.getZoomInterpolator();
             this.setMode(OrbitManipulatorEnums.ZOOM, zoom);
             zoom.setStart(-ev.canvasY);
             zoom.set(0.0);
         },
 
-        stopMotion: function() {
+        stopMotion: function () {
             this._inMotion = false;
             this._mode = undefined;
         },
 
-        zoom: function(ev) {
+        zoom: function (ev) {
             var intDelta = ev.deltaY / this._zoomFactor;
             var manipulator = this._manipulator;
             var zoomTarget = manipulator.getZoomInterpolator().getTarget()[0] - intDelta;
             manipulator.getZoomInterpolator().setTarget(zoomTarget);
         },
 
-        reset: function() {
+        reset: function () {
             this._manipulator.computeHomePosition();
         }
     })

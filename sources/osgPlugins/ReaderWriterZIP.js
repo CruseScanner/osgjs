@@ -5,14 +5,14 @@ import Registry from 'osgDB/Registry';
 import ReaderParser from 'osgDB/readerParser';
 var JSZip = window.JSZip;
 
-var ReaderWriterZIP = function() {
+var ReaderWriterZIP = function () {
     this._options = undefined;
     this._filesMap = {};
     this._fileName = ''; // The file containing the model of the archive ( gltf, glb, osgjs, b3dm, etc )
 };
 
 ReaderWriterZIP.prototype = {
-    readNodeURL: function(url, options) {
+    readNodeURL: function (url, options) {
         if (JSZip === undefined) {
             notify.error('You need to add JSZip as a dependency');
             return P.reject(this);
@@ -25,7 +25,7 @@ ReaderWriterZIP.prototype = {
             if (options.filesMap[url] !== undefined) {
                 // Now url is a File
                 var file = options.filesMap[url];
-                return this.readZipFile(file).then(function() {
+                return this.readZipFile(file).then(function () {
                     if (!self._fileName) return P.reject(self);
                     // At this point we have the main file name and a Map containing all the resources
                     return ReaderParser.readNodeURL(self._fileName, {
@@ -39,8 +39,8 @@ ReaderWriterZIP.prototype = {
             responseType: 'blob'
         });
 
-        return filePromise.then(function(zfile) {
-            self.readZipFile(zfile).then(function() {
+        return filePromise.then(function (zfile) {
+            self.readZipFile(zfile).then(function () {
                 // At this point we have the main file name and a Map containing all the resources
                 return ReaderParser.readNodeURL(self._fileName, {
                     filesMap: self._filesMap
@@ -49,9 +49,9 @@ ReaderWriterZIP.prototype = {
         });
     },
 
-    readZipFile: function(fileOrBlob) {
+    readZipFile: function (fileOrBlob) {
         fileHelper.unzip(fileOrBlob).then(
-            function(filesMap) {
+            function (filesMap) {
                 for (var fileName in filesMap) {
                     var extension = fileHelper.getExtension(fileName);
                     // Check if the file is readable by any osgDB plugin

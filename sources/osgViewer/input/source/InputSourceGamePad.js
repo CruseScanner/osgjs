@@ -5,7 +5,7 @@ import InputSource from 'osgViewer/input/source/InputSource';
  * Game Pads input handling
  * @constructor
  */
-var InputSourceGamePad = function() {
+var InputSourceGamePad = function () {
     InputSource.call(this);
     this._target = window;
     this._supportedEvents = [
@@ -24,7 +24,7 @@ var InputSourceGamePad = function() {
 
     window.addEventListener(
         'gamepadconnected',
-        function(e) {
+        function (e) {
             this._newGamePad(e.gamepad);
             this._onConnectionStateChange(e, 'gamepadconnected');
         }.bind(this)
@@ -32,7 +32,7 @@ var InputSourceGamePad = function() {
 
     window.addEventListener(
         'gamepaddisconnected',
-        function(e) {
+        function (e) {
             this._previousState[e.gamepad.index] = undefined;
             this._onConnectionStateChange(e, 'gamepaddisconnected');
         }.bind(this)
@@ -41,11 +41,11 @@ var InputSourceGamePad = function() {
 utils.createPrototypeObject(
     InputSourceGamePad,
     utils.objectInherit(InputSource.prototype, {
-        getName: function() {
+        getName: function () {
             return 'GamePad';
         },
 
-        setEnable: function(name, callback, enable) {
+        setEnable: function (name, callback, enable) {
             var callbacks = this._callbacks[name];
             if (!callbacks) {
                 callbacks = [];
@@ -65,7 +65,7 @@ utils.createPrototypeObject(
             }
         },
 
-        _onConnectionStateChange: function(event, state) {
+        _onConnectionStateChange: function (event, state) {
             var callback = this._callbacks[state];
             if (!callback) {
                 return;
@@ -73,7 +73,7 @@ utils.createPrototypeObject(
             callback(event);
         },
 
-        _newGamePad: function(gamepad) {
+        _newGamePad: function (gamepad) {
             var state = {
                 buttons: []
             };
@@ -97,18 +97,18 @@ utils.createPrototypeObject(
             this._gamePadState[gamepad.index] = state;
         },
 
-        setValueThreshold: function(threshold) {
+        setValueThreshold: function (threshold) {
             this._valueThreshold = threshold;
         },
 
-        _initEvent: function(name, index, gamepadIndex, type) {
+        _initEvent: function (name, index, gamepadIndex, type) {
             var event = new Event(name);
             event[type] = index;
             event.gamepadIndex = gamepadIndex;
             return event;
         },
 
-        populateEvent: function(ev, customEvent) {
+        populateEvent: function (ev, customEvent) {
             customEvent.gamepadIndex = ev.gamepadIndex;
             if (ev.button !== undefined) {
                 customEvent.button = ev.button;
@@ -121,7 +121,7 @@ utils.createPrototypeObject(
             }
         },
 
-        isEventRegistered: function(nativeEvent, parsedEvent) {
+        isEventRegistered: function (nativeEvent, parsedEvent) {
             if (!parsedEvent.action) {
                 return true;
             }
@@ -139,13 +139,13 @@ utils.createPrototypeObject(
             return true;
         },
 
-        _fireCallbacks: function(callbacks, event) {
+        _fireCallbacks: function (callbacks, event) {
             for (var i = 0; i < callbacks.length; i++) {
                 callbacks[i](event);
             }
         },
 
-        poll: function() {
+        poll: function () {
             if (!this._nbCallbacks) {
                 return;
             }

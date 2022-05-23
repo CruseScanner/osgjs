@@ -5,7 +5,7 @@ import Text from 'osgText/Text';
 
 var osgTextWrapper = {};
 
-osgTextWrapper.Text = function(input, node) {
+osgTextWrapper.Text = function (input, node) {
     var jsonObj = input.getJSON();
     if (!jsonObj.Text) return P.reject();
 

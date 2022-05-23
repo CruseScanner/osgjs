@@ -9,7 +9,7 @@ import { vec2 } from 'osg/glMatrix';
  * @param hammer
  * @constructor
  */
-var InputSourceTouchScreen = function(canvas) {
+var InputSourceTouchScreen = function (canvas) {
     InputSource.call(this, canvas);
     this._defaultRatio = vec2.fromValues(1.0, 1.0);
 
@@ -87,11 +87,11 @@ var InputSourceTouchScreen = function(canvas) {
 utils.createPrototypeObject(
     InputSourceTouchScreen,
     utils.objectInherit(InputSource.prototype, {
-        getName: function() {
+        getName: function () {
             return 'TouchScreen';
         },
 
-        setEnable: function(name, callback, enable) {
+        setEnable: function (name, callback, enable) {
             if (this._isNativeEvent(name)) {
                 if (enable) {
                     this._target.addEventListener(name, callback);
@@ -110,7 +110,7 @@ utils.createPrototypeObject(
             }
         },
 
-        populateEvent: function(ev, customEvent) {
+        populateEvent: function (ev, customEvent) {
             if (this._isNativeEvent(ev.type)) {
                 //native event
                 customEvent.canvasX = customEvent.canvasY = 0;
@@ -152,11 +152,11 @@ utils.createPrototypeObject(
             customEvent.glY = (this._target.clientHeight - customEvent.canvasY) * ratio[1];
         },
 
-        _isNativeEvent: function(evt) {
+        _isNativeEvent: function (evt) {
             return this._supportedEvents.indexOf(evt) >= 0;
         },
 
-        isEventRegistered: function(nativeEvent, parsedEvent) {
+        isEventRegistered: function (nativeEvent, parsedEvent) {
             nativeEvent.preventDefault();
             if (nativeEvent.pointerType && nativeEvent.pointerType !== 'touch') {
                 return false;
@@ -191,7 +191,7 @@ utils.createPrototypeObject(
             return true;
         },
 
-        supportsEvent: function(eventName) {
+        supportsEvent: function (eventName) {
             var result = InputSource.prototype.supportsEvent.call(this, eventName);
             if (result) {
                 return result;
@@ -205,7 +205,7 @@ utils.createPrototypeObject(
             return false;
         },
 
-        getHammer: function() {
+        getHammer: function () {
             return this._hammer;
         }
     }),

@@ -2,23 +2,23 @@ import notify from 'osg/notify';
 
 // Base class for GLResources: Textures, Buffers, Programs, Shaders, FrameBuffers and RenderBuffers
 // It holds a reference to the graphic context that is needed for resource deletion
-var GLObject = function() {
+var GLObject = function () {
     this._gl = undefined;
     this._onLostContextCallback = undefined;
 };
 
 GLObject.prototype = {
-    setGraphicContext: function(gl) {
+    setGraphicContext: function (gl) {
         this._gl = gl;
         GLObject.addObject(this._gl, this);
     },
-    getGraphicContext: function() {
+    getGraphicContext: function () {
         return this._gl;
     },
-    setLostContextCallback: function(cb) {
+    setLostContextCallback: function (cb) {
         this._onLostContextCallback = cb;
     },
-    onLostContext: function() {
+    onLostContext: function () {
         if (this.invalidate && typeof this.invalidate === 'function') {
             this.invalidate();
         }
@@ -34,7 +34,7 @@ GLObject.prototype = {
 // handle webgl restore by indexing all GLObject
 GLObject._sResourcesArrayCache = new window.Map();
 
-GLObject.addObject = function(gl, glObject) {
+GLObject.addObject = function (gl, glObject) {
     if (!GLObject._sResourcesArrayCache.has(gl)) GLObject._sResourcesArrayCache.set(gl, []);
     var resourcesArray = GLObject._sResourcesArrayCache.get(gl);
 
@@ -42,7 +42,7 @@ GLObject.addObject = function(gl, glObject) {
     resourcesArray.push(glObject);
 };
 
-GLObject.removeObject = function(gl, glObject) {
+GLObject.removeObject = function (gl, glObject) {
     if (!GLObject._sResourcesArrayCache.has(gl)) return;
 
     var resourcesArray = GLObject._sResourcesArrayCache.get(gl);
@@ -51,7 +51,7 @@ GLObject.removeObject = function(gl, glObject) {
     resourcesArray.splice(i, 1);
 };
 
-GLObject.onLostContext = function(gl) {
+GLObject.onLostContext = function (gl) {
     if (!GLObject._sResourcesArrayCache.has(gl)) return;
 
     var resourcesArray = GLObject._sResourcesArrayCache.get(gl);

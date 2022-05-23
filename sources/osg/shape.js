@@ -12,7 +12,7 @@ import utils from 'osg/utils';
  * Create a Textured Box on the given center with given size
  * @name createTexturedBox
  */
-var createTexturedBoxGeometry = function(cx, cy, cz, sx, sy, sz) {
+var createTexturedBoxGeometry = function (cx, cy, cz, sx, sy, sz) {
     var centerx = cx !== undefined ? cx : 0.0;
     var centery = cy !== undefined ? cy : 0.0;
     var centerz = cz !== undefined ? cz : 0.0;
@@ -315,7 +315,7 @@ var createTexturedBoxGeometry = function(cx, cy, cz, sx, sy, sz) {
 // http://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
 // It's a Singleton, as it's rendering invariant
 // so same remove uneeded state change when same geom
-var createTexturedFullScreenFakeQuadGeometry = (function() {
+var createTexturedFullScreenFakeQuadGeometry = (function () {
     var g = new Geometry();
 
     var vertexes = new utils.Float32Array([4.0, -1.0, -1.0, 4.0, -1.0, -1.0]);
@@ -327,12 +327,12 @@ var createTexturedFullScreenFakeQuadGeometry = (function() {
     var primitive = new DrawArrays(primitiveSet.TRIANGLES, 0, 3);
     g.getPrimitives().push(primitive);
 
-    return function() {
+    return function () {
         return g;
     };
 })();
 
-var createTexturedQuadGeometry = function(
+var createTexturedQuadGeometry = function (
     cornerx,
     cornery,
     cornerz,
@@ -434,12 +434,12 @@ var createTexturedQuadGeometry = function(
     return g;
 };
 
-var createAxisGeometry = function(size) {
+var createAxisGeometry = function (size) {
     if (size === undefined) {
         size = 1.0;
     }
     if (createAxisGeometry.getShader === undefined) {
-        createAxisGeometry.getShader = function() {
+        createAxisGeometry.getShader = function () {
             if (createAxisGeometry.getShader.program === undefined) {
                 var vertexshader = [
                     '#ifdef GL_ES',
@@ -512,7 +512,7 @@ var createAxisGeometry = function(size) {
  * @name createTexturedSphere
  * @author Darrell Esau
  */
-var createTexturedSphere = function(
+var createTexturedSphere = function (
     radius,
     widthSegments,
     heightSegments,
@@ -532,7 +532,7 @@ var createTexturedSphere = function(
     var segmentsX = Math.max(3, Math.floor(widthSegments) || 8);
     var segmentsY = Math.max(2, Math.floor(heightSegments) || 6);
 
-    var useDrawArrays = segmentsX * segmentsY / 3 >= 65536;
+    var useDrawArrays = (segmentsX * segmentsY) / 3 >= 65536;
     var nbPrim = useDrawArrays ? segmentsX * segmentsY * 6 : segmentsX * segmentsY * 4;
     var fullVerticesList = new utils.Float32Array(nbPrim * 3);
     var fullNormalsList = new utils.Float32Array(nbPrim * 3);
@@ -553,7 +553,7 @@ var createTexturedSphere = function(
     var uv2 = new utils.Float32Array(2);
     var uv3 = new utils.Float32Array(2);
     var uv4 = new utils.Float32Array(2);
-    var getCoordAndUvSphere = function(u, v, coord, norm, uv) {
+    var getCoordAndUvSphere = function (u, v, coord, norm, uv) {
         coord[0] =
             -radius * Math.cos(phiStart + u * phiLength) * Math.sin(thetaStart + v * thetaLength);
         coord[1] = radius * Math.cos(thetaStart + v * thetaLength);
@@ -664,22 +664,20 @@ var createTexturedSphere = function(
     g.getAttributes().TexCoord0 = new BufferArray('ARRAY_BUFFER', fullUVList, 2);
 
     if (useDrawArrays)
-        g
-            .getPrimitives()
-            .push(new DrawArrays(primitiveSet.TRIANGLES, 0, fullVerticesList.length / 3));
+        g.getPrimitives().push(
+            new DrawArrays(primitiveSet.TRIANGLES, 0, fullVerticesList.length / 3)
+        );
     else
-        g
-            .getPrimitives()
-            .push(
-                new DrawElements(
-                    primitiveSet.TRIANGLES,
-                    new BufferArray('ELEMENT_ARRAY_BUFFER', indexes, 1)
-                )
-            );
+        g.getPrimitives().push(
+            new DrawElements(
+                primitiveSet.TRIANGLES,
+                new BufferArray('ELEMENT_ARRAY_BUFFER', indexes, 1)
+            )
+        );
     return g;
 };
 
-var createGridGeometry = function(cx, cy, cz, wx, wy, wz, hx, hy, hz, res1, res2) {
+var createGridGeometry = function (cx, cy, cz, wx, wy, wz, hx, hy, hz, res1, res2) {
     cx = cx !== undefined ? cx : -0.5;
     cy = cy !== undefined ? cy : -0.5;
     cz = cz !== undefined ? cz : 0.0;
@@ -738,34 +736,12 @@ var createGridGeometry = function(cx, cy, cz, wx, wy, wz, hx, hy, hz, res1, res2
  * debug lines showing bounding box abstraction
  * @param col bbox color
  */
-var createBoundingBoxGeometry = function(col) {
+var createBoundingBoxGeometry = function (col) {
     var g = new Geometry();
     //unit cube centered on 0
     var vertices = new Float32Array([
-        -0.5,
-        -0.5,
-        -0.5,
-        0.5,
-        -0.5,
-        -0.5,
-        0.5,
-        0.5,
-        -0.5,
-        -0.5,
-        0.5,
-        -0.5,
-        -0.5,
-        -0.5,
-        0.5,
-        0.5,
-        -0.5,
-        0.5,
-        0.5,
-        0.5,
-        0.5,
-        -0.5,
-        0.5,
-        0.5
+        -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5,
+        -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5
     ]);
     g.getAttributes().Vertex = new BufferArray(BufferArray.ARRAY_BUFFER, vertices, 3);
 
@@ -782,42 +758,16 @@ var createBoundingBoxGeometry = function(col) {
 
     var indexes = new utils.Uint16Array([
         //up
-        0,
-        1,
-        1,
-        2,
-        2,
-        3,
-        3,
-        0,
+        0, 1, 1, 2, 2, 3, 3, 0,
         //down
-        4,
-        5,
-        5,
-        6,
-        6,
-        7,
-        7,
-        4,
+        4, 5, 5, 6, 6, 7, 7, 4,
         // side
-        0,
-        4,
-        1,
-        5,
-        2,
-        6,
-        3,
-        7
+        0, 4, 1, 5, 2, 6, 3, 7
     ]);
 
-    g
-        .getPrimitives()
-        .push(
-            new DrawElements(
-                primitiveSet.LINES,
-                new BufferArray('ELEMENT_ARRAY_BUFFER', indexes, 1)
-            )
-        );
+    g.getPrimitives().push(
+        new DrawElements(primitiveSet.LINES, new BufferArray('ELEMENT_ARRAY_BUFFER', indexes, 1))
+    );
 
     return g;
 };

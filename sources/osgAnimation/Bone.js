@@ -9,7 +9,7 @@ import UpdateBone from 'osgAnimation/UpdateBone';
  *  Bone
  *  @class Bone
  */
-var Bone = function(name) {
+var Bone = function (name) {
     if (name !== undefined) this.setName(name);
 
     MatrixTransform.call(this);
@@ -30,7 +30,7 @@ utils.createPrototypeNode(
         //     return vec3.fromValues( this._rand( id + 2.16 ), this._rand( id * 57.27 ), this._rand( id * 0.874 ) );
         // },
 
-        getOrCreateDebugColor: function() {
+        getOrCreateDebugColor: function () {
             // for bone display (debugging, etc)
             if (this._boneColor) return this._boneColor;
             // this._boneColor = this._generateBoneColor( this.getInstanceID() );
@@ -38,31 +38,31 @@ utils.createPrototypeNode(
             return this._boneColor;
         },
 
-        getBoneBoundingBox: function() {
+        getBoneBoundingBox: function () {
             return this._boneBoundingBox;
         },
 
-        setBoneBoundingBox: function(bb) {
+        setBoneBoundingBox: function (bb) {
             this._boneBoundingBox = bb;
         },
 
-        getMatrixInSkeletonSpace: function() {
+        getMatrixInSkeletonSpace: function () {
             return this._boneInSkeletonSpace;
         },
 
-        getInvBindMatrixInSkeletonSpace: function() {
+        getInvBindMatrixInSkeletonSpace: function () {
             return this._invBindInSkeletonSpace;
         },
 
-        setMatrixInSkeletonSpace: function(m) {
+        setMatrixInSkeletonSpace: function (m) {
             mat4.copy(this._boneInSkeletonSpace, m);
         },
 
-        setInvBindMatrixInSkeletonSpace: function(m) {
+        setInvBindMatrixInSkeletonSpace: function (m) {
             mat4.copy(this._invBindInSkeletonSpace, m);
         },
 
-        getBoneParent: function() {
+        getBoneParent: function () {
             var parents = this.getParents();
             for (var i = 0, l = parents.length; i < l; i++) {
                 var typeID = parents[i].getTypeID();
@@ -73,7 +73,7 @@ utils.createPrototypeNode(
             return undefined;
         },
 
-        setDefaultUpdateCallback: function(name) {
+        setDefaultUpdateCallback: function (name) {
             this.addUpdateCallback(new UpdateBone(name !== undefined ? name : this.getName()));
         }
     }),

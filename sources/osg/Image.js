@@ -2,9 +2,9 @@ import notify from 'osg/notify';
 import utils from 'osg/utils';
 import Object from 'osg/Object';
 
-var ImageBitmap = window.ImageBitmap || function() {};
+var ImageBitmap = window.ImageBitmap || function () {};
 
-var ImageObject = function(image) {
+var ImageObject = function (image) {
     Object.call(this);
 
     this._imageObject = undefined;
@@ -24,38 +24,38 @@ var ImageObject = function(image) {
 utils.createPrototypeObject(
     ImageObject,
     utils.objectInherit(Object.prototype, {
-        dirty: function() {
+        dirty: function () {
             this._isGreyscale = undefined;
             this._dirty = true;
         },
 
-        isDirty: function() {
+        isDirty: function () {
             return this._dirty;
         },
 
-        setDirty: function(bool) {
+        setDirty: function (bool) {
             this._dirty = bool;
         },
 
-        getImage: function() {
+        getImage: function () {
             return this._imageObject instanceof ImageObject
                 ? this._imageObject.getImage()
                 : this._imageObject;
         },
 
-        getURL: function() {
+        getURL: function () {
             return this._url;
         },
 
-        setURL: function(url) {
+        setURL: function (url) {
             this._url = url;
         },
 
-        useOrCreateImage: function(img) {
+        useOrCreateImage: function (img) {
             return img instanceof ImageObject === false ? new ImageObject(img) : img;
         },
 
-        setImage: function(img) {
+        setImage: function (img) {
             if (!this._url && img && (img.src || img.currentSrc)) {
                 // TODO what is currentSrc ?
                 this._url = img.src || img.currentSrc;
@@ -79,23 +79,23 @@ utils.createPrototypeObject(
             this.dirty();
         },
 
-        isCanvas: function() {
+        isCanvas: function () {
             return this.getImage() instanceof window.HTMLCanvasElement;
         },
 
-        isBitmap: function() {
+        isBitmap: function () {
             return this.getImage() instanceof ImageBitmap;
         },
 
-        isVideo: function() {
+        isVideo: function () {
             return this.getImage() instanceof window.HTMLVideoElement;
         },
 
-        isImage: function() {
+        isImage: function () {
             return this.getImage() instanceof window.Image;
         },
 
-        isTypedArray: function() {
+        isTypedArray: function () {
             var img = this.getImage();
             return (
                 img instanceof Uint8Array ||
@@ -104,15 +104,15 @@ utils.createPrototypeObject(
             );
         },
 
-        setWidth: function(w) {
+        setWidth: function (w) {
             this._width = w;
         },
 
-        setHeight: function(h) {
+        setHeight: function (h) {
             this._height = h;
         },
 
-        getWidth: function() {
+        getWidth: function () {
             var img = this.getImage();
             if (this.isImage()) {
                 return img.naturalWidth;
@@ -124,7 +124,7 @@ utils.createPrototypeObject(
             return this._width;
         },
 
-        getHeight: function() {
+        getHeight: function () {
             var img = this.getImage();
             if (this.isImage()) {
                 return img.naturalHeight;
@@ -136,7 +136,7 @@ utils.createPrototypeObject(
             return this._height;
         },
 
-        isGreyscale: function(nbSamples) {
+        isGreyscale: function (nbSamples) {
             if (this._isGreyscale !== undefined) return this._isGreyscale;
 
             if (
@@ -184,7 +184,7 @@ utils.createPrototypeObject(
             return this._isGreyscale;
         },
 
-        isReady: function() {
+        isReady: function () {
             // image is a osgImage
             if (this._imageObject && this._imageObject instanceof ImageObject) {
                 return this._imageObject.isReady();
@@ -228,15 +228,15 @@ utils.createPrototypeObject(
             return false;
         },
 
-        getMipmap: function() {
+        getMipmap: function () {
             return this._mipmap;
         },
 
-        hasMipmap: function() {
+        hasMipmap: function () {
             return this._mipmap.length > 1;
         },
 
-        release: function() {
+        release: function () {
             this._mipmap.length = 0;
             this._imageObject = undefined;
         }

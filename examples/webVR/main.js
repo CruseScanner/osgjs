@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -11,30 +11,30 @@
     var Object = window.Object;
     var InputGroups = OSG.osgViewer.InputGroups;
 
-    var Example = function() {
+    var Example = function () {
         ExampleOSGJS.call(this);
 
         $('#button-enter-fullscreen').click(
-            function() {
+            function () {
                 this.requestFullScreenVR();
             }.bind(this)
         );
 
         $('#button-exit-fullscreen').click(
-            function() {
+            function () {
                 this.exitFullScreenVR();
             }.bind(this)
         );
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        run: function() {
+        run: function () {
             ExampleOSGJS.prototype.run.call(this);
 
             if (window.screenfull) {
                 document.addEventListener(
                     window.screenfull.raw.fullscreenchange,
-                    function() {
+                    function () {
                         console.log('toggle VR mode');
                         this.toggleVR();
                     }.bind(this)
@@ -42,7 +42,7 @@
             }
         },
 
-        switchVR: function() {
+        switchVR: function () {
             var viewer = this._viewer;
 
             // Enable VR
@@ -95,14 +95,14 @@
             this._vrState = !this._vrState;
         },
 
-        toggleVR: function() {
+        toggleVR: function () {
             var viewer = this._viewer;
             if (viewer.getVRDisplay())
                 viewer.setPresentVR(!this._vrState).then(this.switchVR.bind(this));
             else this.switchVR();
         },
 
-        requestFullScreenVR: function() {
+        requestFullScreenVR: function () {
             if (!navigator.getVRDisplays && window.screenfull) {
                 window.screenfull.request(this._canvas);
             } else {
@@ -114,7 +114,7 @@
             $('#button-exit-fullscreen').show();
         },
 
-        exitFullScreenVR: function() {
+        exitFullScreenVR: function () {
             if (!navigator.getVRDisplays && window.screenfull) {
                 window.screenfull.exit();
             } else {
@@ -122,9 +122,9 @@
             }
         },
 
-        initFullscreenEvent: function() {
+        initFullscreenEvent: function () {
             if (window.screenfull && window.screenfull.enabled) {
-                document.addEventListener(window.screenfull.raw.fullscreenchange, function() {
+                document.addEventListener(window.screenfull.raw.fullscreenchange, function () {
                     console.log(
                         'Am I fullscreen? ' + (window.screenfull.isFullscreen ? 'Yes' : 'No')
                     );
@@ -133,13 +133,13 @@
             }
         },
 
-        createScene: function() {
+        createScene: function () {
             var root = new osg.MatrixTransform();
             this._modelNode = root;
             osg.mat4.fromRotation(root.getMatrix(), Math.PI, [0, 0, 1]);
 
             osgDB.readNodeURL('../media/models/material-test/file.osgjs').then(
-                function(model) {
+                function (model) {
                     root.addChild(model);
 
                     // setup manipulator
@@ -169,18 +169,18 @@
             this.initTouch();
         },
 
-        goForward: function() {
+        goForward: function () {
             // assume the first touch in the 1/4 of the top canvas is a google cardboard touch
             osg.log('cardboard touch');
             this._manipulator.getForwardInterpolator().setTarget(1);
         },
 
-        stop: function() {
+        stop: function () {
             osg.log('cardboard unTouch');
             this._manipulator.getForwardInterpolator().setTarget(0);
         },
 
-        initTouch: function() {
+        initTouch: function () {
             this._viewer.getInputManager().addMappings(
                 {
                     'scene.webvrexample:goForward': 'touchstart',
@@ -193,7 +193,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
             window.example = example;

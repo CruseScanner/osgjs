@@ -5,7 +5,7 @@ import utils from 'osg/utils';
 import CompilerVertex from 'osgShader/CompilerVertex';
 import CompilerFragment from 'osgShader/CompilerFragment';
 
-var Compiler = function(attributes, textureAttributes, shaderProcessor) {
+var Compiler = function (attributes, textureAttributes, shaderProcessor) {
     this._attributes = attributes;
     this._textureAttributes = textureAttributes;
 
@@ -46,11 +46,11 @@ var Compiler = function(attributes, textureAttributes, shaderProcessor) {
     this.initTextureAttributes();
 };
 
-Compiler.cloneStateAttributeConfig = function(compilerClass) {
+Compiler.cloneStateAttributeConfig = function (compilerClass) {
     return JSON.parse(JSON.stringify(compilerClass.stateAttributeConfig));
 };
 
-Compiler.setStateAttributeConfig = function(compilerClass, config) {
+Compiler.setStateAttributeConfig = function (compilerClass, config) {
     compilerClass.stateAttributeConfig = config;
 
     config.attribute.forEach(utils.getOrCreateStateAttributeTypeMemberIndexFromName);
@@ -86,25 +86,25 @@ Compiler.setStateAttributeConfig(Compiler, {
 Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     constructor: Compiler,
 
-    createFragmentShader: function() {
+    createFragmentShader: function () {
         this._fragmentShaderMode = true;
         return this._createFragmentShader();
     },
 
-    createVertexShader: function() {
+    createVertexShader: function () {
         this._fragmentShaderMode = false;
         return this._createVertexShader();
     },
 
-    getOrCreateProjectionMatrix: function() {
+    getOrCreateProjectionMatrix: function () {
         return this.getOrCreateUniform('mat4', 'uProjectionMatrix');
     },
 
-    getCompilerName: function() {
+    getCompilerName: function () {
         return this._material ? 'CompilerOSGJS' : 'NoMaterialCompilerOSGJS';
     },
 
-    getFragmentShaderName: function() {
+    getFragmentShaderName: function () {
         var compilerName = this.getCompilerName();
 
         var materialName = this._material && this._material.getName();
@@ -117,33 +117,33 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return compilerName;
     },
 
-    getVertexShaderName: function() {
+    getVertexShaderName: function () {
         return this.getFragmentShaderName();
     },
 
-    getDebugIdentifier: function() {
+    getDebugIdentifier: function () {
         var vname = this.getVertexShaderName();
         var fname = this.getFragmentShaderName();
         return vname === fname ? fname : vname + '|' + fname;
     },
 
-    logError: function(msg) {
+    logError: function (msg) {
         notify.error(this.getDebugIdentifier() + ' : ' + msg);
     },
 
-    logWarn: function(msg) {
+    logWarn: function (msg) {
         notify.warn(this.getDebugIdentifier() + ' : ' + msg);
     },
 
-    getOrCreateConstantOne: function(type) {
+    getOrCreateConstantOne: function (type) {
         return this.getOrCreateConstant(type, type + 'White').setValue(type + '(1.0)');
     },
 
-    getOrCreateConstantZero: function(type) {
+    getOrCreateConstantZero: function (type) {
         return this.getOrCreateConstant(type, type + 'Black').setValue(type + '(0.0)');
     },
 
-    initAttributes: function() {
+    initAttributes: function () {
         var attributes = this._attributes;
         var lights = this._lights;
         var shadows = this._shadows;
@@ -170,7 +170,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         }
     },
 
-    initTextureAttributes: function() {
+    initTextureAttributes: function () {
         var textureAttributes = this._textureAttributes;
         var texturesNum = textureAttributes.length;
         this._textures.length = this._shadowsTextures.length = texturesNum;
@@ -187,14 +187,14 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         }
     },
 
-    registerTextureAttributes: function(tuTarget, tunit) {
+    registerTextureAttributes: function (tuTarget, tunit) {
         var tType = tuTarget.className();
         if (tType === 'Texture') return this.registerTexture(tuTarget, tunit);
         if (tType.indexOf('ShadowTexture') !== -1)
             return this.registerTextureShadow(tuTarget, tunit);
     },
 
-    registerTexture: function(tuTarget, texUnit) {
+    registerTexture: function (tuTarget, texUnit) {
         var tName = tuTarget.getName();
         if (!tName) {
             tName = 'Texture' + texUnit;
@@ -209,7 +209,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         };
     },
 
-    registerTextureShadow: function(tuTarget, texUnit) {
+    registerTextureShadow: function (tuTarget, texUnit) {
         var tName = tuTarget.getName();
         if (!tName) {
             tName = 'Texture' + texUnit;
@@ -225,7 +225,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         };
     },
 
-    getTextureByName: function(name) {
+    getTextureByName: function (name) {
         var texObj = this._texturesByName[name];
         if (!texObj || texObj.variable) return texObj;
 
@@ -254,7 +254,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // The Compiler Main Code called on Vertex or Fragment Shader Graph
-    createShaderFromGraphs: function(roots) {
+    createShaderFromGraphs: function (roots) {
         this._compiledNodeMap = {};
 
         // list all vars
@@ -345,7 +345,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return shader;
     },
 
-    _logLookForVariable: function(args, variable) {
+    _logLookForVariable: function (args, variable) {
         var res = [];
         for (var key in args) {
             if (args[key] === variable) {
@@ -355,7 +355,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return res;
     },
 
-    getNode: function(/*name, arg1, etc*/) {
+    getNode: function (/*name, arg1, etc*/) {
         var n = factory.getNode.apply(factory, arguments);
         if (!n) notify.error('Unknown Node type : ' + arguments[0]);
         var cacheID = n.getID();
@@ -363,11 +363,11 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return n;
     },
 
-    getVariable: function(nameID) {
+    getVariable: function (nameID) {
         return this._variables[nameID];
     },
 
-    getAttributeType: function(type) {
+    getAttributeType: function (type) {
         for (var i = 0; i < this._attributes.length; i++) {
             if (this._attributes[i].getType() === type) return this._attributes[i];
         }
@@ -377,7 +377,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     // TODO: add Precision qualifier
     // if doesn't exist create a new on
     // if nameID given and var already exist, create a varname +
-    createVariable: function(type, varname, deepness) {
+    createVariable: function (type, varname, deepness) {
         var nameID = varname;
 
         if (nameID === undefined) {
@@ -405,7 +405,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return v;
     },
 
-    getOrCreateUniform: function(type, varname, size) {
+    getOrCreateUniform: function (type, varname, size) {
         var nameID = varname;
 
         // accept uniform as parameter to simplify code
@@ -447,7 +447,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // make sure we get correct Node
-    getOrCreateSampler: function(type, varname) {
+    getOrCreateSampler: function (type, varname) {
         if (varname === undefined) {
             this.logError('No name given for sampler type : ' + type);
         }
@@ -464,7 +464,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // make sure we get correct Node
-    getOrCreateAttribute: function(type, nameID) {
+    getOrCreateAttribute: function (type, nameID) {
         if (this._fragmentShaderMode) {
             this.logError('No Vertex Attribute in Fragment Shader');
         }
@@ -485,7 +485,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return v;
     },
 
-    getOrCreateConstant: function(type, varname) {
+    getOrCreateConstant: function (type, varname) {
         var nameID = varname;
         if (nameID === undefined) {
             // TODO: temp constant ? or enforcing reuse ?
@@ -513,7 +513,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // make sure we get correct Node
-    getOrCreateVarying: function(type, nameID) {
+    getOrCreateVarying: function (type, nameID) {
         if (nameID === undefined) {
             this.logError('Error: Mandatory to name varying (as you need to retrieve them)');
         }
@@ -543,11 +543,10 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
             );
         }
 
-        variable = this._variables[nameID] = this._varyings[nameID] = this.getNode(
-            'Varying',
-            type,
-            nameID
-        );
+        variable =
+            this._variables[nameID] =
+            this._varyings[nameID] =
+                this.getNode('Varying', type, nameID);
 
         return variable;
     },
@@ -556,7 +555,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     // TRAVERSE STUFFS
     //////////////////
 
-    markNodeAsVisited: function(n) {
+    markNodeAsVisited: function (n) {
         var cacheID = n.getID();
         if (this._activeNodeMap[cacheID] === n) {
             this._compiledNodeMap[cacheID] = n;
@@ -569,7 +568,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // make sure we traverse once per evaluation of graph
-    checkOrMarkNodeAsTraversed: function(n) {
+    checkOrMarkNodeAsTraversed: function (n) {
         var cacheID = n.getID();
         if (this._traversedNodeMap[cacheID]) {
             return true;
@@ -579,7 +578,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     },
 
     // TODO: add a visitor to debug the graph
-    traverse: function(functor, node) {
+    traverse: function (functor, node) {
         if (this.checkOrMarkNodeAsTraversed(node)) return;
 
         var inputs = node.getInputs();
@@ -605,7 +604,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         this.markNodeAsVisited(node);
     },
 
-    _getAndInitFunctor: function(func) {
+    _getAndInitFunctor: function (func) {
         this._traversedNodeMap = {};
 
         var map = {};
@@ -617,7 +616,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return func;
     },
 
-    _functorEvaluateAndGatherField: function(field, map, text, node) {
+    _functorEvaluateAndGatherField: function (field, map, text, node) {
         var idx = node.getType();
         if (idx === undefined || idx === '') {
             this.logError('Your node ' + node + ' has no type');
@@ -638,7 +637,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     // In case a node of same Type have different outputs (shadow with different defines)
     // it use ID rather than Type as map index UNIQUE PER TYPE
     // TODO: adds includes so that we can remove it from the eval Global Functions ?
-    evaluateAndGatherField: function(nodes, field) {
+    evaluateAndGatherField: function (nodes, field) {
         var func = this._getAndInitFunctor(this._functorEvaluateAndGatherField.bind(this, field));
 
         for (var j = 0, jl = nodes.length; j < jl; j++) {
@@ -648,7 +647,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return func._text;
     },
 
-    _functorEvaluateGlobalFunctionDeclaration: function(map, text, node) {
+    _functorEvaluateGlobalFunctionDeclaration: function (map, text, node) {
         // UNIQUE PER TYPE
         var idx = node.getType();
         if (idx === undefined || idx === '') {
@@ -666,7 +665,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     // (for now pragma include done here too. could be done with define/etc...)
     // Node of same Type has to share exact same "node.globalFunctionDeclaration" output
     // as it use Type rather than ID as map index
-    evaluateGlobalFunctionDeclaration: function(nodes) {
+    evaluateGlobalFunctionDeclaration: function (nodes) {
         var func = this._getAndInitFunctor(this._functorEvaluateGlobalFunctionDeclaration);
 
         for (var j = 0, jl = nodes.length; j < jl; j++) {
@@ -676,7 +675,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return func._text.join('\n');
     },
 
-    _functorEvaluateGlobalVariableDeclaration: function(map, text, node) {
+    _functorEvaluateGlobalVariableDeclaration: function (map, text, node) {
         // UNIQUE PER NODE
         var idx = node.getID();
         if (!node.globalDeclaration || map[idx]) return;
@@ -689,7 +688,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     // Gather a Variables declarations of nodes from a nodeGraph to be outputted
     // outside the VOID MAIN code ( Uniforms, Varying )
     // Node of same Type has different output as it use Type rather than ID as map index
-    evaluateGlobalVariableDeclaration: function(nodes) {
+    evaluateGlobalVariableDeclaration: function (nodes) {
         var func = this._getAndInitFunctor(this._functorEvaluateGlobalVariableDeclaration);
 
         var i = 0;
@@ -717,7 +716,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return declarations.join('\n');
     },
 
-    sortDeclarations: function(declarations) {
+    sortDeclarations: function (declarations) {
         // sort in alphabetical order attr, unif, sample, varying
         declarations.sort();
 
@@ -737,7 +736,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         }
     },
 
-    _functorEvaluate: function(map, text, node) {
+    _functorEvaluate: function (map, text, node) {
         var id = node.getID();
         if (map[id]) return;
         map[id] = true;
@@ -750,7 +749,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         text.push(shader);
     },
 
-    evaluate: function(nodes) {
+    evaluate: function (nodes) {
         var func = this._getAndInitFunctor(this._functorEvaluate);
 
         for (var j = 0, jl = nodes.length; j < jl; j++) {
@@ -760,18 +759,18 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return func._text.join('\n');
     },
 
-    evaluateDefines: function(roots) {
+    evaluateDefines: function (roots) {
         return this.evaluateAndGatherField(roots, 'getDefines');
     },
 
-    evaluateExtensions: function(roots) {
+    evaluateExtensions: function (roots) {
         return this.evaluateAndGatherField(roots, 'getExtensions');
     },
 
     /////////////////////
     // Model space varying
     /////////////////////
-    getOrCreateModelVertex: function() {
+    getOrCreateModelVertex: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec3', 'vModelVertex');
         }
@@ -790,7 +789,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return out;
     },
 
-    getOrCreateModelNormal: function() {
+    getOrCreateModelNormal: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec3', 'vModelNormal');
         }
@@ -809,7 +808,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return out;
     },
 
-    getOrCreateModelTangent: function() {
+    getOrCreateModelTangent: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec4', 'vModelTangent');
         }
@@ -832,7 +831,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
     /////////////////////
     // View space varying
     /////////////////////
-    getOrCreateViewVertex: function() {
+    getOrCreateViewVertex: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec4', 'vViewVertex');
         }
@@ -851,7 +850,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return out;
     },
 
-    getOrCreateViewNormal: function() {
+    getOrCreateViewNormal: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec3', 'vViewNormal');
         }
@@ -870,7 +869,7 @@ Compiler.prototype = utils.extend({}, CompilerVertex, CompilerFragment, {
         return out;
     },
 
-    getOrCreateViewTangent: function() {
+    getOrCreateViewTangent: function () {
         if (this._fragmentShaderMode) {
             return this.getOrCreateVarying('vec4', 'vViewTangent');
         }

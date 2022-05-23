@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import StateAttribute from 'osg/StateAttribute';
 
-var BillboardAttribute = function() {
+var BillboardAttribute = function () {
     StateAttribute.call(this);
     this._attributeEnable = false;
 };
@@ -11,19 +11,19 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Billboard',
 
-        cloneType: function() {
+        cloneType: function () {
             return new BillboardAttribute();
         },
 
-        setEnabled: function(state) {
+        setEnabled: function (state) {
             this._attributeEnable = state;
         },
 
-        isEnabled: function() {
+        isEnabled: function () {
             return this._attributeEnable;
         },
 
-        apply: function() {}
+        apply: function () {}
     }),
     'osg',
     'Billboard'

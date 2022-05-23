@@ -4,7 +4,7 @@ import Object from 'osg/Object';
 import GLObject from 'osg/GLObject';
 import Timer from 'osg/Timer';
 
-var getAttributeType = function(array) {
+var getAttributeType = function (array) {
     var type;
 
     if (array instanceof utils.Float32Array) type = 0x1406;
@@ -30,7 +30,7 @@ var getAttributeType = function(array) {
  * @class BufferArray
  */
 
-var BufferArray = function(target, elements, itemSize) {
+var BufferArray = function (target, elements, itemSize) {
     GLObject.call(this);
     // maybe could inherit from Object
     this._instanceID = Object.getInstanceID();
@@ -71,14 +71,14 @@ BufferArray.STREAM_DRAW = 0x88e0;
 BufferArray._sDeletedGLBufferArrayCache = new window.Map();
 
 // static method to delete Program
-BufferArray.deleteGLBufferArray = function(gl, buffer) {
+BufferArray.deleteGLBufferArray = function (gl, buffer) {
     if (!BufferArray._sDeletedGLBufferArrayCache.has(gl))
         BufferArray._sDeletedGLBufferArrayCache.set(gl, []);
     BufferArray._sDeletedGLBufferArrayCache.get(gl).push(buffer);
 };
 
 // static method to flush all the cached glPrograms which need to be deleted in the GL context specified
-BufferArray.flushDeletedGLBufferArrays = function(gl, availableTime) {
+BufferArray.flushDeletedGLBufferArrays = function (gl, availableTime) {
     // if no time available don't try to flush objects.
     if (availableTime <= 0.0) return availableTime;
     if (!BufferArray._sDeletedGLBufferArrayCache.has(gl)) return availableTime;
@@ -94,7 +94,7 @@ BufferArray.flushDeletedGLBufferArrays = function(gl, availableTime) {
     return availableTime - elapsedTime;
 };
 
-BufferArray.flushAllDeletedGLBufferArrays = function(gl) {
+BufferArray.flushAllDeletedGLBufferArrays = function (gl) {
     if (!BufferArray._sDeletedGLBufferArrayCache.has(gl)) return;
     var deleteList = BufferArray._sDeletedGLBufferArrayCache.get(gl);
     var numBuffers = deleteList.length;
@@ -104,7 +104,7 @@ BufferArray.flushAllDeletedGLBufferArrays = function(gl) {
     }
 };
 
-BufferArray.onLostContext = function(gl) {
+BufferArray.onLostContext = function (gl) {
     if (!BufferArray._sDeletedGLBufferArrayCache.has(gl)) return;
     var deleteList = BufferArray._sDeletedGLBufferArrayCache.get(gl);
     deleteList.length = 0;
@@ -113,30 +113,30 @@ BufferArray.onLostContext = function(gl) {
 utils.createPrototypeObject(
     BufferArray,
     utils.objectInherit(GLObject.prototype, {
-        setUsage: function(usage) {
+        setUsage: function (usage) {
             this._usage = usage;
         },
-        getUsage: function() {
+        getUsage: function () {
             return this._usage;
         },
-        getInstanceID: function() {
+        getInstanceID: function () {
             return this._instanceID;
         },
-        setItemSize: function(size) {
+        setItemSize: function (size) {
             this._itemSize = size;
         },
-        isValid: function() {
+        isValid: function () {
             if (this._buffer) return true;
             if (this._elements && this._elements.length) return true;
             return false;
         },
 
-        invalidate: function() {
+        invalidate: function () {
             this._buffer = undefined;
             this.dirty();
         },
 
-        releaseGLObjects: function() {
+        releaseGLObjects: function () {
             if (this._buffer !== undefined && this._buffer !== null && this._gl !== undefined) {
                 BufferArray.deleteGLBufferArray(this._gl, this._buffer);
                 GLObject.removeObject(this._gl, this);
@@ -144,15 +144,15 @@ utils.createPrototypeObject(
             this.invalidate();
         },
 
-        setNormalize: function(normalize) {
+        setNormalize: function (normalize) {
             this._normalize = normalize;
         },
 
-        getNormalize: function() {
+        getNormalize: function () {
             return this._normalize;
         },
 
-        bind: function(gl) {
+        bind: function (gl) {
             if (!this._gl) this.setGraphicContext(gl);
             var target = this._target;
             var buffer = this._buffer;
@@ -168,30 +168,30 @@ utils.createPrototypeObject(
                 gl.bindBuffer(target, this._buffer);
             }
         },
-        getItemSize: function() {
+        getItemSize: function () {
             return this._itemSize;
         },
-        dirty: function() {
+        dirty: function () {
             this._dirty = true;
         },
-        isDirty: function() {
+        isDirty: function () {
             return this._dirty;
         },
-        compile: function(gl) {
+        compile: function (gl) {
             if (this._dirty) {
                 gl.bufferData(this._target, this._elements, this._usage);
                 this._dirty = false;
             }
         },
-        getElements: function() {
+        getElements: function () {
             return this._elements;
         },
-        setElements: function(elements) {
+        setElements: function (elements) {
             this._elements = elements;
             this._type = getAttributeType(elements);
             this._dirty = true;
         },
-        getType: function() {
+        getType: function () {
             return this._type;
         }
     }),

@@ -2,8 +2,8 @@ import { assert } from 'chai';
 import UpdateVisitor from 'osg/UpdateVisitor';
 import Node from 'osg/Node';
 
-export default function() {
-    test('UpdateVisitor', function() {
+export default function () {
+    test('UpdateVisitor', function () {
         var uv = new UpdateVisitor();
 
         var root = new Node();
@@ -20,33 +20,33 @@ export default function() {
         var callc = 0;
         var stateSetUpdateCallbackCalled = 0;
 
-        var StateSetUpdateCallback = function() {
-            this.update = function(/*stateset, nv */) {
+        var StateSetUpdateCallback = function () {
+            this.update = function (/*stateset, nv */) {
                 stateSetUpdateCallbackCalled += 1;
             };
         };
         var ss = b.getOrCreateStateSet();
         ss.addUpdateCallback(new StateSetUpdateCallback());
 
-        var Froot = function() {};
+        var Froot = function () {};
         Froot.prototype = {
-            update: function(node, nv) {
+            update: function (node, nv) {
                 callRoot = 1;
                 node.traverse(nv);
             }
         };
 
-        var Fb = function() {};
+        var Fb = function () {};
         Fb.prototype = {
-            update: function(/*node, nv */) {
+            update: function (/*node, nv */) {
                 callb = 1;
                 return false;
             }
         };
 
-        var Fc = function() {};
+        var Fc = function () {};
         Fc.prototype = {
-            update: function(/*node, nv */) {
+            update: function (/*node, nv */) {
                 callc = 1;
                 return true;
             }

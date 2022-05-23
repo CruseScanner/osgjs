@@ -57,7 +57,7 @@ import InputGroups from 'osgViewer/input/InputConstants';
 
 var PICKING_NODEMASK = 0x8000;
 
-var createShader = function() {
+var createShader = function () {
     var vertexshader = [
         'attribute vec4 Vertex;',
         'uniform mat4 uModelViewMatrix;',
@@ -109,7 +109,7 @@ var createShader = function() {
     );
 };
 
-var Stats = function(viewer, options) {
+var Stats = function (viewer, options) {
     this._captionsBuffer = undefined;
     this._valuesBuffer = undefined;
 
@@ -161,7 +161,7 @@ var Stats = function(viewer, options) {
 };
 
 utils.createPrototypeObject(Stats, {
-    getCounter: function(name) {
+    getCounter: function (name) {
         if (!this._counters[name]) {
             this._counters[name] = new Counter({
                 caption: name,
@@ -171,10 +171,10 @@ utils.createPrototypeObject(Stats, {
 
         return this._counters[name];
     },
-    getBufferStats: function() {
+    getBufferStats: function () {
         return this._bufferStats;
     },
-    addConfig: function(config) {
+    addConfig: function (config) {
         if (config.init && !config.init()) return;
 
         for (var valueName in config.values) {
@@ -201,7 +201,7 @@ utils.createPrototypeObject(Stats, {
             this._updates.push(config.update);
         }
     },
-    reset: function() {
+    reset: function () {
         this._bufferStats.resetCaptions();
         this._bufferStats.resetValues();
 
@@ -210,7 +210,7 @@ utils.createPrototypeObject(Stats, {
 
         this._bufferStats.resize(this._bufferStats._maxNbVertexes);
     },
-    update: function() {
+    update: function () {
         for (var i = 0; i < this._updates.length; i++) {
             this._updates[i](this);
         }
@@ -231,10 +231,10 @@ utils.createPrototypeObject(Stats, {
             this._dirtyValues = false;
         }
     },
-    getNode: function() {
+    getNode: function () {
         return this._node;
     },
-    setShowFilter: function(groupNamesArray) {
+    setShowFilter: function (groupNamesArray) {
         this._dirtyCaptions = true;
         if (!groupNamesArray) {
             this._displayFilter.length = 0;
@@ -242,7 +242,7 @@ utils.createPrototypeObject(Stats, {
         }
         this._displayFilter = groupNamesArray.slice();
     },
-    _init: function(options) {
+    _init: function (options) {
         // 3D init
         var camera = new Camera();
 
@@ -279,7 +279,7 @@ utils.createPrototypeObject(Stats, {
         texture.setMagFilter(Texture.NEAREST);
         this._text.setFontSize(fontSize * this._viewer.getCanvasPixelRatio());
         this._text.getCanvas().then(
-            function(canvas) {
+            function (canvas) {
                 this._dirtyCaptions = true;
                 var geometry = this._bufferStats.getGeometry();
                 geometry.setNodeMask(~PICKING_NODEMASK);
@@ -324,7 +324,7 @@ utils.createPrototypeObject(Stats, {
         // canvas.addEventListener('touchend', this.onMouseUp.bind(this));
         // canvas.addEventListener('touchcancel', this.onMouseUp.bind(this));
     },
-    onMouseDown: function(e) {
+    onMouseDown: function (e) {
         var hits = this.computeNearestIntersection(e);
         this._onStats = !!hits.length;
         if (!this._onStats) return;
@@ -334,9 +334,9 @@ utils.createPrototypeObject(Stats, {
         vec2.set(this._dragStart, e.canvasX, e.canvasY);
         this._dragStop[1] = this._dragStart[1];
     },
-    onMouseMove: (function() {
+    onMouseMove: (function () {
         var tmpVec3 = vec3.create();
-        return function(e) {
+        return function (e) {
             if (!this._onStats) return;
 
             vec2.set(this._dragStop, e.canvasX, e.canvasY);
@@ -348,17 +348,17 @@ utils.createPrototypeObject(Stats, {
             );
         };
     })(),
-    onMouseUp: function() {
+    onMouseUp: function () {
         this._viewer.getInputManager().setEnable(InputGroups.SCENE, true);
         this._onStats = false;
     },
-    computeNearestIntersection: (function() {
+    computeNearestIntersection: (function () {
         var lsi = new LineSegmentIntersector();
         var origIntersect = vec3.create();
         var dstIntersect = vec3.create();
         var iv = new IntersectionVisitor();
         iv.setIntersector(lsi);
-        return function(e) {
+        return function (e) {
             var x = e.glX;
             var y = e.glY;
 
@@ -375,7 +375,7 @@ utils.createPrototypeObject(Stats, {
             return hits;
         };
     })(),
-    _updateBackgroundPicking: function(x, y, w, h) {
+    _updateBackgroundPicking: function (x, y, w, h) {
         var vertexes = this._backgroundPicking.getVertexAttributeList().Vertex.getElements();
         vertexes[0] = x;
         vertexes[1] = y + h;
@@ -391,7 +391,7 @@ utils.createPrototypeObject(Stats, {
         this._backgroundPicking.getVertexAttributeList().Vertex.dirty();
         this._backgroundPicking.dirtyBound();
     },
-    _generateCaptions: function() {
+    _generateCaptions: function () {
         var initialX = 0;
         var characterHeight = this._text.getCharacterHeight();
         var textCursorX = initialX;
@@ -460,7 +460,7 @@ utils.createPrototypeObject(Stats, {
         }
         this._bufferStats.captionsEnd();
     },
-    _generateValues: function() {
+    _generateValues: function () {
         var characterWidth = this._text.getCharacterWidth();
         var valuesOffsetX = this._labelMaxWidth + 2 * characterWidth;
         var graphOffsetX = this._valuesMaxWidth + 2 * characterWidth;
@@ -544,7 +544,7 @@ utils.createPrototypeObject(Stats, {
         this._bufferStats.graphsEnd();
         this._bufferStats.update();
     },
-    _checkCounterDisplayableChanged: function() {
+    _checkCounterDisplayableChanged: function () {
         var changed = false;
         for (var key in this._counters) {
             var counter = this._counters[key];
@@ -555,7 +555,7 @@ utils.createPrototypeObject(Stats, {
         }
         return changed;
     },
-    _checkViewportChanged: function() {
+    _checkViewportChanged: function () {
         var x = this._viewport.x();
         var y = this._viewport.y();
         var w = this._viewport.width();

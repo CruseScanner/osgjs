@@ -14,7 +14,7 @@ import BoundingBox from 'osg/BoundingBox';
  * @inherits Geometry
  */
 
-var MorphGeometry = function() {
+var MorphGeometry = function () {
     Geometry.call(this);
 
     this._shape = null; // by default no kdtree/shape for morph
@@ -40,7 +40,7 @@ MorphGeometry.MAX_MORPH_GPU = 4;
 utils.createPrototypeNode(
     MorphGeometry,
     utils.objectInherit(Geometry.prototype, {
-        init: function() {
+        init: function () {
             if (this._morphAttribute) {
                 this._isInitialized = true;
                 return false;
@@ -69,40 +69,40 @@ utils.createPrototypeNode(
             return true;
         },
 
-        getMaximumPossibleMorphGPU: function() {
+        getMaximumPossibleMorphGPU: function () {
             return this._maxMorphGPU;
         },
 
-        setMaximumPossibleMorphGPU: function(nb) {
+        setMaximumPossibleMorphGPU: function (nb) {
             this._maxMorphGPU = nb;
             this._isInitialized = false; // it's mostly UpdateMorph that we want to dirty
             if (this._morphAttribute) this._morphAttribute.setNumTargets(nb);
         },
 
-        getMorphTargetNames: function() {
+        getMorphTargetNames: function () {
             return this._morphTargetNames;
         },
 
-        getStateSetAnimation: function() {
+        getStateSetAnimation: function () {
             return this._stateSetAnimation;
         },
 
-        getMorphTargets: function() {
+        getMorphTargets: function () {
             return this._targets;
         },
 
-        isInitialized: function() {
+        isInitialized: function () {
             return this._isInitialized;
         },
 
-        getTargetsWeight: function() {
+        getTargetsWeight: function () {
             return this._targetWeights;
         },
 
-        computeBoundingBox: (function() {
+        computeBoundingBox: (function () {
             var tmpBox = new BoundingBox();
 
-            return function(boundingBox) {
+            return function (boundingBox) {
                 Geometry.prototype.computeBoundingBox.call(this, boundingBox);
 
                 // expand bb with targets
@@ -116,7 +116,7 @@ utils.createPrototypeNode(
             };
         })(),
 
-        mergeChildrenVertexAttributeList: function() {
+        mergeChildrenVertexAttributeList: function () {
             for (var i = 0, l = this._targets.length; i < l; i++) {
                 var target = this._targets[i];
 
@@ -138,7 +138,7 @@ utils.createPrototypeNode(
             }
         },
 
-        _computeEffectiveSumWeights: function() {
+        _computeEffectiveSumWeights: function () {
             var sum = 0.0;
             var weights = this._targetWeights;
             for (var i = 0, nb = weights.length; i < nb; ++i) {
@@ -152,7 +152,7 @@ utils.createPrototypeNode(
             return sum < 0.0 ? -eps : eps;
         },
 
-        computeTransformedVertex: function(id, out) {
+        computeTransformedVertex: function (id, out) {
             out = out || vec3.create();
 
             var id3 = id * 3;
@@ -180,7 +180,7 @@ utils.createPrototypeNode(
             return out;
         },
 
-        computeTransformedVertices: function() {
+        computeTransformedVertices: function () {
             var weights = this._targetWeights;
             var vList = this.getVertexAttributeList();
 

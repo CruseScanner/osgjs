@@ -1,12 +1,12 @@
 import PooledArray from 'osg/PooledArray';
 
-var PooledMap = function() {
+var PooledMap = function () {
     this._keys = new PooledArray();
     this._map = {};
 };
 
 PooledMap.prototype = {
-    reset: function() {
+    reset: function () {
         var array = this._keys.getArray();
         var arrayLength = this._keys.getLength();
         for (var i = 0; i < arrayLength; i++) {
@@ -19,20 +19,20 @@ PooledMap.prototype = {
      * Set a key value
      * you have to check that the key does not exist before otherwise you could hit performance hit when calling reset/forEach
      */
-    set: function(key, value) {
+    set: function (key, value) {
         this._keys.push(key);
         this._map[key] = value;
     },
-    hasKey: function(key) {
+    hasKey: function (key) {
         return this._map[key] !== undefined;
     },
-    getMap: function() {
+    getMap: function () {
         return this._map;
     },
-    getKeys: function() {
+    getKeys: function () {
         return this._keys;
     },
-    forEach: function(func) {
+    forEach: function (func) {
         var array = this._keys.getArray();
         var arrayLength = this._keys.getLength();
         for (var i = 0; i < arrayLength; i++) {

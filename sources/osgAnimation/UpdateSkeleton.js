@@ -8,14 +8,14 @@ import Object from 'osg/Object';
  *  ValidateSkeletonVisitor
  *  @class ValidateSkeletonVisitor
  */
-var ValidateSkeletonVisitor = function() {
+var ValidateSkeletonVisitor = function () {
     NodeVisitor.call(this);
 };
 
 utils.createPrototypeObject(
     ValidateSkeletonVisitor,
     utils.objectInherit(NodeVisitor.prototype, {
-        apply: function(node) {
+        apply: function (node) {
             if (node.getTypeID() !== Bone.getTypeID()) {
                 return;
             }
@@ -45,7 +45,7 @@ utils.createPrototypeObject(
     'ValidateSkeletonVisitor'
 );
 
-var compareBone = function(x, y) {
+var compareBone = function (x, y) {
     var a = x instanceof Bone ? 0 : 1;
     var b = y instanceof Bone ? 0 : 1;
 
@@ -56,18 +56,18 @@ var compareBone = function(x, y) {
  *  UpdateSkeleton
  *  @class UpdateSkeleton
  */
-var UpdateSkeleton = function() {
+var UpdateSkeleton = function () {
     this._needValidate = true;
 };
 
 utils.createPrototypeObject(
     UpdateSkeleton,
     utils.objectInherit(Object.prototype, {
-        needToValidate: function() {
+        needToValidate: function () {
             return this._needValidate;
         },
 
-        update: function(node, nv) {
+        update: function (node, nv) {
             if (this._needValidate && nv.getVisitorType() === NodeVisitor.UPDATE_VISITOR) {
                 if (node.className && node.className() === 'Skeleton') {
                     var validateSkeletonVisitor = new ValidateSkeletonVisitor();

@@ -16,14 +16,14 @@ var OptionsDefault = {
     // statsShowGraph=1 display graph
 };
 
-var Options = function() {
+var Options = function () {
     for (var keyOption in OptionsDefault) {
         this[keyOption] = OptionsDefault[keyOption];
     }
 };
 
 var urlOptions;
-Options.getOptionsURL = function() {
+Options.getOptionsURL = function () {
     if (urlOptions) return urlOptions;
 
     urlOptions = {};
@@ -70,11 +70,11 @@ Options.getOptionsURL = function() {
                 var logContent = [];
                 var divLogger = document.createElement('div');
                 var codeElement = document.createElement('pre');
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     document.body.insertBefore(divLogger, document.body.firstChild);
                     divLogger.appendChild(codeElement);
                 });
-                var logFunc = function(str) {
+                var logFunc = function (str) {
                     logContent.unshift(str);
                     codeElement.innerHTML = logContent.join('\n');
                 };
@@ -90,7 +90,7 @@ Options.getOptionsURL = function() {
                 codeElement.style.fontSize = '10px';
                 codeElement.style.pointerEvents = 'none';
 
-                ['log', 'error', 'warn', 'info', 'debug'].forEach(function(value) {
+                ['log', 'error', 'warn', 'info', 'debug'].forEach(function (value) {
                     window.console[value] = logFunc;
                 });
                 break;
@@ -101,34 +101,34 @@ Options.getOptionsURL = function() {
 };
 
 Options.prototype = {
-    extend: function(options) {
+    extend: function (options) {
         utils.objectMix(this, options);
         return this;
     },
 
-    get: function(key) {
+    get: function (key) {
         return this[key];
     },
 
-    getBoolean: function(key) {
+    getBoolean: function (key) {
         var val = this.getString(key);
         if (val) return val !== 'false' && val !== '0';
         return undefined;
     },
 
-    getNumber: function(key) {
+    getNumber: function (key) {
         var val = this[key];
         if (val) return Number(val);
         return undefined;
     },
 
-    getString: function(key) {
+    getString: function (key) {
         var val = this[key];
         if (val !== undefined) return this[key].toString();
         return undefined;
     },
 
-    extendWithOptionsURL: function() {
+    extendWithOptionsURL: function () {
         this.extend(Options.getOptionsURL());
     }
 };

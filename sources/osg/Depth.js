@@ -1,7 +1,7 @@
 import utils from 'osg/utils';
 import StateAttribute from 'osg/StateAttribute';
 
-var Depth = function(func, near, far, writeMask) {
+var Depth = function (func, near, far, writeMask) {
     StateAttribute.call(this);
 
     this._func = Depth.LESS;
@@ -41,23 +41,23 @@ utils.createPrototypeStateAttribute(
     Depth,
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'Depth',
-        cloneType: function() {
+        cloneType: function () {
             return new Depth();
         },
-        setRange: function(near, far) {
+        setRange: function (near, far) {
             this._near = near;
             this._far = far;
         },
-        setWriteMask: function(mask) {
+        setWriteMask: function (mask) {
             this._writeMask = mask;
         },
-        getWriteMask: function() {
+        getWriteMask: function () {
             return this._writeMask;
         },
-        getFunc: function() {
+        getFunc: function () {
             return this._func;
         },
-        apply: function(state) {
+        apply: function (state) {
             state.applyDepth(this);
         }
     }),

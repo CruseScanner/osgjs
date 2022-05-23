@@ -2,7 +2,7 @@ import Controller from 'osgGA/Controller';
 import utils from 'osg/utils';
 import InputGroups from 'osgViewer/input/InputConstants';
 
-var FirstPersonManipulatorStandardMouseKeyboardController = function(manipulator) {
+var FirstPersonManipulatorStandardMouseKeyboardController = function (manipulator) {
     Controller.call(this, manipulator);
     this.init();
 };
@@ -10,7 +10,7 @@ var FirstPersonManipulatorStandardMouseKeyboardController = function(manipulator
 utils.createPrototypeObject(
     FirstPersonManipulatorStandardMouseKeyboardController,
     utils.objectInherit(Controller.prototype, {
-        init: function() {
+        init: function () {
             this._delay = 0.15;
             this._stepFactor = 1.0; // meaning radius*stepFactor to move
             this._looking = false;
@@ -52,7 +52,7 @@ utils.createPrototypeObject(
             );
         },
         // called to enable/disable controller
-        setEnable: function(bool) {
+        setEnable: function (bool) {
             if (!bool) {
                 // reset mode if we disable it
                 this._buttonup = true;
@@ -60,24 +60,24 @@ utils.createPrototypeObject(
             Controller.prototype.setEnable.call(this, bool);
         },
 
-        setManipulator: function(manipulator) {
+        setManipulator: function (manipulator) {
             this._manipulator = manipulator;
 
             // we always want to sync speed of controller with manipulator
             this._manipulator.setStepFactor(this._stepFactor);
         },
 
-        stopLookAt: function() {
+        stopLookAt: function () {
             this._looking = false;
         },
 
-        startLookAt: function(ev) {
+        startLookAt: function (ev) {
             var manipulator = this._manipulator;
             manipulator.getLookPositionInterpolator().set(ev.canvasX, -ev.canvasY);
             this._looking = true;
         },
 
-        lookAt: function(ev) {
+        lookAt: function (ev) {
             if (!this._looking) {
                 return;
             }
@@ -86,41 +86,41 @@ utils.createPrototypeObject(
             this._manipulator.getLookPositionInterpolator().setTarget(ev.canvasX, -ev.canvasY);
         },
 
-        changeStepFactor: function(ev) {
+        changeStepFactor: function (ev) {
             this._stepFactor = Math.min(Math.max(0.001, this._stepFactor + ev.deltaY * 0.01), 4.0);
             this._manipulator.setStepFactor(this._stepFactor);
         },
 
-        reset: function() {
+        reset: function () {
             this._manipulator.computeHomePosition();
         },
 
-        goForward: function() {
+        goForward: function () {
             this._manipulator.getForwardInterpolator().setDelay(this._delay);
             this._manipulator.getForwardInterpolator().setTarget(1);
         },
 
-        goBackward: function() {
+        goBackward: function () {
             this._manipulator.getForwardInterpolator().setDelay(this._delay);
             this._manipulator.getForwardInterpolator().setTarget(-1);
         },
 
-        goLeft: function() {
+        goLeft: function () {
             this._manipulator.getSideInterpolator().setDelay(this._delay);
             this._manipulator.getSideInterpolator().setTarget(-1);
         },
 
-        goRight: function() {
+        goRight: function () {
             this._manipulator.getSideInterpolator().setDelay(this._delay);
             this._manipulator.getSideInterpolator().setTarget(1);
         },
 
-        stopMoving: function() {
+        stopMoving: function () {
             this._manipulator.getForwardInterpolator().setDelay(this._delay);
             this._manipulator.getForwardInterpolator().setTarget(0);
         },
 
-        stopStrafing: function() {
+        stopStrafing: function () {
             this._manipulator.getSideInterpolator().setDelay(this._delay);
             this._manipulator.getSideInterpolator().setTarget(0);
         }

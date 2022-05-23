@@ -22,7 +22,7 @@ import notify from 'osg/notify';
 // View is normally inherited from osg/View. In osgjs we dont need it yet
 // this split, so everything is in osgViewer/View
 
-var View = function() {
+var View = function () {
     this._camera = new Camera();
     this._camera.setName('OSGJS camera');
 
@@ -53,33 +53,27 @@ View.LightingMode = {
 };
 
 View.prototype = {
-    requestRedraw: function() {
+    requestRedraw: function () {
         this._requestRedraw = true;
     },
-    requestContinuousUpdate: function(bool) {
+    requestContinuousUpdate: function (bool) {
         this._requestContinousUpdate = bool;
     },
-    createRenderer: function(camera) {
+    createRenderer: function (camera) {
         var render = new Renderer(camera);
         //camera->setStats(new osg::Stats("Camera"));
         return render;
     },
 
-    setGraphicContext: function(gc) {
-        this.getCamera()
-            .getRenderer()
-            .getState()
-            .setGraphicContext(gc);
+    setGraphicContext: function (gc) {
+        this.getCamera().getRenderer().getState().setGraphicContext(gc);
     },
 
-    getGraphicContext: function() {
-        return this.getCamera()
-            .getRenderer()
-            .getState()
-            .getGraphicContext();
+    getGraphicContext: function () {
+        return this.getCamera().getRenderer().getState().getGraphicContext();
     },
 
-    initWebGLCaps: function(gl, force) {
+    initWebGLCaps: function (gl, force) {
         WebGLCaps.instance(gl, force);
     },
 
@@ -93,14 +87,14 @@ View.prototype = {
     // http://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
     // ResizeObserver allows to handle that without polling
     // https://developers.google.com/web/updates/2016/10/resizeobserver
-    computeCanvasSize: (function() {
+    computeCanvasSize: (function () {
         var clientWidth;
         var clientHeight;
         var sizeObserver;
-        return function(canvas) {
+        return function (canvas) {
             if (!sizeObserver) {
                 if (window.ResizeObserver) {
-                    sizeObserver = new ResizeObserver(function() {
+                    sizeObserver = new ResizeObserver(function () {
                         clientWidth = canvas.clientWidth;
                         clientHeight = canvas.clientHeight;
                     });
@@ -138,28 +132,28 @@ View.prototype = {
         };
     })(),
 
-    getCanvasWidth: function() {
+    getCanvasWidth: function () {
         return this._canvasWidth;
     },
 
-    getCanvasHeight: function() {
+    getCanvasHeight: function () {
         return this._canvasHeight;
     },
 
-    getCanvasClientWidth: function() {
+    getCanvasClientWidth: function () {
         return Math.ceil(this._canvasWidth / this._devicePixelRatio);
     },
 
-    getCanvasClientHeight: function() {
+    getCanvasClientHeight: function () {
         return Math.ceil(this._canvasHeight / this._devicePixelRatio);
     },
 
-    getCanvasPixelRatio: function() {
+    getCanvasPixelRatio: function () {
         // in case of VR headset, it's probably not relevant anymore
         return this._devicePixelRatio;
     },
 
-    setUpView: function(canvas, options) {
+    setUpView: function (canvas, options) {
         var devicePixelRatio = window.devicePixelRatio || 1;
         var overrideDevicePixelRatio = options.getNumber('overrideDevicePixelRatio');
         var maxDevicePixelRatio = options.getNumber('maxDevicePixelRatio') || -1;
@@ -190,22 +184,19 @@ View.prototype = {
         );
         mat4.perspective(
             this._camera.getProjectionMatrix(),
-            Math.PI / 180 * 55,
+            (Math.PI / 180) * 55,
             ratio,
             1.0,
             1000.0
         );
 
         if (options && options.enableFrustumCulling)
-            this.getCamera()
-                .getRenderer()
-                .getCullVisitor()
-                .setEnableFrustumCulling(true);
+            this.getCamera().getRenderer().getCullVisitor().setEnableFrustumCulling(true);
 
         // add a function to refresh the graph from the console
         if (options && options.debugGraph) {
             var camera = this.getCamera();
-            DisplayGraph.instance().refreshGraph = function() {
+            DisplayGraph.instance().refreshGraph = function () {
                 var displayGraph = DisplayGraph.instance();
                 displayGraph.setDisplayGraphRenderer(true);
                 displayGraph.createGraph(camera);
@@ -221,7 +212,7 @@ View.prototype = {
      * X = 0 at the left
      * Y = 0 at the BOTTOM
      */
-    computeIntersections: function(x, y, traversalMask) {
+    computeIntersections: function (x, y, traversalMask) {
         /*jshint bitwise: false */
         if (traversalMask === undefined) {
             traversalMask = ~0;
@@ -256,23 +247,23 @@ View.prototype = {
         return this._lsi.getIntersections();
     },
 
-    setFrameStamp: function(frameStamp) {
+    setFrameStamp: function (frameStamp) {
         this._frameStamp = frameStamp;
     },
 
-    getFrameStamp: function() {
+    getFrameStamp: function () {
         return this._frameStamp;
     },
 
-    setCamera: function(camera) {
+    setCamera: function (camera) {
         this._camera = camera;
     },
 
-    getCamera: function() {
+    getCamera: function () {
         return this._camera;
     },
 
-    setSceneData: function(node) {
+    setSceneData: function (node) {
         var previousNode = this._scene.getSceneData();
         if (node === previousNode) return;
 
@@ -291,46 +282,46 @@ View.prototype = {
         if (statsNode) this._camera.addChild(statsNode);
     },
 
-    getSceneData: function() {
+    getSceneData: function () {
         return this._scene.getSceneData();
     },
 
-    setDatabasePager: function(dbpager) {
+    setDatabasePager: function (dbpager) {
         this._scene.setDatabasePager(dbpager);
     },
 
-    getDatabasePager: function() {
+    getDatabasePager: function () {
         return this._scene.getDatabasePager();
     },
 
-    getScene: function() {
+    getScene: function () {
         return this._scene;
     },
 
-    getManipulator: function() {
+    getManipulator: function () {
         return this._manipulator;
     },
 
-    setManipulator: function(manipulator) {
+    setManipulator: function (manipulator) {
         this._manipulator = manipulator;
     },
 
-    getLight: function() {
+    getLight: function () {
         return this._light;
     },
 
-    setLight: function(light) {
+    setLight: function (light) {
         this._light = light;
         if (this._lightingMode !== View.LightingMode.NO_LIGHT) {
             this._scene.getOrCreateStateSet().setAttributeAndModes(this._light);
         }
     },
 
-    getLightingMode: function() {
+    getLightingMode: function () {
         return this._lightingMode;
     },
 
-    setLightingMode: function(lightingMode) {
+    setLightingMode: function (lightingMode) {
         if (this._lightingMode !== lightingMode) {
             this._lightingMode = lightingMode;
 
@@ -343,7 +334,7 @@ View.prototype = {
     },
 
     // In OSG this call is done in SceneView
-    flushDeletedGLObjects: function(availableTimeBudget) {
+    flushDeletedGLObjects: function (availableTimeBudget) {
         // Flush all deleted OpenGL objects within the specified availableTime
         var gl = this.getGraphicContext();
         var availableTime = availableTimeBudget;
@@ -356,7 +347,7 @@ View.prototype = {
         FrameBufferObject.flushDeletedGLRenderBuffers(gl, availableTime);
     },
 
-    flushAllDeletedGLObjects: function() {
+    flushAllDeletedGLObjects: function () {
         // Flush all deleted OpenGL objects
         var gl = this.getGraphicContext();
         VertexArrayObject.flushAllDeletedGLVertexArrayObjects(gl);

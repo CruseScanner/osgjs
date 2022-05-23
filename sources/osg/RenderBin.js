@@ -6,7 +6,7 @@ import PooledResource from 'osg/PooledResource';
 import PooledArray from 'osg/PooledArray';
 import PooledMap from 'osg/PooledMap';
 
-var createPositionAttribute = function() {
+var createPositionAttribute = function () {
     return [null, null];
 };
 
@@ -18,7 +18,7 @@ var createPositionAttribute = function() {
  *
  * https://github.com/openscenegraph/osg/blob/master/include/osgUtil/RenderBin#L27-L32
  */
-var RenderBin = function(sortMode) {
+var RenderBin = function (sortMode) {
     Object.call(this);
 
     this._renderStage = undefined;
@@ -42,36 +42,36 @@ RenderBin.SORT_FRONT_TO_BACK = 2;
 // change it at runtime for default RenderBin if needed
 RenderBin.defaultSortMode = RenderBin.SORT_BY_STATE;
 
-var createRenderBin = function() {
+var createRenderBin = function () {
     return new RenderBin();
 };
 var pooledRenderBin = new PooledResource(createRenderBin);
 
 RenderBin.BinPrototypes = {
-    RenderBin: function() {
+    RenderBin: function () {
         return pooledRenderBin.getOrCreateObject().init();
     },
-    DepthSortedBin: function() {
+    DepthSortedBin: function () {
         return pooledRenderBin.getOrCreateObject().init(RenderBin.SORT_BACK_TO_FRONT);
     }
 };
 
-var sortBackToFrontFunction = function(a, b) {
+var sortBackToFrontFunction = function (a, b) {
     return b._depth - a._depth;
 };
 
-var sortFrontToBackFunction = function(a, b) {
+var sortFrontToBackFunction = function (a, b) {
     return a._depth - b._depth;
 };
 
-var sortBinNumberFunction = function(a, b) {
+var sortBinNumberFunction = function (a, b) {
     return a._binNum - b._binNum;
 };
 
 utils.createPrototypeObject(
     RenderBin,
     utils.objectInherit(Object.prototype, {
-        init: function(sortMode) {
+        init: function (sortMode) {
             this._renderStage = undefined;
             this._parent = undefined;
             this._binNum = 0;
@@ -80,7 +80,7 @@ utils.createPrototypeObject(
             RenderBin.prototype._initInternal.call(this);
             return this;
         },
-        _initInternal: function() {
+        _initInternal: function () {
             this._bins.reset();
             this._stateGraphList.reset();
             this._positionedAttribute.reset();
@@ -88,7 +88,7 @@ utils.createPrototypeObject(
             this._leafs.length = 0;
             this._sorted = false;
         },
-        _createRenderBin: function(binName) {
+        _createRenderBin: function (binName) {
             // default render bin constructor
             var renderBinConstructor = RenderBin.BinPrototypes.RenderBin;
 
@@ -98,22 +98,22 @@ utils.createPrototypeObject(
             return renderBinConstructor();
         },
 
-        addPositionAttribute: function(m, attribute) {
+        addPositionAttribute: function (m, attribute) {
             var pa = this._pooledPositionedAttribute.getOrCreateObject();
             pa[0] = m;
             pa[1] = attribute;
             this._positionedAttribute.push(pa);
         },
 
-        getStateGraphList: function() {
+        getStateGraphList: function () {
             return this._stateGraphList;
         },
 
-        getPositionedAttribute: function() {
+        getPositionedAttribute: function () {
             return this._positionedAttribute;
         },
 
-        copyLeavesFromStateGraphListToRenderLeafList: function() {
+        copyLeavesFromStateGraphListToRenderLeafList: function () {
             this._leafs.length = 0;
             var detectedNaN = false;
 
@@ -142,21 +142,21 @@ utils.createPrototypeObject(
             this._stateGraphList.reset();
         },
 
-        getSortMode: function() {
+        getSortMode: function () {
             return this._sortMode;
         },
 
-        sortBackToFront: function() {
+        sortBackToFront: function () {
             this.copyLeavesFromStateGraphListToRenderLeafList();
             this._leafs.sort(sortBackToFrontFunction);
         },
 
-        sortFrontToBack: function() {
+        sortFrontToBack: function () {
             this.copyLeavesFromStateGraphListToRenderLeafList();
             this._leafs.sort(sortFrontToBackFunction);
         },
 
-        sortImplementation: function() {
+        sortImplementation: function () {
             var SortMode = RenderBin;
             switch (this._sortMode) {
                 case SortMode.SORT_BACK_TO_FRONT:
@@ -171,7 +171,7 @@ utils.createPrototypeObject(
             }
         },
 
-        sort: function() {
+        sort: function () {
             if (this._sorted) return;
 
             var binsKeys = this._bins.getKeys();
@@ -187,19 +187,19 @@ utils.createPrototypeObject(
             this._sorted = true;
         },
 
-        setParent: function(parent) {
+        setParent: function (parent) {
             this._parent = parent;
         },
 
-        getParent: function() {
+        getParent: function () {
             return this._parent;
         },
 
-        getBinNumber: function() {
+        getBinNumber: function () {
             return this._binNum;
         },
 
-        findOrInsert: function(binNum, binName) {
+        findOrInsert: function (binNum, binName) {
             var bins = this._bins.getMap();
             var bin = bins[binNum];
 
@@ -213,19 +213,19 @@ utils.createPrototypeObject(
             return bin;
         },
 
-        getStage: function() {
+        getStage: function () {
             return this._renderStage;
         },
 
-        addStateGraph: function(sg) {
+        addStateGraph: function (sg) {
             this._stateGraphList.push(sg);
         },
 
-        reset: function() {
+        reset: function () {
             RenderBin.prototype._initInternal.call(this);
         },
 
-        draw: function(state, previousRenderLeaf) {
+        draw: function (state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
             // use callback drawImplementation if exist
             if (this._drawCallback && this._drawCallback.drawImplementation) {
@@ -237,7 +237,7 @@ utils.createPrototypeObject(
             return previousLeaf;
         },
 
-        applyPositionedAttribute: function(state, positionedAttributes) {
+        applyPositionedAttribute: function (state, positionedAttributes) {
             // the idea is to set uniform 'globally' in uniform map.
             var elements = positionedAttributes.getArray();
             var length = positionedAttributes.getLength();
@@ -253,7 +253,7 @@ utils.createPrototypeObject(
             }
         },
 
-        drawImplementation: function(state, previousRenderLeaf) {
+        drawImplementation: function (state, previousRenderLeaf) {
             var previousLeaf = previousRenderLeaf;
 
             var binsArray = [];
@@ -292,7 +292,7 @@ utils.createPrototypeObject(
             return previousLeaf;
         },
 
-        drawLeafs: function(state, previousRenderLeaf) {
+        drawLeafs: function (state, previousRenderLeaf) {
             var stateList = this._stateGraphList.getArray();
             var stateListLength = this._stateGraphList.getLength();
             var leafs = this._leafs;
@@ -324,11 +324,11 @@ utils.createPrototypeObject(
     'RenderBin'
 );
 
-RenderBin.reset = function() {
+RenderBin.reset = function () {
     pooledRenderBin.reset();
 };
 
-RenderBin.clean = function() {
+RenderBin.clean = function () {
     pooledRenderBin.clean();
 };
 

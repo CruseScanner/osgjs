@@ -4,38 +4,38 @@ import FrameBufferObject from 'osg/FrameBufferObject';
 import Texture from 'osg/Texture';
 import WebglCaps from 'osg/WebGLCaps';
 
-export default function() {
-    test('FrameBufferObject', function() {
+export default function () {
+    test('FrameBufferObject', function () {
         var maxRenderBufferSize = WebglCaps.instance().getWebGLParameter('MAX_RENDERBUFFER_SIZE');
         if (maxRenderBufferSize === undefined) {
             WebglCaps.instance().getWebGLParameters()['MAX_RENDERBUFFER_SIZE'] = 1;
             maxRenderBufferSize = 1;
         }
 
-        (function() {
+        (function () {
             var gl = mockup.createFakeRenderer();
             var state = {
-                getGraphicContext: function() {
+                getGraphicContext: function () {
                     return gl;
                 },
-                applyTextureAttribute: function() {}
+                applyTextureAttribute: function () {}
             };
 
             var b = new FrameBufferObject();
             b.setAttachment({
                 texture: {
-                    isDirty: function() {
+                    isDirty: function () {
                         return false;
                     },
-                    getTextureObject: function() {
+                    getTextureObject: function () {
                         return {
-                            id: function() {}
+                            id: function () {}
                         };
                     },
-                    getWidth: function() {
+                    getWidth: function () {
                         return 1;
                     },
-                    getHeight: function() {
+                    getHeight: function () {
                         return 1;
                     }
                 },
@@ -57,18 +57,18 @@ export default function() {
             // check wrong frame buffer sizes
             b.setAttachment({
                 texture: {
-                    isDirty: function() {
+                    isDirty: function () {
                         return false;
                     },
-                    getTextureObject: function() {
+                    getTextureObject: function () {
                         return {
-                            id: function() {}
+                            id: function () {}
                         };
                     },
-                    getWidth: function() {
+                    getWidth: function () {
                         return maxRenderBufferSize + 1;
                     },
-                    getHeight: function() {
+                    getHeight: function () {
                         return maxRenderBufferSize + 1;
                     }
                 },
@@ -88,13 +88,13 @@ export default function() {
             );
         })();
 
-        (function() {
+        (function () {
             var gl = mockup.createFakeRenderer();
             var state = {
-                getGraphicContext: function() {
+                getGraphicContext: function () {
                     return gl;
                 },
-                applyTextureAttribute: function() {}
+                applyTextureAttribute: function () {}
             };
 
             var fbo = new FrameBufferObject();
@@ -110,9 +110,9 @@ export default function() {
 
             var texture = new Texture();
             // mockup texture
-            texture.getTextureObject = function() {
+            texture.getTextureObject = function () {
                 return {
-                    id: function() {
+                    id: function () {
                         return 1;
                     }
                 };

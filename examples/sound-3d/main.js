@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var SoundCloudID = '237d195ad90846f5e6294ade2e8cf87b';
@@ -12,7 +12,7 @@
     var SC = window.SC;
     var SoundManager = window.SoundManager;
 
-    var Example = function() {
+    var Example = function () {
         this._soundList = [
             {
                 url: 'https://soundcloud.com/wearecc/mdg-banana-man',
@@ -36,14 +36,14 @@
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        initializeSoundCloud: function() {
+        initializeSoundCloud: function () {
             SC.initialize({
                 client_id: SoundCloudID
             });
         },
 
         // helpers
-        createSound: function(sound) {
+        createSound: function (sound) {
             // create the audio element in the dom
             var audio = document.createElement('audio');
             sound.audio = audio;
@@ -52,13 +52,13 @@
 
             var url = sound.url;
             var self = this;
-            return new P(function(resolve, reject) {
+            return new P(function (resolve, reject) {
                 SC.get(
                     '/resolve',
                     {
                         url: url
                     },
-                    function(soundCloudResult) {
+                    function (soundCloudResult) {
                         if (soundCloudResult.errors) {
                             var errors = '';
                             for (var i = 0; i < soundCloudResult.errors.length; i++) {
@@ -84,13 +84,13 @@
             });
         },
 
-        run: function() {
+        run: function () {
             ExampleOSGJS.prototype.run.call(this);
 
             this._viewer.getManipulator().strafeVertical(5);
         },
 
-        createScene: function() {
+        createScene: function () {
             this._soundManager = new SoundManager();
             this._soundManager._camera = this._viewer.getCamera();
 
@@ -99,7 +99,7 @@
             scene.getOrCreateStateSet().setAttributeAndModes(new osg.CullFace(0));
             scene.addUpdateCallback(this._soundManager);
 
-            var addSoundInScene = function(sound) {
+            var addSoundInScene = function (sound) {
                 var node = new osg.MatrixTransform();
                 var sphere = osg.createTexturedSphere(1, 15, 15);
                 node.addChild(sphere);
@@ -138,16 +138,14 @@
 
             for (var i = 0, l = this._soundList.length; i < l; i++) {
                 var sound = this._soundList[i];
-                this.createSound(sound)
-                    .then(addSoundInScene)
-                    .catch(osg.error);
+                this.createSound(sound).then(addSoundInScene).catch(osg.error);
             }
         }
     });
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
             window.example = example;

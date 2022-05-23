@@ -5,8 +5,8 @@ import State from 'osg/State';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 import Input from 'osgDB/Input';
 
-export default function() {
-    test('Texture', function(done) {
+export default function () {
+    test('Texture', function (done) {
         this.timeout(20000);
 
         var input = new Input();
@@ -15,27 +15,27 @@ export default function() {
             .readImageURL(
                 '"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQIW2P8DwQACgAD/il4QJ8AAAAASUVORK5CYII="'
             )
-            .then(function(image) {
+            .then(function (image) {
                 textureFromURL.setImage(image);
             });
         assert.isOk(textureFromURL !== undefined, 'Check textureFromURL');
         var ready;
-        var loadingComplete = function() {
+        var loadingComplete = function () {
             loadingComplete.nbLoad--;
             if (loadingComplete.nbLoad === 0) {
                 ready();
             }
         };
         loadingComplete.nbLoad = 0;
-        loadingComplete.addRessource = function() {
+        loadingComplete.addRessource = function () {
             loadingComplete.nbLoad++;
         };
         var image;
-        var loadTexture = function(name, format) {
+        var loadTexture = function (name, format) {
             loadingComplete.addRessource();
             var texture = new Texture();
             image = new Image();
-            image.onload = function() {
+            image.onload = function () {
                 texture.setImage(image, format);
                 loadingComplete();
             };
@@ -44,7 +44,7 @@ export default function() {
         };
 
         var greyscale;
-        ready = function() {
+        ready = function () {
             var cnv = document.createElement('canvas');
             cnv.setAttribute('width', 128);
             cnv.setAttribute('height', 128);
@@ -52,7 +52,7 @@ export default function() {
             tcanvas.setImage(cnv);
 
             var gl = mockup.createFakeRenderer();
-            gl.createTexture = function() {
+            gl.createTexture = function () {
                 return 1;
             }; // simulate texture creation
             var state = new State(new ShaderGeneratorProxy());

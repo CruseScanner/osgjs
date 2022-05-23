@@ -12,7 +12,7 @@ var forceSyncCompilation = Options.getOptionsURL().syncCompile;
 // finish should be enough but on chrome it's identical to flush,
 // so we use readPixel instead
 var dummy = new Uint8Array(4);
-var glSync = function(gl) {
+var glSync = function (gl) {
     gl.flush();
     gl.finish();
     gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, dummy);
@@ -24,7 +24,7 @@ var errorCallback;
 
 var attributesRegexp = /(in|attribute)\s+\w+\s+(\w+)\s*;/g;
 
-var getAttributeList = function(shaderText) {
+var getAttributeList = function (shaderText) {
     var attributeMap = {};
     var r, attr;
     while ((r = attributesRegexp.exec(shaderText)) !== null) {
@@ -39,7 +39,7 @@ var getAttributeList = function(shaderText) {
  * Program encapsulate an vertex and fragment shader
  * @class Program
  */
-var Program = function(vShader, fShader) {
+var Program = function (vShader, fShader) {
     GLObject.call(this);
     StateAttribute.call(this);
     this._program = null;
@@ -77,14 +77,14 @@ var Program = function(vShader, fShader) {
 Program._sDeletedGLProgramCache = new window.Map();
 
 // static method to delete Program
-Program.deleteGLProgram = function(gl, program) {
+Program.deleteGLProgram = function (gl, program) {
     if (!Program._sDeletedGLProgramCache.has(gl)) Program._sDeletedGLProgramCache.set(gl, []);
 
     Program._sDeletedGLProgramCache.get(gl).push(program);
 };
 
 // static method to flush all the cached glPrograms which need to be deleted in the GL context specified
-Program.flushDeletedGLPrograms = function(gl, availableTime) {
+Program.flushDeletedGLPrograms = function (gl, availableTime) {
     // if no time available don't try to flush objects.
     if (availableTime <= 0.0) return availableTime;
 
@@ -104,7 +104,7 @@ Program.flushDeletedGLPrograms = function(gl, availableTime) {
     return availableTime - elapsedTime;
 };
 
-Program.flushAllDeletedGLPrograms = function(gl) {
+Program.flushAllDeletedGLPrograms = function (gl) {
     if (!Program._sDeletedGLProgramCache.has(gl)) return;
 
     var deleteList = Program._sDeletedGLProgramCache.get(gl);
@@ -116,7 +116,7 @@ Program.flushAllDeletedGLPrograms = function(gl) {
     }
 };
 
-Program.onLostContext = function(gl) {
+Program.onLostContext = function (gl) {
     if (!Program._sDeletedGLProgramCache.has(gl)) return;
     var deleteList = Program._sDeletedGLProgramCache.get(gl);
     deleteList.length = 0;
@@ -131,74 +131,74 @@ utils.createPrototypeStateAttribute(
         utils.objectInherit(StateAttribute.prototype, {
             attributeType: 'Program',
 
-            cloneType: function() {
+            cloneType: function () {
                 return new Program();
             },
 
-            setVertexShader: function(vs) {
+            setVertexShader: function (vs) {
                 this._vertex = vs;
                 this._nullProgram = false;
                 vs.setText(sp.processShader(vs.getText()));
             },
 
-            setFragmentShader: function(fs) {
+            setFragmentShader: function (fs) {
                 this._fragment = fs;
                 this._nullProgram = false;
                 fs.setText(sp.processShader(fs.getText()));
             },
 
-            getVertexShader: function() {
+            getVertexShader: function () {
                 return this._vertex;
             },
-            getFragmentShader: function() {
+            getFragmentShader: function () {
                 return this._fragment;
             },
 
-            getProgram: function() {
+            getProgram: function () {
                 return this._program;
             },
 
-            setActiveUniforms: function(activeUniforms) {
+            setActiveUniforms: function (activeUniforms) {
                 this._activeUniforms = activeUniforms;
             },
 
-            getActiveUniforms: function() {
+            getActiveUniforms: function () {
                 return this._activeUniforms;
             },
 
-            setForeignUniforms: function(foreignUniforms) {
+            setForeignUniforms: function (foreignUniforms) {
                 this._foreignUniforms = foreignUniforms;
             },
 
-            getForeignUniforms: function() {
+            getForeignUniforms: function () {
                 return this._foreignUniforms;
             },
 
-            setUniformsCache: function(uniformsCache) {
+            setUniformsCache: function (uniformsCache) {
                 this._uniformsCache = uniformsCache;
             },
 
-            getUniformsCache: function() {
+            getUniformsCache: function () {
                 return this._uniformsCache;
             },
 
-            setAttributesCache: function(attributesCache) {
+            setAttributesCache: function (attributesCache) {
                 this._attributesCache = attributesCache;
             },
 
-            getAttributesCache: function() {
+            getAttributesCache: function () {
                 return this._attributesCache;
             },
 
-            setTrackAttributes: function(trackAttributes) {
+            setTrackAttributes: function (trackAttributes) {
                 this._trackAttributes = trackAttributes;
             },
 
-            getTrackAttributes: function() {
+            getTrackAttributes: function () {
                 return this._trackAttributes;
             },
 
-            releaseGLObjects: function() {
+            releaseGLObjects: function () {
                 // Call to releaseGLOBjects on shaders
                 if (this._vertex !== undefined) this._vertex.releaseGLObjects();
                 if (this._fragment !== undefined) this._fragment.releaseGLObjects();
@@ -210,11 +210,11 @@ utils.createPrototypeStateAttribute(
                 this.invalidate();
             },
 
-            dirty: function() {
+            dirty: function () {
                 this._program = undefined;
             },
 
-            invalidate: function() {
+            invalidate: function () {
                 this._cacheUniformId = undefined;
 
                 this._uniformsCache = undefined;
@@ -226,7 +226,7 @@ utils.createPrototypeStateAttribute(
                 this._program = undefined;
             },
 
-            _rebuildProgramFromSpector: function(
+            _rebuildProgramFromSpector: function (
                 vertexShaderText,
                 fragmentShaderText,
                 onCompiled,
@@ -244,23 +244,23 @@ utils.createPrototypeStateAttribute(
                 this._compileClean = undefined;
             },
 
-            _onErrorToSpector: function(errLink) {
+            _onErrorToSpector: function (errLink) {
                 if (!this._spectorOnError) return false;
                 this._spectorOnError(errLink);
                 return true;
             },
 
-            _onCompilationToSpector: function() {
+            _onCompilationToSpector: function () {
                 if (!this._spectorOnCompiled) return;
                 this._spectorOnCompiled(this._program);
             },
 
-            _bindProgramToSpector: function() {
+            _bindProgramToSpector: function () {
                 if (!window || !window.spector || this._program.__SPECTOR_rebuildProgram) return;
                 this._program.__SPECTOR_rebuildProgram = this._rebuildProgramFromSpector.bind(this);
             },
 
-            _logDebugShaders: function(gl, errLink) {
+            _logDebugShaders: function (gl, errLink) {
                 if (errLink !== 'Failed to create D3D shaders.\n') return;
                 // rawgl trick is for webgl inspector
                 var debugShader = gl.rawgl !== undefined ? gl.rawgl : gl;
@@ -271,7 +271,7 @@ utils.createPrototypeStateAttribute(
                 notify.error(debugShader.getTranslatedShaderSource(this._fragment.shader));
             },
 
-            _activateFailSafe: function(gl) {
+            _activateFailSafe: function (gl) {
                 var program = gl.createProgram();
                 this._vertex.failSafe(gl, this._vertex.getText());
                 this._fragment.failSafe(gl, this._fragment.getText());
@@ -280,13 +280,13 @@ utils.createPrototypeStateAttribute(
                 this._program = program;
             },
 
-            _glAttachAndLink: function(gl, programGL, vertexShader, fragmentShader) {
+            _glAttachAndLink: function (gl, programGL, vertexShader, fragmentShader) {
                 gl.attachShader(programGL, vertexShader.shader);
                 gl.attachShader(programGL, fragmentShader.shader);
                 gl.linkProgram(programGL);
             },
 
-            _glShaderCompile: function(gl, shader) {
+            _glShaderCompile: function (gl, shader) {
                 if (shader.shader) return;
                 if (shaderStats) {
                     if (shader === this._vertex) shaderStats.vert = Timer.tick();
@@ -296,7 +296,7 @@ utils.createPrototypeStateAttribute(
                 return;
             },
 
-            _glShaderCompilationResult: function(gl, shader) {
+            _glShaderCompilationResult: function (gl, shader) {
                 var success = shader.getCompilationResult(gl, errorCallback);
                 if (shaderStats) {
                     if (this._asyncCompilation === undefined) glSync(gl);
@@ -306,20 +306,20 @@ utils.createPrototypeStateAttribute(
                 return success;
             },
 
-            compile: function() {
+            compile: function () {
                 var gl = this._gl;
 
-                var fragmentText = this._fragment.getText();
+                //var fragmentText = this._fragment.getText();
                 var vertexText = this._vertex.getText();
 
                 this._attributeMap = getAttributeList(vertexText);
-                
+
                 // compile both vertex even if the first one fail (error reporting)
                 this._glShaderCompile(gl, this._vertex);
                 this._glShaderCompile(gl, this._fragment);
             },
 
-            getShaderName: function() {
+            getShaderName: function () {
                 if (this._shaderName) return this._shaderName;
                 if (!this._fragment || !this._fragment.getText()) return;
                 var shaderName = this._fragment.getText().match(/^#define\s+SHADER_NAME\s+(.*)$/m);
@@ -327,7 +327,7 @@ utils.createPrototypeStateAttribute(
                 return this._shaderName;
             },
 
-            getCompilationResultAndLink: function(gl) {
+            getCompilationResultAndLink: function (gl) {
                 if (this._compileClean) return true;
                 if (shaderStats) {
                     shaderStats.vert = 0;
@@ -357,11 +357,11 @@ utils.createPrototypeStateAttribute(
                 return true;
             },
 
-            getAsyncCompiling: function() {
+            getAsyncCompiling: function () {
                 return this._asyncCompilation;
             },
 
-            _logShaderStats: function(gl) {
+            _logShaderStats: function (gl) {
                 if (this._asyncCompilation === undefined) glSync(gl);
 
                 shaderStats.link = Timer.tick() - shaderStats.link;
@@ -387,7 +387,7 @@ utils.createPrototypeStateAttribute(
                 }
             },
 
-            getLinkResult: function(gl) {
+            getLinkResult: function (gl) {
                 if (this._compileClean) {
                     if (shaderStats) {
                         shaderStats.link = Timer.tick();
@@ -442,8 +442,11 @@ utils.createPrototypeStateAttribute(
                     this._activateFailSafe(gl);
                 } else {
                     // Get locations of active uniforms from program
-                    this._uniformMap = { };
-                    var activeUniformCount = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
+                    this._uniformMap = {};
+                    var activeUniformCount = gl.getProgramParameter(
+                        this._program,
+                        gl.ACTIVE_UNIFORMS
+                    );
                     for (var i = 0; i < activeUniformCount; i++) {
                         var info = gl.getActiveUniform(this._program, i);
                         var name = info.name;
@@ -453,25 +456,28 @@ utils.createPrototypeStateAttribute(
                             name = name.substr(0, name.length - 3);
                         }
                         for (var j = 0; j < info.size; j++) {
-                            var suffix = (info.size > 1) ? '[' + j + ']' : '';
+                            var suffix = info.size > 1 ? '[' + j + ']' : '';
                             var fullName = name + suffix;
                             this._uniformMap[fullName] = true;
-                            this._uniformsCache[fullName] = gl.getUniformLocation(this._program, fullName);
-                        }                       
+                            this._uniformsCache[fullName] = gl.getUniformLocation(
+                                this._program,
+                                fullName
+                            );
+                        }
                     }
-                   
+
                     this.cacheAttributeList(gl, window.Object.keys(this._attributeMap));
                 }
                 this._bindProgramToSpector();
                 return this._compileClean;
             },
 
-            enableAsyncCompilation: function(placeHolder, frameNum) {
+            enableAsyncCompilation: function (placeHolder, frameNum) {
                 this._placeHolder = placeHolder;
                 this._asyncCompilation = frameNum;
             },
 
-            apply: function(state) {
+            apply: function (state) {
                 if (this._nullProgram) return;
 
                 if (!this._gl) {
@@ -503,7 +509,7 @@ utils.createPrototypeStateAttribute(
                 this._asyncCompilation = 1;
             },
 
-            cacheAttributeList: function(gl, attributeList) {
+            cacheAttributeList: function (gl, attributeList) {
                 var map = this._attributesCache;
                 for (var i = 0, l = attributeList.length; i < l; i++) {
                     var attr = attributeList[i];
@@ -522,7 +528,7 @@ utils.createPrototypeStateAttribute(
     'Program'
 );
 
-Program.registerErrorCallback = function(callback) {
+Program.registerErrorCallback = function (callback) {
     errorCallback = callback;
 };
 

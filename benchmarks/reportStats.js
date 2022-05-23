@@ -1,7 +1,7 @@
 'use strict';
 var assert = require('chai').assert;
 
-module.exports = function(timed, perfTarget, msg) {
+module.exports = function (timed, perfTarget, msg) {
     var logMsg = msg;
     if (logMsg === undefined) {
         logMsg =

@@ -2,11 +2,11 @@ import { assert } from 'chai';
 import mockup from 'tests/mockup/mockup';
 import BufferArray from 'osg/BufferArray';
 
-export default function() {
-    test('BufferArray', function() {
-        (function() {
+export default function () {
+    test('BufferArray', function () {
+        (function () {
             var gl = mockup.createFakeRenderer();
-            gl.createBuffer = function() {
+            gl.createBuffer = function () {
                 return {};
             };
 

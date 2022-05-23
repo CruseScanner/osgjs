@@ -1,4 +1,4 @@
-window.EnvironmentSphericalHarmonics = (function() {
+window.EnvironmentSphericalHarmonics = (function () {
     'use strict';
 
     var P = window.P;
@@ -9,7 +9,7 @@ window.EnvironmentSphericalHarmonics = (function() {
 
     var shaderProcessor = new osgShader.ShaderProcessor();
 
-    var EnvironmentSphericalHarmonics = function(file) {
+    var EnvironmentSphericalHarmonics = function (file) {
         this._uniformSpherical = undefined;
 
         // if file is an array it's the sh coefs
@@ -21,7 +21,7 @@ window.EnvironmentSphericalHarmonics = (function() {
     };
 
     EnvironmentSphericalHarmonics.prototype = {
-        createShaderSpherical: function() {
+        createShaderSpherical: function () {
             var vertexshader = shaderProcessor.getShader('sphericalHarmonicsVertex.glsl');
             var fragmentshader = shaderProcessor.getShader('sphericalHarmonicsFragment.glsl');
 
@@ -33,7 +33,7 @@ window.EnvironmentSphericalHarmonics = (function() {
             return program;
         },
 
-        createDebugGeometry: function() {
+        createDebugGeometry: function () {
             var debugGroup = new osg.MatrixTransform();
             var size = 10;
             // create a sphere to debug it
@@ -45,7 +45,7 @@ window.EnvironmentSphericalHarmonics = (function() {
             return debugGroup;
         },
 
-        initSHCoef: function(sphCoef) {
+        initSHCoef: function (sphCoef) {
             // use spherical harmonics with 9 coef
             this._sphCoef = sphCoef.slice(0, 9 * 3);
 
@@ -90,7 +90,7 @@ window.EnvironmentSphericalHarmonics = (function() {
             ];
 
             this._sphCoef = coef.map(
-                function(value, index) {
+                function (value, index) {
                     return value * this._sphCoef[index];
                 }.bind(this)
             );
@@ -102,13 +102,13 @@ window.EnvironmentSphericalHarmonics = (function() {
             this._uniformSpherical.getInternalArray().set(this._sphCoef);
         },
 
-        load: function() {
+        load: function () {
             if (this._uniformSpherical) return this._uniformSpherical;
 
             var p = P($.get(this._file));
 
             p.then(
-                function(text) {
+                function (text) {
                     var coefs = JSON.parse(text);
 
                     this.initSHCoef(coefs);

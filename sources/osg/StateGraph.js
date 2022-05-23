@@ -3,7 +3,7 @@ import PooledArray from 'osg/PooledArray';
 import PooledMap from 'osg/PooledMap';
 import PooledResource from 'osg/PooledResource';
 
-var StateGraph = function() {
+var StateGraph = function () {
     this._depth = 0;
     this._children = new PooledMap();
     this._leafs = new PooledArray();
@@ -11,14 +11,14 @@ var StateGraph = function() {
     this._parent = undefined;
 };
 
-var createStateGraph = function() {
+var createStateGraph = function () {
     return new StateGraph();
 };
 
 StateGraph.pooledStateGraph = new PooledResource(createStateGraph);
 StateGraph.statsNbMoveStateGraph = 0;
 
-StateGraph.reset = function() {
+StateGraph.reset = function () {
     StateGraph.pooledStateGraph.reset();
     StateGraph.statsNbMoveStateGraph = 0;
 };
@@ -26,23 +26,23 @@ StateGraph.reset = function() {
 utils.createPrototypeObject(
     StateGraph,
     {
-        clean: function() {
+        clean: function () {
             this._leafs.reset();
             this._children.reset();
             this._depth = 0;
             this._stateset = undefined;
             this._parent = undefined;
         },
-        getStateSet: function() {
+        getStateSet: function () {
             return this._stateset;
         },
-        getLeafs: function() {
+        getLeafs: function () {
             return this._leafs;
         },
-        getParent: function() {
+        getParent: function () {
             return this._parent;
         },
-        findOrInsert: function(stateset) {
+        findOrInsert: function (stateset) {
             // nb call per frame as example: 22 (shadowmap) 55 (pbr) to 512 (performance)
             // it's called by node that have a stateSet
             var stateSetID = stateset.getInstanceID();
@@ -65,10 +65,10 @@ utils.createPrototypeObject(
     'StateGraph'
 );
 
-StateGraph.moveStateGraph = (function() {
+StateGraph.moveStateGraph = (function () {
     var stack = new PooledArray();
     var stackArray = stack.getArray();
-    return function(state, sgCurrentArg, sgNewArg) {
+    return function (state, sgCurrentArg, sgNewArg) {
         StateGraph.statsNbMoveStateGraph++;
         // nb call per frame: 3 (pbr) 10 (shadowmap) 1(performance)
 

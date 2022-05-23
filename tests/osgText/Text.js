@@ -1,8 +1,8 @@
 import { assert } from 'chai';
 import osgText from 'osgText/Text';
 
-export default function() {
-    test('Text._nextPowerOfTwo', function() {
+export default function () {
+    test('Text._nextPowerOfTwo', function () {
         var text = new osgText();
         var npot = text._nextPowerOfTwo(25);
         assert.isOk(npot === 32, 'next power of two must be 32');
@@ -14,7 +14,7 @@ export default function() {
         assert.isOk(npot === 2048, 'next power of two must be 256');
     });
 
-    test('Text.setAlignment', function() {
+    test('Text.setAlignment', function () {
         var text = new osgText('test');
         text.setAlignment(osgText.LEFT_CENTER);
         // we need to call to draw text as the values are updated next frame, so we emulate it just to test.

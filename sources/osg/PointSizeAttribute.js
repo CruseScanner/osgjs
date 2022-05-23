@@ -2,7 +2,7 @@ import utils from 'osg/utils';
 import StateAttribute from 'osg/StateAttribute';
 import Uniform from 'osg/Uniform';
 
-var PointSizeAttribute = function(disable) {
+var PointSizeAttribute = function (disable) {
     StateAttribute.call(this);
 
     this._enable = !disable;
@@ -18,33 +18,33 @@ utils.createPrototypeStateAttribute(
     utils.objectInherit(StateAttribute.prototype, {
         attributeType: 'PointSize',
 
-        cloneType: function() {
+        cloneType: function () {
             return new PointSizeAttribute(true);
         },
 
-        setCircleShape: function(bool) {
+        setCircleShape: function (bool) {
             this._circleShape = bool;
             this._dirtyHash = true;
         },
 
-        isCircleShape: function() {
+        isCircleShape: function () {
             return this._circleShape;
         },
 
-        setEnabled: function(state) {
+        setEnabled: function (state) {
             this._enable = state;
             this._dirtyHash = true;
         },
 
-        isEnabled: function() {
+        isEnabled: function () {
             return this._enable;
         },
 
-        setPointSize: function(size) {
+        setPointSize: function (size) {
             this._pointSize = size;
         },
 
-        getOrCreateUniforms: function() {
+        getOrCreateUniforms: function () {
             var obj = PointSizeAttribute;
             if (obj.uniforms) return obj.uniforms;
 
@@ -55,7 +55,7 @@ utils.createPrototypeStateAttribute(
             return obj.uniforms;
         },
 
-        getHash: function() {
+        getHash: function () {
             if (!this._dirtyHash) return this._hash;
 
             this._hash = this._computeInternalHash();
@@ -63,7 +63,7 @@ utils.createPrototypeStateAttribute(
             return this._hash;
         },
 
-        _computeInternalHash: function() {
+        _computeInternalHash: function () {
             return (
                 this.getTypeMember() +
                 (this.isEnabled() ? '1' : '0') +
@@ -71,7 +71,7 @@ utils.createPrototypeStateAttribute(
             );
         },
 
-        apply: function() {
+        apply: function () {
             if (!this._enable) return;
 
             var uniforms = this.getOrCreateUniforms();

@@ -6,7 +6,7 @@ import Target from 'osgAnimation/target';
 
 var qIdentity = quat.create();
 
-var StackedQuaternion = function(name, q) {
+var StackedQuaternion = function (name, q) {
     Object.call(this);
     this._target = Target.createQuatTarget(q || qIdentity);
     if (name) this.setName(name);
@@ -15,24 +15,24 @@ var StackedQuaternion = function(name, q) {
 utils.createPrototypeObject(
     StackedQuaternion,
     utils.objectInherit(Object.prototype, {
-        init: function(q) {
+        init: function (q) {
             this.setQuaternion(q);
             quat.copy(this._target.defaultValue, q);
         },
 
-        setQuaternion: function(q) {
+        setQuaternion: function (q) {
             quat.copy(this._target.value, q);
         },
 
-        getTarget: function() {
+        getTarget: function () {
             return this._target;
         },
 
-        resetToDefaultValue: function() {
+        resetToDefaultValue: function () {
             this.setQuaternion(this._target.defaultValue);
         },
 
-        applyToMatrix: (function() {
+        applyToMatrix: (function () {
             var matrixTmp = mat4.create();
 
             return function applyToMatrix(m) {

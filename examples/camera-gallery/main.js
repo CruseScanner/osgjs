@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var viewer;
@@ -8,14 +8,14 @@
     var osgViewer = OSG.osgViewer;
 
     // contructor that will generate random camera around a target
-    var CameraSwitcher = function(nb, center, range) {
+    var CameraSwitcher = function (nb, center, range) {
         this._camera = [];
         if (nb !== undefined && center !== undefined && range !== undefined) {
             this.createRandomCamera(nb, center, range);
         }
     };
     CameraSwitcher.prototype = {
-        createRandomCamera: function(nb, center, range) {
+        createRandomCamera: function (nb, center, range) {
             var camera = [];
             for (var x = 0; x < nb; x++) {
                 var vec = [
@@ -34,7 +34,7 @@
             return camera;
         },
 
-        update: function(nv) {
+        update: function (nv) {
             var t = nv.getFrameStamp().getSimulationTime();
             if (this._lastUpdate === undefined) {
                 this._lastUpdate = t;
@@ -63,8 +63,8 @@
 
             // compute lerp position and target
             var srcPosition = this._camera[this._currentCamera].position;
-            var dstPosition = this._camera[(this._currentCamera + 1) % this._camera.length]
-                .position;
+            var dstPosition =
+                this._camera[(this._currentCamera + 1) % this._camera.length].position;
 
             var srcTarget = this._camera[this._currentCamera].target;
             var dstTarget = this._camera[(this._currentCamera + 1) % this._camera.length].target;
@@ -76,15 +76,15 @@
             this._currentTarget = currentTarget;
         },
 
-        getCurrentPosition: function() {
+        getCurrentPosition: function () {
             return this._currentPosition;
         },
-        getCurrentTarget: function() {
+        getCurrentTarget: function () {
             return this._currentTarget;
         }
     };
 
-    var main = function() {
+    var main = function () {
         function createScene() {
             var group = new osg.Node();
 
@@ -101,7 +101,7 @@
 
         var manipulator = new osgGA.OrbitManipulator({ inputManager: viewer.getInputManager() });
         manipulator._cameraSwitcher = new CameraSwitcher(10, [0, 0, 0], [2000, 20, 2000]);
-        manipulator.update = function(nv) {
+        manipulator.update = function (nv) {
             this._cameraSwitcher.update(nv);
 
             osg.mat4.lookAt(

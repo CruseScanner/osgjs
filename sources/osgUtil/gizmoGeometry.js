@@ -9,7 +9,7 @@ import Shader from 'osg/Shader';
 var glPrecision = ['#ifdef GL_ES', 'precision highp float;', '#endif'].join('\n');
 
 var program;
-var getOrCreateShader = function() {
+var getOrCreateShader = function () {
     if (program) return program;
     var shaderName = '#define SHADER_NAME GizmoLine3D';
     var vertexshader = [
@@ -42,7 +42,7 @@ var getOrCreateShader = function() {
 };
 
 var program2D;
-var getOrCreateShader2D = function() {
+var getOrCreateShader2D = function () {
     if (program2D) return program2D;
     var shaderName = '#define SHADER_NAME GizmoLine2D';
     var vertexshader = [
@@ -72,7 +72,7 @@ var getOrCreateShader2D = function() {
 };
 
 var programQC;
-var getOrCreateShaderQuadCircle = function() {
+var getOrCreateShaderQuadCircle = function () {
     if (programQC) return programQC;
     var shaderName = '#define SHADER_NAME GizmoQuadCircle';
     var vertexshader = [
@@ -124,13 +124,13 @@ var getOrCreateShaderQuadCircle = function() {
     return programQC;
 };
 
-var resetPrograms = function() {
+var resetPrograms = function () {
     program = undefined;
     program2D = undefined;
     programQC = undefined;
 };
 
-var createDebugLineGeometry = function() {
+var createDebugLineGeometry = function () {
     var g = new Geometry();
     g.getAttributes().Vertex = new BufferArray(BufferArray.ARRAY_BUFFER, new Float32Array(4), 2);
     var primitive = new DrawArrays(primitiveSet.LINES, 0, 2);
@@ -139,7 +139,7 @@ var createDebugLineGeometry = function() {
     return g;
 };
 
-var createTorusGeometry = function(
+var createTorusGeometry = function (
     argRadiusOut,
     argRadiusWidth,
     argNbRadial,
@@ -164,8 +164,8 @@ var createTorusGeometry = function(
     var j = 0;
     for (j = 0; j <= nbRadial; ++j) {
         for (i = 0; i <= nbTubular; ++i) {
-            var u = i / nbTubular * arc;
-            var v = j / nbRadial * Math.PI * 2;
+            var u = (i / nbTubular) * arc;
+            var v = (j / nbRadial) * Math.PI * 2;
             k = id * 3;
             vertices[k] = (radiusOut + radiusWidth * Math.cos(v)) * Math.cos(u);
             vertices[k + 1] = (radiusOut + radiusWidth * Math.cos(v)) * Math.sin(u);
@@ -186,18 +186,16 @@ var createTorusGeometry = function(
     }
     g.getAttributes().Vertex = new BufferArray(BufferArray.ARRAY_BUFFER, vertices, 3);
     g.getOrCreateStateSet().setAttributeAndModes(getOrCreateShader());
-    g
-        .getPrimitives()
-        .push(
-            new DrawElements(
-                primitiveSet.TRIANGLES,
-                new BufferArray(BufferArray.ELEMENT_ARRAY_BUFFER, indices, 1)
-            )
-        );
+    g.getPrimitives().push(
+        new DrawElements(
+            primitiveSet.TRIANGLES,
+            new BufferArray(BufferArray.ELEMENT_ARRAY_BUFFER, indices, 1)
+        )
+    );
     return g;
 };
 
-var createCylinderGeometry = function(
+var createCylinderGeometry = function (
     argRadiusTop,
     argRadiusBottom,
     argHeight,
@@ -289,24 +287,22 @@ var createCylinderGeometry = function(
 
     g.getAttributes().Vertex = new BufferArray(BufferArray.ARRAY_BUFFER, vertices, 3);
     g.getOrCreateStateSet().setAttributeAndModes(getOrCreateShader());
-    g
-        .getPrimitives()
-        .push(
-            new DrawElements(
-                primitiveSet.TRIANGLES,
-                new BufferArray(BufferArray.ELEMENT_ARRAY_BUFFER, indices, 1)
-            )
-        );
+    g.getPrimitives().push(
+        new DrawElements(
+            primitiveSet.TRIANGLES,
+            new BufferArray(BufferArray.ELEMENT_ARRAY_BUFFER, indices, 1)
+        )
+    );
     return g;
 };
 
-var createCircleGeometry = function(nbVertices, radius, argArc) {
+var createCircleGeometry = function (nbVertices, radius, argArc) {
     var g = new Geometry();
     var vertices = new Float32Array(nbVertices * 3);
     var arc = argArc || Math.PI * 2;
     for (var i = 0; i < nbVertices; ++i) {
         var j = i * 3;
-        var segment = arc * i / nbVertices;
+        var segment = (arc * i) / nbVertices;
         vertices[j] = Math.cos(segment) * radius;
         vertices[j + 1] = Math.sin(segment) * radius;
     }
@@ -317,7 +313,7 @@ var createCircleGeometry = function(nbVertices, radius, argArc) {
     return g;
 };
 
-var createPlaneGeometry = function(width, height) {
+var createPlaneGeometry = function (width, height) {
     var offx = width ? width * 0.5 : 0.5;
     var offy = height ? height * 0.5 : 0.5;
 
@@ -342,7 +338,7 @@ var createPlaneGeometry = function(width, height) {
     return g;
 };
 
-var createQuadCircleGeometry = function() {
+var createQuadCircleGeometry = function () {
     var g = createPlaneGeometry();
     g.getOrCreateStateSet().setAttributeAndModes(getOrCreateShaderQuadCircle());
     return g;

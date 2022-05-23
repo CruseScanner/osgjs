@@ -8,7 +8,7 @@ import PolytopeIntersectFunctor from 'osgUtil/PolytopeIntersectFunctor';
 
 /** Concrete class for implementing polytope intersections with the scene graph.
  * To be used in conjunction with IntersectionVisitor. */
-var PolytopeIntersector = function() {
+var PolytopeIntersector = function () {
     Intersector.call(this);
 
     this._index = 0;
@@ -19,7 +19,7 @@ var PolytopeIntersector = function() {
     this._iReferencePlane = vec4.create();
 };
 
-var transformVec4PostMult = function(out, p, m) {
+var transformVec4PostMult = function (out, p, m) {
     var x = p[0];
     var y = p[1];
     var z = p[2];
@@ -34,7 +34,7 @@ var transformVec4PostMult = function(out, p, m) {
 utils.createPrototypeObject(
     PolytopeIntersector,
     utils.objectInherit(Intersector.prototype, {
-        setPolytope: function(polytope) {
+        setPolytope: function (polytope) {
             this._polytope.setPlanes(polytope);
             var iPlanes = [];
             for (var i = 0; i < polytope.length; ++i) {
@@ -46,11 +46,11 @@ utils.createPrototypeObject(
             vec4.copy(this._iReferencePlane, this._referencePlane);
         },
 
-        getPolytope: function() {
+        getPolytope: function () {
             return this._iPolytope;
         },
 
-        setPolytopeFromWindowCoordinates: function(xMin, yMin, xMax, yMax) {
+        setPolytopeFromWindowCoordinates: function (xMin, yMin, xMax, yMax) {
             // Note: last polytope value depends on the Coordinate frame
             // Now we are only supporting WINDOW coordinate frame, so must change this if we decide to support
             // other types of Coordinate Frame
@@ -63,18 +63,18 @@ utils.createPrototypeObject(
             ]);
         },
 
-        intersectBoundingBox: function(bbox) {
+        intersectBoundingBox: function (bbox) {
             return this._iPolytope.containsBoundingBox(bbox);
         },
 
-        intersectBoundingSphere: function(bsphere) {
+        intersectBoundingSphere: function (bsphere) {
             return this._iPolytope.containsBoundingSphere(bsphere);
         },
 
-        intersect: (function() {
+        intersect: (function () {
             var functor = new PolytopeIntersectFunctor();
 
-            return function(iv, node) {
+            return function (iv, node) {
                 functor.setGeometry(node);
                 functor.setIntersectionVisitor(iv);
                 functor.setIntersector(this);
@@ -94,7 +94,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setCurrentTransformation: function(matrix) {
+        setCurrentTransformation: function (matrix) {
             // Transform the polytope and the referencePlane to the current Model local coordinate frame
             var planeList = this._polytope.getPlanes();
             var iPlaneList = this._iPolytope.getPlanes();

@@ -4,7 +4,7 @@ import { mat4 } from 'osg/glMatrix';
 import Intersector from 'osgUtil/Intersector';
 import LineSegmentIntersectFunctor from 'osgUtil/LineSegmentIntersectFunctor';
 
-var LineSegmentIntersector = function() {
+var LineSegmentIntersector = function () {
     Intersector.call(this);
 
     this._start = vec3.create();
@@ -21,7 +21,7 @@ var LineSegmentIntersector = function() {
 utils.createPrototypeObject(
     LineSegmentIntersector,
     utils.objectInherit(Intersector.prototype, {
-        set: function(start, end, threshold) {
+        set: function (start, end, threshold) {
             vec3.copy(this._start, start);
             vec3.copy(this._iStart, start);
             vec3.copy(this._end, end);
@@ -32,26 +32,26 @@ utils.createPrototypeObject(
             }
         },
 
-        setStart: function(start) {
+        setStart: function (start) {
             vec3.copy(this._start, start);
             vec3.copy(this._iStart, start);
         },
 
-        setEnd: function(end) {
+        setEnd: function (end) {
             vec3.copy(this._end, end);
             vec3.copy(this._iEnd, end);
         },
 
-        intersectNode: function(node) {
+        intersectNode: function (node) {
             // TODO implement intersectBoundingBox?
             return this.intersectBoundingSphere(node.getBoundingSphere());
         },
 
         // Intersection Segment/Sphere
-        intersectBoundingSphere: (function() {
+        intersectBoundingSphere: (function () {
             var sm = vec3.create();
             var se = vec3.create();
-            return function(bsphere) {
+            return function (bsphere) {
                 // test for _start inside the bounding sphere
                 if (!bsphere.valid()) return false;
                 vec3.sub(sm, this._iStart, bsphere.center());
@@ -86,10 +86,10 @@ utils.createPrototypeObject(
             };
         })(),
 
-        intersect: (function() {
+        intersect: (function () {
             var functor = new LineSegmentIntersectFunctor();
 
-            return function(iv, node) {
+            return function (iv, node) {
                 functor.setGeometry(node);
                 functor.setIntersectionVisitor(iv);
                 functor.setIntersector(this);
@@ -119,7 +119,7 @@ utils.createPrototypeObject(
             };
         })(),
 
-        setCurrentTransformation: function(matrix) {
+        setCurrentTransformation: function (matrix) {
             mat4.invert(matrix, matrix);
 
             if (this._threshold > 0.0) {

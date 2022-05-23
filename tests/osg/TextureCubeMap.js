@@ -6,8 +6,8 @@ import State from 'osg/State';
 import ReaderParser from 'osgDB/readerParser';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function() {
-    test('TextureCubeMap', function() {
+export default function () {
+    test('TextureCubeMap', function () {
         var greyscale = ReaderParser.readImage('mockup/greyscale.png', {
             promise: false
         });

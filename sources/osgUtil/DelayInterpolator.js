@@ -1,4 +1,4 @@
-var DelayInterpolator = function(size, delay) {
+var DelayInterpolator = function (size, delay) {
     this._current = new Float32Array(size);
     this._target = new Float32Array(size);
     this._delta = new Float32Array(size);
@@ -9,16 +9,16 @@ var DelayInterpolator = function(size, delay) {
 };
 
 DelayInterpolator.prototype = {
-    setDelay: function(delay) {
+    setDelay: function (delay) {
         this._delay = delay;
     },
-    reset: function() {
+    reset: function () {
         for (var i = 0, l = this._current.length; i < l; i++) {
             this._current[i] = this._target[i] = 0.0;
         }
         this._reset = true;
     },
-    update: function(dt) {
+    update: function (dt) {
         // assume 60 fps to be consistent with the old _delay values for backward compatibility
         // (otherwise we'd have to adjust the _delay values by multiplying to 60 )
         var dtDelay = Math.min(1.0, this._delay * dt * 60.0);
@@ -29,19 +29,19 @@ DelayInterpolator.prototype = {
         }
         return this._delta;
     },
-    set: function() {
+    set: function () {
         for (var i = 0, l = this._current.length; i < l; i++) {
             this._current[i] = this._target[i] = arguments[i];
         }
         this._reset = false;
     },
-    isReset: function() {
+    isReset: function () {
         return this._reset;
     },
-    getCurrent: function() {
+    getCurrent: function () {
         return this._current;
     },
-    setTarget: function() {
+    setTarget: function () {
         for (var i = 0, l = this._target.length; i < l; i++) {
             if (this._reset) {
                 this._target[i] = this._current[i] = arguments[i];
@@ -51,21 +51,21 @@ DelayInterpolator.prototype = {
         }
         this._reset = false;
     },
-    addTarget: function() {
+    addTarget: function () {
         for (var i = 0; i < arguments.length; i++) {
             this._target[i] += arguments[i];
         }
     },
-    getTarget: function() {
+    getTarget: function () {
         return this._target;
     },
-    getDelta: function() {
+    getDelta: function () {
         return this._delta;
     },
-    getStart: function() {
+    getStart: function () {
         return this._start;
     },
-    setStart: function(start) {
+    setStart: function (start) {
         this._start = start;
     }
 };

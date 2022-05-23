@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     // various osg shortcuts
@@ -9,15 +9,15 @@
     var ExampleOSGJS = window.ExampleOSGJS;
     var Object = window.Object;
 
-    var FindAnimationManagerVisitor = function() {
+    var FindAnimationManagerVisitor = function () {
         osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
         this._cb = undefined;
     };
     FindAnimationManagerVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-        getAnimationManager: function() {
+        getAnimationManager: function () {
             return this._cb;
         },
-        apply: function(node) {
+        apply: function (node) {
             var cbs = node.getUpdateCallbackList();
             for (var i = 0, l = cbs.length; i < l; i++) {
                 if (cbs[i] instanceof osgAnimation.BasicAnimationManager) {
@@ -30,7 +30,7 @@
     });
 
     // inherits for the ExampleOSGJS prototype
-    var Example = function() {
+    var Example = function () {
         ExampleOSGJS.call(this);
 
         // can be overriden with url parm ?&scale=1
@@ -48,7 +48,7 @@
     };
 
     Example.prototype = osg.objectInherit(ExampleOSGJS.prototype, {
-        initDatGUI: function() {
+        initDatGUI: function () {
             // config to let data gui change the scale
             this._gui = new window.dat.GUI();
 
@@ -59,13 +59,13 @@
             );
             var self = this;
 
-            controller.onChange(function(value) {
+            controller.onChange(function (value) {
                 self._config.currentModel = value;
                 self.createScene();
             });
         },
 
-        postLoadingModel: function(node) {
+        postLoadingModel: function (node) {
             var visitor = new FindAnimationManagerVisitor();
             node.accept(visitor);
 
@@ -77,7 +77,7 @@
             manager.playAnimation(animations[keys[0]].name);
         },
 
-        createScene: function() {
+        createScene: function () {
             // the root node
             var root = new osg.Node();
 
@@ -92,7 +92,7 @@
             this.getRootNode().addChild(root);
         },
 
-        getOrCreateModel: function(modelName) {
+        getOrCreateModel: function (modelName) {
             var self = this;
             if (!this._model) {
                 this._model = new osg.MatrixTransform();
@@ -102,7 +102,7 @@
             if (modelName) {
                 // ../media/models/animation/' + modelName ?
                 var request = osgDB.readNodeURL(modelName);
-                request.then(function(node) {
+                request.then(function (node) {
                     self._model.addChild(node);
                     self.postLoadingModel(node);
                 });
@@ -118,7 +118,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
         },

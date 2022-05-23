@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var OSG = window.OSG;
@@ -7,11 +7,11 @@
     var osgAnimation = OSG.osgAnimation;
     var osgViewer = OSG.osgViewer;
 
-    var TransitionUpdateCallback = function(target) {
+    var TransitionUpdateCallback = function (target) {
         this._target = target;
     };
     TransitionUpdateCallback.prototype = {
-        update: function(node, nv) {
+        update: function (node, nv) {
             var t = nv.getFrameStamp().getSimulationTime();
             var dt = t - node._lastUpdate;
             if (dt < 0) {
@@ -49,7 +49,7 @@
         }
     };
 
-    var createTexturedBox = function(centerx, centery, centerz, sizex, sizey, sizez, l, r, b, t) {
+    var createTexturedBox = function (centerx, centery, centerz, sizex, sizey, sizez, l, r, b, t) {
         var model = osg.createTexturedBoxGeometry(centerx, centery, centerz, sizex, sizey, sizez);
 
         var uvs = model.getAttributes().TexCoord0;
@@ -112,7 +112,7 @@
         return model;
     };
 
-    var createEffect = function(texture, target, center) {
+    var createEffect = function (texture, target, center) {
         var totalSizeX = 20;
         var maxx = 20;
 
@@ -172,7 +172,7 @@
         var centerPos = [20, 8, 30];
 
         var texture = new osg.Texture();
-        osgDB.readImageURL('image.png').then(function(image) {
+        osgDB.readImageURL('image.png').then(function (image) {
             texture.setImage(image);
         });
 
@@ -184,7 +184,7 @@
         return root;
     }
 
-    var main = function() {
+    var main = function () {
         var canvas = document.getElementById('View');
 
         var viewer;

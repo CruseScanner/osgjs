@@ -9,7 +9,7 @@ import Node from 'osgShader/node/Node';
 // arg1 = input0 or [ inputs ]
 // arg2 = input1
 // ...
-var BaseOperator = function() {
+var BaseOperator = function () {
     Node.call(this);
 };
 
@@ -19,7 +19,7 @@ BaseOperator.prototype = Node.prototype;
 // new Add( output, input0, input1, ... )
 // new Add( output, [ inputs ] )
 // glsl code output = input0 + input1 +...
-var Add = function() {
+var Add = function () {
     BaseOperator.call(this);
 };
 
@@ -30,7 +30,7 @@ utils.createPrototypeObject(
 
         operator: '+',
 
-        _getFirstVariableCast: function() {
+        _getFirstVariableCast: function () {
             var variable = this._inputs[0].getVariable();
             var inType = this._inputs[0].getType();
             var outType = this._outputs.getType();
@@ -49,7 +49,7 @@ utils.createPrototypeObject(
             return variable;
         },
 
-        computeShader: function() {
+        computeShader: function () {
             // force inputs type to be all the same from the output
             var outputType = this._outputs.getType();
             var addType = '';
@@ -80,7 +80,7 @@ utils.createPrototypeObject(
 
 // Mult works like Add
 // glsl code output = input0 * input1 * ...
-var Mult = function() {
+var Mult = function () {
     Add.call(this);
 };
 
@@ -96,7 +96,7 @@ utils.createPrototypeObject(
 
 // basic assignement alias: output = input
 // glsl code output = input0
-var SetFromNode = function() {
+var SetFromNode = function () {
     Add.call(this);
 };
 
@@ -113,7 +113,7 @@ utils.createPrototypeObject(
 // making the cast vector4(input.xyz, 0)
 // if needed
 // glsl code output = matrix * vector4(vec.xyz, 0)
-var MatrixMultDirection = function() {
+var MatrixMultDirection = function () {
     Add.call(this);
     this._overwriteW = true; // if set to false, we copy the input alpha in the output alpha
     this._forceComplement = true;
@@ -128,19 +128,19 @@ utils.createPrototypeObject(
         validInputs: ['vec', 'matrix'],
         validOutputs: ['vec'],
         complement: '0.',
-        setInverse: function(bool) {
+        setInverse: function (bool) {
             this._inverseOp = bool;
             return this;
         },
-        setForceComplement: function(bool) {
+        setForceComplement: function (bool) {
             this._forceComplement = bool;
             return this;
         },
-        setOverwriteW: function(bool) {
+        setOverwriteW: function (bool) {
             this._overwriteW = bool;
             return this;
         },
-        computeShader: function() {
+        computeShader: function () {
             // force inputs type to be all the same from the output
             // and handle vector complement
             var vecIn = this._inputs.vec.getVariable();
@@ -195,7 +195,7 @@ utils.createPrototypeObject(
 
 // override only for complement.
 // glsl code output = matrix * vector4(vec.xyz, 1)
-var MatrixMultPosition = function() {
+var MatrixMultPosition = function () {
     MatrixMultDirection.call(this);
     this._forceComplement = false;
 };
@@ -210,7 +210,7 @@ utils.createPrototypeObject(
     'MatrixMultPosition'
 );
 
-var Blend = function() {
+var Blend = function () {
     BaseOperator.apply(this);
     this._mode = 'MIX';
 };
@@ -218,14 +218,14 @@ utils.createPrototypeObject(
     Blend,
     utils.objectInherit(BaseOperator.prototype, {
         type: 'Blend',
-        mode: function(mode) {
+        mode: function (mode) {
             this._mode = mode;
             return this;
         },
-        computeShader: function() {
+        computeShader: function () {
             return this[this._mode === undefined ? 'MIX' : this._mode]();
         },
-        ADD: function() {
+        ADD: function () {
             return (
                 this._outputs.getVariable() +
                 ' = ' +
@@ -237,7 +237,7 @@ utils.createPrototypeObject(
                 ');'
             );
         },
-        MIX: function() {
+        MIX: function () {
             // result = val0*(1.0-t) + t*val1
             return (
                 this._outputs.getVariable() +
@@ -250,7 +250,7 @@ utils.createPrototypeObject(
                 ');'
             );
         },
-        MULTIPLY: function() {
+        MULTIPLY: function () {
             return (
                 this._outputs.getVariable() +
                 ' = ' +
@@ -277,7 +277,7 @@ utils.createPrototypeObject(
 //            out: this.getNode( 'glPointSize' )
 // }
 //
-var InlineCode = function() {
+var InlineCode = function () {
     Node.call(this);
 };
 
@@ -285,11 +285,11 @@ utils.createPrototypeObject(
     InlineCode,
     utils.objectInherit(Node.prototype, {
         type: 'InlineCode',
-        code: function(txt) {
+        code: function (txt) {
             this._text = txt;
             return this;
         },
-        computeShader: function() {
+        computeShader: function () {
             // merge inputs and outputs dict to search in both
             var replaceVariables = utils.objectMix({}, this._inputs);
             replaceVariables = utils.objectMix(replaceVariables, this._outputs);

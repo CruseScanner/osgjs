@@ -3,7 +3,7 @@ import { mat4 } from 'osg/glMatrix';
 import primitiveIndexFunctor from 'osg/primitiveIndexFunctor';
 import intersectionEnums from 'osgUtil/intersectionEnums';
 
-var IntersectFunctor = function() {
+var IntersectFunctor = function () {
     this._hit = false;
 
     // geom info
@@ -21,7 +21,7 @@ var IntersectFunctor = function() {
 };
 
 // minimal "interface" for intersection type
-IntersectFunctor.Intersection = function() {
+IntersectFunctor.Intersection = function () {
     this._nodePath = undefined;
     this._drawable = undefined;
     this._matrix = undefined;
@@ -33,28 +33,28 @@ IntersectFunctor.Intersection = function() {
 };
 
 IntersectFunctor.prototype = {
-    reset: function() {
+    reset: function () {
         this._hit = false;
         this._vertices = undefined;
         this._primitiveIndex = 0;
     },
 
-    setPrimitiveIndex: function(primitiveIndex) {
+    setPrimitiveIndex: function (primitiveIndex) {
         this._primitiveIndex = primitiveIndex;
     },
-    setGeometry: function(geometry) {
+    setGeometry: function (geometry) {
         this._geometry = geometry;
         this._primitiveIndex = 0;
         this._vertices = geometry.getAttributes().Vertex.getElements();
     },
-    setVertices: function(vertices) {
+    setVertices: function (vertices) {
         this._vertices = vertices;
     },
 
-    setIntersectionVisitor: function(intersectionVisitor) {
+    setIntersectionVisitor: function (intersectionVisitor) {
         this._intersectionVisitor = intersectionVisitor;
     },
-    setIntersector: function(intersector) {
+    setIntersector: function (intersector) {
         this._intersector = intersector;
         this._primitiveMask = intersector.getPrimitiveMask();
 
@@ -64,15 +64,15 @@ IntersectFunctor.prototype = {
             limit === intersectionEnums.LIMIT_ONE;
     },
 
-    setLimitOneIntersection: function(limitOneIntersection) {
+    setLimitOneIntersection: function (limitOneIntersection) {
         this._limitOneIntersection = limitOneIntersection;
     },
 
-    leave: function() {},
+    leave: function () {},
 
-    enter: function(/*bbox*/) {},
+    enter: function (/*bbox*/) {},
 
-    initIntersection: function(intersection) {
+    initIntersection: function (intersection) {
         intersection._matrix = mat4.clone(this._intersectionVisitor.getModelMatrix());
         intersection._nodePath = this._intersectionVisitor.getNodePath().slice();
         intersection._primitiveIndex = this._primitiveIndex;
@@ -82,14 +82,14 @@ IntersectFunctor.prototype = {
         return intersection;
     },
 
-    intersectPoint: function(/*v0, p0*/) {},
-    intersectLine: function(/*v0, v1, p0, p1*/) {},
-    intersectTriangle: function(/*v0, v1, v2, p0, p1, p2*/) {},
+    intersectPoint: function (/*v0, p0*/) {},
+    intersectLine: function (/*v0, v1, p0, p1*/) {},
+    intersectTriangle: function (/*v0, v1, v2, p0, p1, p2*/) {},
 
-    operatorPoint: (function() {
+    operatorPoint: (function () {
         var v0 = vec3.create();
 
-        return function(p0) {
+        return function (p0) {
             if (this._limitOneIntersection && this._hit) return;
             if ((this._primitiveMask & intersectionEnums.POINT_PRIMITIVES) === 0) return;
 
@@ -101,11 +101,11 @@ IntersectFunctor.prototype = {
         };
     })(),
 
-    operatorLine: (function() {
+    operatorLine: (function () {
         var v0 = vec3.create();
         var v1 = vec3.create();
 
-        return function(p0, p1) {
+        return function (p0, p1) {
             if (this._limitOneIntersection && this._hit) return;
             if ((this._primitiveMask & intersectionEnums.LINE_PRIMITIVES) === 0) return;
 
@@ -118,12 +118,12 @@ IntersectFunctor.prototype = {
         };
     })(),
 
-    operatorTriangle: (function() {
+    operatorTriangle: (function () {
         var v0 = vec3.create();
         var v1 = vec3.create();
         var v2 = vec3.create();
 
-        return function(p0, p1, p2) {
+        return function (p0, p1, p2) {
             if (this._limitOneIntersection && this._hit) return;
             if ((this._primitiveMask & intersectionEnums.TRIANGLE_PRIMITIVES) === 0) return;
 
@@ -137,7 +137,7 @@ IntersectFunctor.prototype = {
         };
     })(),
 
-    apply: function(node) {
+    apply: function (node) {
         if (!node.getAttributes().Vertex) return;
         primitiveIndexFunctor(node, this);
     }

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     var $ = window.$;
@@ -6,34 +6,34 @@
     var osg = OSG.osg;
     var osgDB = OSG.osgDB;
     var osgViewer = OSG.osgViewer;
-    var Example = function() {
+    var Example = function () {
         this._viewer1 = undefined;
         this._viewer2 = undefined;
     };
 
     Example.prototype = {
-        createScene1: function() {
+        createScene1: function () {
             var node = new osg.MatrixTransform();
             var request = osgDB.readNodeURL('../media/models/raceship.osgjs');
             request.then(
-                function(model) {
+                function (model) {
                     node.addChild(model);
                     this._viewer1.getManipulator().computeHomePosition();
                 }.bind(this)
             );
             return node;
         },
-        createScene2: function() {
+        createScene2: function () {
             var node = new osg.MatrixTransform();
             osg.mat4.fromRotation(node.getMatrix(), -Math.PI, [0, 0, 1]);
 
             var request = osgDB.readNodeURL('../media/models/material-test/file.osgjs');
             request.then(
-                function(model) {
+                function (model) {
                     var texture = new osg.Texture();
                     osgDB
                         .readImageURL('../media/textures/seamless/grunge1.jpg')
-                        .then(function(image) {
+                        .then(function (image) {
                             texture.setImage(image);
                         });
                     model.getOrCreateStateSet().setTextureAttributeAndModes(0, texture);
@@ -43,7 +43,7 @@
             );
             return node;
         },
-        run: function(canvas1, canvas2) {
+        run: function (canvas1, canvas2) {
             this._viewer1 = new osgViewer.Viewer(canvas1);
             this._viewer2 = new osgViewer.Viewer(canvas2);
             this._viewer1.init();
@@ -63,7 +63,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             var canvas1 = $('#View1')[0];
             var canvas2 = $('#View2')[0];

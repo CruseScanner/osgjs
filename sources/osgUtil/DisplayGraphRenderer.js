@@ -1,7 +1,7 @@
 import DisplayGraphNode from 'osgUtil/DisplayGraphNode';
 import RenderBin from 'osg/RenderBin';
 
-var DisplayGraphRenderer = function(selectables) {
+var DisplayGraphRenderer = function (selectables) {
     this._selectables = selectables;
     this._nodeList = [];
     this._linkList = [];
@@ -18,12 +18,12 @@ var DisplayGraphRenderer = function(selectables) {
 DisplayGraphRenderer.prototype = {
     getColorFromClassName: DisplayGraphNode.prototype.getColorFromClassName,
 
-    createGraph: function(renderBin) {
+    createGraph: function (renderBin) {
         this.reset();
         this.apply(renderBin);
     },
 
-    reset: function() {
+    reset: function () {
         this._renderBinMap.clear();
         this._renderBinStack.length = 0;
         this._generatorID = 0;
@@ -35,7 +35,7 @@ DisplayGraphRenderer.prototype = {
         this._uniqueEdges.clear();
     },
 
-    apply: function(rb) {
+    apply: function (rb) {
         var instanceID = rb.getInstanceID();
         if (!this._renderBinMap.has(instanceID)) {
             this._renderBinMap.set(instanceID, rb);
@@ -66,7 +66,7 @@ DisplayGraphRenderer.prototype = {
         this._renderBinStack.pop();
     },
 
-    registerNode: function(rb) {
+    registerNode: function (rb) {
         var childID = rb.getInstanceID();
 
         this._nodeList.push(rb);
@@ -74,7 +74,7 @@ DisplayGraphRenderer.prototype = {
         // register bins
         var bins = rb._bins;
         bins.forEach(
-            function(key, bin) {
+            function (key, bin) {
                 this.apply(bin);
             }.bind(this)
         );
@@ -89,11 +89,11 @@ DisplayGraphRenderer.prototype = {
         var self = this;
         var context = {};
 
-        var leafFunction = function(leaf) {
+        var leafFunction = function (leaf) {
             self.createNodeAndSetID(this.stateGraphID, leaf);
         }.bind(context);
 
-        var stateGraphFunction = function(sg) {
+        var stateGraphFunction = function (sg) {
             self.createNodeAndSetID(childID, sg);
             var stateGraphID = sg._instanceID;
             var leafsPool = sg.getLeafs();
@@ -111,7 +111,7 @@ DisplayGraphRenderer.prototype = {
         this.createLink(parentID, childID);
     },
 
-    createLink: function(parent, child) {
+    createLink: function (parent, child) {
         var key = parent + '+' + child;
         if (!this._uniqueEdges.has(key)) {
             this._linkList.push({
@@ -122,7 +122,7 @@ DisplayGraphRenderer.prototype = {
         }
     },
 
-    createNodeAndSetID: function(parentID, node) {
+    createNodeAndSetID: function (parentID, node) {
         // register render leaf
         this._nodeList.push(node);
 
@@ -138,7 +138,7 @@ DisplayGraphRenderer.prototype = {
         this.createLink(parentID, node._instanceID);
     },
 
-    generateRenderLeaf: function(g, node) {
+    generateRenderLeaf: function (g, node) {
         var instanceID = node._instanceID;
         var className = 'RenderLeaf';
         var geomName =
@@ -157,7 +157,7 @@ DisplayGraphRenderer.prototype = {
         });
     },
 
-    generateStateGraph: function(g, node) {
+    generateStateGraph: function (g, node) {
         var instanceID = node._instanceID;
         var className = 'StateGraph';
         var label = className + ' ( ' + node._instanceID + ' )';
@@ -171,7 +171,7 @@ DisplayGraphRenderer.prototype = {
         });
     },
 
-    generateRenderStage: function(g, node) {
+    generateRenderStage: function (g, node) {
         var label = node.className() + ' ( ' + node._instanceID + ' )';
         if (node.getName()) label += '\n' + node.getName();
         label +=
@@ -189,7 +189,7 @@ DisplayGraphRenderer.prototype = {
         });
     },
 
-    generateRenderBin: function(g, rb) {
+    generateRenderBin: function (g, rb) {
         var label = rb.className() + ' ( ' + rb.getInstanceID() + ' )';
         if (rb.getName()) label += '\n' + rb.getName();
 
@@ -207,7 +207,7 @@ DisplayGraphRenderer.prototype = {
     },
 
     // Subfunction of createGraph, will iterate to create all the node and link in dagre
-    generateNodeAndLink: function(g) {
+    generateNodeAndLink: function (g) {
         for (var i = 0, ni = this._nodeList.length; i < ni; i++) {
             var node = this._nodeList[i];
 

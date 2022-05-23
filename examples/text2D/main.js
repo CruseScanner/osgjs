@@ -1,4 +1,4 @@
-(function() {
+(function () {
     /**
      * @author Jordi Torres
      */
@@ -10,15 +10,19 @@
     var osgText = OSG.osgText;
     var Object = window.Object;
 
-    var Example = function() {
+    var Example = function () {
         this.gui = undefined;
         this._mobileDevice = /(iPad|iPhone|iPod|Android)/g.test(navigator.userAgent);
         this._textArray = ['osgjs rocks!', 'hello world', 'oh yeah!'];
-        this._textColors = [[1, 0, 0, 0.5], [0, 1, 0, 0.6], [0, 0, 1, 0.8]];
+        this._textColors = [
+            [1, 0, 0, 0.5],
+            [0, 1, 0, 0.6],
+            [0, 0, 1, 0.8]
+        ];
     };
 
     Example.prototype = {
-        initGui: function() {
+        initGui: function () {
             this.gui = new window.dat.GUI({
                 autoPlace: false
             });
@@ -67,22 +71,22 @@
             var that = this;
 
             var textController = this.gui.add(this.params, 'text');
-            textController.onChange(function(value) {
+            textController.onChange(function (value) {
                 that.changeTexts(value);
             });
 
             var rotationController = this.gui.add(this.params, 'rotateToScreen');
-            rotationController.onChange(function(value) {
+            rotationController.onChange(function (value) {
                 that.changeRotateToScreen(value);
             });
 
             var fontController = this.gui.add(this.params, 'font', fonts);
-            fontController.onChange(function(value) {
+            fontController.onChange(function (value) {
                 that.changeFontFamily(value);
             });
 
             var layoutController = this.gui.add(this.params, 'layout', layouts);
-            layoutController.onChange(function(value) {
+            layoutController.onChange(function (value) {
                 that.changeLayout(value);
             });
 
@@ -91,17 +95,17 @@
                 'alignment',
                 Object.keys(alignments)
             );
-            alignmentController.onChange(function(value) {
+            alignmentController.onChange(function (value) {
                 that.changeAlignment(value);
             });
 
             var fontResController = this.gui.add(this.params, 'fontResolution', 2, 128);
-            fontResController.onChange(function(value) {
+            fontResController.onChange(function (value) {
                 that.changeFontresolution(value);
             });
 
             var CharSizeController = this.gui.add(this.params, 'characterSize', 1, 10);
-            CharSizeController.onChange(function(value) {
+            CharSizeController.onChange(function (value) {
                 that.changeCharacterSize(value);
             });
 
@@ -110,15 +114,15 @@
                 'characterSizeMode',
                 Object.keys(characterSizeModes)
             );
-            characterSizeModeController.onChange(function(value) {
+            characterSizeModeController.onChange(function (value) {
                 that.changeCharacterSizeMode(value);
             });
         },
-        createTextScene: function() {
+        createTextScene: function () {
             var model = this.createItems(20);
             return model;
         },
-        setDebugSphere: function(n, alpha) {
+        setDebugSphere: function (n, alpha) {
             var bbs = n.getBound();
             var bs = osg.createTexturedSphere(bbs.radius());
             var ss = bs.getOrCreateStateSet();
@@ -133,14 +137,13 @@
             transformSphere.addChild(bs);
             return transformSphere;
         },
-        createItems: function(value) {
+        createItems: function (value) {
             var root = new osg.Node();
             for (var i = 0, l = value; i < l; i++) {
                 for (var j = 0, m = value; j < m; j++) {
                     var rand = this._textArray[Math.floor(Math.random() * this._textArray.length)];
-                    var randColor = this._textColors[
-                        Math.floor(Math.random() * this._textColors.length)
-                    ];
+                    var randColor =
+                        this._textColors[Math.floor(Math.random() * this._textColors.length)];
                     var text = new osgText.Text(rand);
                     text.setColor(randColor);
                     text.setAutoRotateToScreen(true);
@@ -158,13 +161,13 @@
             }
             return root;
         },
-        changeTexts: function(text) {
-            var TextVisitor = function(str) {
+        changeTexts: function (text) {
+            var TextVisitor = function (str) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._text = str;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setText(this._text);
                     }
@@ -175,13 +178,13 @@
             this._scene.accept(tv);
         },
 
-        changeFontresolution: function(value) {
-            var TextVisitor = function(val) {
+        changeFontresolution: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._fontResolution = val;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setFontResolution(this._fontResolution);
                     }
@@ -192,13 +195,13 @@
             this._scene.accept(tv);
         },
 
-        changeCharacterSize: function(value) {
-            var TextVisitor = function(val) {
+        changeCharacterSize: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._characterSize = val;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setCharacterSize(this._characterSize);
                     }
@@ -209,13 +212,13 @@
             this._scene.accept(tv);
         },
 
-        changeFontFamily: function(value) {
-            var TextVisitor = function(val) {
+        changeFontFamily: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._fontFamily = val;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setFont(this._fontFamily);
                     }
@@ -225,13 +228,13 @@
             var tv = new TextVisitor(value);
             this._scene.accept(tv);
         },
-        changeRotateToScreen: function(value) {
-            var TextVisitor = function(val) {
+        changeRotateToScreen: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._rotateToScreen = val;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setAutoRotateToScreen(this._rotateToScreen);
                     }
@@ -242,14 +245,14 @@
             this._scene.accept(tv);
         },
 
-        changeLayout: function(value) {
-            var TextVisitor = function(val) {
+        changeLayout: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 if (val === 'LEFT_TO_RIGHT') this._layout = osgText.Text.LEFT_TO_RIGHT;
                 else this._layout = osgText.Text.RIGHT_TO_LEFT;
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setLayout(this._layout);
                     }
@@ -260,13 +263,13 @@
             this._scene.accept(tv);
         },
 
-        changeAlignment: function(value) {
-            var TextVisitor = function(val) {
+        changeAlignment: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._alignment = parseInt(val);
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setAlignment(this._alignment);
                     }
@@ -277,13 +280,13 @@
             this._scene.accept(tv);
         },
 
-        changeCharacterSizeMode: function(value) {
-            var TextVisitor = function(val) {
+        changeCharacterSizeMode: function (value) {
+            var TextVisitor = function (val) {
                 osg.NodeVisitor.call(this, osg.NodeVisitor.TRAVERSE_ALL_CHILDREN);
                 this._characterSizeMode = parseInt(val);
             };
             TextVisitor.prototype = osg.objectInherit(osg.NodeVisitor.prototype, {
-                apply: function(node) {
+                apply: function (node) {
                     if (node instanceof osgText.Text) {
                         node.setCharacterSizeMode(this._characterSizeMode);
                     }
@@ -294,7 +297,7 @@
             this._scene.accept(tv);
         },
 
-        onMouseClick: function(canvas, viewer, ev) {
+        onMouseClick: function (canvas, viewer, ev) {
             var ratioX = canvas.width / canvas.clientWidth;
             var ratioY = canvas.height / canvas.clientHeight;
 
@@ -303,7 +306,7 @@
                 (canvas.clientHeight - ev.clientY) * ratioY
             );
 
-            hits.sort(function(a, b) {
+            hits.sort(function (a, b) {
                 return a._ratio - b._ratio;
             });
 
@@ -318,14 +321,14 @@
             }
         },
 
-        run: function() {
+        run: function () {
             this.initGui();
             // Use a custom container so the key letters 'a' 's' 'd' and spacebar works in dat.gui.
             var customContainer = document.getElementById('gui-container');
             customContainer.appendChild(this.gui.domElement);
             customContainer.addEventListener(
                 'keydown',
-                function(e) {
+                function (e) {
                     e.stopPropagation();
                 },
                 false
@@ -358,7 +361,7 @@
 
     window.addEventListener(
         'load',
-        function() {
+        function () {
             var example = new Example();
             example.run();
         },

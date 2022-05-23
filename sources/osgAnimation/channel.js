@@ -14,7 +14,7 @@ var Channel = {};
 // }
 // init a channel with extra field
 // start, end, duration
-var initChannel = function(type, keys, times, targetName, channelName, channel) {
+var initChannel = function (type, keys, times, targetName, channelName, channel) {
     var start = times[0];
     var end = times[times.length - 1];
     channel.start = start;
@@ -28,23 +28,23 @@ var initChannel = function(type, keys, times, targetName, channelName, channel) 
     return channel;
 };
 
-var createVec3Channel = function(keys, times, targetName, channelName, chan) {
+var createVec3Channel = function (keys, times, targetName, channelName, chan) {
     return initChannel(channelType.Vec3, keys, times, targetName, channelName, chan || {});
 };
 
-var createFloatChannel = function(keys, times, targetName, channelName, chan) {
+var createFloatChannel = function (keys, times, targetName, channelName, chan) {
     return initChannel(channelType.Float, keys, times, targetName, channelName, chan || {});
 };
 
-var createQuatChannel = function(keys, times, targetName, channelName, chan) {
+var createQuatChannel = function (keys, times, targetName, channelName, chan) {
     return initChannel(channelType.Quat, keys, times, targetName, channelName, chan || {});
 };
 
-var createQuatSlerpChannel = function(keys, times, targetName, channelName, chan) {
+var createQuatSlerpChannel = function (keys, times, targetName, channelName, chan) {
     return initChannel(channelType.QuatSlerp, keys, times, targetName, channelName, chan || {});
 };
 
-var createFloatCubicBezierChannel = function(keys, times, targetName, channelName, chan) {
+var createFloatCubicBezierChannel = function (keys, times, targetName, channelName, chan) {
     return initChannel(
         channelType.FloatCubicBezier,
         keys,
@@ -55,7 +55,7 @@ var createFloatCubicBezierChannel = function(keys, times, targetName, channelNam
     );
 };
 
-var createVec3CubicBezierChannel = function(keys, times, targetName, channelName, chan) {
+var createVec3CubicBezierChannel = function (keys, times, targetName, channelName, chan) {
     return initChannel(
         channelType.Vec3CubicBezier,
         keys,
@@ -81,22 +81,22 @@ var createVec3CubicBezierChannel = function(keys, times, targetName, channelName
 // }
 
 var Float = {
-    create: function() {
+    create: function () {
         return 0;
     }
 };
 var Vec3 = {
-    create: function() {
+    create: function () {
         return vec3.create32();
     }
 };
 var Quat = {
-    create: function() {
+    create: function () {
         return quat.create32();
     }
 };
 
-var createInstanceChannelType = function(operator, channel) {
+var createInstanceChannelType = function (operator, channel) {
     return {
         channel: channel,
         value: operator.create(),
@@ -108,28 +108,28 @@ var createInstanceChannelType = function(operator, channel) {
     };
 };
 
-var createInstanceVec3Channel = function(channel) {
+var createInstanceVec3Channel = function (channel) {
     return createInstanceChannelType(Vec3, channel);
 };
 
-var createInstanceQuatChannel = function(channel) {
+var createInstanceQuatChannel = function (channel) {
     return createInstanceChannelType(Quat, channel);
 };
 
-var createInstanceFloatChannel = function(channel) {
+var createInstanceFloatChannel = function (channel) {
     return createInstanceChannelType(Float, channel);
 };
 
-var createInstanceFloatCubicBezierChannel = function(channel) {
+var createInstanceFloatCubicBezierChannel = function (channel) {
     return createInstanceChannelType(Float, channel);
 };
 
-var createInstanceVec3CubicBezierChannel = function(channel) {
+var createInstanceVec3CubicBezierChannel = function (channel) {
     return createInstanceChannelType(Vec3, channel);
 };
 
 // create an instance channel from type
-var createInstanceChannel = function(channel) {
+var createInstanceChannel = function (channel) {
     return Channel[channel.type](channel);
 };
 

@@ -4,8 +4,8 @@ import CullFace from 'osg/CullFace';
 import State from 'osg/State';
 import ShaderGeneratorProxy from 'osgShader/ShaderGeneratorProxy';
 
-export default function() {
-    test('CullFace', function() {
+export default function () {
+    test('CullFace', function () {
         var n = new CullFace();
         assert.isOk(n.getMode() === CullFace.BACK, 'Check default mode');
 

@@ -8,7 +8,7 @@ import TransformEnums from 'osg/transformEnums';
  * @class Transform
  * @inherits Node
  */
-var Transform = function() {
+var Transform = function () {
     Node.call(this);
     this.referenceFrame = TransformEnums.RELATIVE_RF;
 };
@@ -17,16 +17,16 @@ var Transform = function() {
 utils.createPrototypeNode(
     Transform,
     utils.objectInherit(Node.prototype, {
-        setReferenceFrame: function(value) {
+        setReferenceFrame: function (value) {
             this.referenceFrame = value;
         },
-        getReferenceFrame: function() {
+        getReferenceFrame: function () {
             return this.referenceFrame;
         },
 
-        computeBoundingSphere: (function() {
+        computeBoundingSphere: (function () {
             var matrix = mat4.create();
-            return function(bSphere) {
+            return function (bSphere) {
                 Node.prototype.computeBoundingSphere.call(this, bSphere);
                 if (!bSphere.valid()) {
                     return bSphere;
